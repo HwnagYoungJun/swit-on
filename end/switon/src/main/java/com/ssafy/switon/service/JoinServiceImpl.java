@@ -44,8 +44,6 @@ public class JoinServiceImpl implements JoinService {
 		return joinDAO.selectJoinsByUserId(userId);
 	}
 
-<<<<<<< HEAD
-=======
 	@Override
 	public boolean isMember(int studyId, int userId) {
 		Join join = new Join();
@@ -54,5 +52,4 @@ public class JoinServiceImpl implements JoinService {
 		return joinDAO.isMember(join) == 1;
 	}
 
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 }

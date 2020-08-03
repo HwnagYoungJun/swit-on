@@ -26,8 +26,6 @@
 		where id = #{id}
 	</select>
 	
-<<<<<<< HEAD
-=======
 	<!-- 가입여부 반환 (가입했으면 1) -->
 	<select id="isMember" resultType="Integer">
 		select count(*) as cnt
@@ -36,7 +34,6 @@
 		and user_id = #{user_id}
 	</select>
 	
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	<!-- 내가 가입한 소모임 리스트 반환 -->
 	<select id="selectJoinsByUserId" resultType="Join">
 		select id, user_id, study_id, isComplete, reg_date, isLeader

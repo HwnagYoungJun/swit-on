@@ -18,10 +18,7 @@ public interface JoinService {
 	boolean delete(int id);
 	// 유저의 소모임 가입 정보 가져오기
 	List<Join> searchAllByUserId(int userId);
-<<<<<<< HEAD
-=======
 	// 가입여부 반환
 	boolean isMember(int studyId, int userId);
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	
 }

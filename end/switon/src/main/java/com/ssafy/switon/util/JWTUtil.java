@@ -5,10 +5,6 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-<<<<<<< HEAD
-import com.ssafy.switon.dto.UserDTO;
-=======
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.service.UserService;
 
@@ -23,10 +19,6 @@ public class JWTUtil {
 	
 	private String secretString = "DksSud+SkDkRkvkEkrahsSkwl+sGhkAhtGo=DNpWlRka";
 	private Key key;
-<<<<<<< HEAD
-	private UserService userService;
-=======
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	
 	public String createToken(UserInfoDTO user) {
 		Claims claims = Jwts.claims().setSubject(Integer.toString(user.getId()));

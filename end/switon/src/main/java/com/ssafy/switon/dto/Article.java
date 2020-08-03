@@ -2,17 +2,6 @@ package com.ssafy.switon.dto;
 
 import java.sql.Date;
 
-<<<<<<< HEAD
-public class Article {
-	
-	int id;
-	String title;
-	String content;
-	int user_id;
-	String file;
-	int board_id;
-	Date created_at;
-=======
 import io.swagger.annotations.ApiParam;
 
 public class Article {
@@ -32,7 +21,6 @@ public class Article {
 	@ApiParam(value = "게시글 작성시간", required = false, hidden = true)
 	Date created_at;
 	@ApiParam(value = "게시글 수정시간", required = false, hidden = true)
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	Date updated_at;
 	
 	public int getBoard_id() {

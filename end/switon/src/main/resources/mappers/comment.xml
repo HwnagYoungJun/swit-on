@@ -12,8 +12,6 @@
 		from comment
 	</select>
 	
-<<<<<<< HEAD
-=======
 	<!-- 게시글 아이디로 댓글 조회 -->
 	<select id="selectCommentsByArticleId" resultType="Comment">
 		select id, content, user_id, article_id, created_at, updated_at
@@ -21,7 +19,6 @@
 		where article_id = #{articleId}
 	</select>
 	
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	<!-- 댓글 상세 조회 -->
 	<select id="selectComment" resultType="Comment">
 		select id, content, user_id, article_id, created_at, updated_at

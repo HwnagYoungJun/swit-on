@@ -16,10 +16,6 @@ public interface CommentService {
 	boolean delete(int id);
 	// 댓글 수정
 	boolean update(Comment comment);
-<<<<<<< HEAD
-	
-=======
 	// 게시글의 댓글 조회
 	List<Comment> searchArticleComments(int articleId);
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 }

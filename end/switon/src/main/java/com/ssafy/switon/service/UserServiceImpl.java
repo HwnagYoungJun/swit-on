@@ -7,16 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.UserDAO;
-<<<<<<< HEAD
-import com.ssafy.switon.dto.UserLoginDTO;
-import com.ssafy.switon.dto.UserRegisterDTO;
-import com.ssafy.switon.dto.UserDTO;
-import com.ssafy.switon.dto.UserInfoDTO;
-=======
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserLoginDTO;
 import com.ssafy.switon.dto.UserRegisterDTO;
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 
 @Service
 public class UserServiceImpl implements UserService {

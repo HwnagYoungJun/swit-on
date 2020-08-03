@@ -16,38 +16,22 @@ public class ArticleDAOImpl implements ArticleDAO {
 	
 	@Override
 	public List<Article> selectArticles() {
-<<<<<<< HEAD
-		return sqlSession.selectList("selectArticles");
-=======
 		return sqlSession.selectList("article.selectArticles");
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	}
 
 	@Override
 	public List<Article> selectArticlesByBoardId(int boardId) {
-<<<<<<< HEAD
-		return sqlSession.selectList("selectArticlesByBoardId", boardId);
-=======
 		return sqlSession.selectList("article.selectArticlesByBoardId", boardId);
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	}
 
 	@Override
 	public List<Article> selectArticlesByUserId(int userId) {
-<<<<<<< HEAD
-		return sqlSession.selectList("selectArticlesByUserId", userId);
-=======
 		return sqlSession.selectList("article.selectArticlesByUserId", userId);
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	}
 
 	@Override
 	public Article selectArticleById(int id) {
-<<<<<<< HEAD
-		return sqlSession.selectOne("selectArticleById", id);
-=======
 		return sqlSession.selectOne("article.selectArticle", id);
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	}
 
 	@Override

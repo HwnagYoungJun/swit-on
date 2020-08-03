@@ -2,14 +2,6 @@ package com.ssafy.switon.dto;
 
 import java.sql.Date;
 
-<<<<<<< HEAD
-public class Comment {
-	int id;
-	String content;
-	int user_id;
-	int article_id;
-	Date created_at;
-=======
 import io.swagger.annotations.ApiParam;
 
 public class Comment {
@@ -25,7 +17,6 @@ public class Comment {
 	@ApiParam(value = "작성일", required = false, hidden = true)
 	Date created_at;
 	@ApiParam(value = "수정일", required = false, hidden = true)
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	Date updated_at;
 	public int getId() {
 		return id;

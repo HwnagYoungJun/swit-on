@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-<<<<<<< HEAD
-import com.ssafy.switon.dto.Token;
-=======
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 import com.ssafy.switon.dto.User;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserLoginDTO;
@@ -28,11 +24,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/accounts")
-<<<<<<< HEAD
-@Api(value="AccountsRestController", description="회원가입, 로그인, 회원정보 조회 등")
-=======
 @Api(value="AccountsRestController", description="회원가입, 로그인")
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 public class AccountsRestController {
 	
 	@Autowired
@@ -63,19 +55,6 @@ public class AccountsRestController {
 			System.out.println("** 로그인 실패!!");
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
-		return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-	}
-	
-	@ApiOperation(value = "(테스트용) 헤더의 토큰을 읽어서 해당하는 유저 정보를 반환한다.", response = UserInfoDTO.class)
-	@GetMapping("/info")
-	public Object info(HttpServletRequest request) {
-		String userToken = request.getHeader("Token");
-		System.out.println("유저 정보 반환");
-		UserInfoDTO user = userService.search(jwtUtil.getUserPK(userToken));
-		return new ResponseEntity<>(user, HttpStatus.OK);
-	}
-=======
 		return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
 	}
 	
@@ -87,7 +66,6 @@ public class AccountsRestController {
 //		UserInfoDTO user = userService.search(jwtUtil.getUserPK(userToken));
 //		return new ResponseEntity<>(user, HttpStatus.OK);
 //	}
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	
 	@ApiOperation(value = "회원 가입을 한다. 가입 성공시 로그인을 자동으로 수행하여 토큰을 반환한다.", response = UserReturnDTO.class)
 	@PostMapping("/register")
@@ -108,28 +86,16 @@ public class AccountsRestController {
 					return new ResponseEntity<>(dto, HttpStatus.OK);
 				} else {
 					System.out.println("** 로그인 실패");
-<<<<<<< HEAD
-					return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-				}
-			} else {
-				System.out.println("** 회원가입 실패");
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-=======
 					return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
 				}
 			} else {
 				System.out.println("** 회원가입 실패");
 				return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 			}
 		} catch (Exception e) {
 			System.out.println("** 서버 에러!!");
 			e.printStackTrace();
-<<<<<<< HEAD
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-=======
 			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 		}
 	}
 }

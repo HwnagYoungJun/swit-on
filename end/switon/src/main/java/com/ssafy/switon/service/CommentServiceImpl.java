@@ -39,12 +39,9 @@ public class CommentServiceImpl implements CommentService {
 		return commentDAO.updateComment(comment)==1;
 	}
 
-<<<<<<< HEAD
-=======
 	@Override
 	public List<Comment> searchArticleComments(int articleId) {
 		return commentDAO.selectCommentsByArticleId(articleId);
 	}
 
->>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 }
