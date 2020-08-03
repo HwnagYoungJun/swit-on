@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/User.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="comment">
+	
+	<!-- 댓글 전체 조회 -->
+	<select id="selectComments" resultType="Comment">
+		select id, content, user_id, article_id, created_at, updated_at
+		from comment
+	</select>
+	
+	<!-- 게시글 아이디로 댓글 조회 -->
+	<select id="selectCommentsByArticleId" resultType="Comment">
+		select id, content, user_id, article_id, created_at, updated_at
+		from comment
+		where article_id = #{articleId}
+	</select>
+	
+	<!-- 댓글 상세 조회 -->
+	<select id="selectComment" resultType="Comment">
+		select id, content, user_id, article_id, created_at, updated_at
+		from comment
+		where id = #{id}
+	</select>
+	
+	<!-- 댓글 등록 -->
+	<insert id="insertComment" parameterType="Comment">
+		insert into comment(content, user_id, article_id)
+		values (#{content}, #{user_id}, #{article_id})
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment">
+		delete from comment
+		where id = #{id}
+	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateComment" parameterType="Comment">
+		update comment
+   		set content = #{content},
+   			updated_at = now()
+   		where id = #{id}	
+	</update>
+</mapper>

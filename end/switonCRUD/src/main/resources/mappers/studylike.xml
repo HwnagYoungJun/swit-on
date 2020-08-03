@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/User.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="studylike">
+	
+	<!-- 소모임좋아요 리스트 반환 -->
+	<select id="selectStudyLikes" resultType="StudyLike">
+		select id, user_id, study_id
+		from studylike
+	</select>
+	
+	<!-- 소모임좋아요 상세 정보 반환 -->
+	<select id="selectStudyLike" resultType="StudyLike">
+		select id, user_id, study_id
+		from studylike
+		where id = #{id}
+	</select>
+	
+	<!-- 해당소모임의 좋아요 수 반환 -->
+	<select id="likeCount" resultType="Integer">
+    	select count(*) as cnt
+    	from studylike
+    	where study_id = #{study_id}
+	</select>
+	
+	<!-- 소모임좋아요 등록 -->
+	<insert id="insertStudyLike" parameterType="StudyLike">
+		insert into studylike(user_id, study_id)
+		values (#{user_id}, #{study_id})
+	</insert>
+	
+	<!-- 소모임좋아요 삭제 -->
+	<delete id="deleteStudyLike">
+		delete from studylike
+		where id = #{id}
+	</delete>
+</mapper>

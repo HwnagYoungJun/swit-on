@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/User.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="articlefav">
+	
+	<!-- 글 즐겨찾기 리스트 전체 반환 -->
+	<select id="selectArticleFavs" resultType="ArticleFav">
+		select id, user_id, article_id
+		from articlefav
+	</select>
+	
+	<!-- 글 즐겨찾기 리스트 상세 정보 반환 -->
+	<select id="selectArticleFav" resultType="ArticleFav">
+		select id, user_id, article_id
+		from articlefav
+		where id = #{id}
+	</select>
+	
+	<!-- 글 즐겨찾기 등록 -->
+	<insert id="insertArticleFav" parameterType="ArticleFav">
+		insert into articlefav(user_id, article_id)
+		values (#{user_id}, #{article_id})
+	</insert>
+	
+	<!-- 글 즐겨찾기 삭제 -->
+	<delete id="deleteArticleFav">
+		delete from articlefav
+		where id = #{id}
+	</delete>
+
+</mapper>

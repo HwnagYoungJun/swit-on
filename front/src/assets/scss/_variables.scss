@@ -1,0 +1,15 @@
+$btn-purple: linear-gradient( to right, #9200b9 8%, #6c23c0 75%, #5600c7 );
+$font-bolder: 2.25rem; // 36, 27
+$font-bold: 1.5rem; // 24, 18
+$font-normal: 1rem; // 16, 12
+$font-light: 0.88rem; // 14, 10.5~ 
+
+:root {
+    font-size: 16px;
+  }
+
+@media screen and (max-width: 640px) {
+    :root {
+        font-size: 12px;
+      }
+}
