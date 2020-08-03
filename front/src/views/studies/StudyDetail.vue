@@ -33,7 +33,7 @@
 			</div>
 		</div>
 		<div v-else class="study-sub-content">
-			<p>python 소모임 소개</p>
+			<p class="title">python 소모임 소개</p>
 			<p>
 				Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum corrupti
 				culpa ipsa et! Ab molestias veritatis numquam nihil quod iste. Labore
@@ -51,7 +51,7 @@
 export default {
 	data() {
 		return {
-			isJoined: false,
+			isJoined: true,
 		};
 	},
 };
@@ -127,7 +127,7 @@ export default {
 .study-sub-content {
 	padding: 15px;
 	position: relative;
-	p:first-child {
+	.title {
 		margin: 10px 0 30px;
 		font-size: $font-bold;
 	}
