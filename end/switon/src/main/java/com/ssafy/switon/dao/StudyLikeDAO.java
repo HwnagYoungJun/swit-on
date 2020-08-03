@@ -1,0 +1,16 @@
+package com.ssafy.switon.dao;
+
+import java.util.List;
+
+import com.ssafy.switon.dto.StudyLike;
+
+public interface StudyLikeDAO {
+	// 소모임 좋아요 전체 조회
+	List<StudyLike> selectStudyLikes();
+	// 소모임 좋아요 조회
+	StudyLike selectStudyLike(int id);
+	// 소모임 좋아요 등록
+	int insertStudyLike(StudyLike studylike);
+	// 소모임 좋아요 삭제
+	int deleteStudyLike(int id);
+}

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/User.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="user">
+
+	<!-- 유저 리스트 반환 -->
+	<select id="selectUsers" resultType="UserInfoDTO">
+		select id,
+			name,
+			email,
+			introduce,
+			profile_image,
+			name_legacy
+		from user
+	</select>
+	
+	<!-- 유저 상세 정보 반환 -->
+	<select id="selectUserById" resultType="UserInfoDTO">
+		select id,
+			name,
+			email,
+			introduce,
+			profile_image,
+			name_legacy
+		from user
+		where id = #{id}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="insertUser" parameterType="UserRegisterDTO">
+		insert into user(name, email, password)
+		values (#{name}, #{email}, #{password})
+	</insert>
+	
+		<!-- 이메일로 유저 패스워드를 찾아서 반환 (로그인을 위해 유저의 저장된 pwd를 반환) -->
+	<select id="getUserPwdByEmail" resultType="String">
+		select password
+		from user
+		where email = #{email}
+	</select>
+	
+	<!-- 이메일로 유저 id를 찾아서 반환 -->
+	<select id="getUserIdByEmail" resultType="Integer">
+		select id
+		from user
+		where email = #{email}
+	</select>
+	
+	<!-- 이름으로 유저 id를 찾아서 반환 -->
+	<select id="getUserIdByName" resultType="Integer">
+		select id
+		from user
+		where name = #{name}
+	</select>
+
+</mapper>

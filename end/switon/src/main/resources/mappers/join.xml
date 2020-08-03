@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/User.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="join">
+
+	<!-- 스터디의 현재 가입자수 반환 -->
+	<select id="userCount" resultType="Integer">
+		select count(*) as cnt
+		from `join`
+		where study_id = #{study_id}
+	</select>
+	
+	<!-- 소모임 가입 모든 리스트 반환 -->
+	<select id="selectJoins" resultType="Join">
+		select id, user_id, study_id, isComplete, reg_date, isLeader
+		from `join`
+	</select>
+	
+	<!-- 소모임 가입 상세 정보 반환 -->
+	<select id="selectJoin" resultType="Join">
+		select id, user_id, study_id, isComplete, reg_date, isLeader
+		from `join`
+		where id = #{id}
+	</select>
+	
+	<!-- 내가 가입한 소모임 리스트 반환 -->
+	<select id="selectJoinsByUserId" resultType="Join">
+		select id, user_id, study_id, isComplete, reg_date, isLeader
+		from `join`
+		where user_id = #{user_id}
+	</select>
+	
+	<!-- 소모임 가입 (일반) -->
+	<insert id="insertJoin" parameterType="Join">
+		insert into `join`(user_id, study_id)
+		values (#{user_id}, #{study_id})
+	</insert>
+	
+	<!-- 소모임 가입 (모임장) -->
+	<insert id="insertJoinLeader" parameterType="Join">
+		insert into `join`(user_id, study_id, isLeader)
+		values (#{user_id}, #{study_id}, 1)
+	</insert>
+	
+	<!-- 스터디 소모임 완료시 완료 표시 -->
+	<update id="updateJoinComplete">
+		update `join`
+		set isComplete = 1
+		where study_id = #{study_id}
+	</update>
+	
+	<!-- 소모임  가입 정보 삭제-->
+	<delete id="deleteJoin">
+		delete from `join`
+		where id = #{id}
+	</delete>
+	
+</mapper>
