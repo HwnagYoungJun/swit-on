@@ -16,5 +16,10 @@ public interface CommentDAO {
 	int deleteComment(int id);
 	// 댓글 수정
 	int updateComment(Comment comment);
+<<<<<<< HEAD
 	
+=======
+	// 게시글 아이디로 댓글 조회
+	List<Comment> selectCommentsByArticleId(int articleId);
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 }

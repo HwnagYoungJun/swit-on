@@ -2,6 +2,7 @@ package com.ssafy.switon.dto;
 
 import java.sql.Date;
 
+<<<<<<< HEAD
 public class Article {
 	
 	int id;
@@ -11,6 +12,27 @@ public class Article {
 	String file;
 	int board_id;
 	Date created_at;
+=======
+import io.swagger.annotations.ApiParam;
+
+public class Article {
+	
+	@ApiParam(value = "게시글 id (PK)", required = false, hidden = true)
+	int id;
+	@ApiParam(value = "게시글 제목", required = true)
+	String title;
+	@ApiParam(value = "게시글 내용", required = true)
+	String content;
+	@ApiParam(value = "작성자 (토큰에서 긁어옴)", required = false, hidden = true)
+	int user_id;
+	@ApiParam(value = "첨부파일")
+	String file;
+	@ApiParam(value = "게시판 아이디 (스터디id에서 얻어냄)", required = false, hidden = true)
+	int board_id;
+	@ApiParam(value = "게시글 작성시간", required = false, hidden = true)
+	Date created_at;
+	@ApiParam(value = "게시글 수정시간", required = false, hidden = true)
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	Date updated_at;
 	
 	public int getBoard_id() {

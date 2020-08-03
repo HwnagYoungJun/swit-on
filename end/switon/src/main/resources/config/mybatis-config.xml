@@ -10,11 +10,20 @@
       <mapper resource="mappers/Study.xml" />
       <mapper resource="mappers/Board.xml" />
       <mapper resource="mappers/Article.xml" />
+<<<<<<< HEAD
+=======
+      <mapper resource="mappers/Comment.xml" />
+      <mapper resource="mappers/Category.xml" />
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
       
       <mapper resource="mappers/Articlelike.xml" />
       <mapper resource="mappers/Articlefav.xml" />
       <mapper resource="mappers/Commentlike.xml" />
       <mapper resource="mappers/Studylike.xml" />
+<<<<<<< HEAD
       <mapper resource="mappers/join.xml" />
+=======
+      <mapper resource="mappers/Join.xml" />
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
    </mappers>
 </configuration>

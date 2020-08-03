@@ -39,4 +39,12 @@ public class CommentDAOImpl implements CommentDAO {
 		return sqlsession.update("comment.updateComment", comment);
 	}
 
+<<<<<<< HEAD
+=======
+	@Override
+	public List<Comment> selectCommentsByArticleId(int articleId) {
+		return sqlsession.selectList("comment.selectCommentsByArticleId", articleId);
+	}
+
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 }

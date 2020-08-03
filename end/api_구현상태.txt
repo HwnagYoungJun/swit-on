@@ -1,0 +1,33 @@
+현재 구현된 것 목록
+
+
+** 유저관련(UserRestController) **
+
+/accounts
+POST	/login
+POST	/register
+
+
+** 프로필 관련 **
+/accounts	(<- 이거 없이 하려니 swagger 오류 발생해서 그냥 넣음)
+GET	/{id}		유저 정보
+GET	/{id}/mystudy	유저가 가입한 스터디 목록
+GET	/{id}/myqna	유저가 작성한 QnA 글 목록	(로그인 필요)
+GET	/{id}/myrepository	유저가 작성한 자료실글 목록 (로그인 필요)
+
+
+
+** 스터디 (StudyRestController) **
+
+/study
+
+GET	/		스터디 리스트
+POST	/create		스터디 생성		(로그인 필요)
+GET	/{studyId} 	스터디 상세정보 반환
+DELETE	/{studyId}/delete	스터디 삭제	(모임장 로그인 필요)
+GET	/{studyId}/notice	공지, qna, 자료실 게시글들 반환
+	/{studyId}/qna
+	/{studyId}/repository
+
+
+

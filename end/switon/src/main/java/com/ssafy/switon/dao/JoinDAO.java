@@ -19,4 +19,9 @@ public interface JoinDAO {
 	List<Join> selectJoinsByUserId(int userId);
 	// 소모임의 현재 가입자수 반환
 	int countUsersByStudyId(int studyId);
+<<<<<<< HEAD
+=======
+	// 소모임 가입여부 반환(가입시 1, 미가입시 0, 오류시 그 외의 값)
+	int isMember(Join join);
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 }

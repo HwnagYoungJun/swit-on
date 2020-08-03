@@ -1,6 +1,9 @@
 package com.ssafy.switon.config;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
@@ -9,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import com.google.common.collect.Lists;
 
 import springfox.documentation.builders.ApiInfoBuilder;
+<<<<<<< HEAD
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -17,6 +21,13 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Parameter;
+=======
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -29,7 +40,11 @@ public class SwaggerConfig {
 	
 	@Bean
 	public Docket postsApi() {
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 //		List<Parameter> global = new ArrayList<>();
 //		global.add(new ParameterBuilder().
 //			name("Authorization").

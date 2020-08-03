@@ -1,0 +1,207 @@
+<template>
+	<form class="articleform" @submit.prevent="createArticle">
+		<div class="articleform-header">
+			<h1>게시글 작성</h1>
+			<div class="articleform-btnbox">
+				<button @click.prevent="$router.go(-1)" class="articleform-btn-cancle">
+					취소
+				</button>
+				<button class="hide-btn">작성</button>
+				<button class="articleform-btn-submit" type="submit">작성</button>
+			</div>
+		</div>
+		<section class="articleform-main">
+			<input
+				type="text"
+				placeholder="제목을 입력해주세요"
+				class="articleform-input"
+				v-model="title"
+			/>
+			<Editor
+				ref="toastuiEditor"
+				initialEditType="wysiwyg"
+				:initialValue="editorText"
+				:options="editorOptions"
+				height="350px"
+			/>
+			<div class="upload-btn_wrap">
+				<input
+					v-model="fileRoute"
+					type="text"
+					class="upload_text"
+					readonly="readonly"
+					placeholder="첨부된 파일이 없습니다."
+				/>
+				<button type="button" title="첨부">
+					<span>첨부</span>
+				</button>
+				<input
+					ref="inputFile"
+					type="file"
+					class="input_file"
+					title="첨부"
+					@change="onChangeFile"
+				/>
+			</div>
+		</section>
+	</form>
+</template>
+<script>
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor/dist/i18n/ko-kr.js';
+import { Editor } from '@toast-ui/vue-editor';
+
+export default {
+	data() {
+		return {
+			title: '',
+			editorText: '',
+			fileRoute: '',
+			inputFile: '',
+			editorOptions: {
+				language: 'ko-KR',
+				hideModeSwitch: true,
+				minHeight: '350px',
+				placeholder: '내용을 입력해주세요',
+			},
+		};
+	},
+	components: {
+		Editor,
+	},
+	methods: {
+		async createArticle() {
+			let content = this.$refs.toastuiEditor.invoke('getMarkdown');
+			console.log(this.title);
+			console.log(content);
+			// const { data } = await
+		},
+		onChangeTitle(val) {
+			this.title = val;
+		},
+		onChangeFile(e) {
+			this.fileRoute = e.target.value;
+			this.inputFile = this.$refs.inputFile.files[0];
+		},
+	},
+};
+</script>
+<style lang="scss">
+.articleform {
+	width: 100%;
+	height: 100%;
+}
+.articleform-main {
+	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
+	padding: 1rem;
+	// padding: 1rem 1rem 0;
+	border-radius: 4px;
+	.articleform-input {
+		width: 100%;
+		padding: 10px;
+		border: none;
+		border-radius: 0;
+		border-bottom: 1px solid black;
+		&:focus {
+			outline: none;
+			border-bottom: 1px solid black;
+		}
+	}
+
+	.tui-editor-defaultUI {
+		border: none;
+	}
+
+	.tui-editor-defaultUI-toolbar {
+		padding: 0 10px;
+	}
+
+	.te-ww-container .tui-editor-contents:first-child {
+		padding: 1rem 10px 0 10px;
+	}
+}
+.articleform-btnbox {
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+
+.articleform-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+	.articleform-btn-cancle {
+		@include form-btn('white');
+		margin-right: 5px;
+	}
+	.articleform-btn-submit {
+		@include form-btn('purple');
+		position: relative;
+		right: 0;
+	}
+	.hide-btn {
+		border: none;
+		border-radius: 3px;
+		height: 40px;
+		padding: 0 1.125rem;
+		font-size: 1rem;
+		font-weight: 700;
+		text-decoration: none solid #000;
+		background: #000;
+		color: #fff;
+		position: absolute;
+		right: 0;
+	}
+}
+
+input.upload_text {
+	flex: 1;
+	height: 2rem;
+	// padding: 0 0.5rem 1rem;
+	// border-top: 1px solid #bbb;
+	// margin-top: 1rem;
+	// margin-bottom: 1rem;
+}
+div.upload-btn_wrap input.input_file {
+	/*파일찾기 폼 투명하게*/
+	position: absolute;
+	top: 0;
+	right: 0;
+	@include scale(width, 75px);
+	opacity: 0;
+	filter: alpha(opacity=0);
+	-ms-filter: 'alpha(opacity=0)';
+	-moz-opacity: 0;
+	margin-top: 0.6rem;
+	&:hover {
+		cursor: pointer;
+	}
+}
+div.upload-btn_wrap {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%; /*width, height 값은 button(찾아보기)값과 같아야함 */
+	height: 2rem;
+	border-top: 1px solid #bbb;
+	padding-left: 3px;
+	margin-top: 1rem;
+}
+div.upload-btn_wrap button {
+	/*버튼 div*/
+	// display: absolute;
+	// top: 0;
+	// right: 0;
+	@include scale(width, 70px);
+	height: 2rem;
+	font-weight: bold;
+	background: rgb(225, 225, 225);
+	// border: 1px solid #333;
+	border: none;
+	border-radius: 3px;
+	color: rgb(150, 149, 149);
+	margin-top: 1rem;
+}
+</style>

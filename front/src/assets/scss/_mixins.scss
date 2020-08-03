@@ -1,0 +1,58 @@
+$mobile-contents-width: 640px; // 쪼그라들기 시작할 시점
+@mixin scale($property, $px) {
+  $w: 1px / $mobile-contents-width * 100;
+  $pxs: null;
+  $vws: null;
+  // 여러 값에 대한 처리로 일반화
+  @each $v in $px {
+    // border: 1px solid black 같은 코드에서 숫자(1px)만 처리
+    @if type-of($v) == 'number' {
+      $px: $v / 1px;
+      $pxs: append($pxs, if($px == 0, 0, $px + px));
+      $vw: $px * $w;
+      $vws: append($vws, if($vw == 0, 0, $vw + vw));
+    } @else {
+      $pxs: append($pxs, $v);
+      $vws: append($vws, $v);
+    }
+  }
+  #{$property}: $pxs;
+  @media (max-width: $mobile-contents-width) {
+    #{$property}: $vws;
+  }
+}
+
+@mixin form-btn($color) {
+    border: none;
+    border-radius: 3px;
+    height: 40px;
+    padding: 0 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none solid #000;
+    transition: all .25s linear;
+    @if $color == 'white' {
+        background: white;
+        color: black;
+        border: 2px solid rgb(229, 229, 229);
+        &:hover {
+            border-color: black;    
+        }
+    } @else if $color == 'purple' {
+        background: black;
+        color: white;
+        padding: 0 1.125rem;
+        opacity: 0;
+		&:hover {
+            background-image: $btn-purple;
+            opacity: 1;
+		}
+    } @else if $color == 'black' {
+        background: rgb(73, 73, 73);
+        color: white;
+        padding: 0 1.125rem;
+        &:hover {
+            background: black;
+        }
+    }
+}

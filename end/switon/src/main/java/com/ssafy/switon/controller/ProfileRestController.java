@@ -7,10 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+<<<<<<< HEAD
 
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.Join;
 import com.ssafy.switon.dto.Study;
+=======
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ssafy.switon.dto.Article;
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserStudyInfoDTO;
 import com.ssafy.switon.service.ArticleService;
@@ -22,6 +31,7 @@ import com.ssafy.switon.util.JWTUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +40,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("accounts")
+=======
+@RestController
+@RequestMapping("/accounts")
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 @Api(value="AccountsRestController", description="유저 프로필 관련")
 public class ProfileRestController {
 	
@@ -64,7 +78,11 @@ public class ProfileRestController {
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
+<<<<<<< HEAD
 	@ApiOperation(value = "유저가 작성한 QnA 글 목록을 반환한다. 로그인 필요")
+=======
+	@ApiOperation(value = "유저가 작성한 QnA 글 목록을 반환한다. (로그인 필요)")
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	@GetMapping("{id}/myqna")
 	public Object myQnaList(@PathVariable int id, HttpServletRequest request) {
 		String userToken = request.getHeader("Token");
@@ -74,10 +92,17 @@ public class ProfileRestController {
 			return new ResponseEntity<>(qnas, HttpStatus.OK);
 		}
 		System.out.println("유저 QnA글 리스트 반환 실패 - 권한 없음");
+<<<<<<< HEAD
 		return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ApiOperation(value = "유저가 작성한 자료실 글 목록을 반환한다. 로그인 필요")
+=======
+		return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ApiOperation(value = "유저가 작성한 자료실 글 목록을 반환한다. (로그인 필요)")
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	@GetMapping("/{id}/myrepository")
 	public Object myRepositoryList(@PathVariable int id, HttpServletRequest request) {
 		String userToken = request.getHeader("Token");
@@ -87,7 +112,11 @@ public class ProfileRestController {
 			return new ResponseEntity<>(repos, HttpStatus.OK);
 		}		
 		System.out.println("유저 자료실 글 리스트 반환 실패 - 권한 없음");
+<<<<<<< HEAD
 		return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+=======
+		return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 	}
 
 }

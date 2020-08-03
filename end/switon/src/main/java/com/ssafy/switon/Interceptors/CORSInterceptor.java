@@ -21,7 +21,11 @@ public class CORSInterceptor extends HandlerInterceptorAdapter {
         response.setHeader("Access-Control-Max-Age", "180");
 		
 //		System.out.println("=== CORS Interceptor ===");
+<<<<<<< HEAD
 //		response.setHeader("Access-Control-Allow-Origin", "http://127.30.1.37:8080");
+=======
+//		response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 //		response.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS");
 //        response.setHeader("Access-Control-Allow-Headers", "*");
 //        response.addHeader("Access-Control-Allow-Headers", "content-type");

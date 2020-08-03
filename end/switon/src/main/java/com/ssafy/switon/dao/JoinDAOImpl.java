@@ -50,4 +50,13 @@ public class JoinDAOImpl implements JoinDAO {
 		return cnt = cnt == null ? 0 : cnt;
 	}
 
+<<<<<<< HEAD
+=======
+	@Override
+	public int isMember(Join join) {
+		Integer cnt = sqlsession.selectOne("join.isMember", join);
+		return cnt = cnt == null ? 0 : cnt;
+	}
+
+>>>>>>> f75d2f70fe3641e3a587de80511421d44e46e6bf
 }
