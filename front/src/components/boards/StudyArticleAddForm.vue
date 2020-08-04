@@ -1,7 +1,11 @@
 <template>
-	<form class="articleform" @submit.prevent="createArticle">
+	<form
+		class="articleform"
+		@submit.prevent="createArticle"
+		enctype="multipart/form-data"
+	>
 		<div class="articleform-header">
-			<h1>게시글 작성</h1>
+			<h2>{{ routeBoardName }}</h2>
 			<div class="articleform-btnbox">
 				<button @click.prevent="$router.go(-1)" class="articleform-btn-cancle">
 					취소
@@ -51,6 +55,7 @@ import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/i18n/ko-kr.js';
 import { Editor } from '@toast-ui/vue-editor';
+import { createArticle } from '@/api/articles';
 
 export default {
 	data() {
@@ -67,15 +72,30 @@ export default {
 			},
 		};
 	},
+	computed: {
+		routeBoardName() {
+			let name = this.$route.params.board_name;
+			return name.charAt(0).toUpperCase() + name.slice(1);
+		},
+	},
 	components: {
 		Editor,
 	},
 	methods: {
 		async createArticle() {
-			let content = this.$refs.toastuiEditor.invoke('getMarkdown');
-			console.log(this.title);
-			console.log(content);
-			// const { data } = await
+			try {
+				const studyId = this.$route.params.id;
+				const boardName = this.$route.params.board_name;
+				let content = this.$refs.toastuiEditor.invoke('getMarkdown');
+				await createArticle(studyId, boardName, {
+					title: this.title,
+					content,
+					file: this.inputFile,
+				});
+				this.$router.push(`/study/${studyId}/${boardName}`);
+			} catch (error) {
+				console.log(error);
+			}
 		},
 		onChangeTitle(val) {
 			this.title = val;

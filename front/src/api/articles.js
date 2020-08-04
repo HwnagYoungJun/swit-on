@@ -4,8 +4,13 @@ function fetchArticles() {
 	return articles.get('/');
 }
 
-function createArticle(articleData) {
-	return articles.post('/', articleData);
+function createArticle(studyId, boardName, articleData) {
+	const formdata = new FormData();
+	formdata.append('title', articleData.title);
+	formdata.append('content', articleData.content);
+	formdata.append('file', articleData.file);
+
+	return articles.post(`/${studyId}/${boardName}`, formdata);
 }
 
 function deleteArticle(articleId) {
@@ -13,7 +18,11 @@ function deleteArticle(articleId) {
 }
 
 function updateArticle(articleId, articleData) {
-	return articles.put(`/${articleId}`, articleData);
+	const formdata = new FormData();
+	formdata.append('title', articleData.title);
+	formdata.append('content', articleData.content);
+	formdata.append('file', articleData.file);
+	return articles.put(`/${articleId}`, formdata);
 }
 
 function fetchArticle(articleId) {

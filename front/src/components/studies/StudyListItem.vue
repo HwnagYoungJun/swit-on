@@ -9,6 +9,24 @@
 		<div class="study-time">
 			{{ studyItem.created_at }}
 		</div>
+		<div class="study-time">
+			{{ studyItem.start_term }}
+		</div>
+		<div class="study-time">
+			{{ studyItem.end_term }}
+		</div>
+		<div class="study-time">
+			{{ studyItem.start_time }}
+		</div>
+		<div class="study-time">
+			{{ studyItem.end_time }}
+		</div>
+		<div class="study-time">
+			<img :src="studyItem.logo" alt="" />
+		</div>
+		<div class="study-time">
+			{{ studyItem.week }}
+		</div>
 		<!-- <button @click="updateStudy">modified</button> -->
 		<button @click="deleteStudyItem">delete</button>
 	</li>
