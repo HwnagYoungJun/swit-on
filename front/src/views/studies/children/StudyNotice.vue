@@ -5,13 +5,13 @@
 			:key="article.id"
 			:article="article"
 		/>
-		<!-- <ArticleCard />
-		<ArticleCard /> -->
+		<ArticleAddBtn boardName="notice" />
 	</div>
 </template>
 
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
+import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import { fetchNoticeArticles } from '@/api/articles';
 export default {
 	data() {
@@ -21,12 +21,13 @@ export default {
 	},
 	components: {
 		ArticleCard,
+		ArticleAddBtn,
 	},
 	methods: {
 		async fetchNotice() {
 			const studyId = this.$route.params.id;
 			const { data } = await fetchNoticeArticles(studyId);
-			this.articles = data;
+			this.articles = data.reverse();
 		},
 	},
 	created() {
@@ -38,6 +39,7 @@ export default {
 .card-wrap {
 	display: flex;
 	flex-wrap: wrap;
+	position: relative;
 	@media screen and (max-width: 1500px) {
 		justify-content: center;
 	}

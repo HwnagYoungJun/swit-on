@@ -1,12 +1,15 @@
 export function formatDate(value) {
 	const day = new Date(value);
 	const dateString = day.toLocaleDateString('ko-KR', {
-		year: 'numeric',
+		// year: 'numeric',
 		month: 'long',
 		day: 'numeric',
 	});
 
-	const timeString = day.toLocaleTimeString('ko-KR');
+	const timeString = day.toLocaleTimeString('ko-KR', {
+		hour: 'numeric',
+		minutes: 'numeric',
+	});
 	return `${dateString} ${timeString}`;
 }
 

@@ -5,13 +5,13 @@
 			:key="article.id"
 			:article="article"
 		/>
-		<!-- <ArticleCard />
-		<ArticleCard /> -->
+		<ArticleAddBtn boardName="qna" />
 	</div>
 </template>
 
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
+import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import { fetchQnaArticles } from '@/api/articles';
 export default {
 	data() {
@@ -21,12 +21,13 @@ export default {
 	},
 	components: {
 		ArticleCard,
+		ArticleAddBtn,
 	},
 	methods: {
 		async fetchQna() {
 			const studyId = this.$route.params.id;
 			const { data } = await fetchQnaArticles(studyId);
-			this.articles = data;
+			this.articles = data.reverse();
 		},
 	},
 	created() {
@@ -38,6 +39,7 @@ export default {
 .card-wrap {
 	display: flex;
 	flex-wrap: wrap;
+	position: relative;
 	@media screen and (max-width: 1500px) {
 		justify-content: center;
 	}

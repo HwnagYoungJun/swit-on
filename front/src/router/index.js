@@ -53,8 +53,8 @@ const routes = [
 				component: () => import('@/views/studies/children/StudyNotice.vue'),
 			},
 			{
-				path: 'question',
-				name: 'question',
+				path: 'qna',
+				name: 'qna',
 				component: () => import('@/views/studies/children/StudyQuestion.vue'),
 			},
 		],

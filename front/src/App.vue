@@ -74,7 +74,7 @@ export default {
 	},
 	data() {
 		return {
-			isMain: true,
+			isMain: false,
 		};
 	},
 	computed: {
