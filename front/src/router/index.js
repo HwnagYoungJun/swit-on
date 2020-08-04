@@ -124,6 +124,11 @@ const routes = [
 		],
 	},
 	{
+		path: 'modifyprofile',
+		name: 'modifyprofile',
+		component: () => import('@/views/profiles/ModifyProfilePage.vue'),
+	},
+	{
 		path: '/category/:UpperCategoryName',
 		name: 'categorydetail',
 		component: () => import('@/views/categorys/CategoryPage.vue'),

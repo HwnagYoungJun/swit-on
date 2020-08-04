@@ -14,7 +14,9 @@
 						alt="icon_img"
 					/>
 					<h2>{{ name }}</h2>
-					<div class="modify-profile">프로필 수정하기</div>
+					<router-link :to="{ name: 'modifyprofile' }">
+						<div class="modify-profile">프로필 수정하기</div>
+					</router-link>
 				</div>
 				<div class="middle-box">
 					<div class="middle-element">
