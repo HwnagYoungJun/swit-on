@@ -41,6 +41,10 @@ hr {
 }
 .el-box {
 	display: flex;
+	margin-top: 2rem;
+	@media screen and (max-width: 1024px) {
+		margin-top: 1rem;
+	}
 	.element {
 		text-decoration: none;
 		color: black;
