@@ -127,6 +127,7 @@ hr {
 		&:hover {
 			font-weight: bold;
 			cursor: pointer;
+			letter-spacing: -0.1px;
 		}
 		img {
 			width: 30px;

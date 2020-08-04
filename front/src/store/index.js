@@ -7,8 +7,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		email: cookies.isKey('email') ? cookies.get('email') : '',
-		token: cookies.isKey('auth-token') ? cookies.get('auth-token') : '',
+		email: cookies.isKey('email') ? cookies.get('email') : null,
+		token: cookies.isKey('auth-token') ? cookies.get('auth-token') : null,
 	},
 	getters: {
 		isLogin(state) {

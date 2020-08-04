@@ -10,6 +10,52 @@
 		</nav>
 		<div class="study-description">
 			<div class="study-content">
+				<p class="study-title">{{ study.name }}</p>
+				<p>모집: {{ study.start_term }} - {{ study.end_term }}</p>
+				<p>
+					요일: 매주 {{ study.week | formatWeekday }}
+					{{ study.start_time }}시-{{ study.end_time }}시
+				</p>
+				<small>5/{{ study.users_limit }}명</small>
+			</div>
+			<div class="study-logo">
+				<img src="@/assets/django.png" alt="" />
+			</div>
+		</div>
+		<div v-if="isJoined" class="study-category">
+			<router-link :to="`/study/${study.id}`"
+				>대시보드<span></span
+			></router-link>
+			<router-link :to="{ name: 'calendar' }">캘린더<span></span></router-link>
+			<router-link :to="{ name: 'repository' }"
+				>저장소<span></span
+			></router-link>
+			<router-link :to="{ name: 'notice' }">공지<span></span></router-link>
+			<router-link :to="{ name: 'question' }">Q&A<span></span></router-link>
+			<hr />
+			<div class="study-sub-content">
+				<router-view></router-view>
+			</div>
+		</div>
+		<div v-else class="study-sub-content">
+			<p class="title">{{ study.name }} 소개</p>
+			<p>
+				{{ study.description }}
+			</p>
+			<button @click="studyJoin" class="join-btn">가입하기</button>
+		</div>
+	</div>
+	<!-- <div>
+		<nav aria-label="Breadcrumb" class="breadcrumb">
+			<ol>
+				<li>
+					<a href="#">프로그래밍 언어</a><span aria-hidden="true">></span>
+				</li>
+				<li><a href="#" aria-current="page">python 소모임</a></li>
+			</ol>
+		</nav>
+		<div class="study-description">
+			<div class="study-content">
 				<p class="study-title">python 소모임</p>
 				<p>모집: 20.07.02 - 20.07.31</p>
 				<p>활동: 매주 화 목 9시-11시</p>
@@ -42,17 +88,36 @@
 				sed esse accusantium quibusdam, molestiae error sequi, eius enim
 				assumenda beatae ab fugiat. Quos rem eum alias. Ut, beatae quidem.
 			</p>
-			<button class="join-btn">가입하기</button>
+			<button @click="studyJoin" class="join-btn">가입하기</button>
 		</div>
-	</div>
+	</div> -->
 </template>
 
 <script>
+import { JoinStudy, fetchStudy } from '@/api/studies';
 export default {
 	data() {
 		return {
-			isJoined: true,
+			isJoined: false,
+			study: {},
 		};
+	},
+	methods: {
+		async fetchData() {
+			const studyId = this.$route.params.id;
+			const { data } = await fetchStudy(studyId);
+			this.study = data.study;
+			// this.study.week = this.bitWeek(data.study.week);
+			this.isJoined = data.isJoined;
+		},
+		async studyJoin() {
+			const studyId = this.$route.params.id;
+			await JoinStudy(studyId);
+			this.fetchData();
+		},
+	},
+	created() {
+		this.fetchData();
 	},
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-	<div>apdl</div>
+	<div>main</div>
 </template>
 
 <script>
