@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<hr />
 		<div class="profile-box">
 			<div>
 				<img
@@ -17,13 +16,13 @@
 						alt="icon_img"
 					/>
 					<h2>{{ name }}</h2>
+					<div class="modify-profile">프로필 수정하기</div>
 				</div>
 				<h4>
 					{{ introduce }}
 				</h4>
 			</div>
 		</div>
-		<hr />
 	</div>
 </template>
 
@@ -42,12 +41,20 @@ export default {
 <style lang="scss" scoped>
 .profile-box {
 	display: flex;
+	margin-bottom: 1.5rem;
 }
 .info-box {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-
+	.modify-profile {
+		border: 1px solid purple;
+		border-radius: 0.3rem;
+		margin-left: 2rem;
+		padding: 0.5rem;
+		display: flex;
+		align-items: center;
+	}
 	.name-box {
 		display: flex;
 		margin: 0 auto;
@@ -72,7 +79,8 @@ export default {
 }
 h2 {
 	height: 30px;
-	margin-top: 10px;
+	display: flex;
+	align-items: center;
 	border-bottom: 2px solid black;
 }
 </style>
