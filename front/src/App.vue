@@ -6,11 +6,11 @@
 				class="main-input"
 				placeholder="소모임을 검색하세요"
 			/>
+			<p class="popular-title">인기 소모임</p>
 			<div class="popular-wrap">
-				<p class="popular-title">인기 소모임</p>
 				<div class="popular-item">
 					<div class="popular-img">
-						<img src="@/assets/color.png" alt="study-logo" />
+						<img src="@/assets/django.png" alt="study-logo" />
 						<p class="temp">5/10</p>
 					</div>
 					<div class="popular-content">
@@ -20,17 +20,15 @@
 					</div>
 				</div>
 				<div class="popular-item">
-					<div
-						class="popular-img"
-						style="background-image: url('@/assets/django.png');"
-					>
+					<div class="popular-img">
+						<img src="@/assets/react.png" alt="study-logo" />
 						<p class="temp">5/10</p>
 					</div>
-					<!-- <div class="popular-content">
+					<div class="popular-content">
 						<p>django</p>
 						<p>월, 수 9시-11시</p>
 						<p>web>django</p>
-					</div> -->
+					</div>
 				</div>
 				<div class="popular-item">
 					<div class="popular-img">
@@ -98,7 +96,8 @@ export default {
 	flex-direction: column;
 	justify-content: space-evenly;
 	align-items: center;
-	height: 100vh;
+	min-height: 100vh;
+	max-height: 100%;
 	background: $btn-purple-opacity;
 	.main-input {
 		width: 30%;
@@ -116,6 +115,7 @@ export default {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-evenly;
+		align-content: space-between;
 		position: relative;
 		.popular-title {
 			color: white;
@@ -125,19 +125,20 @@ export default {
 			left: 5px;
 		}
 		.popular-item {
-			width: 200px;
-			height: 200px;
-			margin: 0 25px;
-			display: grid;
-			place-items: center;
+			width: 230px;
+			margin: 0 0.5rem;
+			display: flex;
+			flex-direction: column;
 			color: white;
 			border: 1px solid transparent;
 			border-radius: 4px;
-			background: rgba(255, 255, 255, 0.1);
 			position: relative;
 			.popular-img {
 				width: 100%;
 				height: 100%;
+			}
+			.popular-content {
+				background: rgba(255, 255, 255, 0.1);
 			}
 			.temp {
 				position: absolute;
@@ -146,7 +147,9 @@ export default {
 			}
 			img {
 				width: 100%;
-				object-fit: cover;
+				height: 100%;
+				object-fit: fill;
+				border-radius: 4px;
 			}
 			p {
 				margin-top: -3px;
