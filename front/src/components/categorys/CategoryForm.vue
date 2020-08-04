@@ -41,5 +41,17 @@ export default {
 		width: 20%;
 		overflow: hidden;
 	}
+	@media screen and (max-width: 1024px) {
+		.study-li {
+			width: 30%;
+			overflow: hidden;
+		}
+	}
+	@media screen and (max-width: 640px) {
+		.study-li {
+			width: 45%;
+			overflow: hidden;
+		}
+	}
 }
 </style>

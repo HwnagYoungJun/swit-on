@@ -100,9 +100,9 @@ aside {
 			display: inline-block;
 			width: 100px;
 			padding: 7px 0;
-			border: 1px solid #6c23c0;
+			border: 1px solid $main-color;
 			border-radius: 30px;
-			color: #6c23c0;
+			color: $main-color;
 			background: none;
 			position: absolute;
 			right: 20px;

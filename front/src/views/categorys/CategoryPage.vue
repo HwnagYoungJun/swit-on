@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<h1>{{ categoryName }}</h1>
+		<CategoryNavForm></CategoryNavForm>
+		<h1>{{ initName }}</h1>
 		<h2>전체 스터디</h2>
 		<hr />
 		<CategoryForm :categoryName="categoryName"></CategoryForm>
@@ -10,14 +11,15 @@
 <script>
 import { fetchStudies } from '@/api/studies';
 import CategoryForm from '@/components/categorys/CategoryForm.vue';
+import CategoryNavForm from '@/components/categorys/CategoryNavForm.vue';
 export default {
 	components: {
 		CategoryForm,
+		CategoryNavForm,
 	},
 	data() {
 		return {
 			studyItems: [],
-			categoryName: null,
 		};
 	},
 	methods: {
@@ -26,8 +28,10 @@ export default {
 			this.studyItems = data.studies;
 		},
 	},
-	created() {
-		this.categoryName = this.$route.params.UpperCategoryName;
+	computed: {
+		initName() {
+			return this.$route.params.UpperCategoryName;
+		},
 	},
 };
 </script>

@@ -1,10 +1,24 @@
 <template>
 	<div class="card">
 		<div class="img-box">
-			<img src="@/assets/dd.png/" alt="" />
+			<img src="@/assets/black.png/" alt="" />
 		</div>
 		<div>
-			<h4>{{ studyData.title }}</h4>
+			<h3>{{ studyData.title }}</h3>
+		</div>
+		<div>
+			<router-link
+				:to="{
+					name: 'categorydetail',
+					params: { UpperCategoryName: studyData.upperCategory },
+				}"
+				>{{ studyData.upperCategory }}</router-link
+			>
+			<span> > {{ studyData.lowerCategory }}</span>
+		</div>
+		<div>
+			<p>{{ studyData.week }} {{ studyData.time }}</p>
+			<p class="expireDay">{{ studyData.expireDay }} 까지</p>
 		</div>
 	</div>
 </template>
@@ -16,6 +30,11 @@ export default {
 			studyData: {
 				// 난중에는 서버에서 받아올 데이터들
 				title: 'python정복',
+				time: '8:00 ~ 9:00',
+				week: '수, 일',
+				expireDay: '20.09.01',
+				upperCategory: '프로그래밍 언어',
+				lowerCategory: 'Python',
 			},
 		};
 	},
@@ -32,7 +51,6 @@ export default {
 
 	.img-box {
 		overflow: hidden;
-		border: 1px solid red;
 
 		img {
 			width: 100%;
@@ -43,6 +61,14 @@ export default {
 			transform: scale(1.1);
 			cursor: pointer;
 		}
+	}
+	p {
+		font-size: $font-normal;
+	}
+	.expireDay {
+		display: inline;
+		background: rgba(0, 0, 0, 0.1);
+		color: red;
 	}
 }
 </style>
