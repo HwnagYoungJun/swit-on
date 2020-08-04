@@ -1,5 +1,5 @@
 <template>
-	<form @submit.prevent="submitForm">
+	<form @submit.prevent="submitForm" enctype="multipart/form-data">
 		<div>
 			<label for="name">name : </label>
 			<input v-model="studyData.name" id="name" type="text" />
@@ -12,6 +12,10 @@
 				type="text"
 				row="5"
 			/>
+		</div>
+		<div>
+			<label for="users_limit">users_limit : </label>
+			<input v-model="studyData.users_limit" id="users_limit" type="number" />
 		</div>
 		<div>
 			<label for="start_time">start_time : </label>
@@ -44,14 +48,14 @@
 				v-model="studyData.isPrivate"
 				id="isPrivate"
 				type="radio"
-				value="false"
+				value="0"
 			/>
 			<label for="isPrivate">비공개 </label>
 			<input
 				v-model="studyData.isPrivate"
 				id="isPrivate"
 				type="radio"
-				value="true"
+				value="1"
 			/>
 		</div>
 		<div>
@@ -110,7 +114,14 @@ export default {
 				description: null,
 				week: null,
 				isRecruit: 1,
-				logo: null,
+				img: null,
+				isPrivate: false,
+				lowercategory_id: null,
+				start_term: null,
+				end_term: null,
+				start_time: null,
+				end_time: null,
+				users_limit: null,
 			},
 		};
 	},
@@ -134,7 +145,7 @@ export default {
 		},
 		onChangeFile(e) {
 			this.fileRoute = e.target.value;
-			this.studyData.logo = this.$refs.inputFile.files[0];
+			this.studyData.img = this.$refs.inputFile.files[0];
 		},
 	},
 };

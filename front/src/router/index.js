@@ -16,6 +16,18 @@ const routes = [
 		component: () => import('@/views/studies/StudyPage.vue'),
 	},
 	{
+		path: '/study/new',
+		name: 'addstudy',
+		component: () => import('@/views/studies/StudyAddPage.vue'),
+		beforeEnter,
+	},
+	{
+		path: '/study/:id/:board_name/new',
+		name: 'newArticle',
+		component: () => import('@/views/boards/StudyArticleAddPage.vue'),
+		beforeEnter,
+	},
+	{
 		path: '/study/:id',
 		name: 'studydetail',
 		component: () => import('@/views/studies/StudyDetail.vue'),
@@ -46,12 +58,6 @@ const routes = [
 				component: () => import('@/views/studies/children/StudyQuestion.vue'),
 			},
 		],
-	},
-	{
-		path: '/study/new',
-		name: 'addstudy',
-		component: () => import('@/views/studies/StudyAddPage.vue'),
-		beforeEnter,
 	},
 	{
 		path: '/study/:id/repository/:id',
@@ -89,12 +95,6 @@ const routes = [
 		beforeEnter(to, from, next) {
 			store.getters['isLogin'] ? next(false) : next();
 		},
-	},
-	{
-		path: '/study/:study_id/new',
-		name: 'newArticle',
-		component: () => import('@/views/boards/StudyArticleAddPage.vue'),
-		// beforeEnter,
 	},
 	{
 		path: '/mypage/',

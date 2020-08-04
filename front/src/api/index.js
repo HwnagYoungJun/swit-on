@@ -14,6 +14,4 @@ function createWithAuth(url, options) {
 
 export const auth = create(process.env.VUE_APP_API_URL);
 export const study = createWithAuth(`${process.env.VUE_APP_API_URL}study/`);
-export const articles = createWithAuth(
-	`${process.env.VUE_APP_API_URL}articles/`,
-);
+export const articles = createWithAuth(`${process.env.VUE_APP_API_URL}study/`);
