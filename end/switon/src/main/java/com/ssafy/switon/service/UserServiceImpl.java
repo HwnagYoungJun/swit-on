@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.UserDAO;
+import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserLoginDTO;
 import com.ssafy.switon.dto.UserRegisterDTO;
@@ -74,5 +75,10 @@ public class UserServiceImpl implements UserService {
 	public boolean nameAlreadyExists(String name) {
 		int id = userDao.getUserIdByName(name);
 		return id > 0;
+	}
+
+	@Override
+	public boolean modify(UserInfoDTO userInfoDTO) {
+		return userDao.updateUser(userInfoDTO) == 1;
 	}
 }

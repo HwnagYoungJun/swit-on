@@ -1,14 +1,24 @@
 package com.ssafy.switon.dto;
 
+import io.swagger.annotations.ApiParam;
+
 public class UserDTO {
 	
+	@ApiParam(value = "유저 id (PK)", required = false, hidden = true)
 	int id;
+	@ApiParam(value = "유저 닉네임")
 	String name;
+	@ApiParam(value = "유저 아이디(이메일)", required = false, hidden = true)
 	String email;
+	@ApiParam(value = "유저 비밀번호")
 	String password;
+	@ApiParam(value = "유저 소갯말")
 	String introduce;
+	@ApiParam(value = "유저 프로필 이미지")
 	String profile_image;
+	@ApiParam(value = "유저 관심 카테고리(소카테고리) id (FK)")
 	int uppercategory_id;
+	@ApiParam(value = "유저 탈퇴시 닉네임 백업", required = false, hidden = true)
 	String name_legacy;
 	
 	public int getId() {

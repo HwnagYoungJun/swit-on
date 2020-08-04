@@ -21,5 +21,7 @@ public interface UserDAO {
 	int getUserIdByEmail(String email);
 	// 유저명(name)으로 유저 id 가져오기
 	int getUserIdByName(String name);
+	// 유저 정보 수정
+	int updateUser(UserInfoDTO userInfoDTO);
 
 }

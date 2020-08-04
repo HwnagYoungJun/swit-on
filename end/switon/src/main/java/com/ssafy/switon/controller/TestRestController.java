@@ -192,31 +192,31 @@ public class TestRestController {
 		return joinService.search(id);
 	}
 	
-	@ApiOperation(value = "소모임 가입 정보 등록한다", response = String.class)
-	@PostMapping("/join/write")
-	public String write(Join join) {
-		System.out.println("소모임 가입 정보 등록");
-		if(joinService.create(join)) {
-			System.out.println("소모임 가입 정보 등록 성공!!!");
-			return "success";
-		} else {
-			System.out.println("소모임 가입 정보 등록 실패...");
-			return "fail";
-		}
-	}
+//	@ApiOperation(value = "소모임 가입 정보 등록한다", response = String.class)
+//	@PostMapping("/join/write")
+//	public String write(Join join) {
+//		System.out.println("소모임 가입 정보 등록");
+//		if(joinService.create(join)) {
+//			System.out.println("소모임 가입 정보 등록 성공!!!");
+//			return "success";
+//		} else {
+//			System.out.println("소모임 가입 정보 등록 실패...");
+//			return "fail";
+//		}
+//	}
 	
-	@ApiOperation(value = "소모임 가입 정보 삭제한다", response = String.class)
-	@GetMapping("/join/delete/{id}")
-	public String deleteJoin(@PathVariable("id") int id) {
-		System.out.println("소모임 가입 정보 삭제");
-		if(joinService.delete(id)) {
-			System.out.println("소모임 가입 정보 삭제 성공!!!");
-			return "success";
-		} else {
-			System.out.println("소모임 가입 정보 삭제 실패...");
-			return "fail";
-		}
-	}
+//	@ApiOperation(value = "소모임 가입 정보 삭제한다", response = String.class)
+//	@GetMapping("/join/delete/{id}")
+//	public String deleteJoin(@PathVariable("id") int id) {
+//		System.out.println("소모임 가입 정보 삭제");
+//		if(joinService.delete(id)) {
+//			System.out.println("소모임 가입 정보 삭제 성공!!!");
+//			return "success";
+//		} else {
+//			System.out.println("소모임 가입 정보 삭제 실패...");
+//			return "fail";
+//		}
+//	}
 	
 	@Autowired
 	CommentService commentService;

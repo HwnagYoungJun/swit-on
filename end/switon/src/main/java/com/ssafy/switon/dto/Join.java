@@ -1,13 +1,14 @@
 package com.ssafy.switon.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Join {
 	int id;
 	int user_id;
 	int study_id;
 	int isComplete;
-	Date reg_date;
+	Timestamp reg_date;
 	int isLeader;
 	
 	
@@ -41,10 +42,10 @@ public class Join {
 	public void setIsComplete(int isComplete) {
 		this.isComplete = isComplete;
 	}
-	public Date getReg_date() {
+	public Timestamp getReg_date() {
 		return reg_date;
 	}
-	public void setReg_date(Date reg_date) {
+	public void setReg_date(Timestamp reg_date) {
 		this.reg_date = reg_date;
 	}
 	@Override

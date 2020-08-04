@@ -27,7 +27,7 @@ public class JWTUtil {
 				.claim("id", user.getId())
 				.claim("name", user.getName())
 				.claim("email", user.getEmail())
-				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1시간
+				.setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 6))) // 6시간?
 				.signWith(key)
 				.compact();
 		return jws;

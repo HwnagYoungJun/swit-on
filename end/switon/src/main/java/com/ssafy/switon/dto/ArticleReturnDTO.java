@@ -1,11 +1,10 @@
 package com.ssafy.switon.dto;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import io.swagger.annotations.ApiParam;
 
-public class Article {
+public class ArticleReturnDTO {
 	
 	@ApiParam(value = "게시글 id (PK)", required = false, hidden = true)
 	int id;
@@ -24,12 +23,8 @@ public class Article {
 	@ApiParam(value = "게시글 수정시간", required = false, hidden = true)
 	Timestamp updated_at;
 	
-	public int getBoard_id() {
-		return board_id;
-	}
-	public void setBoard_id(int board_id) {
-		this.board_id = board_id;
-	}
+	StudySimple study;
+	UserSimpleDTO user;
 	public int getId() {
 		return id;
 	}
@@ -60,6 +55,12 @@ public class Article {
 	public void setFile(String file) {
 		this.file = file;
 	}
+	public int getBoard_id() {
+		return board_id;
+	}
+	public void setBoard_id(int board_id) {
+		this.board_id = board_id;
+	}
 	public Timestamp getCreated_at() {
 		return created_at;
 	}
@@ -72,10 +73,26 @@ public class Article {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
+	public StudySimple getStudy() {
+		return study;
+	}
+	public void setStudy(StudySimple study) {
+		this.study = study;
+	}
+	public UserSimpleDTO getUser() {
+		return user;
+	}
+	public void setUser(UserSimpleDTO user) {
+		this.user = user;
+	}
 	@Override
 	public String toString() {
-		return "Article [id=" + id + ", title=" + title + ", content=" + content + ", user_id=" + user_id + ", file="
-				+ file + ", board_id=" + board_id + ", created_at=" + created_at + ", updated_at=" + updated_at + "]";
+		return "ArticleReturnDTO [id=" + id + ", title=" + title + ", content=" + content + ", user_id=" + user_id
+				+ ", file=" + file + ", board_id=" + board_id + ", created_at=" + created_at + ", updated_at="
+				+ updated_at + ", study=" + study + ", user=" + user + "]";
 	}
 	
+	
+	
+
 }

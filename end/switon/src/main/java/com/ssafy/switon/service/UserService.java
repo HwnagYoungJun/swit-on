@@ -2,6 +2,7 @@ package com.ssafy.switon.service;
 
 import java.util.List;
 
+import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserLoginDTO;
 import com.ssafy.switon.dto.UserRegisterDTO;
@@ -20,5 +21,7 @@ public interface UserService {
 	boolean emailAlreadyExists(String email);
 	// 닉네임(name) 중복 체크 (이미 있으면 T, 없으면 F)
 	boolean nameAlreadyExists(String name);
+	// 회원 정보 수정
+	boolean modify(UserInfoDTO userInfoDTO);
 
 }

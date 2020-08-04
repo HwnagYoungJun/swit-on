@@ -32,7 +32,8 @@
 			end_time,
 			lowercategory_id,
 			logo,
-			users_limit
+			users_limit,
+			(select count(*) from `join` where study_id = study.id) as users_current
 		from study
 	</select>
 	
@@ -53,7 +54,8 @@
 			end_time,
 			lowercategory_id,
 			logo,
-			users_limit
+			users_limit,
+			(select count(*) from `join` where study_id = #{id}) as users_current
 		from study
 		where id = #{id}
 	</select>
@@ -104,7 +106,7 @@
 				#{description},
 				#{code},
 				#{isPrivate},
-				#{isRecruit},
+				1,
 				#{start_term},
 				#{end_term},
 				#{week},
@@ -124,7 +126,6 @@
 			description = #{description},
 			code = #{code},
 			isPrivate = #{isPrivate},
-			isRecruit = #{isRecruit},
 			start_term = #{start_term},
 			end_term = #{end_term},
 			week = #{week},

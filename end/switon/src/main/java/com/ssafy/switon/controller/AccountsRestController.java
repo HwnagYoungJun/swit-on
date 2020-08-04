@@ -58,14 +58,14 @@ public class AccountsRestController {
 		return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
 	}
 	
-//	@ApiOperation(value = "(테스트용) 헤더의 토큰을 읽어서 해당하는 유저 정보를 반환한다.", response = UserInfoDTO.class)
-//	@GetMapping("/info")
-//	public Object info(HttpServletRequest request) {
-//		String userToken = request.getHeader("Token");
-//		System.out.println("유저 정보 반환");
-//		UserInfoDTO user = userService.search(jwtUtil.getUserPK(userToken));
-//		return new ResponseEntity<>(user, HttpStatus.OK);
-//	}
+	@ApiOperation(value = "(테스트용) 헤더의 토큰을 읽어서 해당하는 유저 정보를 반환한다.", response = UserInfoDTO.class)
+	@GetMapping("/")
+	public Object info(HttpServletRequest request) {
+		String userToken = request.getHeader("Authentication").substring("Bearer ".length());
+		System.out.println("유저 정보 반환");
+		UserInfoDTO user = userService.search(jwtUtil.getUserPK(userToken));
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
 	
 	@ApiOperation(value = "회원 가입을 한다. 가입 성공시 로그인을 자동으로 수행하여 토큰을 반환한다.", response = UserReturnDTO.class)
 	@PostMapping("/register")

@@ -56,4 +56,9 @@ public class JoinDAOImpl implements JoinDAO {
 		return cnt = cnt == null ? 0 : cnt;
 	}
 
+	@Override
+	public int deleteJoinByIds(Join join) {
+		return sqlsession.delete("join.deleteJoinByIds", join);
+	}
+
 }

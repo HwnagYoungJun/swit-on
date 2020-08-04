@@ -66,4 +66,11 @@
 		where id = #{id}
 	</delete>
 	
+	<!-- studyId와 userId로 소모임 탈퇴 -->
+	<delete id="deleteJoinByIds">
+		delete from `join`
+		where user_id = #{userId}
+		and study_id = #{studyId}
+	</delete>
+	
 </mapper>

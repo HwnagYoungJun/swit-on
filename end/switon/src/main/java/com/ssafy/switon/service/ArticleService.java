@@ -3,6 +3,7 @@ package com.ssafy.switon.service;
 import java.util.List;
 
 import com.ssafy.switon.dto.Article;
+import com.ssafy.switon.dto.ArticleReturnDTO;
 
 public interface ArticleService {
 	
@@ -26,5 +27,7 @@ public interface ArticleService {
 	boolean modify(Article article);
 	// 게시글 삭제
 	boolean delete(int id);
+	// 게시글 반환 new type
+	List<ArticleReturnDTO> searchArticles(int studyId, int boardId);
 
 }
