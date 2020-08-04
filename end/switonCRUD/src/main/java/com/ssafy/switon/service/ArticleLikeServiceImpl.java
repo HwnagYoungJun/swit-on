@@ -39,4 +39,9 @@ public class ArticleLikeServiceImpl implements ArticleLikeService {
 		return articlelikeDAO.selectLikeCount(article_id);
 	}
 
+	@Override
+	public ArticleLike searchByUser_Article(int userId, int articleId) {
+		return articlelikeDAO.selectArticleLikeByUser_Article(userId, articleId);
+	}
+
 }

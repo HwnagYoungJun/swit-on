@@ -39,4 +39,9 @@ public class StudyLikeServiceImpl implements StudyLikeService {
 		return studylikeDAO.selectLikeCount(study_id);
 	}
 
+	@Override
+	public StudyLike searchByUser_Study(int user_id, int study_id) {
+		return studylikeDAO.selectStudyLikeByUser_Study(user_id, study_id);
+	}
+
 }

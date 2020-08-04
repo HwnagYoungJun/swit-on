@@ -39,4 +39,9 @@ public class CommentLikeServiceImpl implements CommentLikeService {
 		return commentlikeDAO.selectLikeCount(comment_id);
 	}
 
+	@Override
+	public CommentLike searchByUser_Comment(int userId, int commentId) {
+		return commentlikeDAO.selectCommentLikeByUser_Comment(userId, commentId);
+	}
+
 }

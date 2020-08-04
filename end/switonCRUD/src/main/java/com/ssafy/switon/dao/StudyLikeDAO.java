@@ -9,6 +9,8 @@ public interface StudyLikeDAO {
 	List<StudyLike> selectStudyLikes();
 	// 소모임 좋아요 조회
 	StudyLike selectStudyLike(int id);
+	// 해당 유저가 좋아요를 누른 글 조회
+	StudyLike selectStudyLikeByUser_Study(int user_id, int study_id);
 	// 해당 소모임 좋아요수 조회
 	int selectLikeCount(int study_id);
 	// 소모임 좋아요 등록

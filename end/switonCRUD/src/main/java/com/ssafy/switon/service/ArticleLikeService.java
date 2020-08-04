@@ -16,4 +16,6 @@ public interface ArticleLikeService {
 	boolean createArticleLike(ArticleLike articlelike);
 	// 글좋아요 삭제
 	boolean deleteArticleLike(int id);
+	// 유저가 좋아요 누른 글 조회
+	ArticleLike searchByUser_Article(int userId, int articleId);
 }
