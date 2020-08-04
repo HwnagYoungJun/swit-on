@@ -50,6 +50,7 @@ export default {
 	position: relative;
 
 	.img-box {
+		margin-top: 1rem;
 		overflow: hidden;
 
 		img {
@@ -67,8 +68,11 @@ export default {
 	}
 	.expireDay {
 		display: inline;
+		padding: 0.2rem;
+		border-radius: 5px;
 		background: rgba(0, 0, 0, 0.1);
-		color: red;
+		color: #f45340;
+		font-size: xx-small;
 	}
 }
 </style>
