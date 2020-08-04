@@ -9,7 +9,6 @@ function createArticle(studyId, boardName, articleData) {
 	formdata.append('title', articleData.title);
 	formdata.append('content', articleData.content);
 	formdata.append('file', articleData.file);
-
 	return articles.post(`/${studyId}/${boardName}`, formdata);
 }
 
@@ -29,10 +28,23 @@ function fetchArticle(articleId) {
 	return articles.get(`/${articleId}`);
 }
 
+function fetchRepositoryArticles(studyId) {
+	return articles.get(`/${studyId}/repository/`);
+}
+function fetchQnaArticles(studyId) {
+	return articles.get(`/${studyId}/qna/`);
+}
+function fetchNoticeArticles(studyId) {
+	return articles.get(`/${studyId}/notice/`);
+}
+
 export {
 	fetchArticles,
 	fetchArticle,
 	createArticle,
 	deleteArticle,
 	updateArticle,
+	fetchRepositoryArticles,
+	fetchQnaArticles,
+	fetchNoticeArticles,
 };
