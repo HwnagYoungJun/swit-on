@@ -1,7 +1,9 @@
 <template>
 	<div>
 		<CategoryNavForm></CategoryNavForm>
+		<br />
 		<h1>{{ initName }}</h1>
+		<br />
 		<h2>전체 스터디</h2>
 		<hr />
 		<CategoryForm :categoryName="categoryName"></CategoryForm>
