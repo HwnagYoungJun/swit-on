@@ -2,14 +2,7 @@
 	<section>
 		<!-- <h1>메인페이지</h1> -->
 		<nav>
-			<ul class="sub-nav">
-				<li>웹</li>
-				<li>모바일</li>
-				<li>AI</li>
-				<li>CS</li>
-				<li>프로그래밍 언어</li>
-				<li>언어</li>
-			</ul>
+			<CategoryNavForm></CategoryNavForm>
 		</nav>
 		<section>
 			<flickity ref="flickity" :options="flickityOptions">
@@ -164,9 +157,11 @@
 
 <script>
 import Flickity from 'vue-flickity';
+import CategoryNavForm from '@/components/categorys/CategoryNavForm.vue';
 export default {
 	components: {
 		Flickity,
+		CategoryNavForm,
 	},
 	data() {
 		return {
