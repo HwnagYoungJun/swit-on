@@ -124,7 +124,7 @@ const routes = [
 		],
 	},
 	{
-		path: 'modifyprofile',
+		path: '/modifyprofile',
 		name: 'modifyprofile',
 		component: () => import('@/views/profiles/ModifyProfilePage.vue'),
 	},
