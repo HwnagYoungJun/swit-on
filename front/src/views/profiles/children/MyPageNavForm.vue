@@ -1,17 +1,19 @@
 <template>
-	<div class="el-box">
-		<router-link :to="{ name: 'myschedule' }" class="element">{{
-			el.el1
-		}}</router-link>
-		<router-link :to="{ name: 'mygroup' }" class="element">{{
-			el.el2
-		}}</router-link>
-		<router-link :to="{ name: 'mystorage' }" class="element">{{
-			el.el3
-		}}</router-link>
-		<router-link :to="{ name: 'myarticle' }" class="element">{{
-			el.el4
-		}}</router-link>
+	<div>
+		<div class="el-box">
+			<router-link :to="{ name: 'myschedule' }" class="element"
+				>{{ el.el1 }}<span></span
+			></router-link>
+			<router-link :to="{ name: 'mygroup' }" class="element"
+				>{{ el.el2 }}<span></span
+			></router-link>
+			<router-link :to="{ name: 'mystorage' }" class="element"
+				>{{ el.el3 }}<span></span
+			></router-link>
+			<router-link :to="{ name: 'myarticle' }" class="element"
+				>{{ el.el4 }}<span></span
+			></router-link>
+		</div>
 		<hr />
 	</div>
 </template>
@@ -21,10 +23,10 @@ export default {
 	data() {
 		return {
 			el: {
-				el1: '나의 일정',
-				el2: '나의 모임',
-				el3: '나의 저장소',
-				el4: '나의 글',
+				el1: '일정',
+				el2: '모임',
+				el3: '저장소',
+				el4: '글',
 			},
 		};
 	},
@@ -32,9 +34,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+hr {
+	margin-bottom: 2rem;
+	border: none;
+	border-bottom: 1px solid rgb(228, 228, 228);
+}
 .el-box {
 	display: flex;
-	margin-bottom: 2rem;
+	margin-top: 2rem;
+	@media screen and (max-width: 1024px) {
+		margin-top: 1rem;
+	}
 	.element {
 		text-decoration: none;
 		color: black;
@@ -42,12 +52,17 @@ export default {
 		margin-right: 1.25rem;
 		margin-left: 0.7rem;
 		border-bottom: 3px solid transparent;
+		position: relative;
 	}
-	.element:focus {
-		border-bottom: 3px solid green;
-	}
-	.element:hover {
-		border-bottom: 2px solid black;
+	a.router-link-exact-active span {
+		width: 100%;
+		height: 8px;
+		position: absolute;
+		bottom: -4px;
+		left: 0;
+		border-radius: 2px;
+		background: $btn-purple;
+		opacity: 0.5;
 	}
 }
 </style>
