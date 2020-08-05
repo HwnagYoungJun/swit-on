@@ -81,4 +81,10 @@ public class UserServiceImpl implements UserService {
 	public boolean modify(UserInfoDTO userInfoDTO) {
 		return userDao.updateUser(userInfoDTO) == 1;
 	}
+
+	@Override
+	public boolean signOut(int userId) {
+		UserInfoDTO userInfoDTO = userDao.selectUserById(userId);
+		return userDao.updateUserLegacy(userInfoDTO) == 1;
+	}
 }

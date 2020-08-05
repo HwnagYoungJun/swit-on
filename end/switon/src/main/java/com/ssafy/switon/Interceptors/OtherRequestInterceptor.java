@@ -1,5 +1,7 @@
 package com.ssafy.switon.Interceptors;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.service.UserService;
 import com.ssafy.switon.util.JWTUtil;
@@ -45,8 +48,8 @@ public class OtherRequestInterceptor extends HandlerInterceptorAdapter {
 				System.out.println("토큰: " + jwsString);
 //				System.out.println(jwtUtil.getUserPK(jwsString));
 				if (jwsString == null) {
-					System.out.println("** 토큰이 없습니다.");
-					response.getWriter().print("request must have a token");
+					setResponseMsg(response, "로그인이 필요한 서비스입니다. 로그인을 해주세요.");
+					System.out.println("토큰이 없습니다.");
 					return false;
 				}
 				jws = Jwts.parserBuilder()
@@ -67,30 +70,35 @@ public class OtherRequestInterceptor extends HandlerInterceptorAdapter {
 					System.out.println(name + " 유저 토큰 확인 완료");
 					System.out.println("----------------------------------");
 				} else {
-					System.out.println("미등록 유저 토큰");
-					response.getWriter().print("not valid user");
+					System.out.println("** 미등록 유저 토큰");
+					setResponseMsg(response, "등록되지 않은 사용자입니다. 다시 로그인해주세요.");
 					return false;
 				}
 			} catch (NullPointerException ne) {
-				System.out.println("** 토큰이 없음");
-				response.getWriter().print("request must have a token");
+				System.out.println("** 미등록 유저 토큰");
+				setResponseMsg(response, "등록되지 않은 사용자입니다. 다시 로그인해주세요.");
 				return false;
 			} catch (JwtException je) {
 				System.out.println("** 유효하지 않은 토큰");
-				response.getWriter().print("not valid token");
 				System.out.println(je.getMessage());
-				response.sendRedirect("http://127.0.0.1:80/");
+				setResponseMsg(response, "로그인이 시간이 만료되었습니다. 로그인을 해주세요.");
 				return false;
 			} catch (Exception e) {
 				response.getWriter().print("error occured while getting token");
 				System.out.println("** 토큰을 받아올 수 없었습니다.");
 				System.out.println(e.getMessage());
+				setResponseMsg(response, "로그인 정보를 받아올 수 없습니다. 다시 로그인해주세요.");
+				return false;
 			}
 		}
 		
 		return super.preHandle(request, response, handler);
 	}
-
 	
-
+	private void setResponseMsg(HttpServletResponse response, String msg) throws IOException {
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("application/json");
+		response.getWriter().write((new ReturnMsg(msg).toString()));
+		response.setStatus(401);
+	}
 }

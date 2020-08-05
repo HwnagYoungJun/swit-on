@@ -65,4 +65,9 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return sqlSession.selectList("article.selectReposByUserId", userId);
 	}
 
+	@Override
+	public List<Article> selectArticlesByBoardIdLimit5(int boardId) {
+		return sqlSession.selectList("article.selectArticlesByBoardIdLimit5", boardId);
+	}
+
 }

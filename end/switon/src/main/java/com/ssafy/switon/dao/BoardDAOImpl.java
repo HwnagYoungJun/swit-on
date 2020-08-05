@@ -56,4 +56,21 @@ public class BoardDAOImpl implements BoardDAO {
 		Integer boardId = sqlSession.selectOne("board.findNoticeBoardId", studyId);
 		return boardId = boardId == null ? 0 : boardId;
 	}
+
+	@Override
+	public int findBoardId(int studyId, int type) {
+		Integer boardId = 0;
+		switch(type) {
+		case 1:
+			boardId = sqlSession.selectOne("board.findNoticeBoardId", studyId);
+			break;
+		case 2:
+			boardId = sqlSession.selectOne("board.findQnABoardId", studyId);
+			break;
+		case 3:
+			boardId = sqlSession.selectOne("board.findRepoBoardId", studyId);
+			break;
+		}
+		return boardId = boardId == null ? 0 : boardId;
+	}
 }

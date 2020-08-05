@@ -54,5 +54,10 @@ public class UserDAOImpl implements UserDAO {
 		return sqlSession.update("user.updateUser", userInfoDTO);
 	}
 
+	@Override
+	public int updateUserLegacy(UserInfoDTO userInfoDTO) {
+		return sqlSession.update("user.updateUserLegacy", userInfoDTO);
+	}
+
 
 }

@@ -2,7 +2,6 @@ package com.ssafy.switon.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,13 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +23,7 @@ import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleReturnDTO;
 import com.ssafy.switon.dto.Board;
 import com.ssafy.switon.dto.Comment;
-import com.ssafy.switon.dto.Join;
+import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyReturnDTO;
 import com.ssafy.switon.service.ArticleService;
@@ -99,8 +96,12 @@ public class StudyRestController {
 	@PostMapping("/")
 	public Object createStudy(@RequestParam(value = "img", required = false) MultipartFile img, Study study, HttpServletRequest request) {
 		
+		int userId = getUserPK(request);
+//		String baseDirectory = "src"+ File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "upload";
+//		String baseDirectory = request.getSession().getServletContext().getRealPath("upload");
+		String filePath = getUploadPath(request, userId);
 		if(img != null) {
-			String filePath = baseDirectory + "\\" + img.getOriginalFilename();
+			System.out.println(filePath);
 			try {
 				img.transferTo(new File(filePath));
 				study.setLogo(filePath);
@@ -111,7 +112,6 @@ public class StudyRestController {
 			}
 		}
 		// 토큰에서 유저 ID 읽어와서 스터디의 모임장 id로 등록
-		int userId = getUserPK(request);
 		study.setUser_id(userId);
 		int studyId = studyService.create(study, userId);
 		if(studyId > 0) {
@@ -123,24 +123,20 @@ public class StudyRestController {
 			joinService.join(studyId, userId);
 			System.out.println("모임장의 스터디 가입 성공!");
 			
-			return new ResponseEntity<>("success", HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("스터디가 정상적으로 생성되었습니다."), HttpStatus.OK);
 		}
 		System.out.println("** 스터디 생성 실패 - 서버 에러");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("소모임 생성을 실패했습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
 
-	private int getUserPK(HttpServletRequest request) {
-		return jwtUtil.getUserPK(request.getHeader("Authentication").substring("Bearer ".length()));
-	}
 	
 	@ApiOperation(value = "스터디를 수정한다. 해당 소모임의 모임장이 아닌 사람이 시도할 경우 실패한다. (로그인 필요)")
 	@PutMapping("/{studyId}")
 	public Object modifyStudy(@RequestParam(value = "img", required = false) MultipartFile img,
 							Study study, @PathVariable("studyId") int studyId, HttpServletRequest request) {
-		// 토큰에서 유저 ID 읽어와서 스터디의 모임장 id로 등록
+		int userId = getUserPK(request);
 		if(img != null) {
-			String filePath = baseDirectory + "\\" + img.getOriginalFilename();
+			String filePath = getUploadPath(request, userId);
 			try {
 				img.transferTo(new File(filePath));
 				study.setLogo(filePath);
@@ -150,14 +146,13 @@ public class StudyRestController {
 				e.printStackTrace();
 			}
 		}
-		int userId = getUserPK(request);
 		Study originalStudy = studyService.search(studyId);
 		study.setId(studyId);
 		study.setUser_id(userId);
 		
 		if(originalStudy == null) {
 			System.out.println("** 스터디 수정 실패 - 없는 스터디입니다.");
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 스터디입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		if(study.getLogo() == null) {
@@ -174,13 +169,13 @@ public class StudyRestController {
 		
 		if(originalStudy.getUser_id() != userId) {
 			System.out.println("** 스터디 수정 실패 - 권한 없음");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("수정 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		
 		study.setId(studyId);
 		study.setUser_id(userId);
 		studyService.modify(study);
-		return new ResponseEntity<>("success", HttpStatus.OK);
+		return new ResponseEntity<>(new ReturnMsg("스터디를 성공적으로 수정하였습니다."), HttpStatus.OK);
 		
 	}
 	
@@ -192,14 +187,14 @@ public class StudyRestController {
 		
 		if(study.getUser_id() != userId) {
 			System.out.println("** 스터디 삭제 실패 - 권한 없음");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("삭제 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		if(studyService.delete(studyId)) {
 			System.out.println("스터디 삭제 성공");
-			return new ResponseEntity<>("success", HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("스터디를 성공적으로 삭제하였습니다."), HttpStatus.OK);
 		}
 		System.out.println("** 스터디 삭제 실패 - 서버 에러");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("스터디 삭제에 실패했습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	
@@ -208,13 +203,13 @@ public class StudyRestController {
 	public Object showNotice(@PathVariable("studyId") int studyId, HttpServletRequest request) {
 		int noticeBoardId = boardService.findNoticeBoardId(studyId);
 		if(noticeBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticles(studyId, noticeBoardId);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, noticeBoardId);
 //			List<Article> articles = articleService.searchBoardArticles(noticeBoardId);
 			System.out.println(studyId + "번 스터디의 공지사항 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
 		}
 		System.out.println("** " + studyId + "번 스터디의 공지사항 글 리스트 반환 실패");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("공지사항을 받아올 수 없었습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 qna 게시판 글 리스트를 반환한다.", response = List.class)
@@ -223,17 +218,17 @@ public class StudyRestController {
 		int userId = getUserPK(request);
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** qna 게시판 글리스트 조회 실패 - 권한 없음");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		int qnaBoardId = boardService.findQnABoardId(studyId);
 		if(qnaBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticles(studyId, qnaBoardId);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, qnaBoardId);
 //			List<Article> articles = articleService.searchBoardArticles(qnaBoardId);
 			System.out.println(studyId + "번 스터디의 QnA 게시판 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
 		}
 		System.out.println("** " + studyId + "번 스터디의 QnA 게시판 글 리스트 반환 실패");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("QnA를 받아올 수 없었습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 자료실 게시판 글 리스트를 반환한다.", response = List.class)
@@ -242,17 +237,17 @@ public class StudyRestController {
 		int userId = getUserPK(request);
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 자료실 게시판 글 조회 실패 - 권한 없음");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		int repoBoardId = boardService.findRepoBoardId(studyId);
 		if(repoBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticles(studyId, repoBoardId);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, repoBoardId);
 //			List<Article> articles = articleService.searchBoardArticles(repoBoardId);
 			System.out.println(studyId + "번 스터디의 자료실 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
 		}
 		System.out.println("** " + studyId + "번 스터디의 자료실 글 리스트 반환 실패");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("자료실 글을 받아올 수 없었습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "공지글 작성 (모임장 로그인 필요)")
@@ -263,7 +258,7 @@ public class StudyRestController {
 		
 		if(userId != study.getUser_id()) {
 			System.out.println("** 공지글 작성 실패 - 권한 없음");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("작성 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		
 		int noticeBoardId = boardService.findNoticeBoardId(studyId);
@@ -272,17 +267,22 @@ public class StudyRestController {
 		
 		if(articleService.create(article)) {
 			System.out.println("공지글 작성 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("공지글을 성공적으로 작성하였습니다."), HttpStatus.OK);
 		}
 		System.out.println("** 공지글 작성 실패 - 서버 오류...");
-		return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(new ReturnMsg("공지글 작성을 실패했습니다. 서버 관리자에게 문의 바랍니다."), HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ApiOperation(value = "스터디의 qna 게시판에 글을 작성한다. (로그인 필요)")
 	@PostMapping("/{studyId}/qna")
 	public Object writeQna(@RequestParam(value = "img", required = false) MultipartFile img, Article article, @PathVariable("studyId") int studyId, HttpServletRequest request) {
+		int userId = getUserPK(request);
+		if(!joinService.isMember(studyId, userId)) {
+			System.out.println("** qna 글 작성 실패 - 가입하지 않은 멤버입니다.");
+			return new ResponseEntity<>(new ReturnMsg("작성 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+		}
 		if(img != null) {
-			String filePath = baseDirectory + "\\" + img.getOriginalFilename();
+			String filePath = getUploadPath(request, userId);
 			try {
 				img.transferTo(new File(filePath));
 				article.setFile(filePath);
@@ -292,23 +292,27 @@ public class StudyRestController {
 				e.printStackTrace();
 			}
 		}
-		int userId = getUserPK(request);
 		if(joinService.isMember(studyId, userId)) {
 			article.setBoard_id(boardService.findQnABoardId(studyId));
 			article.setUser_id(userId);
 			articleService.create(article);
 			System.out.println(studyId + "번 스터디의 qna 게시판에 글 작성 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("글을 성공적으로 작성하였습니다."), HttpStatus.OK);
 		}
 		System.out.println("** " + studyId + "번 스터디의 qna 게시판에 글 작성 실패...");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("글 작성을 실패하였습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 자료실 게시판에 글을 작성한다. (로그인 필요)")
 	@PostMapping("/{studyId}/repository")
 	public Object writeRepo(@RequestParam(value = "img", required = false) MultipartFile img, Article article, @PathVariable("studyId") int studyId, HttpServletRequest request) {
+		int userId = getUserPK(request);
+		if(!joinService.isMember(studyId, userId)) {
+			System.out.println("** 자료실 글 작성 실패 - 가입하지 않은 멤버입니다.");
+			return new ResponseEntity<>(new ReturnMsg("작성 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+		}
 		if(img != null) {
-			String filePath = baseDirectory + "\\" + img.getOriginalFilename();
+			String filePath = getUploadPath(request, userId);
 			try {
 				img.transferTo(new File(filePath));
 				article.setFile(filePath);
@@ -318,16 +322,15 @@ public class StudyRestController {
 				e.printStackTrace();
 			}
 		}
-		int userId = getUserPK(request);
 		if(joinService.isMember(studyId, userId)) {
 			article.setBoard_id(boardService.findRepoBoardId(studyId));
 			article.setUser_id(userId);
 			articleService.create(article);
 			System.out.println(studyId + "번 스터디의 자료실 게시판에 글 작성 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("글을 성공적으로 작성하였습니다."), HttpStatus.OK);
 		}
 		System.out.println("** " + studyId + "번 스터디의 자료실 게시판에 글 작성 실패...");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("글 작성을 실패하였습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 공지사항 글 조회")
@@ -340,7 +343,7 @@ public class StudyRestController {
 			return new ResponseEntity<>(article, HttpStatus.OK);
 		}
 		System.out.println("** " + articleId + "번 글 조회 실패..");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("글을 불러올 수 없습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 qna 게시판 글 조회")
@@ -349,7 +352,7 @@ public class StudyRestController {
 		int userId = getUserPK(request);
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** qna 게시판 글 조회 실패 - 권한 없음");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		Article article = articleService.search(articleId);
 		if(article != null) {
@@ -357,7 +360,7 @@ public class StudyRestController {
 			return new ResponseEntity<>(article, HttpStatus.OK);
 		}
 		System.out.println("** " + articleId + "번 글 조회 실패..");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("글을 불러올 수 없습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 자료실 게시판 글 조회")
@@ -366,7 +369,7 @@ public class StudyRestController {
 		int userId = getUserPK(request);
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 자료실 게시판 글 조회 실패 - 권한 없음");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		Article article = articleService.search(articleId);
 		if(article != null) {
@@ -374,7 +377,7 @@ public class StudyRestController {
 			return new ResponseEntity<>(article, HttpStatus.OK);
 		}
 		System.out.println("** " + articleId + "번 글 조회 실패..");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("글을 불러올 수 없습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 공지사항 글 수정 (로그인 필요)")
@@ -385,12 +388,12 @@ public class StudyRestController {
 		
 		if(originalArticle == null) {
 			System.out.println("** " + articleId + "번 글 수정 실패 - 찾을 수 없는 게시글");
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		int userId = getUserPK(request);
 		if(originalArticle.getUser_id() != userId) { // 내가 쓴 글이 아니면 실패
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		
 		article.setId(articleId);
@@ -398,15 +401,16 @@ public class StudyRestController {
 		article.setBoard_id(boardService.findQnABoardId(studyId));
 		
 		articleService.modify(article);
-		return new ResponseEntity<>("success", HttpStatus.OK);
+		return new ResponseEntity<>(new ReturnMsg("성공적으로 수정하였습니다."), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "스터디의 QnA 게시판 글 수정 (로그인 필요)")
 	@PutMapping("/{studyId}/qna/{articleId}")
 	public Object modifyQna(@RequestParam(value = "img", required = false) MultipartFile img, 
 						Article article, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+		int userId = getUserPK(request);
 		if(img != null) {
-			String filePath = baseDirectory + "\\" + img.getOriginalFilename();
+			String filePath = getUploadPath(request, userId);
 			try {
 				img.transferTo(new File(filePath));
 				article.setFile(filePath);
@@ -421,12 +425,11 @@ public class StudyRestController {
 		
 		if(originalArticle == null) {
 			System.out.println("** " + articleId + "번 글 수정 실패 - 찾을 수 없는 게시글");
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		int userId = getUserPK(request);
 		if(originalArticle.getUser_id() != userId) { // 내가 쓴 글이 아니면 실패
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		
 		article.setId(articleId);
@@ -434,15 +437,16 @@ public class StudyRestController {
 		article.setBoard_id(boardService.findQnABoardId(studyId));
 		
 		articleService.modify(article);
-		return new ResponseEntity<>("success", HttpStatus.OK);
+		return new ResponseEntity<>(new ReturnMsg("성공적으로 수정하였습니다."), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "스터디의 자료실 게시판 글 수정 (로그인 필요)")
 	@PutMapping("/{studyId}/repository/{articleId}")
 	public Object modifyRepo(@RequestParam(value = "img", required = false) MultipartFile img, 
 							Article article, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+		int userId = getUserPK(request);
 		if(img != null) {
-			String filePath = baseDirectory + "\\" + img.getOriginalFilename();
+			String filePath = getUploadPath(request, userId);
 			try {
 				img.transferTo(new File(filePath));
 				article.setFile(filePath);
@@ -457,12 +461,11 @@ public class StudyRestController {
 		
 		if(originalArticle == null) {
 			System.out.println("** " + articleId + "번 글 수정 실패 - 찾을 수 없는 게시글");
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		int userId = getUserPK(request);
 		if(originalArticle.getUser_id() != userId) { // 내가 쓴 글이 아니면 실패
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		
 		article.setId(articleId);
@@ -471,7 +474,7 @@ public class StudyRestController {
 		
 		articleService.modify(article);
 		System.out.println(articleId + "번 글 수정 성공!");
-		return new ResponseEntity<>("success", HttpStatus.OK);
+		return new ResponseEntity<>(new ReturnMsg("성공적으로 수정하였습니다."), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "스터디의 공지사항 글 삭제 (로그인 필요)")
@@ -482,18 +485,18 @@ public class StudyRestController {
 		
 		if(article == null) {
 			System.out.println("** " + articleId + "번 글 삭제 실패 - 찾을 수 없는 게시글");
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(article.getUser_id() != userId) { // 내가 쓴 글이 아니면 실패
 			System.out.println("** " + articleId + "번 글 삭제 실패 - 권한 없음");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		if(articleService.delete(articleId)) {
 			System.out.println(articleId + "번 글 삭제 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);			
+			return new ResponseEntity<>(new ReturnMsg("성공적으로 삭제하였습니다."), HttpStatus.OK);			
 		}
 		System.out.println("** " + articleId + "번 글 삭제 실패 - 서버 에러");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("삭제에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 qna 게시판 글 삭제 (로그인 필요)")
@@ -504,18 +507,18 @@ public class StudyRestController {
 		
 		if(article == null) {
 			System.out.println("** " + articleId + "번 글 삭제 실패 - 찾을 수 없는 게시글");
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(article.getUser_id() != userId) { // 내가 쓴 글이 아니면 실패
 			System.out.println("** " + articleId + "번 글 삭제 실패 - 권한 없음");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		if(articleService.delete(articleId)) {
 			System.out.println(articleId + "번 글 삭제 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);			
+			return new ResponseEntity<>(new ReturnMsg("성공적으로 삭제하였습니다."), HttpStatus.OK);			
 		}
 		System.out.println("** " + articleId + "번 글 삭제 실패 - 서버 에러");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("삭제에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 자료실 게시판 글 삭제 (로그인 필요)")
@@ -526,18 +529,18 @@ public class StudyRestController {
 		
 		if(article == null) {
 			System.out.println("** " + articleId + "번 글 삭제 실패 - 찾을 수 없는 게시글");
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(article.getUser_id() != userId) { // 내가 쓴 글이 아니면 실패
 			System.out.println("** " + articleId + "번 글 삭제 실패 - 권한 없음");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		if(articleService.delete(articleId)) {
 			System.out.println(articleId + "번 글 삭제 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);			
+			return new ResponseEntity<>(new ReturnMsg("성공적으로 삭제하였습니다."), HttpStatus.OK);			
 		}
 		System.out.println("** " + articleId + "번 글 삭제 실패 - 서버 에러");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("삭제에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "qna 게시글의 댓글 리스트 반환")
@@ -565,10 +568,10 @@ public class StudyRestController {
 		
 		if(commentService.create(comment)) {
 			System.out.println("댓글 작성 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);			
+			return new ResponseEntity<>(new ReturnMsg("댓글을 성공적으로 작성했습니다."), HttpStatus.OK);			
 		}
 		System.out.println("** 댓글 작성 실패 - 서버 오류...");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("작성에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "자료실 게시글의 댓글 작성")
@@ -580,10 +583,10 @@ public class StudyRestController {
 		
 		if(commentService.create(comment)) {
 			System.out.println("댓글 작성 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);			
+			return new ResponseEntity<>(new ReturnMsg("댓글을 성공적으로 작성했습니다."), HttpStatus.OK);			
 		}
 		System.out.println("** 댓글 작성 실패 - 서버 오류...");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("작성에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "qna 게시글의 댓글 수정")
@@ -593,20 +596,20 @@ public class StudyRestController {
 		Comment originalComment = commentService.search(commentId);
 		if(originalComment == null) {
 			System.out.println("** 댓글 수정 실패 - 댓글이 존재하지 않음...");
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 댓글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(originalComment.getUser_id() != userId) {	// 내가 쓴 댓글이 아닐 경우 실패
 			System.out.println("** 댓글 수정 실패 - 권한 없음...");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		comment.setId(commentId);
 		
 		if(commentService.update(comment)) {
 			System.out.println("댓글 수정 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);			
+			return new ResponseEntity<>(new ReturnMsg("댓글을 성공적으로 수정했습니다."), HttpStatus.OK);			
 		}
 		System.out.println("** 댓글 수정 실패 - 서버 오류...");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("수정에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "자료실 게시글의 댓글 수정")
@@ -616,20 +619,20 @@ public class StudyRestController {
 		Comment originalComment = commentService.search(commentId);
 		if(originalComment == null) {
 			System.out.println("** 댓글 수정 실패 - 댓글이 존재하지 않음...");
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 댓글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(originalComment.getUser_id() != userId) {	// 내가 쓴 댓글이 아닐 경우 실패
 			System.out.println("** 댓글 수정 실패 - 권한 없음...");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		comment.setId(commentId);
 		
 		if(commentService.update(comment)) {
 			 System.out.println("댓글 수정 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);			
+			return new ResponseEntity<>(new ReturnMsg("댓글을 수정하였습니다."), HttpStatus.OK);			
 		}
 		System.out.println("** 댓글 수정 실패 - 서버 오류...");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("수정에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "QnA 게시글의 댓글 삭제")
@@ -639,18 +642,18 @@ public class StudyRestController {
 		Comment originalComment = commentService.search(commentId);
 		if(originalComment == null) {
 			System.out.println("** 댓글 삭제 실패 - 댓글이 존재하지 않음...");
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 댓글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(originalComment.getUser_id() != userId) {	// 내가 쓴 댓글이 아닐 경우 실패
 			System.out.println("** 댓글 삭제 실패 - 권한 없음...");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		if(commentService.delete(commentId)) {
 			System.out.println("댓글 삭제 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);			
+			return new ResponseEntity<>(new ReturnMsg("댓글을 삭제했습니다."), HttpStatus.OK);			
 		}
 		System.out.println("** 댓글 삭제 실패 - 서버 오류...");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("삭제에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "자료실 게시글의 댓글 삭제")
@@ -660,18 +663,18 @@ public class StudyRestController {
 		Comment originalComment = commentService.search(commentId);
 		if(originalComment == null) {
 			System.out.println("** 댓글 삭제 실패 - 댓글이 존재하지 않음...");
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 댓글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(originalComment.getUser_id() != userId) {	// 내가 쓴 댓글이 아닐 경우 실패
 			System.out.println("** 댓글 삭제 실패 - 권한 없음...");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		if(commentService.delete(commentId)) {
 			System.out.println("댓글 삭제 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("댓글을 삭제했습니다."), HttpStatus.OK);
 		}
 		System.out.println("** 댓글 삭제 실패 - 서버 오류...");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("삭제에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "소모임에 가입한다.")
@@ -680,15 +683,15 @@ public class StudyRestController {
 		int userId = getUserPK(request);
 		if(joinService.isMember(studyId, userId)) {
 			System.out.println("** 소모임 가입 실패 - 이미 가입한 회원...");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("이미 가입한 소모임입니다."), HttpStatus.UNAUTHORIZED);
 		}
 		
 		if(joinService.join(studyId, userId)) {
 			System.out.println("소모임 가입 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("소모임에 성공적으로 가입했습니다."), HttpStatus.OK);
 		}
-		System.out.println("** 스터디 생성 실패 - 서버 에러");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		System.out.println("** 스터디 가입 실패 - 서버 에러");
+		return new ResponseEntity<>(new ReturnMsg("가입에 실패했습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "소모임을 탈퇴한다.")
@@ -697,13 +700,24 @@ public class StudyRestController {
 		int userId = getUserPK(request);
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 소모임 탈퇴 실패 - 이미 탈퇴했거나 가입하지 않은 소모임...");
-			return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("이미 탈퇴한 소모임입니다."), HttpStatus.UNAUTHORIZED);
 		}
 		if(joinService.leave(studyId, userId)) {
 			System.out.println("소모임 탈퇴 성공!");
-			return new ResponseEntity<>("success", HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("소모임을 탈퇴했습니다."), HttpStatus.OK);
 		}
 		System.out.println("** 소모임 탈퇴 실패 - 서버 에러");
-		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("탈퇴에 실패했습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+
+	// 파일 저장 경로와 파일 저장명을 반환해주는 메소드
+	private String getUploadPath(HttpServletRequest request, int userId) {
+		return request.getServletContext().getRealPath("static"+ File.separator + "upload") + File.separator + userId + "_" + System.currentTimeMillis() + ".PNG";
+	}
+	
+	// Token(Authentication)에서 유저 id 정보를 뽑아내는 메소드
+	private int getUserPK(HttpServletRequest request) {
+		return jwtUtil.getUserPK(request.getHeader("Authentication").substring("Bearer ".length()));
 	}
 }

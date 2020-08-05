@@ -23,5 +23,7 @@ public interface UserDAO {
 	int getUserIdByName(String name);
 	// 유저 정보 수정
 	int updateUser(UserInfoDTO userInfoDTO);
+	// 유저 탈퇴 처리 (legacy 유저로 만들기)
+	int updateUserLegacy(UserInfoDTO userInfoDTO);
 
 }

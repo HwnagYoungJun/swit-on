@@ -23,5 +23,7 @@ public interface UserService {
 	boolean nameAlreadyExists(String name);
 	// 회원 정보 수정
 	boolean modify(UserInfoDTO userInfoDTO);
+	// 유저 탈퇴 처리
+	boolean signOut(int userId);
 
 }

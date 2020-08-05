@@ -37,6 +37,17 @@
 		values (#{name}, #{email}, #{password})
 	</insert>
 	
+	<!-- 회원 탈퇴: 아이디, 비번, 이름 등을 파기하고 탈퇴한 유저라는 것을 표시한다. -->
+	<update id="updateUserLegacy" parameterType="UserInfoDTO">
+		update user
+		set name = '',
+			email = '',
+			password = '',
+			introduce = '',
+			profile_image = '',
+			name_legacy = #{name}
+		where id = #{id}
+	</update>
 	<!-- 유저 정보 수정 -->
 	<update id="updateUser" parameterType="UserInfoDTO">
 		update user

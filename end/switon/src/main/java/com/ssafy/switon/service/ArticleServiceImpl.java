@@ -1,16 +1,22 @@
 package com.ssafy.switon.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.ArticleDAO;
+import com.ssafy.switon.dao.BoardDAO;
+import com.ssafy.switon.dao.JoinDAO;
 import com.ssafy.switon.dao.StudyDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleReturnDTO;
+import com.ssafy.switon.dto.Join;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudySimple;
 import com.ssafy.switon.dto.UserInfoDTO;
@@ -27,6 +33,12 @@ public class ArticleServiceImpl implements ArticleService {
 	
 	@Autowired
 	UserDAO userDao;
+	
+	@Autowired
+	JoinDAO joinDao;
+	
+	@Autowired
+	BoardDAO boardDao;
 	
 	@Override
 	public List<Article> searchAll() {
@@ -79,8 +91,8 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleReturnDTO> searchArticles(int studyId, int boardId) {
-		List<Article> articles = articleDao.selectArticlesByBoardId(boardId);
+	public List<ArticleReturnDTO> searchArticlesByBoardId(int studyId, int boardId) {
+		List<Article> articles = articleDao.selectArticlesByBoardIdLimit5(boardId);
 		List<ArticleReturnDTO> articleReturnDTOs = new ArrayList<ArticleReturnDTO>();
 		Study originalStudy = studyDao.selectStudyById(studyId);
 			StudySimple study = new StudySimple();
@@ -110,6 +122,39 @@ public class ArticleServiceImpl implements ArticleService {
 			articleReturnDTOs.add(articleReturnDTO);
 		}
 		return articleReturnDTOs;
+	}
+
+	@Override
+	public List<ArticleReturnDTO> searchFeeds(int userId) {
+		List<Join> joins = joinDao.selectJoinsByUserId(userId);
+		List<ArticleReturnDTO> articles = new LinkedList<ArticleReturnDTO>();
+		for(Join join : joins) { // 유저가 가입한 스터디 id마다 boardId들을 추출해서 List 얻어내기
+			int studyId = join.getStudy_id();
+			for(int i = 1; i <= 3; i++) {
+				List<ArticleReturnDTO> boardArticles = searchArticlesByBoardId(studyId, boardDao.findBoardId(studyId, i));
+				articles.addAll(boardArticles);
+			}
+		}
+		Collections.sort(articles, new Comparator<ArticleReturnDTO>() {
+			@Override
+			public int compare(ArticleReturnDTO article1, ArticleReturnDTO article2) {
+				return article2.getCreated_at().compareTo(article1.getCreated_at());
+			}
+		});
+		
+		return articles;
+	}
+
+	@Override
+	public List<ArticleReturnDTO> searchArticlesByBoardIdOrdered(int studyId, int boardId) {
+		List<ArticleReturnDTO> articles = searchArticlesByBoardId(studyId, boardId);
+		Collections.sort(articles, new Comparator<ArticleReturnDTO>() {
+			@Override
+			public int compare(ArticleReturnDTO article1, ArticleReturnDTO article2) {
+				return article2.getCreated_at().compareTo(article1.getCreated_at());
+			}
+		});
+		return articles;
 	}
 	
 

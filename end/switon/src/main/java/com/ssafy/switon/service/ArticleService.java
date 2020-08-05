@@ -27,7 +27,10 @@ public interface ArticleService {
 	boolean modify(Article article);
 	// 게시글 삭제
 	boolean delete(int id);
-	// 게시글 반환 new type
-	List<ArticleReturnDTO> searchArticles(int studyId, int boardId);
-
+	// 게시판의 게시글 반환 new type
+	List<ArticleReturnDTO> searchArticlesByBoardId(int studyId, int boardId);
+	// 게시판의 게시글 반환 new type 최신순
+	List<ArticleReturnDTO> searchArticlesByBoardIdOrdered(int studyId, int boardId);
+	// 내가 가입한 스타디들의 게시글 반환 new type 최신순
+	List<ArticleReturnDTO> searchFeeds(int userId);
 }
