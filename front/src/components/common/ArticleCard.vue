@@ -1,29 +1,47 @@
 <template>
-	<div class="card">
-		<div class="card-info">
-			<p class="card-info-title">{{ article.title }}</p>
-			<div>
-				<span class="study-info">
-					<img src="@/assets/color.png" alt="" />
-					<span>{{ article.study.name }}</span>
-				</span>
-				<span class="user-info">
-					<img src="@/assets/dd.png" alt="" />
-					<span>{{ article.user.name }}</span>
-				</span>
-				<p>{{ article.created_at | formatDate }}</p>
+	<router-link>
+		<div class="card">
+			<div class="card-info">
+				<p class="card-info-title">{{ article.title }}</p>
+				<div>
+					<span class="study-info">
+						<img src="@/assets/color.png" alt="" />
+						<!-- <span>{{ article.study.name }}</span> -->
+					</span>
+					<span class="user-info">
+						<img src="@/assets/dd.png" alt="" />
+						<!-- <span>{{ article.user.name }}</span> -->
+					</span>
+					<p>{{ article.created_at | formatDate }}</p>
+				</div>
 			</div>
+			<div class="card-content">
+				<p>{{ article.content }}</p>
+			</div>
+			<!-- {{ article }} -->
 		</div>
-		<div class="card-content">
-			<p>{{ article.content }}</p>
-		</div>
-	</div>
+	</router-link>
 </template>
 
 <script>
+import { fetchRepositoryArticle } from '@/api/articles';
+
 export default {
-	props: {
-		article: Object,
+	data() {
+		return {
+			article: null,
+		};
+	},
+	methods: {
+		async fetchArticle() {
+			const studyId = this.$route.params.id;
+			const repoId = this.$route.params.repo_id;
+			const { data } = await fetchRepositoryArticle(studyId, repoId);
+			this.article = data;
+		},
+	},
+	created() {
+		this.fetchArticle();
 	},
 };
 </script>

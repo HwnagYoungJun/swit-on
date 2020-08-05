@@ -31,6 +31,9 @@ function fetchArticle(articleId) {
 function fetchRepositoryArticles(studyId) {
 	return articles.get(`/${studyId}/repository/`);
 }
+function fetchRepositoryArticle(studyId, repoId) {
+	return articles.get(`/${studyId}/repository/${repoId}`);
+}
 function fetchQnaArticles(studyId) {
 	return articles.get(`/${studyId}/qna/`);
 }
@@ -45,6 +48,7 @@ export {
 	deleteArticle,
 	updateArticle,
 	fetchRepositoryArticles,
+	fetchRepositoryArticle,
 	fetchQnaArticles,
 	fetchNoticeArticles,
 };

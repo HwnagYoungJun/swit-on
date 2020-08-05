@@ -60,7 +60,7 @@ const routes = [
 		],
 	},
 	{
-		path: '/study/:id/repository/:id',
+		path: '/study/:id/repository/:repo_id',
 		name: 'repositoryDetail',
 		component: () => import('@/components/common/ArticleCardDetail.vue'),
 	},

@@ -1,10 +1,6 @@
 <template>
 	<div class="card-wrap">
-		<ArticleCard
-			v-for="article in articles"
-			:key="article.id"
-			:article="article"
-		/>
+		<ArticleCard v-for="article in articles" :key="article.id" />
 		<ArticleAddBtn boardName="repository" />
 	</div>
 </template>
@@ -27,7 +23,7 @@ export default {
 		async fetchRepo() {
 			const studyId = this.$route.params.id;
 			const { data } = await fetchRepositoryArticles(studyId);
-			this.articles = data.reverse();
+			this.articles = data;
 		},
 	},
 	created() {

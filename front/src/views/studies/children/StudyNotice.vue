@@ -27,7 +27,7 @@ export default {
 		async fetchNotice() {
 			const studyId = this.$route.params.id;
 			const { data } = await fetchNoticeArticles(studyId);
-			this.articles = data.reverse();
+			this.articles = data;
 		},
 	},
 	created() {

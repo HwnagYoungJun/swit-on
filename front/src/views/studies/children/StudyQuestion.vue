@@ -27,7 +27,7 @@ export default {
 		async fetchQna() {
 			const studyId = this.$route.params.id;
 			const { data } = await fetchQnaArticles(studyId);
-			this.articles = data.reverse();
+			this.articles = data;
 		},
 	},
 	created() {
