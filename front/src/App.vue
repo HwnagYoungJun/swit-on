@@ -6,27 +6,46 @@
 				class="main-input"
 				placeholder="소모임을 검색하세요"
 			/>
-			<p class="popular-title">인기 소모임</p>
 			<div class="popular-wrap">
-				<div class="popular-item">
-					<div class="popular-img">
-						<img src="@/assets/django.png" alt="study-logo" />
-						<p class="temp">5/10</p>
-					</div>
-					<div class="popular-content">
-						<p>django</p>
-						<p>월, 수 9시-11시</p>
-						<p>web>django</p>
-					</div>
-				</div>
-				<div class="popular-item">
+				<p class="popular-title">인기 소모임</p>
+				<div class="popular-item" :key="num" v-for="num in [1, 2, 3, 4]">
 					<div class="popular-img">
 						<img src="@/assets/react.png" alt="study-logo" />
 						<p class="temp">5/10</p>
 					</div>
 					<div class="popular-content">
-						<p>django</p>
-						<p>월, 수 9시-11시</p>
+						<p class="content-category">
+							web <i class="icon ion-md-arrow-dropright"></i> django
+						</p>
+						<p class="content-title">드장고 완벽 가이드</p>
+						<p class="content-week">
+							<span class="content-day"> 월</span
+							><span class="content-day"> 수</span>
+						</p>
+						<p class="content-time">9:00-11:00</p>
+					</div>
+				</div>
+				<!-- <div class="popular-item">
+					<div class="popular-img">
+						<img src="@/assets/django.png" alt="study-logo" />
+						<p class="temp">5/10</p>
+					</div>
+					<div class="popular-content">
+						<p class="content-category">
+							web <i class="icon ion-md-arrow-dropright"></i> django
+						</p>
+						<p class="content-title">django</p>
+						<p class="content-week">월, 수 9시-11시</p>
+					</div>
+				</div>
+				<div class="popular-item">
+					<div class="popular-img">
+						<img src="@/assets/cloud.png" alt="study-logo" />
+						<p class="temp">5/10</p>
+					</div>
+					<div class="popular-content">
+						<p class="content-title">django</p>
+						<p class="content-week">월, 수 9시-11시</p>
 						<p>web>django</p>
 					</div>
 				</div>
@@ -36,22 +55,11 @@
 						<p class="temp">5/10</p>
 					</div>
 					<div class="popular-content">
-						<p>django</p>
-						<p>월, 수 9시-11시</p>
+						<p class="content-title">장고 부수기</p>
+						<p class="content-week">월, 수 9시-11시</p>
 						<p>web>django</p>
 					</div>
-				</div>
-				<div class="popular-item">
-					<div class="popular-img">
-						<img src="@/assets/color.png" alt="study-logo" />
-						<p class="temp">5/10</p>
-					</div>
-					<div class="popular-content">
-						<p>django</p>
-						<p>월, 수 9시-11시</p>
-						<p>web>django</p>
-					</div>
-				</div>
+				</div> -->
 			</div>
 		</section>
 		<section v-else>
@@ -91,6 +99,7 @@ export default {
 	width: 70%;
 	margin: 0 auto;
 }
+
 .main-page {
 	display: flex;
 	flex-direction: column;
@@ -104,18 +113,19 @@ export default {
 		padding: 13px 25px;
 		line-height: 2;
 		border: none;
-		border-radius: 10px;
 		background: rgba(255, 255, 255, 0.5);
+		box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.35);
 		&:focus {
 			outline: none;
 			background: rgba(255, 255, 255, 1);
 		}
 	}
 	.popular-wrap {
+		width: 80%;
+		margin: 0 auto;
 		display: flex;
-		flex-wrap: wrap;
 		justify-content: space-evenly;
-		align-content: space-between;
+		flex-wrap: wrap;
 		position: relative;
 		.popular-title {
 			color: white;
@@ -125,34 +135,61 @@ export default {
 			left: 5px;
 		}
 		.popular-item {
-			width: 230px;
-			margin: 0 0.5rem;
-			display: flex;
-			flex-direction: column;
-			color: white;
+			display: grid;
+			grid-template-columns: 15rem;
+			grid-template-rows: 7.5rem 12rem;
+			grid-template-areas:
+				'text-part'
+				'image-part';
 			border: 1px solid transparent;
-			border-radius: 4px;
 			position: relative;
+			margin-top: 1rem;
+			padding: 0.3rem 0.5rem 0.5rem;
+			background: white;
+			color: #454545;
+			box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
 			.popular-img {
-				width: 100%;
-				height: 100%;
+				grid-area: image-part;
+				overflow: hidden;
+				cursor: pointer;
 			}
 			.popular-content {
-				background: rgba(255, 255, 255, 0.1);
+				grid-area: text-part;
+				.content-category {
+					padding-bottom: 0.3rem;
+					border-bottom: 1px solid black;
+				}
+				.content-title {
+					font-size: $font-bold;
+					font-weight: 600;
+					padding-top: 0.3rem;
+					padding-bottom: 0.3rem;
+					// border-bottom: 1px solid black;
+				}
+				.content-week {
+					// padding-top: 0.3rem;
+					.content-day {
+						font-weight: 600;
+					}
+				}
 			}
 			.temp {
 				position: absolute;
-				bottom: 0;
-				right: 0;
+				bottom: 1rem;
+				right: 1rem;
+				color: white;
 			}
 			img {
 				width: 100%;
 				height: 100%;
 				object-fit: fill;
-				border-radius: 4px;
+				transition: all 0.3s ease;
+				&:hover {
+					transform: scale(1.1);
+				}
 			}
 			p {
-				margin-top: -3px;
+				// margin-top: -3px;
 			}
 		}
 	}
