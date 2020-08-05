@@ -1,7 +1,7 @@
 <template>
 	<form class="signup-form" autocomplete="off" @submit.prevent="submitForm">
 		<InputBox
-			type="name"
+			type="text"
 			userInfo="name"
 			title="이름"
 			:message="changeNameMessage"

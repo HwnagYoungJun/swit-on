@@ -13,7 +13,7 @@
 				<p class="study-title">{{ study.name }}</p>
 				<p>모집: {{ study.start_term }} - {{ study.end_term }}</p>
 				<p>
-					요일: 매주
+					매주:
 					{{ study.week | formatWeekday }}
 					{{ study.start_time }}시-{{ study.end_time }}시
 				</p>
@@ -62,7 +62,6 @@ export default {
 			const studyId = this.$route.params.id;
 			const { data } = await fetchStudy(studyId);
 			this.study = data.study;
-			// this.study.week = this.bitWeek(data.study.week);
 			this.isJoined = data.isJoined;
 		},
 		async studyJoin() {

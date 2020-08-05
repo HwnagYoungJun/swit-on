@@ -1,4 +1,4 @@
-import { articles } from './index';
+import { boardArticles, articles } from './index';
 
 function fetchArticles() {
 	return articles.get('/');
@@ -9,7 +9,7 @@ function createArticle(studyId, boardName, articleData) {
 	formdata.append('title', articleData.title);
 	formdata.append('content', articleData.content);
 	formdata.append('file', articleData.file);
-	return articles.post(`/${studyId}/${boardName}`, formdata);
+	return boardArticles.post(`/${studyId}/${boardName}`, formdata);
 }
 
 function deleteArticle(articleId) {
@@ -29,13 +29,13 @@ function fetchArticle(articleId) {
 }
 
 function fetchRepositoryArticles(studyId) {
-	return articles.get(`/${studyId}/repository/`);
+	return boardArticles.get(`/${studyId}/repository/`);
 }
 function fetchQnaArticles(studyId) {
-	return articles.get(`/${studyId}/qna/`);
+	return boardArticles.get(`/${studyId}/qna/`);
 }
 function fetchNoticeArticles(studyId) {
-	return articles.get(`/${studyId}/notice/`);
+	return boardArticles.get(`/${studyId}/notice/`);
 }
 
 export {

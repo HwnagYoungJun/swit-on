@@ -3,13 +3,13 @@
 		<main class="newsFeed-container">
 			<section class="article-box">
 				<ArticleCard></ArticleCard>
+				<!-- <ArticleCard></ArticleCard>
 				<ArticleCard></ArticleCard>
 				<ArticleCard></ArticleCard>
 				<ArticleCard></ArticleCard>
 				<ArticleCard></ArticleCard>
 				<ArticleCard></ArticleCard>
-				<ArticleCard></ArticleCard>
-				<ArticleCard></ArticleCard>
+				<ArticleCard></ArticleCard> -->
 			</section>
 			<aside class="side-box">
 				<div class="group-box">

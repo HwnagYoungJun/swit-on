@@ -181,7 +181,7 @@ input.upload_text {
 	height: 2rem;
 	// padding: 0 0.5rem 1rem;
 	// border-top: 1px solid #bbb;
-	// margin-top: 1rem;
+	margin-top: 1rem;
 	// margin-bottom: 1rem;
 }
 div.upload-btn_wrap input.input_file {
@@ -210,10 +210,6 @@ div.upload-btn_wrap {
 	margin-top: 1rem;
 }
 div.upload-btn_wrap button {
-	/*버튼 div*/
-	// display: absolute;
-	// top: 0;
-	// right: 0;
 	@include scale(width, 70px);
 	height: 2rem;
 	font-weight: bold;
