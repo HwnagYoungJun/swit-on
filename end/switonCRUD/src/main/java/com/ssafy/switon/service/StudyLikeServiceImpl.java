@@ -44,4 +44,9 @@ public class StudyLikeServiceImpl implements StudyLikeService {
 		return studylikeDAO.selectStudyLikeByUser_Study(user_id, study_id);
 	}
 
+	@Override
+	public boolean deleteStudyLikeByUser(int user_id, int study_id) {
+		return studylikeDAO.deleteStudyLikeByUser(user_id, study_id)==1;
+	}
+
 }

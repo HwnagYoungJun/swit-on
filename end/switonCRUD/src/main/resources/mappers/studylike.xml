@@ -44,4 +44,10 @@
 		delete from studylike
 		where id = #{id}
 	</delete>
+
+	<!-- 해당 유저가 누른 소모임좋아요 삭제 -->
+	<delete id="deleteStudyLikeByUser">
+		delete from studylike
+		where user_id = #{user_id} and study_id = #{study_id} 
+	</delete>
 </mapper>

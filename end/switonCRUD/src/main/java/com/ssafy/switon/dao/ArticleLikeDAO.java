@@ -18,4 +18,6 @@ public interface ArticleLikeDAO {
 	int insertArticleLike(ArticleLike articlelike);
 	// 글좋아요 삭제
 	int deleteArticleLike(int id);
+	// 해당 유저가 누른 글좋아요 삭제
+	int deleteArticleLikeByUser(int user_id, int article_id);
 }

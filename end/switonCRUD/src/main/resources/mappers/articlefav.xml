@@ -45,4 +45,10 @@
 		where id = #{id}
 	</delete>
 
+	<!-- 해당 유저가 누른 글 즐겨찾기 삭제 -->
+	<delete id="deleteArticleFavByUser">
+		delete from articlefav
+		where user_id = #{user_id} and article_id = #{article_id}
+	</delete>
+
 </mapper>

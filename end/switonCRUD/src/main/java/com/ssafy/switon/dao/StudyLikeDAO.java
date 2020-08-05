@@ -17,4 +17,6 @@ public interface StudyLikeDAO {
 	int insertStudyLike(StudyLike studylike);
 	// 소모임 좋아요 삭제
 	int deleteStudyLike(int id);
+	// 해당 유저가 누른소모임 좋아요 삭제
+	int deleteStudyLikeByUser(int user_id, int study_id);
 }

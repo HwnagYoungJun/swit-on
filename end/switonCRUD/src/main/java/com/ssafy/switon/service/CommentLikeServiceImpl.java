@@ -44,4 +44,9 @@ public class CommentLikeServiceImpl implements CommentLikeService {
 		return commentlikeDAO.selectCommentLikeByUser_Comment(userId, commentId);
 	}
 
+	@Override
+	public boolean deleteByUser(int user_id, int comment_id) {
+		return commentlikeDAO.deleteCommentLikeByUser(user_id, comment_id)==1;
+	}
+
 }

@@ -47,4 +47,12 @@ public class ArticleFavDAOImpl implements ArticleFavDAO {
 		return sqlsession.selectOne("articlefav.selectArticleFavByUser_Article", articlefav);
 	}
 
+	@Override
+	public int deleteArticleFavByUser(int user_id, int article_id) {
+		ArticleFav articlefav = new ArticleFav();
+		articlefav.setArticle_id(article_id);
+		articlefav.setUser_id(user_id);
+		return sqlsession.delete("articlefav.deleteArticleFavByUser", articlefav);
+	}
+
 }

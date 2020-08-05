@@ -48,4 +48,12 @@ public class CommentLikeDAOImpl implements CommentLikeDAO {
 		return sqlsession.selectOne("commentlike.selectCommentLikeByUser_Article_Comment", commentlike);
 	}
 
+	@Override
+	public int deleteCommentLikeByUser(int user_id, int comment_id) {
+		CommentLike commentlike = new CommentLike();
+		commentlike.setUser_id(user_id);
+		commentlike.setComment_id(comment_id);
+		return sqlsession.delete("commentlike.deleteCommentLikeByUser", commentlike);
+	}
+
 }

@@ -44,5 +44,11 @@
 		delete from commentlike
 		where id = #{id}
 	</delete>
+
+	<!-- 해당 유저가 누른 댓글좋아요 삭제 -->
+	<delete id="deleteCommentLikeByUser">
+		delete from commentlike
+		where user_id = #{user_id} and comment_id = #{comment_id}
+	</delete>
 	
 </mapper>

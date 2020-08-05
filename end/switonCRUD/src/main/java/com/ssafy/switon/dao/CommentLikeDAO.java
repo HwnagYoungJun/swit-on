@@ -18,4 +18,6 @@ public interface CommentLikeDAO {
 	int insertCommentLike(CommentLike commentlike);
 	// 댓글 좋아요 삭제
 	int deleteCommentLike(int id);
+	// 해당 유저가 누른댓글 좋아요 삭제
+	int deleteCommentLikeByUser(int user_id, int comment_id);
 }

@@ -44,4 +44,9 @@ public class ArticleFavServiceImpl implements ArticleFavService {
 		return articlefavDAO.selectArticleFavByUser_Article(userId, articleId);
 	}
 
+	@Override
+	public boolean deleteByUser(int user_id, int article_id) {
+		return articlefavDAO.deleteArticleFavByUser(user_id, article_id)==1;
+	}
+
 }

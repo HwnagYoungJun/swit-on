@@ -48,4 +48,12 @@ public class ArticleLikeDAOImpl implements ArticleLikeDAO {
 		return sqlSession.selectOne("articlelike.selectArticleLikeByUser_Article", articlelike);
 	}
 
+	@Override
+	public int deleteArticleLikeByUser(int user_id, int article_id) {
+		ArticleLike articlelike = new ArticleLike();
+		articlelike.setUser_id(user_id);
+		articlelike.setArticle_id(article_id);
+		return sqlSession.delete("articlelike.deleteArticleLikeByUser", articlelike);
+	}
+
 }
