@@ -28,6 +28,7 @@ export default {
 	display: grid;
 	width: 100%;
 	height: 100%;
+	gap: 1.5rem;
 	grid-template-columns: repeat(4, 1fr);
 	grid-template-rows: 1fr;
 }
