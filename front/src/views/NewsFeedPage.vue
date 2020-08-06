@@ -63,6 +63,7 @@
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import GruopCardSmall from '@/components/common/GruopCardSmall.vue';
 import { fetchFeeds } from '@/api/articles';
+// import { fetchStudy } from '@/api/studies';
 import 'tui-calendar/dist/tui-calendar.css';
 import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 import 'tui-date-picker/dist/tui-date-picker.css';

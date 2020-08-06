@@ -111,7 +111,7 @@ const routes = [
 	{
 		path: '/mypage/',
 		name: 'mypage',
-		component: () => import('@/views/profiles/MyPagePage.vue'),
+		component: () => import('@/views/profiles/ProfilePage.vue'),
 		children: [
 			{
 				path: 'myschedule',
