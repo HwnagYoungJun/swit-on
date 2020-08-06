@@ -1,11 +1,45 @@
 <template>
 	<div class="dashboard-wrap">
 		<div class="card-wrap">
-			<router-link :to="{ name: 'repositoryDetail' }"
-				><ArticleCard
+			<router-link
+				:key="article.id"
+				v-for="article in qnaArticles"
+				:to="{
+					name: 'BoardArticleDetail',
+					params: {
+						id,
+						board_name: 'repository',
+						article_id: article.id,
+					},
+				}"
+				><ArticleCard :article="article"
 			/></router-link>
-			<ArticleCard />
-			<ArticleCard />
+			<router-link
+				:key="article.id"
+				v-for="article in repositoryArticles"
+				:to="{
+					name: 'BoardArticleDetail',
+					params: {
+						id,
+						board_name: 'repository',
+						article_id: article.id,
+					},
+				}"
+				><ArticleCard :article="article"
+			/></router-link>
+			<router-link
+				:key="article.id"
+				v-for="article in noticeArticles"
+				:to="{
+					name: 'BoardArticleDetail',
+					params: {
+						id,
+						board_name: 'notice',
+						article_id: article.id,
+					},
+				}"
+				><ArticleCard :article="article"
+			/></router-link>
 		</div>
 		<aside>
 			<div class="schedule">
@@ -47,9 +81,34 @@
 
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
+import { fetchArticles } from '@/api/articles';
 export default {
+	props: {
+		id: Number,
+	},
+	data() {
+		return {
+			repositoryArticles: null,
+			noticeArticles: null,
+			qnaArticles: null,
+		};
+	},
 	components: {
 		ArticleCard,
+	},
+	methods: {
+		async fetchData() {
+			const studyId = this.id;
+			const {
+				data: { notice, repository, qna },
+			} = await fetchArticles(studyId, 'dashboard');
+			this.repositoryArticles = repository;
+			this.noticeArticles = notice;
+			this.qnaArticles = qna;
+		},
+	},
+	created() {
+		this.fetchData();
 	},
 };
 </script>

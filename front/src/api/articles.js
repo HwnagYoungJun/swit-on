@@ -1,7 +1,10 @@
-import { boardArticles, articles } from './index';
+import { boardArticles, baseAuth } from './index';
 
-function fetchArticles() {
-	return articles.get('/');
+function fetchFeeds() {
+	return baseAuth.get('/feeds');
+}
+function fetchArticles(studyId, boardName) {
+	return boardArticles.get(`/${studyId}/${boardName}/`);
 }
 
 function createArticle(studyId, boardName, articleData) {
@@ -12,20 +15,20 @@ function createArticle(studyId, boardName, articleData) {
 	return boardArticles.post(`/${studyId}/${boardName}`, formdata);
 }
 
-function deleteArticle(articleId) {
-	return articles.delete(`/${articleId}`);
+function deleteArticle(studyId, boardName, articleId) {
+	return boardArticles.delete(`/${studyId}/${boardName}/${articleId}`);
 }
 
-function updateArticle(articleId, articleData) {
+function updateArticle(studyId, boardName, articleId, articleData) {
 	const formdata = new FormData();
 	formdata.append('title', articleData.title);
 	formdata.append('content', articleData.content);
 	formdata.append('file', articleData.file);
-	return articles.put(`/${articleId}`, formdata);
+	return boardArticles.put(`/${studyId}/${boardName}/${articleId}`, formdata);
 }
 
-function fetchArticle(articleId) {
-	return articles.get(`/${articleId}`);
+function fetchArticle(studyId, boardName, articleId) {
+	return boardArticles.get(`/${studyId}/${boardName}/${articleId}`);
 }
 
 function fetchRepositoryArticles(studyId) {
@@ -47,4 +50,5 @@ export {
 	fetchRepositoryArticles,
 	fetchQnaArticles,
 	fetchNoticeArticles,
+	fetchFeeds,
 };

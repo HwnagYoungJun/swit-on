@@ -25,11 +25,18 @@ const routes = [
 		path: '/study/:id/:board_name/new',
 		name: 'newArticle',
 		component: () => import('@/views/boards/StudyArticleAddPage.vue'),
+		props: route => ({
+			id: Number(route.params.id),
+			board_name: String(route.params.board_name),
+		}),
 		beforeEnter,
 	},
 	{
 		path: '/study/:id',
 		name: 'studydetail',
+		props: route => ({
+			id: Number(route.params.id),
+		}),
 		component: () => import('@/views/studies/StudyDetail.vue'),
 		children: [
 			{
@@ -60,8 +67,13 @@ const routes = [
 		],
 	},
 	{
-		path: '/study/:id/repository/:id',
-		name: 'repositoryDetail',
+		path: '/study/:id/:board_name/:article_id',
+		name: 'BoardArticleDetail',
+		props: route => ({
+			id: Number(route.params.id),
+			board_name: String(route.params.board_name),
+			article_id: Number(route.params.article_id),
+		}),
 		component: () => import('@/components/common/ArticleCardDetail.vue'),
 	},
 	{

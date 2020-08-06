@@ -10,9 +10,9 @@
 					><span aria-hidden="true">></span>
 				</li>
 				<li>
-					<router-link :to="{ name: 'repository' }" aria-current="page"
-						>repository</router-link
-					>
+					<router-link :to="{ name: `${board_name}` }" aria-current="page">{{
+						board_name
+					}}</router-link>
 				</li>
 			</ol>
 		</nav>
@@ -55,7 +55,40 @@
 </template>
 
 <script>
-export default {};
+import { fetchArticle } from '@/api/articles';
+export default {
+	props: {
+		id: Number,
+		board_name: String,
+		article_id: Number,
+	},
+	data() {
+		return {
+			article: null,
+		};
+	},
+	methods: {
+		async fetchData() {
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				const { data } = await fetchArticle(studyId, boardName, articleId);
+				this.article = data;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+	},
+	created() {
+		this.fetchData();
+	},
+	watch: {
+		article_id() {
+			this.fetchData();
+		},
+	},
+};
 </script>
 
 <style lang="scss">

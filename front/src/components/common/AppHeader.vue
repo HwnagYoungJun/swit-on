@@ -1,9 +1,14 @@
 <template>
-	<header id="nav" class="container">
+	<header id="nav" :class="['container', isMainRoute ? 'nav-white' : '']">
 		<div class="nav-search">
 			<div class="nav-logo">
-				<router-link :to="{ name: 'main' }"
-					><img src="@/assets/black.png" alt="logo" class="switon"
+				<router-link class="switon-logo" :to="{ name: 'main' }">
+					<img
+						v-if="isMainRoute"
+						src="@/assets/logo.png"
+						alt="logo"
+						class="switon"/>
+					<img v-else src="@/assets/color.png" alt="logo" class="switon"
 				/></router-link>
 			</div>
 			<label for="search" class="a11y-hidden">search: </label>
@@ -20,15 +25,15 @@
 			<i class="icon ion-md-search nav-search-icon"></i>
 		</div>
 		<nav class="nav-router">
-			<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
-				>뉴스피드</router-link
-			>
 			<template v-if="!isUserLogin">
 				<router-link class="nav-router-item" :to="{ name: 'login' }"
 					>로그인</router-link
 				>
 			</template>
 			<template v-else>
+				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
+					>뉴스피드</router-link
+				>
 				<a class="nav-router-item" href="javascript:;" @click="logoutUser"
 					>로그아웃</a
 				>
@@ -51,6 +56,9 @@ export default {
 	computed: {
 		isUserLogin() {
 			return this.$store.getters.isLogin;
+		},
+		isMainRoute() {
+			return this.$route.name === 'main';
 		},
 	},
 	methods: {
@@ -81,8 +89,27 @@ header {
 		justify-content: flex-start;
 	}
 }
+.nav-white {
+	background: none;
+	color: white;
+	.switon {
+		display: none;
+	}
+	#search {
+		display: none;
+	}
+	i {
+		display: none;
+	}
+	.nav-router-item {
+		color: white;
+	}
+}
+.switon-logo {
+	padding-bottom: 0;
+}
 .switon {
-	width: 50px;
+	@include scale(width, 50px);
 }
 .nav-search {
 	position: relative;
@@ -93,7 +120,7 @@ header {
 	}
 	#search {
 		@include scale(width, 400px);
-		padding: 0.8rem 1.2rem 0.8rem 0.75rem;
+		padding: 0.8rem 2rem 0.8rem 0.75rem;
 		font-size: $font-light;
 		border: 1px solid #dbdbdb;
 		color: -internal-light-dark(black, white);

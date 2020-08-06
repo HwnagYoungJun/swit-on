@@ -1,10 +1,19 @@
 <template>
 	<div class="card-wrap">
-		<ArticleCard
+		<router-link
 			v-for="article in articles"
 			:key="article.id"
-			:article="article"
-		/>
+			:to="{
+				name: 'BoardArticleDetail',
+				params: {
+					id,
+					board_name: 'qna',
+					article_id: article.id,
+				},
+			}"
+		>
+			<ArticleCard :article="article" />
+		</router-link>
 		<ArticleAddBtn boardName="qna" />
 	</div>
 </template>
@@ -12,8 +21,11 @@
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
-import { fetchQnaArticles } from '@/api/articles';
+import { fetchArticles } from '@/api/articles';
 export default {
+	props: {
+		id: Number,
+	},
 	data() {
 		return {
 			articles: [],
@@ -25,8 +37,8 @@ export default {
 	},
 	methods: {
 		async fetchQna() {
-			const studyId = this.$route.params.id;
-			const { data } = await fetchQnaArticles(studyId);
+			const studyId = this.id;
+			const { data } = await fetchArticles(studyId, 'qna');
 			this.articles = data.reverse();
 		},
 	},

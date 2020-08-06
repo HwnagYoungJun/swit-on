@@ -5,7 +5,11 @@
 				<li>
 					<a href="#">프로그래밍 언어</a><span aria-hidden="true">></span>
 				</li>
-				<li><a href="#" aria-current="page">python 소모임</a></li>
+				<li>
+					<router-link :to="`/study/${id}`" aria-current="page"
+						>python 소모임</router-link
+					>
+				</li>
 			</ol>
 		</nav>
 		<div class="study-description">
@@ -17,7 +21,7 @@
 					{{ study.week | formatWeekday }}
 					{{ study.start_time }}시-{{ study.end_time }}시
 				</p>
-				<small>5/{{ study.users_limit }}명</small>
+				<small>{{ study.users_current }}/{{ study.users_limit }}명</small>
 			</div>
 			<div class="study-logo">
 				<img src="@/assets/django.png" alt="" />
@@ -35,7 +39,7 @@
 			<router-link :to="{ name: 'qna' }">Q&A<span></span></router-link>
 			<hr />
 			<div class="study-sub-content">
-				<router-view></router-view>
+				<router-view :id="id"></router-view>
 			</div>
 		</div>
 		<div v-else class="study-sub-content">
@@ -51,6 +55,9 @@
 <script>
 import { JoinStudy, fetchStudy } from '@/api/studies';
 export default {
+	props: {
+		id: Number,
+	},
 	data() {
 		return {
 			isJoined: false,
@@ -59,13 +66,13 @@ export default {
 	},
 	methods: {
 		async fetchData() {
-			const studyId = this.$route.params.id;
+			const studyId = this.id;
 			const { data } = await fetchStudy(studyId);
 			this.study = data.study;
 			this.isJoined = data.isJoined;
 		},
 		async studyJoin() {
-			const studyId = this.$route.params.id;
+			const studyId = this.id;
 			await JoinStudy(studyId);
 			this.fetchData();
 		},
@@ -73,6 +80,11 @@ export default {
 	created() {
 		this.fetchData();
 	},
+	// watch: {
+	// 	id() {
+	// 		this.fetchData();
+	// 	},
+	// },
 };
 </script>
 

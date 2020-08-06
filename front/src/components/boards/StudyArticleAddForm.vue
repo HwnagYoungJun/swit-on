@@ -58,6 +58,10 @@ import { Editor } from '@toast-ui/vue-editor';
 import { createArticle } from '@/api/articles';
 
 export default {
+	props: {
+		id: Number,
+		board_name: String,
+	},
 	data() {
 		return {
 			title: '',
@@ -74,8 +78,7 @@ export default {
 	},
 	computed: {
 		routeBoardName() {
-			let name = this.$route.params.board_name;
-			return name.charAt(0).toUpperCase() + name.slice(1);
+			return this.board_name.charAt(0).toUpperCase() + this.board_name.slice(1);
 		},
 	},
 	components: {
@@ -84,8 +87,8 @@ export default {
 	methods: {
 		async createArticle() {
 			try {
-				const studyId = this.$route.params.id;
-				const boardName = this.$route.params.board_name;
+				const studyId = this.id;
+				const boardName = this.board_name;
 				let content = this.$refs.toastuiEditor.invoke('getMarkdown');
 				await createArticle(studyId, boardName, {
 					title: this.title,
