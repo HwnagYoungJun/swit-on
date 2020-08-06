@@ -184,7 +184,7 @@ public class StudyRestController {
 	public Object deleteStudy(@PathVariable("studyId") int studyId, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		Study study = studyService.search(studyId);
-		
+		// 순서: 
 		if(study.getUser_id() != userId) {
 			System.out.println("** 스터디 삭제 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("삭제 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
@@ -196,6 +196,13 @@ public class StudyRestController {
 		System.out.println("** 스터디 삭제 실패 - 서버 에러");
 		return new ResponseEntity<>(new ReturnMsg("스터디 삭제에 실패했습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+//	@ApiOperation(value = "소모임을 종료한다. (소모임 기간이 지났을 때 모임장이 종료 가능, 정상적으로 끝낸다)")
+//	@PutMapping("/{studyId}/finish")
+//	public Object finishStudy(@PathVariable("studyId") int studyId, HttpServletRequest request) {
+//		int userId = getUserPK(request);
+//		return new ResponseEntity<>(new ReturnMsg);
+//	}
 	
 	
 	@ApiOperation(value = "스터디의 공지사항 글 리스트를 반환한다.", response = List.class)
@@ -709,6 +716,7 @@ public class StudyRestController {
 		System.out.println("** 소모임 탈퇴 실패 - 서버 에러");
 		return new ResponseEntity<>(new ReturnMsg("탈퇴에 실패했습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
 	
 
 	// 파일 저장 경로와 파일 저장명을 반환해주는 메소드

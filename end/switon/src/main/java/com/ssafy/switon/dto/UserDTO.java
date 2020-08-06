@@ -17,7 +17,7 @@ public class UserDTO {
 	@ApiParam(value = "유저 프로필 이미지")
 	String profile_image;
 	@ApiParam(value = "유저 관심 카테고리(소카테고리) id (FK)")
-	int uppercategory_id;
+	String interests;
 	@ApiParam(value = "유저 탈퇴시 닉네임 백업", required = false, hidden = true)
 	String name_legacy;
 	
@@ -57,11 +57,11 @@ public class UserDTO {
 	public void setProfile_image(String profile_image) {
 		this.profile_image = profile_image;
 	}
-	public int getUppercategory_id() {
-		return uppercategory_id;
+	public String getInterests() {
+		return interests;
 	}
-	public void setUppercategory_id(int uppercategory_id) {
-		this.uppercategory_id = uppercategory_id;
+	public void setInterests(String interests) {
+		this.interests = interests;
 	}
 	public String getName_legacy() {
 		return name_legacy;
@@ -73,7 +73,7 @@ public class UserDTO {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", introduce="
-				+ introduce + ", profile_image=" + profile_image + ", uppercategory_id=" + uppercategory_id
+				+ introduce + ", profile_image=" + profile_image + ", interests=" + interests
 				+ ", name_legacy=" + name_legacy + "]";
 	}
 }

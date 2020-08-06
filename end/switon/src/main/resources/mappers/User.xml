@@ -13,7 +13,7 @@
 			email,
 			introduce,
 			profile_image,
-			uppercategory_id,
+			interests,
 			name_legacy
 		from user
 	</select>
@@ -25,7 +25,7 @@
 			email,
 			introduce,
 			profile_image,
-			uppercategory_id,
+			interests,
 			name_legacy
 		from user
 		where id = #{id}
