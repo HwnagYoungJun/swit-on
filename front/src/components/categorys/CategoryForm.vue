@@ -5,7 +5,7 @@
 				<StudyCard :study="study" />
 			</li>
 		</ul>
-		<div class="noStudy">
+		<div class="noStudy" v-if="!isStudy">
 			<img src="@/assets/kti_(var.doran).png" alt="bb" />
 		</div>
 	</div>
@@ -34,6 +34,11 @@ export default {
 			this.studies = [];
 			this.fetchStudy();
 			console.log(this.lowerCategory);
+		},
+	},
+	computed: {
+		isStudy() {
+			return this.studies.length === 0 ? false : true;
 		},
 	},
 	methods: {
