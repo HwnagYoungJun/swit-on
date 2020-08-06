@@ -5,6 +5,9 @@
 				<StudyCard :study="study" />
 			</li>
 		</ul>
+		<div class="noStudy">
+			<img src="@/assets/kti_(var.doran).png" alt="bb" />
+		</div>
 	</div>
 </template>
 
@@ -80,6 +83,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.noStudy {
+	img {
+		width: 100%;
+	}
+}
 .study-box {
 	display: flex;
 	justify-content: space-between;
