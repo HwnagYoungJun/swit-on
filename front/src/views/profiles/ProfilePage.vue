@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
-		<ProfileForm></ProfileForm>
-		<MyPageNavForm></MyPageNavForm>
+		<ProfileForm />
+		<MyPageNavForm />
 		<router-view />
 		<hr />
 	</div>
