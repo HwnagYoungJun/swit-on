@@ -49,5 +49,15 @@ public class UserDAOImpl implements UserDAO {
 		return userId = userId == null ? 0 : userId;
 	}
 
+	@Override
+	public int updateUser(UserInfoDTO userInfoDTO) {
+		return sqlSession.update("user.updateUser", userInfoDTO);
+	}
+
+	@Override
+	public int updateUserLegacy(UserInfoDTO userInfoDTO) {
+		return sqlSession.update("user.updateUserLegacy", userInfoDTO);
+	}
+
 
 }

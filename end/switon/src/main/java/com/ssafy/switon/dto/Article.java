@@ -1,6 +1,7 @@
 package com.ssafy.switon.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import io.swagger.annotations.ApiParam;
 
@@ -19,16 +20,10 @@ public class Article {
 	@ApiParam(value = "게시판 아이디 (스터디id에서 얻어냄)", required = false, hidden = true)
 	int board_id;
 	@ApiParam(value = "게시글 작성시간", required = false, hidden = true)
-	Date created_at;
+	Timestamp created_at;
 	@ApiParam(value = "게시글 수정시간", required = false, hidden = true)
-	Date updated_at;
+	Timestamp updated_at;
 	
-	public int getBoard_id() {
-		return board_id;
-	}
-	public void setBoard_id(int board_id) {
-		this.board_id = board_id;
-	}
 	public int getId() {
 		return id;
 	}
@@ -59,16 +54,22 @@ public class Article {
 	public void setFile(String file) {
 		this.file = file;
 	}
-	public Date getCreated_at() {
+	public int getBoard_id() {
+		return board_id;
+	}
+	public void setBoard_id(int board_id) {
+		this.board_id = board_id;
+	}
+	public Timestamp getCreated_at() {
 		return created_at;
 	}
-	public void setCreated_at(Date created_at) {
+	public void setCreated_at(Timestamp created_at) {
 		this.created_at = created_at;
 	}
-	public Date getUpdated_at() {
+	public Timestamp getUpdated_at() {
 		return updated_at;
 	}
-	public void setUpdated_at(Date updated_at) {
+	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
 	@Override
@@ -76,5 +77,6 @@ public class Article {
 		return "Article [id=" + id + ", title=" + title + ", content=" + content + ", user_id=" + user_id + ", file="
 				+ file + ", board_id=" + board_id + ", created_at=" + created_at + ", updated_at=" + updated_at + "]";
 	}
+	
 	
 }

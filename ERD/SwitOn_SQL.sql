@@ -1,4 +1,4 @@
-﻿create database if not exists switon;
+create database if not exists switon;
 use switon;
 
 SET foreign_key_checks = 0;
@@ -25,9 +25,9 @@ create table `lowercategory` (
 insert into uppercategory (`name`) values ('웹');
 insert into uppercategory (`name`) values ('모바일');
 insert into uppercategory (`name`) values ('프로그래밍언어');
-insert into uppercategory (`name`) values ('언어');
 insert into uppercategory (`name`) values ('AI');
 insert into uppercategory (`name`) values ('CS');
+insert into uppercategory (`name`) values ('언어');
 
 insert into lowercategory (`name`, `uppercategory_id`) values ('Django', 1);
 insert into lowercategory (`name`, `uppercategory_id`) values ('Spring', 1);
@@ -55,25 +55,25 @@ insert into lowercategory (`name`, `uppercategory_id`) values ('스위프트', 3
 insert into lowercategory (`name`, `uppercategory_id`) values ('R', 3);
 insert into lowercategory (`name`, `uppercategory_id`) values ('기타', 3);
 
-insert into lowercategory (`name`, `uppercategory_id`) values ('영어', 4);
-insert into lowercategory (`name`, `uppercategory_id`) values ('한국어', 4);
-insert into lowercategory (`name`, `uppercategory_id`) values ('중국어', 4);
-insert into lowercategory (`name`, `uppercategory_id`) values ('일본어', 4);
+insert into lowercategory (`name`, `uppercategory_id`) values ('머신러닝', 4);
+insert into lowercategory (`name`, `uppercategory_id`) values ('딥러닝', 4);
+insert into lowercategory (`name`, `uppercategory_id`) values ('opencv', 4);
+insert into lowercategory (`name`, `uppercategory_id`) values ('텐서플로', 4);
+insert into lowercategory (`name`, `uppercategory_id`) values ('케라스', 4);
 insert into lowercategory (`name`, `uppercategory_id`) values ('기타', 4);
 
-insert into lowercategory (`name`, `uppercategory_id`) values ('머신러닝', 5);
-insert into lowercategory (`name`, `uppercategory_id`) values ('딥러닝', 5);
-insert into lowercategory (`name`, `uppercategory_id`) values ('opencv', 5);
-insert into lowercategory (`name`, `uppercategory_id`) values ('텐서플로', 5);
-insert into lowercategory (`name`, `uppercategory_id`) values ('케라스', 5);
+insert into lowercategory (`name`, `uppercategory_id`) values ('자료구조', 5);
+insert into lowercategory (`name`, `uppercategory_id`) values ('알고리즘', 5);
+insert into lowercategory (`name`, `uppercategory_id`) values ('네트워크', 5);
+insert into lowercategory (`name`, `uppercategory_id`) values ('컴퓨터구조', 5);
+insert into lowercategory (`name`, `uppercategory_id`) values ('소프트웨어공학', 5);
+insert into lowercategory (`name`, `uppercategory_id`) values ('운영체제', 5);
 insert into lowercategory (`name`, `uppercategory_id`) values ('기타', 5);
 
-insert into lowercategory (`name`, `uppercategory_id`) values ('자료구조', 6);
-insert into lowercategory (`name`, `uppercategory_id`) values ('알고리즘', 6);
-insert into lowercategory (`name`, `uppercategory_id`) values ('네트워크', 6);
-insert into lowercategory (`name`, `uppercategory_id`) values ('컴퓨터구조', 6);
-insert into lowercategory (`name`, `uppercategory_id`) values ('소프트웨어공학', 6);
-insert into lowercategory (`name`, `uppercategory_id`) values ('운영체제', 6);
+insert into lowercategory (`name`, `uppercategory_id`) values ('영어', 6);
+insert into lowercategory (`name`, `uppercategory_id`) values ('한국어', 6);
+insert into lowercategory (`name`, `uppercategory_id`) values ('중국어', 6);
+insert into lowercategory (`name`, `uppercategory_id`) values ('일본어', 6);
 insert into lowercategory (`name`, `uppercategory_id`) values ('기타', 6);
 
 select * from uppercategory;
@@ -88,18 +88,30 @@ create table `user` (
     `password` varchar(100),
     `introduce` varchar(1000),
     `profile_image` varchar(100),
-    `uppercategory_id` int,
+    `interests` varchar(100),
     `name_legacy` varchar(20),
+    `deleted` boolean default false,
 
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`uppercategory_id`) REFERENCES uppercategory (`id`)
+    PRIMARY KEY (`id`)
 );
 
-insert into user (`name`, `email`, `password`, `introduce`, `uppercategory_id`)
+insert into user (`name`, `email`, `password`, `introduce`, `interests`)
 values ('ssafy', 'ssafy@ssafy.com', '$2a$10$s2evPCMK9MV1iVWU.xzjmOxhsLg2Lw9tHEC3XKsh0IhHPIKjAL.Qu', '서울대학교 6학년 4반 김싸피입니다. 자신있는 것은 파이썬과 롤입니다.', '2');
 
 insert into user (`name`, `email`, `password`, `introduce`)
 values ('admin', 'admin@ssafy.com', '$2a$10$cmOX6saYyAyaejxiWmlNoe8llUvr8933LiWJprxz070.Wla7y1.a2', '진정한 강자는 소개를 하지 않는다.');
+
+insert into user (`name`, `email`, `password`)
+values ('황영준', 'dudghkd1@naver.com', '$2a$10$j.6yQiQygo2ashO9vf5uVOT/xxqnvt.NBEJItcJDDXFhCT.w.m/v.');
+
+insert into user (`name`, `email`, `password`)
+values ('에이', 'aaa', '$2a$10$spq8wxUxTVNyZLnFcQGce.FYNNxcuDUmf2SKGOazoOtgKb5BGle5q');
+
+insert into user (`name`, `email`, `password`)
+values ('메리', 'kti91@likelion.org', '$2a$10$ToOIdxrb19e0DmfARKNu3uQABz5kdGoJv03kJ7/OBtBnojWU7qNtq');
+
+insert into user (`name`, `email`, `password`)
+values ('홍연주', '1@a.com', '$2a$10$PGa29t/xuJVWI1kxdYBa.epScRS4dalILslSUM63n6jH9SH6s2UKW');
 
 select * from user;
 
@@ -122,16 +134,16 @@ create table `study` (
     `lowercategory_id` int,
     `logo` varchar(100),
     `users_limit` int NOT NULL,
+    `isFinish` boolean default false,
 
     PRIMARY KEY (`id`),
-    UNIQUE KEY (`name`),
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
     FOREIGN KEY (`lowercategory_id`) REFERENCES `lowercategory` (`id`)
     
 );
 
 insert into study (`name`, `user_id`, `description`, `week`, `start_time`, `end_time`, `lowercategory_id`, `users_limit`)
-values ('파이썬의 왕', '1', '저그전이 어렵습니다.', 64 + 16 + 4, '14:00', '18:00', 2, 25);
+values ('파이썬의 왕', '1', '저그전이 어렵습니다.', 64 + 16 + 4, '14:00', '18:00', 15, 25);
 
 select * from study;
 
@@ -145,7 +157,7 @@ create table `board` (
     `type` int NOT NULL,
 
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`study_id`) REFERENCES study (`id`)
+    FOREIGN KEY (`study_id`) REFERENCES study (`id`) ON DELETE CASCADE
 );
 
 insert into board (`study_id`, `type`)
@@ -158,7 +170,7 @@ insert into board (`study_id`, `type`)
 create table `article` (
    `id` int NOT NULL AUTO_INCREMENT,
     `title` varchar(100) NOT NULL,
-    `content` varchar(5000) NOT NULL,
+    `content` text NOT NULL,
     `user_id` int NOT NULL,
     `file` varchar(100),
     `board_id` int NOT NULL,
@@ -166,7 +178,7 @@ create table `article` (
     `updated_at` timestamp,
 
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`board_id`) REFERENCES `board` (`id`)
+    FOREIGN KEY (`board_id`) REFERENCES `board` (`id`)  ON DELETE CASCADE
 );
 
 insert into article (`title`, `content`, `user_id`, `board_id`)
@@ -191,7 +203,7 @@ create table `comment` (
     `updated_at` timestamp,
 
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`article_id`) REFERENCES `article` (`id`)
+    FOREIGN KEY (`article_id`) REFERENCES `article` (`id`)  ON DELETE CASCADE
 );
 
 insert into `comment` (`content`, `user_id`, `article_id`)
@@ -216,7 +228,7 @@ create table `join` (
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-    FOREIGN KEY (`study_id`) REFERENCES `study` (`id`)
+    FOREIGN KEY (`study_id`) REFERENCES `study` (`id`)  ON DELETE CASCADE
 );
 
 insert into `join` (`user_id`, `study_id`, `isComplete`, `isLeader`)
@@ -238,7 +250,7 @@ create table `studylike` (
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-    FOREIGN KEY (`study_id`) REFERENCES `study` (`id`)
+    FOREIGN KEY (`study_id`) REFERENCES `study` (`id`)  ON DELETE CASCADE
 );
 
 create table `articlelike` (
@@ -248,7 +260,7 @@ create table `articlelike` (
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-    FOREIGN KEY (`article_id`) REFERENCES `article` (`id`)
+    FOREIGN KEY (`article_id`) REFERENCES `article` (`id`)  ON DELETE CASCADE
 );
 
 create table `commentlike` (
@@ -258,7 +270,7 @@ create table `commentlike` (
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-    FOREIGN KEY (`comment_id`) REFERENCES `comment` (`id`)
+    FOREIGN KEY (`comment_id`) REFERENCES `comment` (`id`)  ON DELETE CASCADE
 );
 
 create table `articlefav` (
@@ -268,7 +280,7 @@ create table `articlefav` (
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-    FOREIGN KEY (`article_id`) REFERENCES `article` (`id`)
+    FOREIGN KEY (`article_id`) REFERENCES `article` (`id`)  ON DELETE CASCADE
 );
 
 select * from studylike;

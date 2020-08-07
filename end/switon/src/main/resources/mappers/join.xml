@@ -19,6 +19,13 @@
 		from `join`
 	</select>
 	
+	<!-- 만들다 말았음 -->
+	<select id="selectUserStudies" resultType="Integer">
+		select study_id
+		from `join`
+		where user_id = #{userId}
+	</select>	
+	
 	<!-- 소모임 가입 상세 정보 반환 -->
 	<select id="selectJoin" resultType="Join">
 		select id, user_id, study_id, isComplete, reg_date, isLeader
@@ -64,6 +71,13 @@
 	<delete id="deleteJoin">
 		delete from `join`
 		where id = #{id}
+	</delete>
+	
+	<!-- studyId와 userId로 소모임 탈퇴 -->
+	<delete id="deleteJoinByIds">
+		delete from `join`
+		where user_id = #{userId}
+		and study_id = #{studyId}
 	</delete>
 	
 </mapper>

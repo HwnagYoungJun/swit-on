@@ -19,6 +19,20 @@
 		where id = #{id}
 	</select>
 	
+	<!-- 해당유저가 즐겨찾기를 누른 글 반환 -->
+	<select id="selectArticleFavByUser_Article" parameterType="ArticleFav" resultType="ArticleFav">
+		select id, user_id, article_id
+		from articlefav
+		where user_id = #{user_id} and article_id = #{article_id}
+	</select>
+	
+	<!-- 사용자가 즐겨찾기한 글 리스트 반환 -->
+	<select id="selectArticleFavByUser" resultType="ArticleFav">
+    	select id, user_id, article_id
+    	from articlefav
+    	where user_id = #{user_id}
+	</select>
+	
 	<!-- 글 즐겨찾기 등록 -->
 	<insert id="insertArticleFav" parameterType="ArticleFav">
 		insert into articlefav(user_id, article_id)
@@ -29,6 +43,12 @@
 	<delete id="deleteArticleFav">
 		delete from articlefav
 		where id = #{id}
+	</delete>
+
+	<!-- 해당 유저가 누른 글 즐겨찾기 삭제 -->
+	<delete id="deleteArticleFavByUser">
+		delete from articlefav
+		where user_id = #{user_id} and article_id = #{article_id}
 	</delete>
 
 </mapper>
