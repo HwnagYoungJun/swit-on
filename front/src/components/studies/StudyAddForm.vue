@@ -65,20 +65,78 @@
 				/>
 				<label>까지</label>
 			</div>
-			<div>
-				<label for="uppercategory_id" class="head-label">카테고리</label>
-				<select
-					v-model="studyData.uppercategory_id"
-					id="uppercategory_id"
-					required
-				>
-					<option value="1">웹</option>
-					<option value="2">모바일</option>
-					<option value="3">프로그래밍 언어</option>
-					<option value="4">AI</option>
-					<option value="5">CS</option>
-					<option value="6">언어</option>
-				</select>
+			<div class="studyform-category">
+				<div class="studyform-uppercategory">
+					<label for="uppercategory_id" class="head-label">카테고리</label>
+					<select v-model="uppercategory_id" id="uppercategory_id" required>
+						<option value="1">웹</option>
+						<option value="2">모바일</option>
+						<option value="3">프로그래밍 언어</option>
+						<option value="4">AI</option>
+						<option value="5">CS</option>
+						<option value="6">언어</option>
+					</select>
+				</div>
+				<div class="studyform-lowercategory">
+					<select
+						v-model="studyData.lowercategory_id"
+						id="lowercategory_id"
+						required
+					>
+						<option v-if="uppercategory_id === '1'" value="1">Django</option>
+						<option v-if="uppercategory_id === '1'" value="2">Spring</option>
+						<option v-if="uppercategory_id === '1'" value="3">Node.Js</option>
+						<option v-if="uppercategory_id === '1'" value="4">Vue</option>
+						<option v-if="uppercategory_id === '1'" value="5">React</option>
+						<option v-if="uppercategory_id === '1'" value="6">HTML/CSS</option>
+						<option v-if="uppercategory_id === '1'" value="7"
+							>Javascript</option
+						>
+						<option v-if="uppercategory_id === '1'" value="8">Database</option>
+						<option v-if="uppercategory_id === '1'" value="9">기타</option>
+						<option v-if="uppercategory_id === '2'" value="10">Android</option>
+						<option v-if="uppercategory_id === '2'" value="11">IOS</option>
+						<option v-if="uppercategory_id === '2'" value="12">Flutter</option>
+						<option v-if="uppercategory_id === '2'" value="13"
+							>React Native</option
+						>
+						<option v-if="uppercategory_id === '2'" value="14">기타</option>
+						<option v-if="uppercategory_id === '3'" value="15">Python</option>
+						<option v-if="uppercategory_id === '3'" value="16">C</option>
+						<option v-if="uppercategory_id === '3'" value="17">C#</option>
+						<option v-if="uppercategory_id === '3'" value="18">C++</option>
+						<option v-if="uppercategory_id === '3'" value="19">Java</option>
+						<option v-if="uppercategory_id === '3'" value="20">Kotlin</option>
+						<option v-if="uppercategory_id === '3'" value="21">Swift</option>
+						<option v-if="uppercategory_id === '3'" value="22">R</option>
+						<option v-if="uppercategory_id === '3'" value="23">기타</option>
+						<option v-if="uppercategory_id === '4'" value="24">머신러닝</option>
+						<option v-if="uppercategory_id === '4'" value="25">딥러닝</option>
+						<option v-if="uppercategory_id === '4'" value="26">OpenCV</option>
+						<option v-if="uppercategory_id === '4'" value="27"
+							>텐서플로우</option
+						>
+						<option v-if="uppercategory_id === '4'" value="28">케라스</option>
+						<option v-if="uppercategory_id === '4'" value="29">기타</option>
+
+						<option v-if="uppercategory_id === '5'" value="30">자료구조</option>
+						<option v-if="uppercategory_id === '5'" value="31">알고리즘</option>
+						<option v-if="uppercategory_id === '5'" value="32">네트워크</option>
+						<option v-if="uppercategory_id === '5'" value="33"
+							>컴퓨터구조</option
+						>
+						<option v-if="uppercategory_id === '5'" value="34"
+							>소프트웨어공학</option
+						>
+						<option v-if="uppercategory_id === '5'" value="35">운영체제</option>
+						<option v-if="uppercategory_id === '5'" value="36">기타</option>
+						<option v-if="uppercategory_id === '6'" value="37">영어</option>
+						<option v-if="uppercategory_id === '6'" value="38">한국어</option>
+						<option v-if="uppercategory_id === '6'" value="39">중국어</option>
+						<option v-if="uppercategory_id === '6'" value="40">일본어</option>
+						<option v-if="uppercategory_id === '6'" value="41">기타</option>
+					</select>
+				</div>
 			</div>
 			<div class="studyform-term">
 				<label for="start_term" class="head-label">일정</label>
@@ -161,6 +219,7 @@ export default {
 		return {
 			fileRoute: '',
 			weekData: [],
+			uppercategory_id: null,
 			studyData: {
 				name: null,
 				description: null,
@@ -168,7 +227,7 @@ export default {
 				isRecruit: 1,
 				img: null,
 				isPrivate: 0,
-				lowercategory_id: 2,
+				lowercategory_id: null,
 				start_term: null,
 				end_term: null,
 				start_time: null,
@@ -189,6 +248,10 @@ export default {
 			try {
 				this.weekCalculator();
 				this.studyData.users_limit = parseInt(this.studyData.users_limit);
+				this.studyData.lowercategory_id = parseInt(
+					this.studyData.lowercategory_id,
+				);
+				console.log(this.studyData);
 				await createStudy(this.studyData);
 				this.$router.push({ name: 'main' });
 			} catch (e) {
@@ -245,7 +308,6 @@ export default {
 .studyform-main {
 	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
 	padding: 1rem;
-	// padding: 1rem 1rem 0;
 	border-radius: 4px;
 	div {
 		margin-bottom: 0.75rem;
@@ -304,7 +366,7 @@ div.upload-btn_wrap {
 	position: relative;
 	display: flex;
 	align-items: center;
-	width: 100%; /*width, height 값은 button(찾아보기)값과 같아야함 */
+	width: 100%;
 	height: 2rem;
 	border-top: 1px solid #bbb;
 	padding-left: 3px;
@@ -315,7 +377,6 @@ div.upload-btn_wrap button {
 	height: 2rem;
 	font-weight: bold;
 	background: rgb(225, 225, 225);
-	// border: 1px solid #333;
 	border: none;
 	border-radius: 3px;
 	color: rgb(150, 149, 149);
