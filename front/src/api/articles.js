@@ -41,6 +41,12 @@ function fetchNoticeArticles(studyId) {
 	return boardArticles.get(`/${studyId}/notice/`);
 }
 
+function createComment(studyId, boardName, articleId, commentData) {
+	return boardArticles.post(`/${studyId}/${boardName}/${articleId}/comments`, {
+		commentData,
+	});
+}
+
 export {
 	fetchArticles,
 	fetchArticle,
@@ -51,4 +57,5 @@ export {
 	fetchQnaArticles,
 	fetchNoticeArticles,
 	fetchFeeds,
+	createComment,
 };

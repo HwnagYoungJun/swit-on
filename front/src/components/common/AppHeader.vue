@@ -5,7 +5,7 @@
 				<router-link class="switon-logo" :to="{ name: 'main' }">
 					<img
 						v-if="isMainRoute"
-						src="@/assets/logo.png"
+						src="@/assets/white.png"
 						alt="logo"
 						class="switon"/>
 					<img v-else src="@/assets/color.png" alt="logo" class="switon"
@@ -31,6 +31,9 @@
 				>
 			</template>
 			<template v-else>
+				<router-link class="nav-router-item" :to="{ name: 'addstudy' }"
+					>만들기</router-link
+				>
 				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
 					>뉴스피드</router-link
 				>
@@ -93,7 +96,7 @@ header {
 	background: none;
 	color: white;
 	.switon {
-		display: none;
+		// display: none;
 	}
 	#search {
 		display: none;
@@ -150,7 +153,7 @@ header {
 	align-items: center;
 	font-weight: 600;
 	.nav-router-item {
-		margin-right: 0.25rem;
+		margin-right: 0.5rem;
 	}
 	.nav-router-img {
 		width: 2rem;

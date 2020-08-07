@@ -17,13 +17,14 @@
 			</ol>
 		</nav>
 		<div class="card-detail-wrap">
-			<div class="card-detail">
+			<div v-if="article" class="card-detail">
 				<div class="card-detail-title">
 					<img src="@/assets/color2.png" alt="" class="img" />
-					<p>저장소 제목</p>
+					<p>{{ article.title }}</p>
 				</div>
 				<div class="card-detail-content">
-					<p>
+					<Viewer :initialValue="article.content" />
+					<!-- <p>
 						Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non,
 						asperiores facere excepturi mollitia earum quisquam cupiditate
 						debitis perferendis maiores voluptatibus impedit repudiandae
@@ -39,7 +40,7 @@
 						alias, nulla adipisci, saepe modi, expedita aspernatur nostrum
 						dolores pariatur ex deserunt repellendus quod. Enim reiciendis
 						blanditiis ad vel molestiae?
-					</p>
+					</p> -->
 					<div class="logo">
 						<i class="icon ion-md-heart"></i>
 						<span>좋아요 800개</span>
@@ -47,7 +48,13 @@
 					<div class="content-info">
 						<a href="">User name</a><span>#python</span> <span>#django</span>
 					</div>
-					<input type="text" name="" id="" autofocus placeholder="댓글달기" />
+					<input
+						@keypress.enter="AddComment"
+						type="text"
+						v-model="commentContent"
+						autofocus
+						placeholder="댓글달기"
+					/>
 				</div>
 			</div>
 		</div>
@@ -55,16 +62,23 @@
 </template>
 
 <script>
-import { fetchArticle } from '@/api/articles';
+import { fetchArticle, createComment } from '@/api/articles';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import Viewer from '@toast-ui/vue-editor/src/Viewer.vue';
 export default {
 	props: {
 		id: Number,
 		board_name: String,
 		article_id: Number,
 	},
+	components: {
+		Viewer,
+	},
 	data() {
 		return {
 			article: null,
+			initText: null,
+			commentContent: null,
 		};
 	},
 	methods: {
@@ -74,7 +88,21 @@ export default {
 				const boardName = this.board_name;
 				const articleId = this.article_id;
 				const { data } = await fetchArticle(studyId, boardName, articleId);
+				console.log(data);
 				this.article = data;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		async AddComment() {
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				const content = this.commentContent;
+				await createComment(studyId, boardName, articleId, { content });
+				// this.commentContent = null;
+				this.fetchData();
 			} catch (error) {
 				console.log(error);
 			}
@@ -84,9 +112,7 @@ export default {
 		this.fetchData();
 	},
 	watch: {
-		article_id() {
-			this.fetchData();
-		},
+		$route: 'fetchData',
 	},
 };
 </script>

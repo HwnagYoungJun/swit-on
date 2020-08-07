@@ -168,7 +168,7 @@ export default {
 				isRecruit: 1,
 				img: null,
 				isPrivate: 0,
-				lowercategory_id: null,
+				lowercategory_id: 2,
 				start_term: null,
 				end_term: null,
 				start_time: null,
@@ -188,9 +188,9 @@ export default {
 		async submitForm() {
 			try {
 				this.weekCalculator();
+				this.studyData.users_limit = parseInt(this.studyData.users_limit);
 				await createStudy(this.studyData);
-				console.log(this.studyData);
-				this.$router.push({ name: 'studies' });
+				this.$router.push({ name: 'main' });
 			} catch (e) {
 				console.log(e);
 			}

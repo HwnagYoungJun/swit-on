@@ -3,7 +3,10 @@
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
 				<li>
-					<a href="#">프로그래밍 언어</a><span aria-hidden="true">></span>
+					<router-link :to="`/category/${study.uppercategory_name}`">{{
+						study.uppercategory_name
+					}}</router-link
+					><span aria-hidden="true">></span>
 				</li>
 				<li>
 					<router-link :to="`/study/${id}`" aria-current="page"
@@ -24,7 +27,8 @@
 				<small>{{ study.users_current }}/{{ study.users_limit }}명</small>
 			</div>
 			<div class="study-logo">
-				<img src="@/assets/django.png" alt="" />
+				<img v-if="study.logo" :src="study.logo" alt="" />
+				<!-- <img src="@/assets/django.png" alt="" /> -->
 			</div>
 		</div>
 		<div v-if="isJoined" class="study-category">
@@ -68,6 +72,7 @@ export default {
 		async fetchData() {
 			const studyId = this.id;
 			const { data } = await fetchStudy(studyId);
+			console.log(data);
 			this.study = data.study;
 			this.isJoined = data.isJoined;
 		},
