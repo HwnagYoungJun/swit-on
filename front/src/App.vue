@@ -70,7 +70,7 @@ export default {
 			this.isLoading = true;
 			const { data } = await fetchStudies();
 			this.isLoading = false;
-			this.studies = data;
+			this.studies = data.reverse().splice(0, 4);
 		},
 	},
 	// created() {

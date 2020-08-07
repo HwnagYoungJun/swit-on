@@ -30,7 +30,7 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-	width: 505px;
+	width: 480px;
 	margin: 10px 5px 50px;
 	padding: 15px;
 	border-bottom: 1px solid rgb(228, 228, 228);
@@ -44,7 +44,7 @@ export default {
 		}
 		div {
 			color: rgb(90, 90, 90);
-			.study-info {
+			.user-info {
 				display: flex;
 				// flex-direction: column;
 				// justify-content: center;
@@ -54,7 +54,7 @@ export default {
 					width: 20px;
 				}
 			}
-			.user-info {
+			.study-info {
 				display: flex;
 				flex-direction: column;
 				align-items: center;
