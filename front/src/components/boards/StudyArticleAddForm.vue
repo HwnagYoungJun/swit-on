@@ -1,7 +1,11 @@
 <template>
-	<form class="articleform" @submit.prevent="createArticle">
+	<form
+		class="articleform"
+		@submit.prevent="createArticle"
+		enctype="multipart/form-data"
+	>
 		<div class="articleform-header">
-			<h1>게시글 작성</h1>
+			<h2>{{ routeBoardName }}</h2>
 			<div class="articleform-btnbox">
 				<button @click.prevent="$router.go(-1)" class="articleform-btn-cancle">
 					취소
@@ -51,8 +55,13 @@ import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/i18n/ko-kr.js';
 import { Editor } from '@toast-ui/vue-editor';
+import { createArticle } from '@/api/articles';
 
 export default {
+	props: {
+		id: Number,
+		board_name: String,
+	},
 	data() {
 		return {
 			title: '',
@@ -67,15 +76,29 @@ export default {
 			},
 		};
 	},
+	computed: {
+		routeBoardName() {
+			return this.board_name.charAt(0).toUpperCase() + this.board_name.slice(1);
+		},
+	},
 	components: {
 		Editor,
 	},
 	methods: {
 		async createArticle() {
-			let content = this.$refs.toastuiEditor.invoke('getMarkdown');
-			console.log(this.title);
-			console.log(content);
-			// const { data } = await
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				let content = this.$refs.toastuiEditor.invoke('getMarkdown');
+				await createArticle(studyId, boardName, {
+					title: this.title,
+					content,
+					file: this.inputFile,
+				});
+				this.$router.push(`/study/${studyId}/${boardName}`);
+			} catch (error) {
+				console.log(error);
+			}
 		},
 		onChangeTitle(val) {
 			this.title = val;
@@ -161,7 +184,7 @@ input.upload_text {
 	height: 2rem;
 	// padding: 0 0.5rem 1rem;
 	// border-top: 1px solid #bbb;
-	// margin-top: 1rem;
+	margin-top: 1rem;
 	// margin-bottom: 1rem;
 }
 div.upload-btn_wrap input.input_file {
@@ -190,10 +213,6 @@ div.upload-btn_wrap {
 	margin-top: 1rem;
 }
 div.upload-btn_wrap button {
-	/*버튼 div*/
-	// display: absolute;
-	// top: 0;
-	// right: 0;
 	@include scale(width, 70px);
 	height: 2rem;
 	font-weight: bold;

@@ -1,32 +1,31 @@
 <template>
 	<div class="card">
 		<div class="card-info">
-			<p class="card-info-title">파이썬 어려워</p>
+			<p class="card-info-title">{{ article.title }}</p>
 			<div>
 				<span class="study-info">
 					<img src="@/assets/color.png" alt="" />
-					<span>python 소모임</span>
+					<span>{{ article.study.name }}</span>
 				</span>
 				<span class="user-info">
 					<img src="@/assets/dd.png" alt="" />
-					<span>kim</span>
+					<span>{{ article.user.name }}</span>
 				</span>
-				<p>3시간 전</p>
+				<p>{{ article.created_at | formatDate }}</p>
 			</div>
 		</div>
 		<div class="card-content">
-			<p>
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus
-				repellendus aliquid esse sapiente harum excepturi ab assumenda amet
-				veniam? Eum repudiandae cupiditate reiciendis ipsum architecto iusto
-				repellat voluptate, alias qui? lor
-			</p>
+			<p>{{ article.content }}</p>
 		</div>
 	</div>
 </template>
 
 <script>
-export default {};
+export default {
+	props: {
+		article: Object,
+	},
+};
 </script>
 
 <style lang="scss" scoped>

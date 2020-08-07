@@ -16,8 +16,27 @@ const routes = [
 		component: () => import('@/views/studies/StudyPage.vue'),
 	},
 	{
+		path: '/study/new',
+		name: 'addstudy',
+		component: () => import('@/views/studies/StudyAddPage.vue'),
+		beforeEnter,
+	},
+	{
+		path: '/study/:id/:board_name/new',
+		name: 'newArticle',
+		component: () => import('@/views/boards/StudyArticleAddPage.vue'),
+		props: route => ({
+			id: Number(route.params.id),
+			board_name: String(route.params.board_name),
+		}),
+		beforeEnter,
+	},
+	{
 		path: '/study/:id',
 		name: 'studydetail',
+		props: route => ({
+			id: Number(route.params.id),
+		}),
 		component: () => import('@/views/studies/StudyDetail.vue'),
 		children: [
 			{
@@ -41,21 +60,20 @@ const routes = [
 				component: () => import('@/views/studies/children/StudyNotice.vue'),
 			},
 			{
-				path: 'question',
-				name: 'question',
+				path: 'qna',
+				name: 'qna',
 				component: () => import('@/views/studies/children/StudyQuestion.vue'),
 			},
 		],
 	},
 	{
-		path: '/study/new',
-		name: 'addstudy',
-		component: () => import('@/views/studies/StudyAddPage.vue'),
-		beforeEnter,
-	},
-	{
-		path: '/study/:id/repository/:id',
-		name: 'repositoryDetail',
+		path: '/study/:id/:board_name/:article_id',
+		name: 'BoardArticleDetail',
+		props: route => ({
+			id: Number(route.params.id),
+			board_name: String(route.params.board_name),
+			article_id: Number(route.params.article_id),
+		}),
 		component: () => import('@/components/common/ArticleCardDetail.vue'),
 	},
 	{
@@ -91,15 +109,9 @@ const routes = [
 		},
 	},
 	{
-		path: '/study/:study_id/new',
-		name: 'newArticle',
-		component: () => import('@/views/boards/StudyArticleAddPage.vue'),
-		// beforeEnter,
-	},
-	{
 		path: '/mypage/',
 		name: 'mypage',
-		component: () => import('@/views/profiles/MyPagePage.vue'),
+		component: () => import('@/views/profiles/ProfilePage.vue'),
 		children: [
 			{
 				path: 'myschedule',
@@ -122,6 +134,11 @@ const routes = [
 				component: () => import('@/views/profiles/children/MyArticleForm.vue'),
 			},
 		],
+	},
+	{
+		path: '/modifyprofile',
+		name: 'modifyprofile',
+		component: () => import('@/views/profiles/ModifyProfilePage.vue'),
 	},
 	{
 		path: '/category/:UpperCategoryName',
