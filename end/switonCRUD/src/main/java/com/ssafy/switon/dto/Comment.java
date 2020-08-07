@@ -3,7 +3,6 @@ package com.ssafy.switon.dto;
 import java.sql.Date;
 
 public class Comment {
-	// ´ñ±Û Repository
 	int id;
 	String content;
 	int user_id;
