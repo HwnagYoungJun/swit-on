@@ -25,5 +25,18 @@
 		where uppercategory_id = #{uppercategory_id}
 	</select>
 	
-
+	<!-- 소분류 카테고리 상세 조회 -->
+	<select id="selectLowerCategoryById" resultType="LowerCategory">
+		select id, name, uppercategory_id
+		from lowercategory
+		where id = #{id}
+	</select>
+	
+	<!-- 대분류 카테고리 상세 조회 -->
+	<select id="selectUpperCategoryById" resultType="UpperCategory">
+		select id, name
+		from uppercategory
+		where id = #{id}
+	</select>
+	
 </mapper>

@@ -13,6 +13,7 @@
 			email,
 			introduce,
 			profile_image,
+			interests,
 			name_legacy
 		from user
 	</select>
@@ -24,6 +25,7 @@
 			email,
 			introduce,
 			profile_image,
+			interests,
 			name_legacy
 		from user
 		where id = #{id}
@@ -35,7 +37,29 @@
 		values (#{name}, #{email}, #{password})
 	</insert>
 	
-		<!-- 이메일로 유저 패스워드를 찾아서 반환 (로그인을 위해 유저의 저장된 pwd를 반환) -->
+	<!-- 회원 탈퇴: 아이디, 비번, 이름 등을 파기하고 탈퇴한 유저라는 것을 표시한다. -->
+	<update id="updateUserLegacy" parameterType="UserInfoDTO">
+		update user
+		set name = '',
+			email = '',
+			password = '',
+			introduce = '',
+			profile_image = '',
+			name_legacy = #{name}
+		where id = #{id}
+	</update>
+	<!-- 유저 정보 수정 -->
+	<update id="updateUser" parameterType="UserInfoDTO">
+		update user
+		set name = #{name},
+			email = #{email},
+			introduce = #{introduce},
+			profile_image = #{profile_image},
+			name_legacy = #{name_legacy}
+		where id = #{id}
+	</update>
+	
+	<!-- 이메일로 유저 패스워드를 찾아서 반환 (로그인을 위해 유저의 저장된 pwd를 반환) -->
 	<select id="getUserPwdByEmail" resultType="String">
 		select password
 		from user

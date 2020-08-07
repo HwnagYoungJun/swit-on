@@ -19,6 +19,13 @@
 		where id = #{id}
 	</select>
 	
+	<!-- 해당유저가 좋아요를 누른 모임 반환 -->
+	<select id="selectStudyLikeByUser_Study" parameterType="StudyLike" resultType="StudyLike">
+		select id, user_id, study_id
+		from studylike
+		where user_id = #{user_id} and study_id = #{study_id}
+	</select>
+	
 	<!-- 해당소모임의 좋아요 수 반환 -->
 	<select id="likeCount" resultType="Integer">
     	select count(*) as cnt
@@ -36,5 +43,11 @@
 	<delete id="deleteStudyLike">
 		delete from studylike
 		where id = #{id}
+	</delete>
+
+	<!-- 해당 유저가 누른 소모임좋아요 삭제 -->
+	<delete id="deleteStudyLikeByUser">
+		delete from studylike
+		where user_id = #{user_id} and study_id = #{study_id} 
 	</delete>
 </mapper>

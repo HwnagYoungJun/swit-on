@@ -14,6 +14,29 @@
 		order by created_at desc
 		limit 1
 	</select>
+	
+	<!-- 카테고리 아이디로 스터디 리스트 반환 -->
+	<select id="selectStudiesByLowercategoryId" resultType="Study">
+		select id,
+			name,
+			user_id,
+			description,
+			code,
+			isPrivate,
+			isRecruit,
+			start_term,
+			end_term,
+			created_at,
+			week,
+			start_time,
+			end_time,
+			lowercategory_id,
+			logo,
+			users_limit,
+			(select count(*) from `join` where study_id = study.id) as users_current
+		from study
+		where lowercategory_id = #{lowercategory_id}
+	</select>
 
 	<!-- 스터디 리스트 반환 -->
 	<select id="selectStudies" resultType="Study">
@@ -32,7 +55,8 @@
 			end_time,
 			lowercategory_id,
 			logo,
-			users_limit
+			users_limit,
+			(select count(*) from `join` where study_id = study.id) as users_current
 		from study
 	</select>
 	
@@ -53,7 +77,8 @@
 			end_time,
 			lowercategory_id,
 			logo,
-			users_limit
+			users_limit,
+			(select count(*) from `join` where study_id = #{id}) as users_current
 		from study
 		where id = #{id}
 	</select>
@@ -104,7 +129,7 @@
 				#{description},
 				#{code},
 				#{isPrivate},
-				#{isRecruit},
+				1,
 				#{start_term},
 				#{end_term},
 				#{week},
@@ -124,7 +149,6 @@
 			description = #{description},
 			code = #{code},
 			isPrivate = #{isPrivate},
-			isRecruit = #{isRecruit},
 			start_term = #{start_term},
 			end_term = #{end_term},
 			week = #{week},

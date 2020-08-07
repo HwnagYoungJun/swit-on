@@ -20,5 +20,7 @@ public interface StudyDAO {
 	int getRecentStudyIdByUserId(int userId);
 	// 유저 아이디로 가입한 스터디 전체 검색
 	List<Study> selectLeaderStudiesByUserId(int userId);
+	// 카테고리 아이디로 소모임 리스트 검색
+	List<Study> selectStudiesByLowercategoryId(int lowercategory_id);
 	
 }

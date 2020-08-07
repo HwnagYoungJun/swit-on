@@ -22,5 +22,7 @@ public interface BoardDAO {
 	int insertBoard(Board board);
 	// 게시판 삭제
 	int deleteBoard(int id);
+	// 스터디 아이디 + type으로 게시판 아이디 찾기
+	int findBoardId(int studyId, int type);
 
 }

@@ -13,5 +13,6 @@
       <mapper resource="mappers/join.xml" />
       <mapper resource="mappers/category.xml" />
       <mapper resource="mappers/comment.xml" />
+      <mapper resource="mappers/User.xml" /> 
    </mappers>
 </configuration>

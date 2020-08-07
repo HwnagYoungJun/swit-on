@@ -36,8 +36,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		if(!request.getMethod().equals("OPTIONS")) {
 			Jws<Claims> jws;
 			try {
-				String jwsString = request.getHeader("token");
-//				String jwsString = request.getHeader("Authorization").substring("Bearer ".length());
+//				String jwsString = request.getHeader("token");
+				String jwsString = request.getHeader("Authentication").substring("Bearer ".length());
 				System.out.println("토큰: " + jwsString);
 //				System.out.println(jwtUtil.getUserPK(jwsString));
 				if (jwsString == null) {

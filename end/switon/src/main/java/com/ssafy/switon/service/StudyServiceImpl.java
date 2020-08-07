@@ -3,20 +3,29 @@ package com.ssafy.switon.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.ssafy.switon.dao.CategoryDAO;
 import com.ssafy.switon.dao.JoinDAO;
 import com.ssafy.switon.dao.StudyDAO;
+import com.ssafy.switon.dao.StudyLikeDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Join;
+import com.ssafy.switon.dto.Like;
+import com.ssafy.switon.dto.LowerCategory;
 import com.ssafy.switon.dto.Study;
+import com.ssafy.switon.dto.StudyCardDTO;
+import com.ssafy.switon.dto.StudyReturnDTO;
+import com.ssafy.switon.dto.UpperCategory;
 import com.ssafy.switon.dto.UserStudyInfoDTO;
 
 @Service
 public class StudyServiceImpl implements StudyService {
 
+	@Autowired
+	StudyLikeDAO likeDao;
+	
 	@Autowired
 	StudyDAO studyDao;
 	
@@ -25,6 +34,9 @@ public class StudyServiceImpl implements StudyService {
 	
 	@Autowired
 	UserDAO userDao;
+	
+	@Autowired
+	CategoryDAO categoryDao;
  	
 	@Override
 	public List<Study> searchAll() {
@@ -34,6 +46,18 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	public Study search(int id) {
 		return studyDao.selectStudyById(id);
+	}
+	
+	@Override
+	public StudyReturnDTO search(int id, boolean isJoined, boolean isLeader, int userId) {
+		Study study = studyDao.selectStudyById(id);
+		Like like = new Like(likeDao.selectLikeCount(id), 
+				likeDao.selectStudyLikeByUser_Study(userId, id) != null);				
+		LowerCategory lowerCategory = categoryDao.selectLowOne(study.getLowercategory_id());
+		UpperCategory upperCategory = categoryDao.selectUpOne(lowerCategory.getUppercategory_id());
+		study.setUppercategory_id(upperCategory.getId());
+		study.setUppercategory_name(upperCategory.getName());
+		return new StudyReturnDTO(study, isJoined, isLeader, like);
 	}
 
 	@Override
@@ -71,5 +95,36 @@ public class StudyServiceImpl implements StudyService {
 		}
 		return list;
 	}
+
+	@Override
+	public List<Study> searchStudiesByLowercategory(int lowercategory_id) {
+		return studyDao.selectStudiesByLowercategoryId(lowercategory_id);
+	}
+
+	@Override
+	public List<StudyCardDTO> searchStudyCardsByLowercategoryId(int lowercategory_id) {
+		List<Study> studies = studyDao.selectStudiesByLowercategoryId(lowercategory_id);
+		List<StudyCardDTO> studyCards = new ArrayList<StudyCardDTO>();
+		for(Study study : studies) {
+			studyCards.add(new StudyCardDTO(study.getId(), study.getName(), 
+					study.getStart_time(), study.getEnd_time(), study.getWeek(), 
+					study.getEnd_term(), study.getUsers_current(), study.getUsers_limit()));
+		}
+		return studyCards;
+	}
+
+	@Override
+	public List<StudyCardDTO> searchStudyCards() {
+		List<Study> studies = studyDao.selectStudies();
+		List<StudyCardDTO> studyCards = new ArrayList<StudyCardDTO>();
+		for(Study study : studies) {
+			studyCards.add(new StudyCardDTO(study.getId(), study.getName(), 
+					study.getStart_time(), study.getEnd_time(), study.getWeek(), 
+					study.getEnd_term(), study.getUsers_current(), study.getUsers_limit()));
+		}
+		return studyCards;
+	}
+
+	
 
 }

@@ -3,6 +3,7 @@ package com.ssafy.switon.service;
 import java.util.List;
 
 import com.ssafy.switon.dto.Comment;
+import com.ssafy.switon.dto.CommentReturnDTO;
 
 public interface CommentService {
 
@@ -18,4 +19,6 @@ public interface CommentService {
 	boolean update(Comment comment);
 	// 게시글의 댓글 조회
 	List<Comment> searchArticleComments(int articleId);
+	
+	List<CommentReturnDTO> searchArticleCommentsIncludingProfile(int articleId);
 }
