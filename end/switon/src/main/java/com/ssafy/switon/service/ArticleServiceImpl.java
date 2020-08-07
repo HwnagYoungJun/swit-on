@@ -17,6 +17,7 @@ import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleReturnDTO;
 import com.ssafy.switon.dto.Join;
+import com.ssafy.switon.dto.Like;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudySimple;
 import com.ssafy.switon.dto.UserInfoDTO;
@@ -39,6 +40,9 @@ public class ArticleServiceImpl implements ArticleService {
 	
 	@Autowired
 	BoardDAO boardDao;
+	
+	@Autowired
+	ArticleLikeService articleLikeService;
 	
 	@Override
 	public List<Article> searchAll() {
@@ -91,7 +95,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleReturnDTO> searchArticlesByBoardId(int studyId, int boardId, int type) {
+	public List<ArticleReturnDTO> searchArticlesByBoardId(int studyId, int boardId, int type, int userId) {
 		String board_name = "notice";
 		switch(type) {
 		case 1: 
@@ -119,9 +123,13 @@ public class ArticleServiceImpl implements ArticleService {
 			if(userInfoDTO.getProfile_image() != null) {
 				user.setProfile_image(userInfoDTO.getProfile_image());				
 			}
-			
+			int articleId = article.getId();
+			boolean isLiked = articleLikeService.searchByUser_Article(userId, articleId) != null;
+			Like like = new Like(articleLikeService.searchLikeCount(articleId),
+					isLiked);
+			System.out.println(like);
 			ArticleReturnDTO articleReturnDTO = new ArticleReturnDTO();
-			articleReturnDTO.setId(article.getId());
+			articleReturnDTO.setId(articleId);
 			articleReturnDTO.setTitle(article.getTitle());
 			articleReturnDTO.setContent(article.getContent());
 			articleReturnDTO.setUser_id(article.getUser_id());			
@@ -132,13 +140,14 @@ public class ArticleServiceImpl implements ArticleService {
 			articleReturnDTO.setStudy(study);
 			articleReturnDTO.setUser(user);
 			articleReturnDTO.setBoard_name(board_name);
+			articleReturnDTO.setLike(like);
 			articleReturnDTOs.add(articleReturnDTO);
 		}
 		return articleReturnDTOs;
 	}
 	
 	@Override
-	public List<ArticleReturnDTO> searchArticlesByBoardIdLimit5(int studyId, int boardId, int type) {
+	public List<ArticleReturnDTO> searchArticlesByBoardIdLimit5(int studyId, int boardId, int type, int userId) {
 		String board_name = "notice";
 		switch(type) {
 		case 1: 
@@ -166,9 +175,13 @@ public class ArticleServiceImpl implements ArticleService {
 			if(userInfoDTO.getProfile_image() != null) {
 				user.setProfile_image(userInfoDTO.getProfile_image());				
 			}
-			
+			int articleId = article.getId();
+			boolean isLiked = articleLikeService.searchByUser_Article(userId, articleId) != null;
+			Like like = new Like(articleLikeService.searchLikeCount(articleId),
+					isLiked);
+			System.out.println(like);
 			ArticleReturnDTO articleReturnDTO = new ArticleReturnDTO();
-			articleReturnDTO.setId(article.getId());
+			articleReturnDTO.setId(articleId);
 			articleReturnDTO.setTitle(article.getTitle());
 			articleReturnDTO.setContent(article.getContent());
 			articleReturnDTO.setUser_id(article.getUser_id());			
@@ -179,6 +192,7 @@ public class ArticleServiceImpl implements ArticleService {
 			articleReturnDTO.setStudy(study);
 			articleReturnDTO.setUser(user);
 			articleReturnDTO.setBoard_name(board_name);
+			articleReturnDTO.setLike(like);
 			articleReturnDTOs.add(articleReturnDTO);
 		}
 		return articleReturnDTOs;
@@ -191,7 +205,7 @@ public class ArticleServiceImpl implements ArticleService {
 		for(Join join : joins) { // 유저가 가입한 스터디 id마다 boardId들을 추출해서 List 얻어내기
 			int studyId = join.getStudy_id();
 			for(int i = 1; i <= 3; i++) {
-				List<ArticleReturnDTO> boardArticles = searchArticlesByBoardIdLimit5(studyId, boardDao.findBoardId(studyId, i), i);
+				List<ArticleReturnDTO> boardArticles = searchArticlesByBoardIdLimit5(studyId, boardDao.findBoardId(studyId, i), i, userId);
 				articles.addAll(boardArticles);
 			}
 		}
@@ -206,8 +220,8 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleReturnDTO> searchArticlesByBoardIdOrdered(int studyId, int boardId, int type) {
-		List<ArticleReturnDTO> articles = searchArticlesByBoardId(studyId, boardId, type);
+	public List<ArticleReturnDTO> searchArticlesByBoardIdOrdered(int studyId, int boardId, int type, int userId) {
+		List<ArticleReturnDTO> articles = searchArticlesByBoardId(studyId, boardId, type, userId);
 		Collections.sort(articles, new Comparator<ArticleReturnDTO>() {
 			@Override
 			public int compare(ArticleReturnDTO article1, ArticleReturnDTO article2) {

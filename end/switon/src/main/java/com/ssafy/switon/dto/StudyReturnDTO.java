@@ -5,7 +5,16 @@ public class StudyReturnDTO {
 	Study study;
 	Boolean isJoined;
 	Boolean isLeader;
+	Like like;
 	
+	
+	
+	public Like getLike() {
+		return like;
+	}
+	public void setLike(Like like) {
+		this.like = like;
+	}
 	public Study getStudy() {
 		return study;
 	}
@@ -21,10 +30,11 @@ public class StudyReturnDTO {
 	public Boolean getIsLeader() {
 		return isLeader;
 	}
-	public StudyReturnDTO(Study study, Boolean isJoined, Boolean isLeader) {
+	public StudyReturnDTO(Study study, Boolean isJoined, Boolean isLeader, Like like) {
 		this.study = study;
 		this.isJoined = isJoined;
 		this.isLeader = isLeader;
+		this.like = like;
 	}
 	public void setIsLeader(Boolean isLeader) {
 		this.isLeader = isLeader;

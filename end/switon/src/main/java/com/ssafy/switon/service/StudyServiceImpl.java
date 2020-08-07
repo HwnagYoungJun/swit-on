@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import com.ssafy.switon.dao.CategoryDAO;
 import com.ssafy.switon.dao.JoinDAO;
 import com.ssafy.switon.dao.StudyDAO;
+import com.ssafy.switon.dao.StudyLikeDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Join;
+import com.ssafy.switon.dto.Like;
 import com.ssafy.switon.dto.LowerCategory;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyCardDTO;
@@ -21,6 +23,9 @@ import com.ssafy.switon.dto.UserStudyInfoDTO;
 @Service
 public class StudyServiceImpl implements StudyService {
 
+	@Autowired
+	StudyLikeDAO likeDao;
+	
 	@Autowired
 	StudyDAO studyDao;
 	
@@ -44,13 +49,15 @@ public class StudyServiceImpl implements StudyService {
 	}
 	
 	@Override
-	public StudyReturnDTO search(int id, boolean isJoined, boolean isLeader) {
+	public StudyReturnDTO search(int id, boolean isJoined, boolean isLeader, int userId) {
 		Study study = studyDao.selectStudyById(id);
+		Like like = new Like(likeDao.selectLikeCount(id), 
+				likeDao.selectStudyLikeByUser_Study(userId, id) != null);				
 		LowerCategory lowerCategory = categoryDao.selectLowOne(study.getLowercategory_id());
 		UpperCategory upperCategory = categoryDao.selectUpOne(lowerCategory.getUppercategory_id());
 		study.setUppercategory_id(upperCategory.getId());
 		study.setUppercategory_name(upperCategory.getName());
-		return new StudyReturnDTO(study, isJoined, isLeader);
+		return new StudyReturnDTO(study, isJoined, isLeader, like);
 	}
 
 	@Override

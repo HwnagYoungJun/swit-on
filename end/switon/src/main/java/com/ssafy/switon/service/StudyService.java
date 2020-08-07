@@ -14,7 +14,7 @@ public interface StudyService {
 	// id로 스터디 정보 반환
 	Study search(int id);
 	// id로 스터디 정보 반환 + 카테고리 정보도 반환
-	StudyReturnDTO search(int id, boolean isJoined, boolean isLeader);
+	StudyReturnDTO search(int id, boolean isJoined, boolean isLeader, int userId);
 	// 새로운 스터디 생성, 생성된 스터디 id를 반환한다. 생성 실패시 0 반환
 	int create(Study study, int userId);
 	// 스터디 수정

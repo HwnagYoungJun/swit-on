@@ -25,6 +25,7 @@ import com.ssafy.switon.dto.ArticleReturnDTO;
 import com.ssafy.switon.dto.Board;
 import com.ssafy.switon.dto.Comment;
 import com.ssafy.switon.dto.CommentReturnDTO;
+import com.ssafy.switon.dto.Like;
 import com.ssafy.switon.dto.LowerCategory;
 import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.Study;
@@ -32,6 +33,7 @@ import com.ssafy.switon.dto.StudyReturnDTO;
 import com.ssafy.switon.dto.User;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserSimpleDTO;
+import com.ssafy.switon.service.ArticleLikeService;
 import com.ssafy.switon.service.ArticleService;
 import com.ssafy.switon.service.BoardService;
 import com.ssafy.switon.service.CategoryService;
@@ -51,6 +53,9 @@ import io.swagger.annotations.ApiOperation;
 public class StudyRestController {
 	
 	String baseDirectory = "C:\\SSAFY\\spring_workspace\\switon\\img";
+	
+	@Autowired
+	private ArticleLikeService articleLikeService;
 	
 	@Autowired
 	private CategoryService categoryService;
@@ -94,9 +99,10 @@ public class StudyRestController {
 		System.out.println("auth : " + auth);
 		boolean isJoined = false;
 		boolean isLeader = false;
+		int userId = 0;
 		if(auth != null) {	// 로그인한 경우
 			auth = auth.substring("Bearer ".length());	
-			int userId = getUserPK(request);
+			userId = getUserPK(request);
 			if(joinService.isMember(studyId, userId)) { // 가입한 회원인 경우 가입여부 변경
 				isJoined = true;
 			}
@@ -104,7 +110,7 @@ public class StudyRestController {
 				isLeader = true;
 			}
 		}
-		StudyReturnDTO dto = studyService.search(studyId, isJoined, isLeader);
+		StudyReturnDTO dto = studyService.search(studyId, isJoined, isLeader, userId);
 		
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
@@ -235,9 +241,9 @@ public class StudyRestController {
 		int qnaBoardId = boardService.findQnABoardId(studyId);
 		int repoBoardId = boardService.findRepoBoardId(studyId);
 		if(noticeBoardId != 0) {
-			List<ArticleReturnDTO> notice = articleService.searchArticlesByBoardIdLimit5(studyId, noticeBoardId, 1);
-			List<ArticleReturnDTO> qna = articleService.searchArticlesByBoardIdLimit5(studyId, qnaBoardId, 2);
-			List<ArticleReturnDTO> repository = articleService.searchArticlesByBoardIdLimit5(studyId, repoBoardId, 3);
+			List<ArticleReturnDTO> notice = articleService.searchArticlesByBoardIdLimit5(studyId, noticeBoardId, 1, userId);
+			List<ArticleReturnDTO> qna = articleService.searchArticlesByBoardIdLimit5(studyId, qnaBoardId, 2, userId);
+			List<ArticleReturnDTO> repository = articleService.searchArticlesByBoardIdLimit5(studyId, repoBoardId, 3, userId);
 			System.out.println("대쉬보드에 필요한 글들 읽어오기 성공!");
 			return new ResponseEntity<>(new DashBoardReturnDTO(notice, qna, repository), HttpStatus.OK);
 		}
@@ -248,9 +254,14 @@ public class StudyRestController {
 	@ApiOperation(value = "스터디의 공지사항 글 리스트를 반환한다.", response = List.class)
 	@GetMapping("/{studyId}/notice")
 	public Object showNotice(@PathVariable("studyId") int studyId, HttpServletRequest request) {
+		int userId = 0;
+		String auth = request.getHeader("Authentication");
+		if(auth != null) {
+			userId = getUserPK(request);
+		}
 		int noticeBoardId = boardService.findNoticeBoardId(studyId);
 		if(noticeBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, noticeBoardId, 1);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, noticeBoardId, 1, userId);
 //			List<Article> articles = articleService.searchBoardArticles(noticeBoardId);
 			System.out.println(studyId + "번 스터디의 공지사항 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
@@ -269,7 +280,7 @@ public class StudyRestController {
 		}
 		int qnaBoardId = boardService.findQnABoardId(studyId);
 		if(qnaBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, qnaBoardId, 2);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, qnaBoardId, 2, userId);
 //			List<Article> articles = articleService.searchBoardArticles(qnaBoardId);
 			System.out.println(studyId + "번 스터디의 QnA 게시판 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
@@ -288,7 +299,7 @@ public class StudyRestController {
 		}
 		int repoBoardId = boardService.findRepoBoardId(studyId);
 		if(repoBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, repoBoardId, 3);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, repoBoardId, 3, userId);
 //			List<Article> articles = articleService.searchBoardArticles(repoBoardId);
 			System.out.println(studyId + "번 스터디의 자료실 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
@@ -385,11 +396,17 @@ public class StudyRestController {
 	@ApiOperation(value = "스터디의 공지사항 글 조회")
 	@GetMapping("/{studyId}/notice/{articleId}")
 	public Object readNotice(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
-		
+		int userId = 0;
+		String auth = request.getHeader("Authentication");
+		if(auth != null) {
+			userId = getUserPK(request);
+		}
 		Article originalArticle = articleService.search(articleId);
 		if(originalArticle != null) {
 			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId);
-			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments);
+			Like like = new Like(articleLikeService.searchLikeCount(articleId),
+					articleLikeService.searchByUser_Article(userId, articleId) != null);
+			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments, like);
 			
 			// 게시글 작성자 정보 등록하는 부분...
 			UserInfoDTO userInfo = userService.search(originalArticle.getUser_id());
@@ -417,7 +434,9 @@ public class StudyRestController {
 		Article originalArticle = articleService.search(articleId);
 		if(originalArticle != null) {
 			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId);
-			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments);
+			Like like = new Like(articleLikeService.searchLikeCount(articleId),
+					articleLikeService.searchByUser_Article(userId, articleId) != null);
+			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments, like);
 			
 			// 게시글 작성자 정보 등록하는 부분...
 			UserInfoDTO userInfo = userService.search(originalArticle.getUser_id());
@@ -445,7 +464,9 @@ public class StudyRestController {
 		Article originalArticle = articleService.search(articleId);
 		if(originalArticle != null) {
 			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId);
-			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments);
+			Like like = new Like(articleLikeService.searchLikeCount(articleId),
+					articleLikeService.searchByUser_Article(userId, articleId) != null);
+			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments, like);
 			
 			// 게시글 작성자 정보 등록하는 부분...
 			UserInfoDTO userInfo = userService.search(originalArticle.getUser_id());

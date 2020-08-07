@@ -27,6 +27,15 @@ public class ArticleReturnDTO {
 	
 	StudySimple study;
 	UserSimpleDTO user;
+	Like like;
+	
+	
+	public Like getLike() {
+		return like;
+	}
+	public void setLike(Like like) {
+		this.like = like;
+	}
 	public int getId() {
 		return id;
 	}

@@ -25,10 +25,12 @@ public class ArticleDetailReturnDTO {
 	Timestamp updated_at;
 	// 간단한 작성자 정보
 	UserSimpleDTO user;
-	// 댓글도 함께 반환해야해서...
+	// 댓글도 함께 반환해야 해서...
 	List<CommentReturnDTO> comments;
+	// 좋아요 상태도 함께 반환해야 해서...
+	Like like;
 	
-	public ArticleDetailReturnDTO(Article article, List<CommentReturnDTO> comments) {
+	public ArticleDetailReturnDTO(Article article, List<CommentReturnDTO> comments, Like like) {
 		this.id = article.getId();
 		this.title = article.getTitle();
 		this.content = article.getContent();
@@ -38,8 +40,17 @@ public class ArticleDetailReturnDTO {
 		this.created_at = article.getCreated_at();
 		this.updated_at = article.getUpdated_at();
 		this.comments = comments;
+		this.like = like;
 	}
 	
+	public Like getLike() {
+		return like;
+	}
+
+	public void setLike(Like like) {
+		this.like = like;
+	}
+
 	public UserSimpleDTO getUser() {
 		return user;
 	}
