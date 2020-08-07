@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		<div class="card-content">
-			<p>{{ article.content }}</p>
+			<!-- <p>{{ article.content }}</p> -->
 		</div>
 	</div>
 </template>

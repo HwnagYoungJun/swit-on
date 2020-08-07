@@ -43,10 +43,11 @@
 					</p> -->
 					<div class="logo">
 						<i class="icon ion-md-heart"></i>
-						<span>좋아요 800개</span>
+						<span>좋아요 0개</span>
 					</div>
 					<div class="content-info">
-						<a href="">User name</a><span>#python</span> <span>#django</span>
+						<a href="">{{ article.user.name }}</a
+						><span>#python</span> <span>#django</span>
 					</div>
 					<input
 						@keypress.enter="AddComment"
