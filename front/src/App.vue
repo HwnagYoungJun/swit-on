@@ -31,6 +31,7 @@
 								{{ study.start_time }}-{{ study.end_time }}
 							</p>
 						</div>
+					</div>
 				</router-link>
 			</div>
 		</section>
