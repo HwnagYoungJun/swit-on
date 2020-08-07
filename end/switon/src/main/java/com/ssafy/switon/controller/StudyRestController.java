@@ -20,17 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.switon.dto.Article;
+import com.ssafy.switon.dto.ArticleDetailReturnDTO;
 import com.ssafy.switon.dto.ArticleReturnDTO;
 import com.ssafy.switon.dto.Board;
 import com.ssafy.switon.dto.Comment;
+import com.ssafy.switon.dto.CommentReturnDTO;
+import com.ssafy.switon.dto.LowerCategory;
 import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyReturnDTO;
+import com.ssafy.switon.dto.User;
+import com.ssafy.switon.dto.UserInfoDTO;
+import com.ssafy.switon.dto.UserSimpleDTO;
 import com.ssafy.switon.service.ArticleService;
 import com.ssafy.switon.service.BoardService;
+import com.ssafy.switon.service.CategoryService;
 import com.ssafy.switon.service.CommentService;
+import com.ssafy.switon.service.DashBoardReturnDTO;
 import com.ssafy.switon.service.JoinService;
 import com.ssafy.switon.service.StudyService;
+import com.ssafy.switon.service.UserService;
 import com.ssafy.switon.util.JWTUtil;
 
 import io.swagger.annotations.Api;
@@ -42,6 +51,9 @@ import io.swagger.annotations.ApiOperation;
 public class StudyRestController {
 	
 	String baseDirectory = "C:\\SSAFY\\spring_workspace\\switon\\img";
+	
+	@Autowired
+	private CategoryService categoryService;
 	
 	@Autowired
 	private StudyService studyService;
@@ -61,9 +73,16 @@ public class StudyRestController {
 	@Autowired
 	private JWTUtil jwtUtil;
 	
+	@Autowired
+	private UserService userService;
+	
 	@ApiOperation(value = "스터디 리스트를 반환한다.", response = List.class)
-	@GetMapping("/")
-	public List<Study> showAllStudies(){
+	@GetMapping("")
+	public List<Study> showAllStudies(@RequestParam(value="lowercategory_id", required = false) String lowercategory_id){
+		System.out.println(lowercategory_id);
+		if(lowercategory_id != null) {
+			return studyService.searchStudiesByLowercategory(Integer.parseInt(lowercategory_id));
+		}
 		System.out.println("스터디 리스트 출력");
 		return studyService.searchAll();
 	}
@@ -85,9 +104,7 @@ public class StudyRestController {
 				isLeader = true;
 			}
 		}
-		Study study = studyService.search(studyId);
-		System.out.println(study.getCreated_at());
-		StudyReturnDTO dto = new StudyReturnDTO(study, isJoined, isLeader);
+		StudyReturnDTO dto = studyService.search(studyId, isJoined, isLeader);
 		
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
@@ -99,12 +116,12 @@ public class StudyRestController {
 		int userId = getUserPK(request);
 //		String baseDirectory = "src"+ File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "upload";
 //		String baseDirectory = request.getSession().getServletContext().getRealPath("upload");
-		String filePath = getUploadPath(request, userId);
 		if(img != null) {
-			System.out.println(filePath);
+			String RealPath = getUploadRealPath(request, userId, img);
+			String path = getUploadPath(userId, img);
 			try {
-				img.transferTo(new File(filePath));
-				study.setLogo(filePath);
+				img.transferTo(new File(RealPath));
+				study.setLogo(path);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -136,10 +153,11 @@ public class StudyRestController {
 							Study study, @PathVariable("studyId") int studyId, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		if(img != null) {
-			String filePath = getUploadPath(request, userId);
+			String RealPath = getUploadRealPath(request, userId, img);
+			String path = getUploadPath(userId, img);
 			try {
-				img.transferTo(new File(filePath));
-				study.setLogo(filePath);
+				img.transferTo(new File(RealPath));
+				study.setLogo(path);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -205,12 +223,34 @@ public class StudyRestController {
 //	}
 	
 	
+	@ApiOperation(value = "스터디의 대쉬보드를 반환한다. (최신글순)(공지5, qna5, 자료실5)", response = List.class)
+	@GetMapping("/{studyId}/dashboard")
+	public Object showDashboard(@PathVariable("studyId") int studyId, HttpServletRequest request) {
+		int userId = getUserPK(request);
+		if(!joinService.isMember(studyId, userId)) {
+			System.out.println("** 대쉬보드 반환 실패 - 권한 없음");
+			return new ResponseEntity<>(new ReturnMsg("가입하지 않은 소모임입니다."), HttpStatus.UNAUTHORIZED);
+		}
+		int noticeBoardId = boardService.findNoticeBoardId(studyId);
+		int qnaBoardId = boardService.findQnABoardId(studyId);
+		int repoBoardId = boardService.findRepoBoardId(studyId);
+		if(noticeBoardId != 0) {
+			List<ArticleReturnDTO> notice = articleService.searchArticlesByBoardIdLimit5(studyId, noticeBoardId, 1);
+			List<ArticleReturnDTO> qna = articleService.searchArticlesByBoardIdLimit5(studyId, qnaBoardId, 2);
+			List<ArticleReturnDTO> repository = articleService.searchArticlesByBoardIdLimit5(studyId, repoBoardId, 3);
+			System.out.println("대쉬보드에 필요한 글들 읽어오기 성공!");
+			return new ResponseEntity<>(new DashBoardReturnDTO(notice, qna, repository), HttpStatus.OK);
+		}
+		System.out.println("** " + studyId + "번 스터디의 대쉬보드 반환 실패");
+		return new ResponseEntity<>(new ReturnMsg("대쉬보드 글들을 받아올 수 없었습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 	@ApiOperation(value = "스터디의 공지사항 글 리스트를 반환한다.", response = List.class)
 	@GetMapping("/{studyId}/notice")
 	public Object showNotice(@PathVariable("studyId") int studyId, HttpServletRequest request) {
 		int noticeBoardId = boardService.findNoticeBoardId(studyId);
 		if(noticeBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, noticeBoardId);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, noticeBoardId, 1);
 //			List<Article> articles = articleService.searchBoardArticles(noticeBoardId);
 			System.out.println(studyId + "번 스터디의 공지사항 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
@@ -229,7 +269,7 @@ public class StudyRestController {
 		}
 		int qnaBoardId = boardService.findQnABoardId(studyId);
 		if(qnaBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, qnaBoardId);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, qnaBoardId, 2);
 //			List<Article> articles = articleService.searchBoardArticles(qnaBoardId);
 			System.out.println(studyId + "번 스터디의 QnA 게시판 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
@@ -248,7 +288,7 @@ public class StudyRestController {
 		}
 		int repoBoardId = boardService.findRepoBoardId(studyId);
 		if(repoBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, repoBoardId);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, repoBoardId, 3);
 //			List<Article> articles = articleService.searchBoardArticles(repoBoardId);
 			System.out.println(studyId + "번 스터디의 자료실 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
@@ -289,10 +329,11 @@ public class StudyRestController {
 			return new ResponseEntity<>(new ReturnMsg("작성 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		if(img != null) {
-			String filePath = getUploadPath(request, userId);
+			String RealPath = getUploadRealPath(request, userId, img);
+			String path = getUploadPath(userId, img);
 			try {
-				img.transferTo(new File(filePath));
-				article.setFile(filePath);
+				img.transferTo(new File(RealPath));
+				article.setFile(path);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -319,10 +360,11 @@ public class StudyRestController {
 			return new ResponseEntity<>(new ReturnMsg("작성 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		if(img != null) {
-			String filePath = getUploadPath(request, userId);
+			String RealPath = getUploadRealPath(request, userId, img);
+			String path = getUploadPath(userId, img);
 			try {
-				img.transferTo(new File(filePath));
-				article.setFile(filePath);
+				img.transferTo(new File(RealPath));
+				article.setFile(path);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -344,8 +386,19 @@ public class StudyRestController {
 	@GetMapping("/{studyId}/notice/{articleId}")
 	public Object readNotice(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		
-		Article article = articleService.search(articleId);
-		if(article != null) {
+		Article originalArticle = articleService.search(articleId);
+		if(originalArticle != null) {
+			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId);
+			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments);
+			
+			// 게시글 작성자 정보 등록하는 부분...
+			UserInfoDTO userInfo = userService.search(originalArticle.getUser_id());
+			UserSimpleDTO user = new UserSimpleDTO();
+			user.setId(userInfo.getId());
+			user.setName(userInfo.getName());
+			user.setProfile_image(userInfo.getProfile_image());
+			article.setUser(user);
+			
 			System.out.println(articleId + "번 글 조회 성공!");
 			return new ResponseEntity<>(article, HttpStatus.OK);
 		}
@@ -361,8 +414,19 @@ public class StudyRestController {
 			System.out.println("** qna 게시판 글 조회 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		Article article = articleService.search(articleId);
-		if(article != null) {
+		Article originalArticle = articleService.search(articleId);
+		if(originalArticle != null) {
+			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId);
+			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments);
+			
+			// 게시글 작성자 정보 등록하는 부분...
+			UserInfoDTO userInfo = userService.search(originalArticle.getUser_id());
+			UserSimpleDTO user = new UserSimpleDTO();
+			user.setId(userInfo.getId());
+			user.setName(userInfo.getName());
+			user.setProfile_image(userInfo.getProfile_image());
+			article.setUser(user);
+			
 			System.out.println(articleId + "번 글 조회 성공!");
 			return new ResponseEntity<>(article, HttpStatus.OK);
 		}
@@ -378,8 +442,19 @@ public class StudyRestController {
 			System.out.println("** 자료실 게시판 글 조회 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		Article article = articleService.search(articleId);
-		if(article != null) {
+		Article originalArticle = articleService.search(articleId);
+		if(originalArticle != null) {
+			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId);
+			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments);
+			
+			// 게시글 작성자 정보 등록하는 부분...
+			UserInfoDTO userInfo = userService.search(originalArticle.getUser_id());
+			UserSimpleDTO user = new UserSimpleDTO();
+			user.setId(userInfo.getId());
+			user.setName(userInfo.getName());
+			user.setProfile_image(userInfo.getProfile_image());
+			article.setUser(user);
+			
 			System.out.println(articleId + "번 글 조회 성공!");
 			return new ResponseEntity<>(article, HttpStatus.OK);
 		}
@@ -417,10 +492,11 @@ public class StudyRestController {
 						Article article, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		if(img != null) {
-			String filePath = getUploadPath(request, userId);
+			String RealPath = getUploadRealPath(request, userId, img);
+			String path = getUploadPath(userId, img);
 			try {
-				img.transferTo(new File(filePath));
-				article.setFile(filePath);
+				img.transferTo(new File(RealPath));
+				article.setFile(path);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -453,10 +529,11 @@ public class StudyRestController {
 							Article article, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		if(img != null) {
-			String filePath = getUploadPath(request, userId);
+			String RealPath = getUploadRealPath(request, userId, img);
+			String path = getUploadPath(userId, img);
 			try {
-				img.transferTo(new File(filePath));
-				article.setFile(filePath);
+				img.transferTo(new File(RealPath));
+				article.setFile(path);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -717,12 +794,22 @@ public class StudyRestController {
 		return new ResponseEntity<>(new ReturnMsg("탈퇴에 실패했습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	
-
-	// 파일 저장 경로와 파일 저장명을 반환해주는 메소드
-	private String getUploadPath(HttpServletRequest request, int userId) {
-		return request.getServletContext().getRealPath("static"+ File.separator + "upload") + File.separator + userId + "_" + System.currentTimeMillis() + ".PNG";
+	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img) {
+		String fileName = img.getOriginalFilename();
+		int pos = fileName.lastIndexOf(".");
+		String ext = fileName.substring(pos);
+		return request.getServletContext().getRealPath("static"+ File.separator + "upload")
+				+ File.separator + userId + "_" + System.currentTimeMillis() + ext;
 	}
+	
+	private String getUploadPath(int userId, MultipartFile img) {
+		String fileName = img.getOriginalFilename();
+		int pos = fileName.lastIndexOf(".");
+		String ext = fileName.substring(pos);
+		return "static"+ File.separator + "upload"
+				+ File.separator + userId + "_" + System.currentTimeMillis() + ext;
+	}
+	
 	
 	// Token(Authentication)에서 유저 id 정보를 뽑아내는 메소드
 	private int getUserPK(HttpServletRequest request) {

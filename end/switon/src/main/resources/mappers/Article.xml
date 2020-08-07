@@ -33,7 +33,7 @@
 		where board_id = #{board_id}
 	</select>
 	
-	<!-- 게시판 아이디의 게시판 리스트 반환(5개 제한) -->
+	<!-- 게시판 아이디의 게시글 리스트 반환(5개 제한) -->
 	<select id="selectArticlesByBoardIdLimit5" resultType="Article">
 		select id,
 			title,
@@ -45,6 +45,7 @@
 			updated_at
 		from article
 		where board_id = #{board_id}
+		order by created_at desc
 		limit 5
 	</select>
 	

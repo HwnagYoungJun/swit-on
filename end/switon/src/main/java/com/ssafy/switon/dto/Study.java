@@ -41,8 +41,24 @@ public class Study {
 	int users_limit;
 	@ApiParam(value = "현재 인원 수", required = false, hidden = true)
 	int users_current;
+	@ApiParam(value = "소모임 대분류(상위카테고리) id", required = false, hidden = true)
+	int uppercategory_id;
+	@ApiParam(value = "소모임 소분류(상위카테고리) 이름", required = false, hidden = true)
+	String uppercategory_name;
 	
 	
+	public int getUppercategory_id() {
+		return uppercategory_id;
+	}
+	public void setUppercategory_id(int uppercategory_id) {
+		this.uppercategory_id = uppercategory_id;
+	}
+	public String getUppercategory_name() {
+		return uppercategory_name;
+	}
+	public void setUppercategory_name(String uppercategory_name) {
+		this.uppercategory_name = uppercategory_name;
+	}
 	public int getUsers_current() {
 		return users_current;
 	}

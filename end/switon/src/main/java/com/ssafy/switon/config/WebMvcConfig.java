@@ -35,7 +35,8 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		.addPathPatterns("/accounts/**/myrepository")
 		.addPathPatterns("/study/**/qna/**")
 		.addPathPatterns("/study/**/repository/**")
-		.addPathPatterns("/feeds");
+		.addPathPatterns("/feeds")
+		.addPathPatterns("/study/**/dashboard");
 		
 //		registry.addInterceptor(authInterceptor)
 //		.addPathPatterns("/accounts/info")

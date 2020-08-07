@@ -1,6 +1,7 @@
 package com.ssafy.switon.dto;
 
 public class ArticleFav {
+	// ±€ ¡Ò∞‹√£±‚ Repository	
 	int id;
 	int user_id;
 	int article_id;

@@ -91,7 +91,66 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleReturnDTO> searchArticlesByBoardId(int studyId, int boardId) {
+	public List<ArticleReturnDTO> searchArticlesByBoardId(int studyId, int boardId, int type) {
+		String board_name = "notice";
+		switch(type) {
+		case 1: 
+			board_name = "notice";
+			break;
+		case 2: 
+			board_name = "qna";
+			break;
+		case 3:
+			board_name = "repository";
+			break;
+		}
+		List<Article> articles = articleDao.selectArticlesByBoardId(boardId);
+		List<ArticleReturnDTO> articleReturnDTOs = new ArrayList<ArticleReturnDTO>();
+		Study originalStudy = studyDao.selectStudyById(studyId);
+			StudySimple study = new StudySimple();
+			study.setId(originalStudy.getId());
+			study.setLogo(originalStudy.getLogo());
+			study.setName(originalStudy.getName());
+		for(Article article : articles) {
+			UserInfoDTO userInfoDTO = userDao.selectUserById(article.getUser_id());
+			UserSimpleDTO user = new UserSimpleDTO();
+			user.setId(userInfoDTO.getId());
+			user.setName(userInfoDTO.getName());
+			if(userInfoDTO.getProfile_image() != null) {
+				user.setProfile_image(userInfoDTO.getProfile_image());				
+			}
+			
+			ArticleReturnDTO articleReturnDTO = new ArticleReturnDTO();
+			articleReturnDTO.setId(article.getId());
+			articleReturnDTO.setTitle(article.getTitle());
+			articleReturnDTO.setContent(article.getContent());
+			articleReturnDTO.setUser_id(article.getUser_id());			
+			articleReturnDTO.setFile(article.getFile());			
+			articleReturnDTO.setBoard_id(article.getBoard_id());			
+			articleReturnDTO.setCreated_at(article.getCreated_at());			
+			articleReturnDTO.setUpdated_at(article.getUpdated_at());			
+			articleReturnDTO.setStudy(study);
+			articleReturnDTO.setUser(user);
+			articleReturnDTO.setBoard_name(board_name);
+			articleReturnDTOs.add(articleReturnDTO);
+		}
+		return articleReturnDTOs;
+	}
+	
+	@Override
+	public List<ArticleReturnDTO> searchArticlesByBoardIdLimit5(int studyId, int boardId, int type) {
+		String board_name = "notice";
+		switch(type) {
+		case 1: 
+			board_name = "notice";
+			break;
+		case 2: 
+			board_name = "qna";
+			break;
+		case 3:
+			board_name = "repository";
+			break;
+		}
 		List<Article> articles = articleDao.selectArticlesByBoardIdLimit5(boardId);
 		List<ArticleReturnDTO> articleReturnDTOs = new ArrayList<ArticleReturnDTO>();
 		Study originalStudy = studyDao.selectStudyById(studyId);
@@ -118,7 +177,8 @@ public class ArticleServiceImpl implements ArticleService {
 			articleReturnDTO.setCreated_at(article.getCreated_at());			
 			articleReturnDTO.setUpdated_at(article.getUpdated_at());			
 			articleReturnDTO.setStudy(study);
-			articleReturnDTO.setUser(user);;
+			articleReturnDTO.setUser(user);
+			articleReturnDTO.setBoard_name(board_name);
 			articleReturnDTOs.add(articleReturnDTO);
 		}
 		return articleReturnDTOs;
@@ -131,7 +191,7 @@ public class ArticleServiceImpl implements ArticleService {
 		for(Join join : joins) { // 유저가 가입한 스터디 id마다 boardId들을 추출해서 List 얻어내기
 			int studyId = join.getStudy_id();
 			for(int i = 1; i <= 3; i++) {
-				List<ArticleReturnDTO> boardArticles = searchArticlesByBoardId(studyId, boardDao.findBoardId(studyId, i));
+				List<ArticleReturnDTO> boardArticles = searchArticlesByBoardIdLimit5(studyId, boardDao.findBoardId(studyId, i), i);
 				articles.addAll(boardArticles);
 			}
 		}
@@ -146,8 +206,8 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleReturnDTO> searchArticlesByBoardIdOrdered(int studyId, int boardId) {
-		List<ArticleReturnDTO> articles = searchArticlesByBoardId(studyId, boardId);
+	public List<ArticleReturnDTO> searchArticlesByBoardIdOrdered(int studyId, int boardId, int type) {
+		List<ArticleReturnDTO> articles = searchArticlesByBoardId(studyId, boardId, type);
 		Collections.sort(articles, new Comparator<ArticleReturnDTO>() {
 			@Override
 			public int compare(ArticleReturnDTO article1, ArticleReturnDTO article2) {

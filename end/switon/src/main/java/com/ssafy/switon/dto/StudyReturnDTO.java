@@ -5,6 +5,7 @@ public class StudyReturnDTO {
 	Study study;
 	Boolean isJoined;
 	Boolean isLeader;
+	
 	public Study getStudy() {
 		return study;
 	}

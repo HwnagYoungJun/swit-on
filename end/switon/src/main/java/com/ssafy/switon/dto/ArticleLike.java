@@ -1,6 +1,7 @@
 package com.ssafy.switon.dto;
 
 public class ArticleLike {
+	// 글 좋아요 Repository
 	int id;
 	int user_id;
 	int article_id;

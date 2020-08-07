@@ -1,10 +1,11 @@
 package com.ssafy.switon.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import io.swagger.annotations.ApiParam;
 
-public class ArticleReturnDTO {
+public class ArticleDetailReturnDTO {
 	
 	@ApiParam(value = "게시글 id (PK)", required = false, hidden = true)
 	int id;
@@ -22,11 +23,31 @@ public class ArticleReturnDTO {
 	Timestamp created_at;
 	@ApiParam(value = "게시글 수정시간", required = false, hidden = true)
 	Timestamp updated_at;
-	@ApiParam(value = "게시판 타입(영어로)", required = false, hidden = true)
-	String board_name;
-	
-	StudySimple study;
+	// 간단한 작성자 정보
 	UserSimpleDTO user;
+	// 댓글도 함께 반환해야해서...
+	List<CommentReturnDTO> comments;
+	
+	public ArticleDetailReturnDTO(Article article, List<CommentReturnDTO> comments) {
+		this.id = article.getId();
+		this.title = article.getTitle();
+		this.content = article.getContent();
+		this.user_id = article.getUser_id();
+		this.file = article.getFile();
+		this.board_id = article.getBoard_id();
+		this.created_at = article.getCreated_at();
+		this.updated_at = article.getUpdated_at();
+		this.comments = comments;
+	}
+	
+	public UserSimpleDTO getUser() {
+		return user;
+	}
+
+	public void setUser(UserSimpleDTO user) {
+		this.user = user;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -75,33 +96,18 @@ public class ArticleReturnDTO {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
-	public String getBoard_name() {
-		return board_name;
+	public List<CommentReturnDTO> getComments() {
+		return comments;
 	}
-	public void setBoard_name(String board_name) {
-		this.board_name = board_name;
+	public void setComments(List<CommentReturnDTO> comments) {
+		this.comments = comments;
 	}
-	public StudySimple getStudy() {
-		return study;
-	}
-	public void setStudy(StudySimple study) {
-		this.study = study;
-	}
-	public UserSimpleDTO getUser() {
-		return user;
-	}
-	public void setUser(UserSimpleDTO user) {
-		this.user = user;
-	}
+
 	@Override
 	public String toString() {
-		return "ArticleReturnDTO [id=" + id + ", title=" + title + ", content=" + content + ", user_id=" + user_id
+		return "ArticleDetailReturnDTO [id=" + id + ", title=" + title + ", content=" + content + ", user_id=" + user_id
 				+ ", file=" + file + ", board_id=" + board_id + ", created_at=" + created_at + ", updated_at="
-				+ updated_at + ", board_name=" + board_name + ", study=" + study + ", user=" + user + "]";
+				+ updated_at + ", user=" + user + ", comments=" + comments + "]";
 	}
 	
-	
-	
-	
-
 }

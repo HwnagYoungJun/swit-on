@@ -64,17 +64,18 @@ public class ProfileRestController {
 	@ApiOperation(value = "유저 정보를 수정한다.(만드는중)", response = UserInfoDTO.class)
 	@PutMapping("{id}")
 	public Object modifyUser(@RequestParam(value = "img", required = false) MultipartFile img, 
-							@PathVariable int id, UserInfoDTO userInfoDTO, MultipartHttpServletRequest request) {
+							@PathVariable int id, UserInfoDTO userInfoDTO, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		if(userId != id) {
 			System.out.println("** 유저 정보 수정 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("유저 정보 수정에 실패했습니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);			
 		}
 		if(img != null) {
-			String filePath = getUploadPath(request, userId);
+			String RealPath = getUploadRealPath(request, userId, img);
+			String path = getUploadPath(userId, img);
 			try {
-				img.transferTo(new File(filePath));
-				userInfoDTO.setProfile_image(filePath);
+				img.transferTo(new File(RealPath));
+				userInfoDTO.setProfile_image(path);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -158,9 +159,20 @@ public class ProfileRestController {
 		return new ResponseEntity<>(new ReturnMsg("탈퇴 중 문제가 발생했습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.OK);
 	}
 	
-	// 파일 저장 경로와 파일 저장명을 반환해주는 메소드
-	private String getUploadPath(MultipartHttpServletRequest request, int userId) {
-		return request.getServletContext().getRealPath("static"+ File.separator + "upload") + File.separator + userId + "_" + System.currentTimeMillis() + ".PNG";
+	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img) {
+		String fileName = img.getOriginalFilename();
+		int pos = fileName.lastIndexOf(".");
+		String ext = fileName.substring(pos);
+		return request.getServletContext().getRealPath("static"+ File.separator + "upload")
+				+ File.separator + userId + "_" + System.currentTimeMillis() + ext;
+	}
+	
+	private String getUploadPath(int userId, MultipartFile img) {
+		String fileName = img.getOriginalFilename();
+		int pos = fileName.lastIndexOf(".");
+		String ext = fileName.substring(pos);
+		return "static"+ File.separator + "upload"
+				+ File.separator + userId + "_" + System.currentTimeMillis() + ext;
 	}
 	
 	// Token(Authentication)에서 유저 id 정보를 뽑아내는 메소드
