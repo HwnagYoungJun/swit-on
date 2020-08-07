@@ -194,6 +194,7 @@ export default {
 			width: 90%;
 			margin: 5%;
 			position: relative;
+			padding-top: 2rem;
 			span {
 				padding: 0 15px;
 				position: absolute;
@@ -201,7 +202,6 @@ export default {
 				background: #fff;
 			}
 			.calendar-box {
-				margin-top: 2rem;
 			}
 		}
 		.group-box {
