@@ -22,9 +22,6 @@
 							</p>
 						</div>
 						<div class="popular-content">
-							<p class="content-category">
-								web <i class="icon ion-md-arrow-dropright"></i> django
-							</p>
 							<p class="content-title">{{ study.name }}</p>
 							<p class="content-week">
 								<span class="content-day"> 월</span
@@ -36,41 +33,6 @@
 						</div>
 					</div>
 				</router-link>
-				<!-- <div class="popular-item">
-					<div class="popular-img">
-						<img src="@/assets/django.png" alt="study-logo" />
-						<p class="temp">5/10</p>
-					</div>
-					<div class="popular-content">
-						<p class="content-category">
-							web <i class="icon ion-md-arrow-dropright"></i> django
-						</p>
-						<p class="content-title">django</p>
-						<p class="content-week">월, 수 9시-11시</p>
-					</div>
-				</div>
-				<div class="popular-item">
-					<div class="popular-img">
-						<img src="@/assets/cloud.png" alt="study-logo" />
-						<p class="temp">5/10</p>
-					</div>
-					<div class="popular-content">
-						<p class="content-title">django</p>
-						<p class="content-week">월, 수 9시-11시</p>
-						<p>web>django</p>
-					</div>
-				</div>
-				<div class="popular-item">
-					<div class="popular-img">
-						<img src="@/assets/color.png" alt="study-logo" />
-						<p class="temp">5/10</p>
-					</div>
-					<div class="popular-content">
-						<p class="content-title">장고 부수기</p>
-						<p class="content-week">월, 수 9시-11시</p>
-						<p>web>django</p>
-					</div>
-				</div> -->
 			</div>
 		</section>
 		<section v-else>
@@ -148,8 +110,9 @@ export default {
 		padding: 13px 25px;
 		line-height: 2;
 		border: none;
+		border-radius: 4px;
 		background: rgba(255, 255, 255, 0.5);
-		box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.35);
+		box-shadow: 3px 3px 5px rgba(83, 83, 83, 0.35);
 		&:focus {
 			outline: none;
 			background: rgba(255, 255, 255, 1);
@@ -164,15 +127,15 @@ export default {
 		position: relative;
 		.popular-title {
 			color: white;
-			font-size: $font-light;
+			font-size: $font-normal;
 			position: absolute;
-			top: -25px;
-			left: 5px;
+			top: -20px;
+			left: 40px;
 		}
 		.popular-item {
 			display: grid;
 			grid-template-columns: 15rem;
-			grid-template-rows: 7.5rem 12rem;
+			grid-template-rows: 7rem 12rem;
 			grid-template-areas:
 				'text-part'
 				'image-part';
@@ -180,9 +143,9 @@ export default {
 			position: relative;
 			margin-top: 1rem;
 			padding: 0.3rem 0.5rem 0.5rem;
-			background: white;
 			color: #454545;
-			box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
+			// background: rgba(255, 255, 255, 0.05);
+			box-shadow: 3px 2px 6px rgba(37, 37, 37, 0.5);
 			.popular-img {
 				grid-area: image-part;
 				overflow: hidden;
@@ -190,16 +153,16 @@ export default {
 			}
 			.popular-content {
 				grid-area: text-part;
+				color: #fff;
 				.content-category {
 					padding-bottom: 0.3rem;
-					border-bottom: 1px solid black;
+					border-bottom: 1px solid #fff;
 				}
 				.content-title {
 					font-size: $font-bold;
 					font-weight: 600;
 					padding-top: 0.3rem;
 					padding-bottom: 0.3rem;
-					// border-bottom: 1px solid black;
 				}
 				.content-week {
 					// padding-top: 0.3rem;

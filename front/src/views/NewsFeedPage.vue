@@ -63,6 +63,7 @@
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import GruopCardSmall from '@/components/common/GruopCardSmall.vue';
 import { fetchFeeds } from '@/api/articles';
+// import { fetchStudy } from '@/api/studies';
 import 'tui-calendar/dist/tui-calendar.css';
 import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 import 'tui-date-picker/dist/tui-date-picker.css';
@@ -193,6 +194,7 @@ export default {
 			width: 90%;
 			margin: 5%;
 			position: relative;
+			padding-top: 2rem;
 			span {
 				padding: 0 15px;
 				position: absolute;
@@ -200,7 +202,6 @@ export default {
 				background: #fff;
 			}
 			.calendar-box {
-				margin-top: 2rem;
 			}
 		}
 		.group-box {

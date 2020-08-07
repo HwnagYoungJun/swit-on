@@ -1,14 +1,6 @@
 <template>
 	<div>
 		<div class="category-box">
-			<div class="openCategory category-element">
-				<router-link
-					:to="{
-						name: 'main',
-					}"
-					><img src="@/assets/black.png" alt="ham"
-				/></router-link>
-			</div>
 			<div class="category-element">
 				<router-link
 					:to="{
@@ -17,65 +9,17 @@
 					>전체</router-link
 				>
 			</div>
-			<div class="category-element">
-				<router-link
-					:to="{
-						name: 'categorydetail',
-						params: { UpperCategoryName: categoryElements.el1 },
-					}"
-				>
-					{{ categoryElements.el1 }}
-				</router-link>
-			</div>
-			<div class="category-element">
-				<router-link
-					:to="{
-						name: 'categorydetail',
-						params: { UpperCategoryName: categoryElements.el2 },
-					}"
-				>
-					{{ categoryElements.el2 }}
-				</router-link>
-			</div>
-			<div class="category-element">
-				<router-link
-					:to="{
-						name: 'categorydetail',
-						params: { UpperCategoryName: categoryElements.el3 },
-					}"
-				>
-					{{ categoryElements.el3 }}
-				</router-link>
-			</div>
-			<div class="category-element">
-				<router-link
-					:to="{
-						name: 'categorydetail',
-						params: { UpperCategoryName: categoryElements.el4 },
-					}"
-				>
-					{{ categoryElements.el4 }}
-				</router-link>
-			</div>
-			<div class="category-element">
-				<router-link
-					:to="{
-						name: 'categorydetail',
-						params: { UpperCategoryName: categoryElements.el5 },
-					}"
-				>
-					{{ categoryElements.el5 }}
-				</router-link>
-			</div>
-			<div class="category-element">
-				<router-link
-					:to="{
-						name: 'categorydetail',
-						params: { UpperCategoryName: categoryElements.el6 },
-					}"
-				>
-					{{ categoryElements.el6 }}
-				</router-link>
+			<div :key="categoryElement" v-for="categoryElement in categoryElements">
+				<div class="category-element">
+					<router-link
+						:to="{
+							name: 'categorydetail',
+							params: { UpperCategoryName: categoryElement },
+						}"
+					>
+						{{ categoryElement }}
+					</router-link>
+				</div>
 			</div>
 		</div>
 		<hr />
@@ -91,7 +35,7 @@ export default {
 				el2: '모바일',
 				el3: 'AI',
 				el4: 'CS',
-				el5: '프로그래밍 언어',
+				el5: '프로그래밍언어',
 				el6: '언어',
 			},
 		};
