@@ -39,7 +39,7 @@ export default {
 		async fetchNotice() {
 			const studyId = this.id;
 			const { data } = await fetchArticles(studyId, 'notice');
-			this.articles = data.reverse();
+			this.articles = data;
 		},
 	},
 	created() {

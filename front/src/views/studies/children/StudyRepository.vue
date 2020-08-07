@@ -39,7 +39,7 @@ export default {
 		async fetchRepo() {
 			const studyId = this.id;
 			const { data } = await fetchArticles(studyId, 'repository');
-			this.articles = data.reverse();
+			this.articles = data;
 		},
 	},
 	created() {
