@@ -42,9 +42,10 @@ function fetchNoticeArticles(studyId) {
 }
 
 function createComment(studyId, boardName, articleId, commentData) {
-	return boardArticles.post(`/${studyId}/${boardName}/${articleId}/comments`, {
+	return boardArticles.post(
+		`/${studyId}/${boardName}/${articleId}/comments`,
 		commentData,
-	});
+	);
 }
 
 export {
