@@ -16,7 +16,12 @@
 				>
 					<div class="popular-item">
 						<div class="popular-img">
-							<img src="@/assets/react.png" alt="study-logo" />
+							<img
+								v-if="study.logo"
+								:src="`${BaseUrl}${study.logo}`"
+								alt="study-logo"
+							/>
+							<img v-else src="@/assets/django.png" alt="" />
 							<p class="temp">
 								{{ study.users_current }} / {{ study.users_limit }}
 							</p>
@@ -64,20 +69,24 @@ export default {
 		isMainRoute() {
 			return this.$route.name === 'main';
 		},
+		BaseUrl() {
+			return process.env.VUE_APP_API_URL;
+		},
 	},
 	methods: {
 		async fetchData() {
 			this.isLoading = true;
 			const { data } = await fetchStudies();
+			console.log(data);
 			this.isLoading = false;
 			this.studies = data.reverse().splice(0, 4);
 		},
 	},
-	// created() {
-	// 	if (this.isMainRoute) {
-	// 		this.fetchData();
-	// 	}
-	// },
+	created() {
+		if (this.isMainRoute) {
+			this.fetchData();
+		}
+	},
 	watch: {
 		isMainRoute() {
 			if (this.isMainRoute) {
