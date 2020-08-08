@@ -109,8 +109,8 @@ const routes = [
 		},
 	},
 	{
-		path: '/mypage/',
-		name: 'mypage',
+		path: '/profile/:user_name',
+		name: 'profile',
 		component: () => import('@/views/profiles/ProfilePage.vue'),
 		children: [
 			{
