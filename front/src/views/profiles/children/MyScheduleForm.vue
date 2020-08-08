@@ -64,7 +64,7 @@ export default {
 					start: '2020-08-01T12:30:00+09:00',
 					end: '2020-08-05T17:31:00+09:00',
 					color: '#ffffff',
-					bgColor: '#ff5583',
+					bgColor: '',
 					dragBgColor: '#ff5583',
 					borderColor: '#ff5583',
 				},
@@ -80,9 +80,10 @@ export default {
 				'month.schedule.height': '24px',
 			},
 			week: {
-				narrowWeekend: true,
-				showTimezoneCollapseButton: true,
-				timezonesCollapsed: false,
+				//
+				// narrowWeekend: true,
+				// showTimezoneCollapseButton: true,
+				// timezonesCollapsed: false,
 			},
 			month: {
 				visibleWeeksCount: 2,
@@ -104,8 +105,8 @@ export default {
 					return 'MILESTONE';
 				},
 			},
-			useCreationPopup: true,
-			useDetailPopup: true,
+			useCreationPopup: false,
+			useDetailPopup: false,
 		};
 	},
 };

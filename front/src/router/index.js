@@ -6,6 +6,11 @@ Vue.use(VueRouter);
 
 const routes = [
 	{
+		path: '/test',
+		name: 'testtest',
+		component: () => import('@/views/calendar/makeScheduleForm.vue'),
+	},
+	{
 		path: '/',
 		name: 'main',
 		component: () => import('@/views/Main.vue'),

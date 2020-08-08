@@ -1,11 +1,13 @@
 <template>
 	<div>
 		<div class="profile-box">
-			<img
-				class="img-box"
-				src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.0-9/51195329_2188965328018448_6283346633593716736_n.jpg?_nc_cat=110&_nc_sid=85a577&_nc_ohc=oEFV7dFTDEwAX9IiKKx&_nc_ht=scontent-ssn1-1.xx&oh=91b2c49439a416691eccd803c50bd221&oe=5F4024D8"
-				alt="profile_img"
-			/>
+			<div class="profile-wrap">
+				<img
+					class="img-box"
+					src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.0-9/51195329_2188965328018448_6283346633593716736_n.jpg?_nc_cat=110&_nc_sid=85a577&_nc_ohc=oEFV7dFTDEwAX9IiKKx&_nc_ht=scontent-ssn1-1.xx&oh=91b2c49439a416691eccd803c50bd221&oe=5F4024D8"
+					alt="profile_img"
+				/>
+			</div>
 			<div class="info-box">
 				<div class="name-box">
 					<img
@@ -113,15 +115,23 @@ export default {
 		}
 	}
 }
-.img-box {
+.profile-wrap {
+	max-height: 15rem;
+	max-width: 15rem;
+	min-width: 15rem;
+	min-width: 15rem;
 	width: 15rem;
 	height: 15rem;
-	border-radius: 50%;
-	object-fit: cover;
 	margin-right: 4rem;
 	@media screen and (max-width: 1024px) {
 		margin-right: 0;
 	}
+}
+.img-box {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	object-fit: cover;
 }
 .icon-box {
 	display: flex;
