@@ -43,22 +43,27 @@
 					><i class="icon ion-md-power nav-router-medium"></i
 				></a>
 			</template>
-			<router-link class="nav-router-item" :to="{ name: 'mypage' }"
+			<router-link v-if="name" class="nav-router-item" :to="`/profile/${name}`"
 				><img class="nav-router-img" src="@/assets/logo.png" alt="프로필"
 			/></router-link>
+			<button @click="test">test</button>
 		</nav>
 	</header>
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import axios from 'axios';
+import { mapMutations, mapState } from 'vuex';
 export default {
 	data() {
 		return {
 			searchData: '',
+			baseURL: process.env.VUE_APP_API_URL,
+			userName: this.name ? this.name : null,
 		};
 	},
 	computed: {
+		...mapState(['name']),
 		isUserLogin() {
 			return this.$store.getters.isLogin;
 		},
@@ -68,11 +73,15 @@ export default {
 	},
 	methods: {
 		...mapMutations(['clearUserEmail', 'clearToken']),
+		async test() {
+			const res = await axios.get(`${this.baseURL}accounts/login`);
+			console.log(res);
+		},
 		logoutUser() {
 			this.clearUserEmail();
 			this.clearToken();
 			this.$cookies.remove('auth-token');
-			this.$cookies.remove('email');
+			this.$cookies.remove('name');
 			this.$router.push({ name: 'main' });
 		},
 		onChangeSearch(val) {

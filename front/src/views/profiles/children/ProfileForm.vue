@@ -37,11 +37,14 @@
 </template>
 
 <script>
+import cookies from 'vue-cookies';
 export default {
 	data() {
 		return {
 			// 추후 DB에서 오는 데이터
-			name: 'HWANG YJ',
+			name: this.$store.state.name
+				? this.$store.state.name
+				: cookies.get('name'),
 			introduce: '20자 이내의 단어만 쓸 수 있습니다!!',
 			studying: 5,
 			studyed: 6,

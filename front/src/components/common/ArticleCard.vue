@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		<div class="card-content">
-			<!-- <p>{{ article.content }}</p> -->
+			<!-- <p>{{ article.content | truncate }}</p> -->
 		</div>
 	</div>
 </template>
@@ -34,6 +34,7 @@ export default {
 	margin: 10px 5px 50px;
 	padding: 15px;
 	border-bottom: 1px solid rgb(228, 228, 228);
+	// background:
 	.card-info {
 		margin-bottom: 30px;
 		font-size: $font-light;
