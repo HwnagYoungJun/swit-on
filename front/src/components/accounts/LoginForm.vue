@@ -87,7 +87,7 @@ export default {
 				// LOGIN 액션함수에 await를 걸지 않으면 로그인 처리되기 전에 라우터 이동이 진행됌
 				await this.LOGIN(this.loginData);
 				this.testCookie();
-				this.$router.push({ name: 'studies' });
+				this.$router.push({ name: 'main' });
 			} catch (error) {
 				// console.log(error.response.data);
 				console.log(error);

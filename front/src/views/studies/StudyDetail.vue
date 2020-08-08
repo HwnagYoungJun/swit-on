@@ -3,9 +3,16 @@
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
 				<li>
-					<a href="#">프로그래밍 언어</a><span aria-hidden="true">></span>
+					<router-link :to="`/category/${study.uppercategory_name}`">{{
+						study.uppercategory_name
+					}}</router-link
+					><span aria-hidden="true">></span>
 				</li>
-				<li><a href="#" aria-current="page">python 소모임</a></li>
+				<li>
+					<router-link :to="`/study/${id}`" aria-current="page"
+						>python 소모임</router-link
+					>
+				</li>
 			</ol>
 		</nav>
 		<div class="study-description">
@@ -13,14 +20,15 @@
 				<p class="study-title">{{ study.name }}</p>
 				<p>모집: {{ study.start_term }} - {{ study.end_term }}</p>
 				<p>
-					요일: 매주
+					매주:
 					{{ study.week | formatWeekday }}
 					{{ study.start_time }}시-{{ study.end_time }}시
 				</p>
-				<small>5/{{ study.users_limit }}명</small>
+				<small>{{ study.users_current }}/{{ study.users_limit }}명</small>
 			</div>
 			<div class="study-logo">
-				<img src="@/assets/django.png" alt="" />
+				<img v-if="study.logo" :src="study.logo" alt="" />
+				<!-- <img src="@/assets/django.png" alt="" /> -->
 			</div>
 		</div>
 		<div v-if="isJoined" class="study-category">
@@ -35,7 +43,7 @@
 			<router-link :to="{ name: 'qna' }">Q&A<span></span></router-link>
 			<hr />
 			<div class="study-sub-content">
-				<router-view></router-view>
+				<router-view :id="id"></router-view>
 			</div>
 		</div>
 		<div v-else class="study-sub-content">
@@ -51,6 +59,9 @@
 <script>
 import { JoinStudy, fetchStudy } from '@/api/studies';
 export default {
+	props: {
+		id: Number,
+	},
 	data() {
 		return {
 			isJoined: false,
@@ -59,14 +70,14 @@ export default {
 	},
 	methods: {
 		async fetchData() {
-			const studyId = this.$route.params.id;
+			const studyId = this.id;
 			const { data } = await fetchStudy(studyId);
+			console.log(data);
 			this.study = data.study;
-			// this.study.week = this.bitWeek(data.study.week);
 			this.isJoined = data.isJoined;
 		},
 		async studyJoin() {
-			const studyId = this.$route.params.id;
+			const studyId = this.id;
 			await JoinStudy(studyId);
 			this.fetchData();
 		},
@@ -74,6 +85,11 @@ export default {
 	created() {
 		this.fetchData();
 	},
+	// watch: {
+	// 	id() {
+	// 		this.fetchData();
+	// 	},
+	// },
 };
 </script>
 

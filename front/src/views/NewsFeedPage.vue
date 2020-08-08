@@ -1,15 +1,21 @@
 <template>
 	<div class="container">
 		<main class="newsFeed-container">
-			<section class="article-box">
-				<ArticleCard></ArticleCard>
-				<ArticleCard></ArticleCard>
-				<ArticleCard></ArticleCard>
-				<ArticleCard></ArticleCard>
-				<ArticleCard></ArticleCard>
-				<ArticleCard></ArticleCard>
-				<ArticleCard></ArticleCard>
-				<ArticleCard></ArticleCard>
+			<section v-if="articles" class="article-box">
+				<router-link
+					v-for="article in articles"
+					:key="article.id"
+					:to="{
+						name: 'BoardArticleDetail',
+						params: {
+							id: article.study.id,
+							board_name: article.board_name,
+							article_id: article.id,
+						},
+					}"
+				>
+					<ArticleCard :article="article" />
+				</router-link>
 			</section>
 			<aside class="side-box">
 				<div class="group-box">
@@ -56,7 +62,8 @@
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import GruopCardSmall from '@/components/common/GruopCardSmall.vue';
-
+import { fetchFeeds } from '@/api/articles';
+// import { fetchStudy } from '@/api/studies';
 import 'tui-calendar/dist/tui-calendar.css';
 import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 import 'tui-date-picker/dist/tui-date-picker.css';
@@ -65,6 +72,7 @@ export default {
 	components: { ArticleCard, GruopCardSmall, Calendar },
 	data() {
 		return {
+			articles: null,
 			calendarList: [
 				{
 					id: '0',
@@ -129,6 +137,15 @@ export default {
 			useDetailPopup: true,
 		};
 	},
+	methods: {
+		async fetchData() {
+			const { data } = await fetchFeeds();
+			this.articles = data.reverse();
+		},
+	},
+	created() {
+		this.fetchData();
+	},
 };
 </script>
 
@@ -177,6 +194,7 @@ export default {
 			width: 90%;
 			margin: 5%;
 			position: relative;
+			padding-top: 2rem;
 			span {
 				padding: 0 15px;
 				position: absolute;
@@ -184,7 +202,6 @@ export default {
 				background: #fff;
 			}
 			.calendar-box {
-				margin-top: 2rem;
 			}
 		}
 		.group-box {

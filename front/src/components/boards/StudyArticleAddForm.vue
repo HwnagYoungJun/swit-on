@@ -58,6 +58,10 @@ import { Editor } from '@toast-ui/vue-editor';
 import { createArticle } from '@/api/articles';
 
 export default {
+	props: {
+		id: Number,
+		board_name: String,
+	},
 	data() {
 		return {
 			title: '',
@@ -74,8 +78,7 @@ export default {
 	},
 	computed: {
 		routeBoardName() {
-			let name = this.$route.params.board_name;
-			return name.charAt(0).toUpperCase() + name.slice(1);
+			return this.board_name.charAt(0).toUpperCase() + this.board_name.slice(1);
 		},
 	},
 	components: {
@@ -84,8 +87,8 @@ export default {
 	methods: {
 		async createArticle() {
 			try {
-				const studyId = this.$route.params.id;
-				const boardName = this.$route.params.board_name;
+				const studyId = this.id;
+				const boardName = this.board_name;
 				let content = this.$refs.toastuiEditor.invoke('getMarkdown');
 				await createArticle(studyId, boardName, {
 					title: this.title,
@@ -181,7 +184,7 @@ input.upload_text {
 	height: 2rem;
 	// padding: 0 0.5rem 1rem;
 	// border-top: 1px solid #bbb;
-	// margin-top: 1rem;
+	margin-top: 1rem;
 	// margin-bottom: 1rem;
 }
 div.upload-btn_wrap input.input_file {
@@ -210,10 +213,6 @@ div.upload-btn_wrap {
 	margin-top: 1rem;
 }
 div.upload-btn_wrap button {
-	/*버튼 div*/
-	// display: absolute;
-	// top: 0;
-	// right: 0;
 	@include scale(width, 70px);
 	height: 2rem;
 	font-weight: bold;

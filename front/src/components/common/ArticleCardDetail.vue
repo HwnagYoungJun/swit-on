@@ -10,44 +10,82 @@
 					><span aria-hidden="true">></span>
 				</li>
 				<li>
-					<router-link :to="{ name: 'repository' }" aria-current="page"
-						>repository</router-link
-					>
+					<router-link :to="{ name: `${board_name}` }" aria-current="page">{{
+						board_name
+					}}</router-link>
 				</li>
 			</ol>
 		</nav>
 		<div class="card-detail-wrap">
-			<div class="card-detail">
+			<div v-if="article" class="card-detail">
 				<div class="card-detail-title">
 					<img src="@/assets/color2.png" alt="" class="img" />
-					<p>저장소 제목</p>
+					<p>{{ article.title }}</p>
 				</div>
 				<div class="card-detail-content">
-					<p>
-						Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non,
-						asperiores facere excepturi mollitia earum quisquam cupiditate
-						debitis perferendis maiores voluptatibus impedit repudiandae
-						reiciendis incidunt ex. Consequuntur facere accusantium corporis
-						dolorem? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-						Enim aspernatur aperiam mollitia dicta animi. Quaerat nisi
-						distinctio et neque ipsa eaque optio quam magni qui odit, est ipsum
-						quibusdam corporis.
-					</p>
-					<img src="@/assets/django.png" alt="main-img" class="main-img" />
-					<p>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor non
-						alias, nulla adipisci, saepe modi, expedita aspernatur nostrum
-						dolores pariatur ex deserunt repellendus quod. Enim reiciendis
-						blanditiis ad vel molestiae?
-					</p>
+					<Viewer :initialValue="article.content" />
 					<div class="logo">
 						<i class="icon ion-md-heart"></i>
-						<span>좋아요 800개</span>
+						<span>좋아요 0개</span>
 					</div>
 					<div class="content-info">
-						<a href="">User name</a><span>#python</span> <span>#django</span>
+						<a href="">{{ article.user.name }}</a
+						><span>#python</span> <span>#django</span>
 					</div>
-					<input type="text" name="" id="" autofocus placeholder="댓글달기" />
+					<div class="comment-body">
+						<ul>
+							<li v-for="comment in article.comments" :key="comment.id">
+								<span class="comment-user">{{ comment.user.name }}</span>
+								{{ comment.content }}
+
+								<!-- {{ cmt.like_users }}
+								<i
+									v-if="isLikeUser"
+									@click="
+										unlikeComment({ feedId: feed.id, commentId: cmt.id });
+										isLike();
+									"
+									class="fas fa-heart heart-color"
+								></i>
+								<i
+									v-else
+									@click="
+										likeComment({ feedId: feed.id, commentId: cmt.id });
+										isLike();
+									"
+									class="far fa-heart"
+								></i>
+								<i
+									v-if="$store.state.username === cmt.user.username"
+									@click="deleteComment({ feedId: feed.id, commentId: cmt.id })"
+									class="fas fa-times comment-delete"
+								>
+								</i> -->
+							</li>
+						</ul>
+					</div>
+					<div class="comment-form">
+						<input
+							@keypress.enter="
+								AddComment();
+								resetContent();
+							"
+							v-model="commentContent"
+							type="text"
+							class="comment"
+							autofocus
+							placeholder="댓글달기"
+						/>
+						<button
+							@click.prevent="
+								AddComment();
+								resetContent();
+							"
+							class="comment-btn"
+						>
+							게시
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -55,7 +93,63 @@
 </template>
 
 <script>
-export default {};
+import { fetchArticle, createComment } from '@/api/articles';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import Viewer from '@toast-ui/vue-editor/src/Viewer.vue';
+export default {
+	props: {
+		id: Number,
+		board_name: String,
+		article_id: Number,
+	},
+	components: {
+		Viewer,
+	},
+	data() {
+		return {
+			article: null,
+			initText: null,
+			commentContent: null,
+		};
+	},
+	methods: {
+		async fetchData() {
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				const { data } = await fetchArticle(studyId, boardName, articleId);
+				console.log(data);
+				this.article = data;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		async AddComment() {
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				const content = this.commentContent;
+				await createComment(studyId, boardName, articleId, {
+					content,
+				});
+				this.fetchData();
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		resetContent() {
+			this.commentContent = null;
+		},
+	},
+	created() {
+		this.fetchData();
+	},
+	watch: {
+		$route: 'fetchData',
+	},
+};
 </script>
 
 <style lang="scss">
@@ -134,16 +228,37 @@ export default {};
 			text-align: center;
 		}
 	}
-	input {
-		width: 100%;
-		height: 45px;
-		border: none;
-		border-top: 1px solid #dbdbdb;
-		color: #999999;
-		font-size: $font-normal;
-		&:focus {
-			outline: none;
+	.comment-form {
+		position: relative;
+		.comment {
+			width: 100%;
+			height: 45px;
+			padding: 0.8rem;
+			border: none;
+			border-top: 1px solid #dbdbdb;
+			color: #999999;
+			font-size: $font-normal;
+			&:focus {
+				outline: none;
+			}
 		}
+		.comment-btn {
+			position: absolute;
+			top: 15px;
+			right: 10px;
+			background: none;
+			border: none;
+			color: $main-color;
+			cursor: pointer;
+			&:focus {
+				outline: none;
+			}
+		}
+	}
+	.comment-user {
+		margin-right: 8px;
+		font-weight: bold;
+		cursor: pointer;
 	}
 }
 </style>

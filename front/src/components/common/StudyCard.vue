@@ -5,14 +5,14 @@
 		</div>
 		<div class="etc-box">
 			<div>
-				<h3>{{ studyData.title }}</h3>
+				<h3>{{ studyData.name }}</h3>
 			</div>
 			<div>
 				<span>{{ studyData.posPeople }} / {{ studyData.maxPeople }}명</span>
 			</div>
 			<div>
 				<p>{{ studyData.week }}</p>
-				<p>{{ studyData.time }}</p>
+				<p>{{ studyData.startTime }} ~ {{ studyData.endTime }}</p>
 				<p class="expireDay">{{ studyData.expireDay }} 까지</p>
 			</div>
 		</div>
@@ -20,19 +20,35 @@
 </template>
 
 <script>
+import { formatWeekday } from '@/utils/filters';
 export default {
 	data() {
 		return {
 			studyData: {
 				// 난중에는 서버에서 받아올 데이터들
-				title: 'python정복',
-				time: '8:00 ~ 9:00',
-				week: '매주 수, 일',
-				expireDay: '20.09.01',
-				posPeople: 5,
-				maxPeople: 10,
+				name: this.study.name,
+				startTime: this.$props.study.start_time,
+				endTime: this.$props.study.end_time,
+				week: this.weekArray,
+				expireDay: this.$props.study.end_term,
+				posPeople: this.$props.study.users_current,
+				maxPeople: this.$props.study.users_limit,
 			},
 		};
+	},
+	props: {
+		study: Object,
+	},
+	methods: {
+		async fetchStudyData() {},
+	},
+	computed: {
+		weekArray() {
+			return formatWeekday(this.$props.study.week);
+		},
+	},
+	created() {
+		this.fetchStudyData();
 	},
 };
 </script>

@@ -19,7 +19,6 @@ export function truncate(string) {
 
 export function formatWeekday(n) {
 	let res = [];
-	console.log(typeof n);
 	if (n & 64) {
 		res.push('월');
 	}
