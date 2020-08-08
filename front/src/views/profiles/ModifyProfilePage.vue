@@ -40,38 +40,41 @@
 </template>
 
 <script>
-import axios from 'axios';
-
+import { baseAuth } from '@/api/index';
+import cookies from 'vue-cookies';
 export default {
 	data() {
 		return {
 			email: null,
-			name: null,
 			introduce: null,
+			name: this.$store.state.name
+				? this.$store.state.name
+				: cookies.get('name'),
 		};
 	},
-	method: {
-		// 태인이형님이 만들어 두신걸 알지만 제가 만듭니다 ㅎㅎ
+	methods: {
 		async fetchData() {
 			try {
-				const res = await axios.get('http://200.20.20.20/accounts/');
-				this.email = res.email;
-				this.name = res.name;
-				this.introduce = res.introduce;
-			} catch (err) {
-				console.log(err.msg);
-			}
-		},
-		async modifyData() {
-			try {
-				await axios.put('유알엘을 씁시다', {
-					name: this.name,
-					introduce: this.introduce,
-				});
+				const { data } = await baseAuth.get(`accounts/${this.name}`);
+				this.email = data.email;
+				this.introduce = data.introduce;
 			} catch (err) {
 				console.log(err);
 			}
 		},
+		// async modifyData() {
+		// 	try {
+		// 		await baseAuth.put('유알엘을 씁시다', {
+		// 			name: this.name,
+		// 			introduce: this.introduce,
+		// 		});
+		// 	} catch (err) {
+		// 		console.log(err);
+		// 	}
+		// },
+	},
+	created() {
+		this.fetchData();
 	},
 	computed: {
 		isVaildIntro() {
@@ -82,9 +85,6 @@ export default {
 			var isVaild = lenIntro < 21 ? true : false;
 			return isVaild;
 		},
-	},
-	created() {
-		this.fetchData();
 	},
 };
 </script>

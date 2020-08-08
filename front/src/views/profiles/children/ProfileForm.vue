@@ -40,6 +40,7 @@
 
 <script>
 import cookies from 'vue-cookies';
+import { baseAuth } from '@/api/index';
 export default {
 	data() {
 		return {
@@ -47,10 +48,26 @@ export default {
 			name: this.$store.state.name
 				? this.$store.state.name
 				: cookies.get('name'),
-			introduce: '20자 이내의 단어만 쓸 수 있습니다!!',
+			introduce: null,
+			profileImg: null,
 			studying: 5,
 			studyed: 6,
 		};
+	},
+	methods: {
+		async fetchData() {
+			try {
+				const { data } = await baseAuth.get(`accounts/${this.name}`);
+				console.log(data);
+				this.introduce = data.introduce;
+				this.profileImg = data.profile_image;
+			} catch (err) {
+				console.log(err);
+			}
+		},
+	},
+	created() {
+		this.fetchData();
 	},
 };
 </script>
