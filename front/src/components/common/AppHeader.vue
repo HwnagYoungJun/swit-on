@@ -46,13 +46,11 @@
 			<router-link v-if="name" class="nav-router-item" :to="`/profile/${name}`"
 				><img class="nav-router-img" src="@/assets/logo.png" alt="프로필"
 			/></router-link>
-			<button @click="test">test</button>
 		</nav>
 	</header>
 </template>
 
 <script>
-import axios from 'axios';
 import { mapMutations, mapState } from 'vuex';
 export default {
 	data() {
@@ -73,10 +71,6 @@ export default {
 	},
 	methods: {
 		...mapMutations(['clearUserEmail', 'clearToken']),
-		async test() {
-			const res = await axios.get(`${this.baseURL}accounts/login`);
-			console.log(res);
-		},
 		logoutUser() {
 			this.clearUserEmail();
 			this.clearToken();
