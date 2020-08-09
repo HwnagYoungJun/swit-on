@@ -4,7 +4,7 @@
 			<div class="profile-wrap">
 				<img
 					class="img-box"
-					src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.0-9/51195329_2188965328018448_6283346633593716736_n.jpg?_nc_cat=110&_nc_sid=85a577&_nc_ohc=oEFV7dFTDEwAX9IiKKx&_nc_ht=scontent-ssn1-1.xx&oh=91b2c49439a416691eccd803c50bd221&oe=5F4024D8"
+					:src="`${baseURL}${profileImg}`"
 					alt="profile_img"
 				/>
 			</div>
@@ -64,6 +64,11 @@ export default {
 			} catch (err) {
 				console.log(err);
 			}
+		},
+	},
+	computed: {
+		baseURL() {
+			return process.env.VUE_APP_API_URL;
 		},
 	},
 	created() {

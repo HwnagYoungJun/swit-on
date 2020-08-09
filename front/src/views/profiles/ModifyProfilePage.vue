@@ -4,13 +4,14 @@
 		autocomplete="off"
 		@submit.prevent="modifyData"
 	>
-		<img
-			class="img-box"
-			src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.0-9/51195329_2188965328018448_6283346633593716736_n.jpg?_nc_cat=110&_nc_sid=85a577&_nc_ohc=oEFV7dFTDEwAX9IiKKx&_nc_ht=scontent-ssn1-1.xx&oh=91b2c49439a416691eccd803c50bd221&oe=5F4024D8"
-			alt="profile_img"
-		/>
+		<img class="img-box" id="img-box" :src="profileImgCom" alt="profile_img" />
 		<div class="img-change">
-			<input type="file" />
+			<input
+				ref="inputFile"
+				id="inputFile"
+				type="file"
+				@change="onChangeFile"
+			/>
 		</div>
 		<h2>{{ email }}</h2>
 		<div class="input-container">
@@ -45,38 +46,62 @@ import cookies from 'vue-cookies';
 export default {
 	data() {
 		return {
+			swichFile: false,
 			email: null,
 			introduce: null,
+			profileImg: null,
 			name: this.$store.state.name
 				? this.$store.state.name
 				: cookies.get('name'),
 		};
 	},
 	methods: {
+		onChangeFile(e) {
+			this.profileImg = e.target.value;
+			var tempImg = this.$refs.inputFile.files[0];
+			var reader = new FileReader();
+			reader.readAsDataURL(tempImg);
+			reader.onload = function() {
+				document.querySelector('#img-box').src = reader.result;
+			};
+			this.swichFile = true;
+		},
 		async fetchData() {
 			try {
 				const { data } = await baseAuth.get(`accounts/${this.name}`);
 				this.email = data.email;
 				this.introduce = data.introduce;
+				this.profileImg = data.profile_image;
 			} catch (err) {
 				console.log(err);
 			}
 		},
-		// async modifyData() {
-		// 	try {
-		// 		await baseAuth.put('유알엘을 씁시다', {
-		// 			name: this.name,
-		// 			introduce: this.introduce,
-		// 		});
-		// 	} catch (err) {
-		// 		console.log(err);
-		// 	}
-		// },
+		async modifyData() {
+			try {
+				await baseAuth.put(`accounts/${this.name}`, {
+					name: this.name,
+					introduce: this.introduce,
+					profile_image: this.profileImg,
+				});
+				console.log('변경성공');
+				this.$router.push({ path: `profile/${this.name}` });
+			} catch (err) {
+				console.log(err);
+			}
+		},
 	},
 	created() {
 		this.fetchData();
 	},
 	computed: {
+		profileImgCom() {
+			return this.swichFile
+				? `${this.profileImg}`
+				: `${this.baseURL}${this.profileImg}`;
+		},
+		baseURL() {
+			return process.env.VUE_APP_API_URL;
+		},
 		isVaildIntro() {
 			var lenIntro = 0;
 			if (this.introduce !== null) {
