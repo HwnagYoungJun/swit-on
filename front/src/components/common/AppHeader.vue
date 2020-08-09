@@ -22,7 +22,6 @@
 				id="search"
 				placeholder="소모임을 검색하세요"
 			/>
-			<i class="icon ion-md-search nav-search-icon"></i>
 		</div>
 		<nav class="nav-router">
 			<template v-if="!isUserLogin">
@@ -31,15 +30,18 @@
 				>
 			</template>
 			<template v-else>
-				<router-link class="nav-router-item" :to="{ name: 'addstudy' }"
-					>만들기</router-link
-				>
 				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
-					>뉴스피드</router-link
-				>
+					><span class="nav-router-full">뉴스피드</span
+					><i class="icon ion-md-home nav-router-medium"></i
+				></router-link>
+				<router-link class="nav-router-item" :to="{ name: 'addstudy' }"
+					><span class="nav-router-full">만들기</span
+					><i class="icon ion-md-add nav-router-medium"></i
+				></router-link>
 				<a class="nav-router-item" href="javascript:;" @click="logoutUser"
-					>로그아웃</a
-				>
+					><span class="nav-router-full">로그아웃</span
+					><i class="icon ion-md-power nav-router-medium"></i
+				></a>
 			</template>
 			<router-link v-if="name" class="nav-router-item" :to="`/profile/${name}`"
 				><img class="nav-router-img" src="@/assets/logo.png" alt="프로필"
@@ -110,15 +112,19 @@ header {
 	#search {
 		display: none;
 	}
-	i {
-		display: none;
-	}
 	.nav-router-item {
 		color: white;
 	}
+	i {
+		color: white;
+		font-size: 24px;
+		font-weight: 600;
+	}
 }
 .switon-logo {
-	padding-bottom: 0;
+	// padding-bottom: 0;
+	display: flex;
+	align-items: center;
 }
 .switon {
 	@include scale(width, 50px);
@@ -131,7 +137,7 @@ header {
 		@include scale(margin-right, 32px);
 	}
 	#search {
-		@include scale(width, 400px);
+		width: 400px;
 		padding: 0.8rem 2rem 0.8rem 0.75rem;
 		font-size: $font-light;
 		border: 1px solid #dbdbdb;
@@ -144,8 +150,14 @@ header {
 			outline: none;
 			background: rgb(248, 248, 249);
 			border: none;
-			@include scale(width, 420px);
+			width: 420px;
 			box-shadow: none;
+		}
+		@media screen and (max-width: 768px) {
+			width: 200px;
+			&:focus {
+				width: 220px;
+			}
 		}
 	}
 	.nav-search-icon {
@@ -164,13 +176,28 @@ header {
 	.nav-router-item {
 		margin-right: 0.5rem;
 	}
+	.nav-router-full {
+		display: inline;
+	}
+	.nav-router-medium {
+		display: none;
+	}
 	.nav-router-img {
 		width: 2rem;
 		border-radius: 50%;
 		object-fit: cover;
 	}
-	@media screen and (max-width: 640px) {
-		display: none;
+	@media screen and (max-width: 768px) {
+		.nav-router-full {
+			display: none;
+		}
+		.nav-router-medium {
+			display: inline;
+		}
+		i {
+			font-size: 24px;
+			font-weight: 600;
+		}
 	}
 }
 .a11y-hidden {

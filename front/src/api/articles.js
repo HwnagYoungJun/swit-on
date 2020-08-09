@@ -12,11 +12,11 @@ function createArticle(studyId, boardName, articleData) {
 	formdata.append('title', articleData.title);
 	formdata.append('content', articleData.content);
 	formdata.append('file', articleData.file);
-	return boardArticles.post(`/${studyId}/${boardName}`, formdata);
+	return boardArticles.post(`/${studyId}/${boardName}/`, formdata);
 }
 
 function deleteArticle(studyId, boardName, articleId) {
-	return boardArticles.delete(`/${studyId}/${boardName}/${articleId}`);
+	return boardArticles.delete(`/${studyId}/${boardName}/${articleId}/`);
 }
 
 function updateArticle(studyId, boardName, articleId, articleData) {
@@ -24,11 +24,11 @@ function updateArticle(studyId, boardName, articleId, articleData) {
 	formdata.append('title', articleData.title);
 	formdata.append('content', articleData.content);
 	formdata.append('file', articleData.file);
-	return boardArticles.put(`/${studyId}/${boardName}/${articleId}`, formdata);
+	return boardArticles.put(`/${studyId}/${boardName}/${articleId}/`, formdata);
 }
 
 function fetchArticle(studyId, boardName, articleId) {
-	return boardArticles.get(`/${studyId}/${boardName}/${articleId}`);
+	return boardArticles.get(`/${studyId}/${boardName}/${articleId}/`);
 }
 
 function fetchRepositoryArticles(studyId) {
@@ -43,9 +43,16 @@ function fetchNoticeArticles(studyId) {
 
 function createComment(studyId, boardName, articleId, commentData) {
 	return boardArticles.post(
-		`/${studyId}/${boardName}/${articleId}/comments`,
+		`/${studyId}/${boardName}/${articleId}/comments/`,
 		commentData,
 	);
+}
+
+function createArticleLike(studyId, boardName, articleId) {
+	return boardArticles.post(`/${studyId}/${boardName}/${articleId}/like/`);
+}
+function deleteArticleLike(studyId, boardName, articleId) {
+	return boardArticles.delete(`/${studyId}/${boardName}/${articleId}/unlike/`);
 }
 
 export {
@@ -59,4 +66,6 @@ export {
 	fetchNoticeArticles,
 	fetchFeeds,
 	createComment,
+	createArticleLike,
+	deleteArticleLike,
 };
