@@ -29,8 +29,9 @@
 						<div class="popular-content">
 							<p class="content-title">{{ study.name }}</p>
 							<p class="content-week">
-								<span class="content-day"> 월</span
-								><span class="content-day"> 수</span>
+								<span class="content-day">{{
+									study.week | formatWeekday
+								}}</span>
 							</p>
 							<p class="content-time">
 								{{ study.start_time }}-{{ study.end_time }}

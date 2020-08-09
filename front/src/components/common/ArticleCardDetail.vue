@@ -19,7 +19,7 @@
 		<div class="card-detail-wrap">
 			<div v-if="article" class="card-detail">
 				<div class="card-detail-title">
-					<img src="@/assets/color2.png" alt="" class="img" />
+					<!-- <img src="@/assets/color2.png" alt="" class="img" /> -->
 					<p>{{ article.title }}</p>
 				</div>
 				<div class="card-detail-content">
@@ -219,7 +219,7 @@ export default {
 	display: flex;
 	margin: 10px;
 	p {
-		margin: 5px 15px;
+		// margin: 5px 15px;
 		font-size: $font-bold;
 	}
 }
