@@ -56,8 +56,8 @@ export default {
 		};
 	},
 	methods: {
-		onChangeFile(e) {
-			this.profileImg = e.target.value;
+		onChangeFile() {
+			this.profileImg = this.$refs.inputFile.files[0];
 			var tempImg = this.$refs.inputFile.files[0];
 			var reader = new FileReader();
 			reader.readAsDataURL(tempImg);
