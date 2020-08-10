@@ -12,8 +12,15 @@
 						article_id: article.id,
 					},
 				}"
-				><ArticleCard :article="article"
-			/></router-link>
+				><ArticleCard :article="article">
+					<div slot="logo">
+						<img src="@/assets/dd.png" alt="" />
+					</div>
+					<div slot="bread">
+						<span>web>python</span>
+					</div>
+				</ArticleCard>
+			</router-link>
 			<router-link
 				:key="article.id"
 				v-for="article in repositoryArticles"
@@ -25,8 +32,15 @@
 						article_id: article.id,
 					},
 				}"
-				><ArticleCard :article="article"
-			/></router-link>
+				><ArticleCard :article="article">
+					<div slot="logo">
+						<img src="@/assets/dd.png" alt="" />
+					</div>
+					<div slot="bread">
+						<span>web>python</span>
+					</div>
+				</ArticleCard>
+			</router-link>
 			<router-link
 				:key="article.id"
 				v-for="article in noticeArticles"
@@ -38,8 +52,15 @@
 						article_id: article.id,
 					},
 				}"
-				><ArticleCard :article="article"
-			/></router-link>
+				><ArticleCard :article="article">
+					<div slot="logo">
+						<img src="@/assets/dd.png" alt="" />
+					</div>
+					<div slot="bread">
+						<span>web>python</span>
+					</div>
+				</ArticleCard>
+			</router-link>
 		</div>
 		<aside>
 			<div class="schedule">

@@ -12,7 +12,11 @@
 				},
 			}"
 		>
-			<ArticleCard :article="article" />
+			<ArticleCard :article="article">
+				<div slot="logo">
+					<img src="@/assets/dd.png" alt="" />
+				</div>
+			</ArticleCard>
 		</router-link>
 		<ArticleAddBtn boardName="notice" />
 	</div>
