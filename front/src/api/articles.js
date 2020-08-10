@@ -53,7 +53,7 @@ function createArticleLike(studyId, boardName, articleId) {
 	return boardArticles.post(`/${studyId}/${boardName}/${articleId}/like/`);
 }
 function deleteArticleLike(studyId, boardName, articleId) {
-	return boardArticles.delete(`/${studyId}/${boardName}/${articleId}/unlike/`);
+	return boardArticles.delete(`/${studyId}/${boardName}/${articleId}/like/`);
 }
 
 export {
