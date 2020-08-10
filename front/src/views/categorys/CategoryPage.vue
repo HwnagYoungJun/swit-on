@@ -42,15 +42,11 @@ export default {
 			this.lowerCategory = '전체';
 		},
 	},
-<<<<<<< HEAD
-
-=======
 	watch: {
 		$route() {
 			this.lowerCategory = '전체';
 		},
 	},
->>>>>>> feature/front-category
 	computed: {
 		initName() {
 			return this.$route.params.UpperCategoryName;
