@@ -1,7 +1,7 @@
 <template>
 	<div class="card">
 		<div class="img-box">
-			<img src="@/assets/cloud.png/" alt="" />
+			<img :src="`${BaseUrl}${studyData.logo}`" alt="logo_img" />
 		</div>
 		<div class="etc-box">
 			<div>
@@ -33,6 +33,7 @@ export default {
 				expireDay: this.$props.study.end_term,
 				posPeople: this.$props.study.users_current,
 				maxPeople: this.$props.study.users_limit,
+				logo: this.$props.study.logo,
 			},
 		};
 	},
@@ -45,6 +46,9 @@ export default {
 	computed: {
 		weekArray() {
 			return formatWeekday(this.$props.study.week);
+		},
+		BaseUrl() {
+			return process.env.VUE_APP_API_URL;
 		},
 	},
 	created() {
