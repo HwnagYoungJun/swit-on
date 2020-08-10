@@ -3,6 +3,7 @@ import { boardArticles, baseAuth } from './index';
 function fetchFeeds() {
 	return baseAuth.get('/feeds');
 }
+
 function fetchArticles(studyId, boardName) {
 	return boardArticles.get(`/${studyId}/${boardName}/`);
 }

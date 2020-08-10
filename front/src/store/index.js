@@ -18,6 +18,9 @@ export default new Vuex.Store({
 		getToken(state) {
 			return state.token;
 		},
+		getName(state) {
+			return state.name;
+		},
 	},
 	mutations: {
 		setUserName(state, name) {

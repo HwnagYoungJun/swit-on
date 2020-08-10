@@ -44,6 +44,7 @@ export default {
 			this.lowerCategory = '전체';
 		},
 	},
+
 	computed: {
 		initName() {
 			return this.$route.params.UpperCategoryName;

@@ -6,6 +6,11 @@ Vue.use(VueRouter);
 
 const routes = [
 	{
+		path: '/test',
+		name: 'testtest',
+		component: () => import('@/views/calendar/makeScheduleForm.vue'),
+	},
+	{
 		path: '/',
 		name: 'main',
 		component: () => import('@/views/Main.vue'),
@@ -109,8 +114,11 @@ const routes = [
 		},
 	},
 	{
-		path: '/profile/:user_name',
+		path: '/profile/:userName',
 		name: 'profile',
+		props: route => ({
+			userName: String(route.params.userName),
+		}),
 		component: () => import('@/views/profiles/ProfilePage.vue'),
 		children: [
 			{
