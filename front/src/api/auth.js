@@ -1,5 +1,5 @@
 // 로그인, 회원가입, 회원탈퇴
-import { auth } from './index';
+import { auth, baseAuth } from './index';
 
 // 회원가입 API
 function registerUser(userData) {
@@ -11,4 +11,8 @@ function loginUser(userData) {
 	return auth.post('accounts/login', userData);
 }
 
-export { registerUser, loginUser };
+function fetchProfile(userName) {
+	return baseAuth.get(`accounts/${userName}`);
+}
+
+export { registerUser, loginUser, fetchProfile };

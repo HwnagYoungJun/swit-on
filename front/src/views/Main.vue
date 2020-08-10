@@ -1,6 +1,5 @@
 <template>
 	<section>
-		<!-- <h1>메인페이지</h1> -->
 		<nav>
 			<CategoryNavForm></CategoryNavForm>
 		</nav>

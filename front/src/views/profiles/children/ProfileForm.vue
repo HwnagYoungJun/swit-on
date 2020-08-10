@@ -1,11 +1,14 @@
 <template>
 	<div>
 		<div class="profile-box">
-			<img
-				class="img-box"
-				src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.0-9/51195329_2188965328018448_6283346633593716736_n.jpg?_nc_cat=110&_nc_sid=85a577&_nc_ohc=oEFV7dFTDEwAX9IiKKx&_nc_ht=scontent-ssn1-1.xx&oh=91b2c49439a416691eccd803c50bd221&oe=5F4024D8"
-				alt="profile_img"
-			/>
+			<div class="profile-wrap">
+				<img
+					v-if="profileImg"
+					class="img-box"
+					:src="`${baseURL}${profileImg}`"
+					alt="profile_img"
+				/>
+			</div>
 			<div class="info-box">
 				<div class="name-box">
 					<img
@@ -13,7 +16,7 @@
 						src="https://www.shareicon.net/data/128x128/2015/09/27/108202_game_512x512.png"
 						alt="icon_img"
 					/>
-					<h2>{{ name }}</h2>
+					<h2>{{ userName }}</h2>
 					<router-link :to="{ name: 'modifyprofile' }">
 						<div class="modify-profile">프로필 수정하기</div>
 					</router-link>
@@ -37,15 +40,44 @@
 </template>
 
 <script>
+// import cookies from 'vue-cookies';
+import { fetchProfile } from '@/api/auth';
 export default {
+	props: {
+		userName: String,
+	},
 	data() {
 		return {
 			// 추후 DB에서 오는 데이터
-			name: 'HWANG YJ',
-			introduce: '20자 이내의 단어만 쓸 수 있습니다!!',
+			// name: this.$store.state.name
+			// 	? this.$store.state.name
+			// 	: cookies.get('name'),
+			introduce: null,
+			profileImg: null,
 			studying: 5,
 			studyed: 6,
 		};
+	},
+	methods: {
+		async fetchData() {
+			try {
+				const name = this.userName;
+				const { data } = await fetchProfile(name);
+				console.log(data);
+				this.introduce = data.introduce;
+				this.profileImg = data.profile_image;
+			} catch (err) {
+				console.log(err);
+			}
+		},
+	},
+	computed: {
+		baseURL() {
+			return process.env.VUE_APP_API_URL;
+		},
+	},
+	created() {
+		this.fetchData();
 	},
 };
 </script>
@@ -110,15 +142,23 @@ export default {
 		}
 	}
 }
-.img-box {
+.profile-wrap {
+	max-height: 15rem;
+	max-width: 15rem;
+	min-width: 15rem;
+	min-width: 15rem;
 	width: 15rem;
 	height: 15rem;
-	border-radius: 50%;
-	object-fit: cover;
 	margin-right: 4rem;
 	@media screen and (max-width: 1024px) {
 		margin-right: 0;
 	}
+}
+.img-box {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	object-fit: cover;
 }
 .icon-box {
 	display: flex;

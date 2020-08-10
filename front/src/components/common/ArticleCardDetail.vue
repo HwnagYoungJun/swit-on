@@ -19,18 +19,23 @@
 		<div class="card-detail-wrap">
 			<div v-if="article" class="card-detail">
 				<div class="card-detail-title">
-					<img src="@/assets/color2.png" alt="" class="img" />
+					<!-- <img src="@/assets/color2.png" alt="" class="img" /> -->
 					<p>{{ article.title }}</p>
 				</div>
 				<div class="card-detail-content">
 					<Viewer :initialValue="article.content" />
 					<div class="logo">
-						<i class="icon ion-md-heart"></i>
-						<span>좋아요 0개</span>
+						<i
+							@click="articleUnLike"
+							v-if="isLiked"
+							class="icon ion-md-heart like"
+						></i>
+						<i @click="articleLike" v-else class="icon ion-md-heart unlike"></i>
+						<span>좋아요 {{ likeCount }}개</span>
 					</div>
 					<div class="content-info">
-						<a href="">{{ article.user.name }}</a
-						><span>#python</span> <span>#django</span>
+						<a href="">{{ article.user.name }}</a>
+						<!-- <span>#python</span> <span>#django</span> -->
 					</div>
 					<div class="comment-body">
 						<ul>
@@ -93,7 +98,12 @@
 </template>
 
 <script>
-import { fetchArticle, createComment } from '@/api/articles';
+import {
+	fetchArticle,
+	createComment,
+	createArticleLike,
+	deleteArticleLike,
+} from '@/api/articles';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import Viewer from '@toast-ui/vue-editor/src/Viewer.vue';
 export default {
@@ -111,6 +121,14 @@ export default {
 			initText: null,
 			commentContent: null,
 		};
+	},
+	computed: {
+		isLiked() {
+			return this.article.like.liked;
+		},
+		likeCount() {
+			return this.article.like.like_cnt;
+		},
 	},
 	methods: {
 		async fetchData() {
@@ -134,6 +152,28 @@ export default {
 				await createComment(studyId, boardName, articleId, {
 					content,
 				});
+				this.fetchData();
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		async articleLike() {
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				await createArticleLike(studyId, boardName, articleId);
+				this.fetchData();
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		async articleUnLike() {
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				await deleteArticleLike(studyId, boardName, articleId);
 				this.fetchData();
 			} catch (error) {
 				console.log(error);
@@ -179,7 +219,7 @@ export default {
 	display: flex;
 	margin: 10px;
 	p {
-		margin: 5px 15px;
+		// margin: 5px 15px;
 		font-size: $font-bold;
 	}
 }
@@ -202,10 +242,17 @@ export default {
 		font-size: $font-bold;
 		i {
 			margin-right: 10px;
+			cursor: pointer;
 		}
 		span {
 			font-size: $font-light;
 			color: #999999;
+		}
+		.like {
+			color: crimson;
+		}
+		.unlike {
+			color: grey;
 		}
 	}
 	.content-info {
