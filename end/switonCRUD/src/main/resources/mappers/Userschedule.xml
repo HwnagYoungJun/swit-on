@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- mappers/Userschedule.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="userschedule">
+
+	<!-- 모든 유저스케줄 조회 -->
+	<select id="selectAll" resultType="UserSchedule">
+		select id, user_id, schedule_id, status
+		from userschedule
+	</select>
+	
+	<!-- 유저 아이디로 스케줄 조회 -->
+	<select id="selectUserScheduleByUserId" resultType="UserSchedule">
+		select id, user_id, schedule_id, status
+		from userschedule
+		where user_id = #{userId}
+	</select>
+	
+	<!-- 스케줄 아이디로 참가한 유저 조회 (나중에 내가 할 거) -->
+	
+	<!-- 유저스케줄 생성 (* status는 자동으로 생성됨, 입력X) -->
+	<insert id="insertUserSchedule" parameterType="UserSchedule">
+		insert into `userschedule`(user_id, schedule_id)
+		values (#{userId}, #{scheduleId})
+	</insert>
+	
+	<!-- 스케줄을 상태(status)를 변경 -->
+	<update id="updateCheckIn" parameterType="Integer">
+		update `userschedule`
+		set status = #{status}
+	</update>
+	
+	<!-- 스케쥴 삭제 -->
+	<delete id="deleteUserSchedule">
+		delete from userschedule
+   		where id = #{id} 
+	</delete>
+	
+	<!-- 더이상의 수정, 삭제는 없음! -->
+
+</mapper>
