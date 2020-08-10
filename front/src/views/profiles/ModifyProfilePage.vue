@@ -44,6 +44,9 @@
 import { baseAuth } from '@/api/index';
 import cookies from 'vue-cookies';
 export default {
+	props: {
+		userName: String,
+	},
 	data() {
 		return {
 			swichFile: false,

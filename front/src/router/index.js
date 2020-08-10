@@ -114,8 +114,11 @@ const routes = [
 		},
 	},
 	{
-		path: '/profile/:user_name',
+		path: '/profile/:userName',
 		name: 'profile',
+		props: route => ({
+			userName: String(route.params.userName),
+		}),
 		component: () => import('@/views/profiles/ProfilePage.vue'),
 		children: [
 			{

@@ -3,6 +3,7 @@
 		<div class="profile-box">
 			<div class="profile-wrap">
 				<img
+					v-if="profileImg"
 					class="img-box"
 					:src="`${baseURL}${profileImg}`"
 					alt="profile_img"
@@ -15,7 +16,7 @@
 						src="https://www.shareicon.net/data/128x128/2015/09/27/108202_game_512x512.png"
 						alt="icon_img"
 					/>
-					<h2>{{ name }}</h2>
+					<h2>{{ userName }}</h2>
 					<router-link :to="{ name: 'modifyprofile' }">
 						<div class="modify-profile">프로필 수정하기</div>
 					</router-link>
@@ -39,15 +40,18 @@
 </template>
 
 <script>
-import cookies from 'vue-cookies';
-import { baseAuth } from '@/api/index';
+// import cookies from 'vue-cookies';
+import { fetchProfile } from '@/api/auth';
 export default {
+	props: {
+		userName: String,
+	},
 	data() {
 		return {
 			// 추후 DB에서 오는 데이터
-			name: this.$store.state.name
-				? this.$store.state.name
-				: cookies.get('name'),
+			// name: this.$store.state.name
+			// 	? this.$store.state.name
+			// 	: cookies.get('name'),
 			introduce: null,
 			profileImg: null,
 			studying: 5,
@@ -57,7 +61,8 @@ export default {
 	methods: {
 		async fetchData() {
 			try {
-				const { data } = await baseAuth.get(`accounts/${this.name}`);
+				const name = this.userName;
+				const { data } = await fetchProfile(name);
 				console.log(data);
 				this.introduce = data.introduce;
 				this.profileImg = data.profile_image;
