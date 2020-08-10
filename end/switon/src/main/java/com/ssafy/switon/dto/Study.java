@@ -37,7 +37,7 @@ public class Study {
 	int lowercategory_id;
 	@ApiParam(value = "소모임 대표 이미지 주소", required = false, hidden = true)
 	String logo;
-	@ApiParam(value = "소모임 최대 회원 수 제한")
+	@ApiParam(value = "소모임 최대 회원 수 제한", required = true)
 	int users_limit;
 	@ApiParam(value = "현재 인원 수", required = false, hidden = true)
 	int users_current;
@@ -45,7 +45,6 @@ public class Study {
 	int uppercategory_id;
 	@ApiParam(value = "소모임 소분류(상위카테고리) 이름", required = false, hidden = true)
 	String uppercategory_name;
-	
 	
 	public int getUppercategory_id() {
 		return uppercategory_id;
@@ -167,6 +166,7 @@ public class Study {
 				+ ", code=" + code + ", isPrivate=" + isPrivate + ", isRecruit=" + isRecruit + ", start_term="
 				+ start_term + ", end_term=" + end_term + ", created_at=" + created_at + ", week=" + week
 				+ ", start_time=" + start_time + ", end_time=" + end_time + ", lowercategory_id=" + lowercategory_id
-				+ ", logo=" + logo + ", users_limit=" + users_limit + ", users_current=" + users_current + "]";
+				+ ", logo=" + logo + ", users_limit=" + users_limit + ", users_current=" + users_current
+				+ ", uppercategory_id=" + uppercategory_id + ", uppercategory_name=" + uppercategory_name + "]";
 	}
 }

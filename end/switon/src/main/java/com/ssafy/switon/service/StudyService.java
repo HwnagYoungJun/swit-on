@@ -25,9 +25,14 @@ public interface StudyService {
 	List<UserStudyInfoDTO> searchUserStudies(int userId);
 	// 카테고리 아이디로 스터디 검색
 	List<Study> searchStudiesByLowercategory(int lowercategory_id);
-	// 카테고리 아이디로 스터디카드 검색
-	List<StudyCardDTO> searchStudyCardsByLowercategoryId(int parseInt);
+	// 상위카테고리 아이디로 스터디 검색
+	List<Study> searchStudiesByUppercategory(int uppercategory_id);
+	// 하위 카테고리 아이디로 스터디카드 검색
+	List<StudyCardDTO> searchStudyCardsByLowercategoryId(int lowercategory_id);
+	// 상위카테고리 아이디로 스터디카드 검색
+	List<StudyCardDTO> searchStudyCardsByUppercategory(int uppercategory_id);
 	// 스터디 카드 전체 검색
 	List<StudyCardDTO> searchStudyCards();
+	
 
 }

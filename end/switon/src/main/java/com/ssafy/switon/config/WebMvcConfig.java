@@ -3,6 +3,7 @@ package com.ssafy.switon.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.ssafy.switon.Interceptors.CORSInterceptor;
@@ -21,6 +22,16 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	@Autowired
 	OtherRequestInterceptor otherInterceptor;
 	
+	
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/upload/**")
+			.addResourceLocations("static/upload/");
+	}
+
+
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(corsInterceptor)

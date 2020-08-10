@@ -125,6 +125,33 @@ public class StudyServiceImpl implements StudyService {
 		return studyCards;
 	}
 
+	@Override
+	public List<Study> searchStudiesByUppercategory(int uppercategory_id) {
+		List<Study> studies = new ArrayList<Study>();
+		List<LowerCategory> categories = categoryDao.selectUp_Low(uppercategory_id);
+		for(LowerCategory category : categories) {
+			studies.addAll(studyDao.selectStudiesByLowercategoryId(category.getId()));
+		}
+		return studies;
+	}
+
+	@Override
+	public List<StudyCardDTO> searchStudyCardsByUppercategory(int uppercategory_id) {
+		List<Study> studies = new ArrayList<Study>();
+		List<LowerCategory> categories = categoryDao.selectUp_Low(uppercategory_id);
+		for(LowerCategory category : categories) {
+			studies.addAll(studyDao.selectStudiesByLowercategoryId(category.getId()));
+		}
+		
+		List<StudyCardDTO> studyCards = new ArrayList<StudyCardDTO>();
+		for(Study study : studies) {
+			studyCards.add(new StudyCardDTO(study.getId(), study.getName(), 
+					study.getStart_time(), study.getEnd_time(), study.getWeek(), 
+					study.getEnd_term(), study.getUsers_current(), study.getUsers_limit()));
+		}
+		return studyCards;
+	}
+
 	
 
 }

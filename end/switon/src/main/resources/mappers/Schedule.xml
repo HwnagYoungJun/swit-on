@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/Schedule.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="schedule">
+
+	<!-- 모든 스케줄 조회(테스트용) -->
+	<select	id="selectAll" resultType="Schedule">
+		select id, study_id, title, start, end, bg_color, user_id
+		from schedule
+	</select>
+
+	<!-- 스터디 아이디로 스케줄 조회 -->
+	<select id="selectSchedulesByStudyId" resultType="Schedule">
+		select id, study_id, title, start, end, bg_color, user_id
+		from schedule
+		where study_id = #{study_id}
+	</select>
+	
+	<!-- id로 스케줄 상세 정보 조회 -->
+	<select id="selectScheduleById" resultType="Schedule">
+		select id, study_id, title, start, end, bg_color, user_id
+		from schedule
+		where id = #{id}
+	</select>
+
+	<!-- 스케줄 생성 -->
+	<insert id="insertSchedule" parameterType="Schedule">
+		insert into `schedule`(study_id, title, start, end, bg_color, user_id)
+		values (#{study_id}, #{title}, #{start}, #{end}, #{bg_color}, #{user_id})
+	</insert>
+	
+	<!-- 스케줄 수정 -->
+	<update id="updateSchedule" parameterType="Schedule">
+		update `schedule`
+		set study_id = #{study_id},
+			title = #{title},
+			start = #{start},
+			end = #{end},
+			bg_color = #{bg_color},
+			user_id = #{user_id}
+		where id = #{id}
+	</update>
+	
+	<!-- 스케줄 삭제 -->
+	<delete id="deleteSchedule">
+		delete from `schedule`
+		where id = #{id}
+	</delete>
+	
+</mapper>

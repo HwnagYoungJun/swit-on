@@ -18,5 +18,8 @@
       <mapper resource="mappers/Commentlike.xml" />
       <mapper resource="mappers/Studylike.xml" />
       <mapper resource="mappers/Join.xml" />
+      
+      <mapper resource="mappers/Schedule.xml" />
+      <mapper resource="mappers/Userschedule.xml" />
    </mappers>
 </configuration>
