@@ -47,18 +47,18 @@ public class ScheduleTestRestController {
 		return scheduleService.selectScheduleById(id);
 	}
 	
-	@ApiOperation(value = "스케쥴 등록한다", response = String.class)
-	@PostMapping("/write")
-	public String writeSchedule(Schedule schedule) {
-		System.out.println("스케쥴 등록");
-		if(scheduleService.createSchedule(schedule)) {
-			System.out.println("스케쥴 등록 성공!!!");
-			return "success";
-		} else {
-			System.out.println("스케쥴 등록 실패...");
-			return "fail";
-		}
-	}
+//	@ApiOperation(value = "스케쥴 등록한다", response = String.class)
+//	@PostMapping("/write")
+//	public String writeSchedule(Schedule schedule) {
+//		System.out.println("스케쥴 등록");
+//		if(scheduleService.createSchedule(schedule)) {
+//			System.out.println("스케쥴 등록 성공!!!");
+//			return "success";
+//		} else {
+//			System.out.println("스케쥴 등록 실패...");
+//			return "fail";
+//		}
+//	}
 	
 	@ApiOperation(value = "스케쥴 삭제한다", response = String.class)
 	@DeleteMapping("/delete/{id}")
@@ -103,18 +103,18 @@ public class ScheduleTestRestController {
 //		return userscheduleService.selectUserScheduleByUserId(userId);
 //	}
 	
-	@ApiOperation(value = "유저 스케쥴 등록한다", response = String.class)
-	@PostMapping("/write/2")
-	public String writeUserSchedule(UserSchedule userschedule) {
-		System.out.println("유저 스케쥴 등록");
-		if(userscheduleService.createUserSchedule(userschedule)) {
-			System.out.println("유저 스케쥴 등록 성공!!!");
-			return "success";
-		} else {
-			System.out.println("유저 스케쥴 등록 실패...");
-			return "fail";
-		}
-	}
+//	@ApiOperation(value = "유저 스케쥴 등록한다", response = String.class)
+//	@PostMapping("/write/2")
+//	public String writeUserSchedule(UserSchedule userschedule) {
+//		System.out.println("유저 스케쥴 등록");
+//		if(userscheduleService.createUserSchedule(userschedule)) {
+//			System.out.println("유저 스케쥴 등록 성공!!!");
+//			return "success";
+//		} else {
+//			System.out.println("유저 스케쥴 등록 실패...");
+//			return "fail";
+//		}
+//	}
 	
 //	@ApiOperation(value = "유저 스케쥴 상태 변경한다", response = String.class)
 //	@PostMapping("/update/2")

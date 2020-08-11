@@ -151,6 +151,11 @@ public class StudyServiceImpl implements StudyService {
 		}
 		return studyCards;
 	}
+	
+	@Override
+	public List<Study> searchStudyByKeyword(String keyword) {
+		return studyDao.selectStudyByKeyword(keyword);
+	}
 
 	
 

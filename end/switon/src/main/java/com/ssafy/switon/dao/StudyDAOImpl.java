@@ -55,5 +55,12 @@ public class StudyDAOImpl implements StudyDAO {
 		List<Study> list = sqlSession.selectList("study.selectStudiesByLowercategoryId", lowercategory_id);
 		return list;
 	}
+	
+	@Override
+	public List<Study> selectStudyByKeyword(String keyword) {
+		System.out.println("검색어: " + keyword);
+		keyword = "%" + keyword + "%";
+		return sqlSession.selectList("study.selectStudyByKeyword", keyword);
+	}
 
 }

@@ -17,5 +17,9 @@ public interface CategoryDAO {
 	LowerCategory selectLowOne(int id);
 	// 대분류 카테고리 하나 조회
 	UpperCategory selectUpOne(int id);
+	// 키워드로 대분류 조회
+	List<UpperCategory> selectUpByKeyword(String keyword);
+	// 키워드로 소분류 조회
+	List<LowerCategory> selectLowByKeyword(String keyword);
 	
 }

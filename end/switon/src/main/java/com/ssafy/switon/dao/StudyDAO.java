@@ -22,5 +22,6 @@ public interface StudyDAO {
 	List<Study> selectLeaderStudiesByUserId(int userId);
 	// 카테고리 아이디로 소모임 리스트 검색
 	List<Study> selectStudiesByLowercategoryId(int lowercategory_id);
-	
+	// 키워드로 스터디 검색
+	List<Study> selectStudyByKeyword(String keyword);
 }

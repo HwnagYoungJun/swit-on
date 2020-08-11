@@ -39,5 +39,17 @@ public class CategoryDAOImpl implements CategoryDAO {
 	public UpperCategory selectUpOne(int id) {
 		return sqlsession.selectOne("category.selectUpperCategoryById", id);
 	}
+	
+	@Override
+	public List<UpperCategory> selectUpByKeyword(String keyword) {
+		keyword = "%" + keyword + "%";
+		return sqlsession.selectList("category.selectUpperCategoryByKeyword", keyword);
+	}
+
+	@Override
+	public List<LowerCategory> selectLowByKeyword(String keyword) {
+		keyword = "%" + keyword + "%";
+		return sqlsession.selectList("category.selectLowerCategoryByKeyword", keyword);
+	}
 
 }

@@ -33,6 +33,8 @@ public interface StudyService {
 	List<StudyCardDTO> searchStudyCardsByUppercategory(int uppercategory_id);
 	// 스터디 카드 전체 검색
 	List<StudyCardDTO> searchStudyCards();
+	// 키워드로 스터디 검색
+	List<Study> searchStudyByKeyword(String keyword);
 	
 
 }

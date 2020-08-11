@@ -29,5 +29,15 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<LowerCategory> searchUp_Low(int uppercategory_id) {
 		return categoryDAO.selectUp_Low(uppercategory_id);
 	}
+	
+	@Override
+	public List<UpperCategory> searchUpByKeyword(String keyword) {
+		return categoryDAO.selectUpByKeyword(keyword);
+	}
+
+	@Override
+	public List<LowerCategory> searchLowByKeyword(String keyword) {
+		return categoryDAO.selectLowByKeyword(keyword);
+	}
 
 }

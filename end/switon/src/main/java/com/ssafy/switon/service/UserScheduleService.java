@@ -15,7 +15,7 @@ public interface UserScheduleService {
 	// 유저 아이디로 스케쥴 조회
 	List<UserSchedule> selectUserScheduleByUserId(int userId);
 	// 유저스케쥴 생성
-	boolean createUserSchedule(UserSchedule userschedule);
+	String createUserSchedule(UserSchedule userschedule);
 	// 스케쥴 상태를 변경
 	boolean changeStatus(int userId, int scheduleId, int status);
 	// 성공 여부를 변경

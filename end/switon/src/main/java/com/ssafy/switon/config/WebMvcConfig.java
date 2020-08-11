@@ -38,7 +38,6 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		.addPathPatterns("/**");
 		
 		registry.addInterceptor(otherInterceptor)
-		.addPathPatterns("/study")
 		.addPathPatterns("/study/**");
 		
 		registry.addInterceptor(getInterceptor)
@@ -47,7 +46,8 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		.addPathPatterns("/study/**/qna/**")
 		.addPathPatterns("/study/**/repository/**")
 		.addPathPatterns("/feeds")
-		.addPathPatterns("/study/**/dashboard");
+		.addPathPatterns("/study/**/dashboard")
+		.addPathPatterns("/study/**/schedule/**");
 		
 //		registry.addInterceptor(authInterceptor)
 //		.addPathPatterns("/accounts/info")

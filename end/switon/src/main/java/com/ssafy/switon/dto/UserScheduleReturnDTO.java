@@ -2,16 +2,16 @@ package com.ssafy.switon.dto;
 
 public class UserScheduleReturnDTO {
 	
-	Schedule schedule;
+	ScheduleReturnDTO schedule;
 	boolean checkIn;
 	boolean checkOut;
 	boolean timeover;
 	boolean success;
 	
-	public Schedule getSchedule() {
+	public ScheduleReturnDTO getSchedule() {
 		return schedule;
 	}
-	public void setSchedule(Schedule schedule) {
+	public void setSchedule(ScheduleReturnDTO schedule) {
 		this.schedule = schedule;
 	}
 	public boolean isCheckIn() {
@@ -44,7 +44,7 @@ public class UserScheduleReturnDTO {
 				+ ", timeover=" + timeover + ", success=" + success + "]";
 	}
 	
-	public UserScheduleReturnDTO(Schedule schedule, int status, boolean success) {
+	public UserScheduleReturnDTO(ScheduleReturnDTO schedule, int status, boolean success) {
 		this.schedule = schedule;
 		checkIn = false;
 		checkOut = false;

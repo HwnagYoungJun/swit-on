@@ -6,6 +6,30 @@
 
 <mapper namespace="study">
 
+	<!-- 키워드로 스터디 검색 -->
+	<select id="selectStudyByKeyword" resultType="Study">
+		select id,
+			name,
+			user_id,
+			description,
+			code,
+			isPrivate,
+			isRecruit,
+			start_term,
+			end_term,
+			created_at,
+			week,
+			start_time,
+			end_time,
+			lowercategory_id,
+			logo,
+			users_limit,
+			(select codunt(*) from `join` where study_id = study.id) as users_current
+		from study
+		where name like #{keyword}
+		or lowercategory_id in (select id from lowercategory where name like #{keyword})
+	</select>
+
 	<!-- 내가 만든 최신 스터디의 아이디 한개 가져오기 -->
 	<select id="getRecentStudyIdByUserId" resultType="Integer">
 		select id

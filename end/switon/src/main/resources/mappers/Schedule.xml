@@ -50,4 +50,13 @@
 		where id = #{id}
 	</delete>
 	
+	<!-- 자신이 만든 가장 최신의 스터디의 id를 반환 -->
+	<select id="selectRecentScheduleId" parameterType="Integer" resultType="Integer">
+		select id, study_id, title, start, end, bg_color, user_id
+		from `schedule`
+		where user_id = #{user_id}
+		order by id desc
+		limit 1
+	</select>
+	
 </mapper>

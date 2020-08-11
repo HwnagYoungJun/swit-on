@@ -1,5 +1,6 @@
 package com.ssafy.switon.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.ScheduleDAO;
+import com.ssafy.switon.dao.StudyDAO;
 import com.ssafy.switon.dao.UserScheduleDAO;
 import com.ssafy.switon.dto.ParticipateInfo;
 import com.ssafy.switon.dto.Schedule;
+import com.ssafy.switon.dto.ScheduleReturnDTO;
+import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.UserSchedule;
 import com.ssafy.switon.dto.UserScheduleReturnDTO;
 import com.ssafy.switon.dto.UserScheduleSimpleDTO;
@@ -23,6 +27,9 @@ public class UserScheduleServiceImpl implements UserScheduleService {
 	@Autowired
 	ScheduleDAO scheduleDAO;
 	
+	@Autowired
+	StudyDAO studyDAO;
+	
 	@Override
 	public List<UserSchedule> selectAll() {
 		return userscheduleDAO.selectUserSchedules();
@@ -34,8 +41,31 @@ public class UserScheduleServiceImpl implements UserScheduleService {
 	}
 
 	@Override
-	public boolean createUserSchedule(UserSchedule userschedule) {
-		return userscheduleDAO.insertUserSchedule(userschedule)==1;
+	public String createUserSchedule(UserSchedule userschedule) {
+		Schedule newSchedule = scheduleDAO.selectScheduleById(userschedule.getSchedule_id());
+		Timestamp newStart = newSchedule.getStart();
+		Timestamp newEnd = newSchedule.getEnd();
+		int userId = userschedule.getUser_id();
+//		List<UserScheduleReturnDTO> scheduleList = getUserSchedules(userId);
+		List<UserSchedule> scheduleList = userscheduleDAO.selectUserSchedules(userId);
+		for(UserSchedule userSchedule : scheduleList) {
+			Schedule schedule = scheduleDAO.selectScheduleById(userSchedule.getSchedule_id());
+			Timestamp oldStart = schedule.getStart();
+			Timestamp oldEnd = schedule.getEnd();
+			// B시작시간이 A종료시간보다 앞인 경우 + B종료시간이 A시작시간보다 뒤인 경우
+			if(newStart.before(oldEnd) && newEnd.after(oldStart)
+					// OR B종료시간이 A시작시간보다 뒤인 경우 + B시작시간이 A의 종료시간보다 앞인 경우 <- 오류
+					|| newEnd.after(oldStart) && newStart.before(oldEnd)){
+				// 오류인 경우 어떤 스터디의 어떤 스케줄과 겹치는지 이름을 반환
+				Study conflictStudy = studyDAO.selectStudyById(schedule.getStudy_id());
+				String msg = "현재 참가중인 '" + conflictStudy.getName() + "' 스터디의 '" + schedule.getTitle() + "' 스케줄과 시간이 겹칩니다.";
+				return msg;
+			}
+		}
+		if(userscheduleDAO.insertUserSchedule(userschedule)==1) {
+			return "success";
+		}
+		return "fail";
 	}
 
 	@Override
@@ -66,7 +96,10 @@ public class UserScheduleServiceImpl implements UserScheduleService {
 		List<UserScheduleReturnDTO> list = new ArrayList<UserScheduleReturnDTO>();
 		
 		for(UserSchedule userSchedule : userSchedules) {
-			Schedule schedule = scheduleDAO.selectScheduleById(userSchedule.getSchedule_id());
+			Schedule originalSchedule = scheduleDAO.selectScheduleById(userSchedule.getSchedule_id());
+			ScheduleReturnDTO schedule = new ScheduleReturnDTO(originalSchedule);
+			Study study = studyDAO.selectStudyById(schedule.getStudy_id());
+			schedule.setStudy_name(study.getName());
 			UserScheduleReturnDTO dto = new UserScheduleReturnDTO(
 					schedule,
 					userSchedule.getStatus(),

@@ -43,5 +43,9 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	public int deleteSchedule(int id) {
 		return sqlsession.delete("schedule.deleteSchedule", id);
 	}
+	
+	public int selectRecentScheduleId(int userId) {
+		return sqlsession.selectOne("schedule.selectRecentScheduleId", userId);
+	}
 
 }

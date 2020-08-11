@@ -82,13 +82,18 @@ public class StudyRestController {
 	
 	@ApiOperation(value = "스터디 리스트를 반환한다.", response = List.class)
 	@GetMapping("")
-	public List<Study> showAllStudies(@RequestParam(value="lowercategory_id", required = false) String lowercategory_id, @RequestParam(value="uppercategory_id", required = false) String uppercategory_id){
+	public List<Study> showAllStudies(@RequestParam(value="lowercategory_id", required = false) String lowercategory_id,
+									@RequestParam(value="uppercategory_id", required = false) String uppercategory_id,
+									@RequestParam(value="keyword", required = false) String keyword){
 		System.out.println(lowercategory_id);
 		if(lowercategory_id != null) {
 			return studyService.searchStudiesByLowercategory(Integer.parseInt(lowercategory_id));
 		}
 		if(uppercategory_id != null) {
 			return studyService.searchStudiesByUppercategory(Integer.parseInt(uppercategory_id));
+		}
+		if(keyword != null) {
+			return studyService.searchStudyByKeyword(keyword);
 		}
 		System.out.println("스터디 리스트 출력");
 		return studyService.searchAll();

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.switon.dto.ParticipateInfo;
 import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.Schedule;
+import com.ssafy.switon.dto.ScheduleReturnDTO;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.UserSchedule;
 import com.ssafy.switon.dto.UserScheduleReturnDTO;
@@ -59,7 +60,7 @@ public class ScheduleRestController {
 			System.out.println("** 스터디 스케줄 조회 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		List<Schedule> schedules = scheduleService.selectSchedulesByStudyId(studyId);
+		List<ScheduleReturnDTO> schedules = scheduleService.selectSchedulesByStudyId(studyId);
 		System.out.println(studyId + "번 스터디의 스케줄 리스트 반환 성공");
 		return new ResponseEntity<>(schedules, HttpStatus.OK);
 	}
@@ -75,13 +76,17 @@ public class ScheduleRestController {
 		}
 		schedule.setStudy_id(studyId);
 		schedule.setUser_id(userId);
-		if(scheduleService.createSchedule(schedule)) {
+		String result = scheduleService.createSchedule(schedule);
+		if(result.equals("success")) {
 			System.out.println(studyId + "번 스터디에 스케줄 생성 성공!");
 			return new ResponseEntity<>(new ReturnMsg("스케줄을 성공적으로 생성했습니다."), HttpStatus.OK);
-			
 		}
-		System.out.println("** 스케줄 생성 실패 - 서버 에러");
-		return new ResponseEntity<>(new ReturnMsg("스케줄을 생성할 수 없었습니다. 서버 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
+		if(result.equals("fail")) {
+			System.out.println("** 스케줄 생성 실패 - 서버 에러");
+			return new ResponseEntity<>(new ReturnMsg("스케줄을 생성할 수 없었습니다. 서버 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);			
+		}
+		System.out.println("스케줄 생성 실패 - " + result);
+		return new ResponseEntity<>(new ReturnMsg(result), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "스케줄 조회", response = Schedule.class)
@@ -93,8 +98,15 @@ public class ScheduleRestController {
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		Schedule schedule = scheduleService.selectScheduleById(scheduleId);
+		ScheduleReturnDTO dto = new ScheduleReturnDTO(schedule);
+		if(studyId != schedule.getStudy_id()) {
+			System.out.println("** 스케줄 조회 실패 - 권한 없음");
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+		}
+		Study study = studyService.search(studyId);
+		dto.setStudy_name(study.getName());
 		System.out.println(scheduleId + "번 스케줄 조회 성공");
-		return new ResponseEntity<>(schedule, HttpStatus.OK);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "스케줄 수정")
@@ -162,12 +174,16 @@ public class ScheduleRestController {
 			System.out.println("** 스케줄 참가 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		if(userscheduleService.createUserSchedule(new UserSchedule(userId, scheduleId))) {
+		String result = userscheduleService.createUserSchedule(new UserSchedule(userId, scheduleId));
+		if(result.equals("success")) {
 			System.out.println(scheduleId + "번 스케줄 참가 성공!!");
 			return new ResponseEntity<>(new ReturnMsg("스케줄에 참가신청을 하였습니다."), HttpStatus.OK);
 		}
-		System.out.println("** 스케줄 참가 실패 - 서버 오류 발생");
-		return new ResponseEntity<>(new ReturnMsg("스케줄에 참여할 수 없었습니다. 서버 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		if(result.equals("fail")) {
+			System.out.println("** 스케줄 참가 실패 - 서버 오류 발생");
+			return new ResponseEntity<>(new ReturnMsg("스케줄에 참여할 수 없었습니다. 서버 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<>(new ReturnMsg(result), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "유저의 스케줄 참가 취소")
@@ -227,6 +243,7 @@ public class ScheduleRestController {
 		System.out.println("** 입실 퇴실체크 - 서버 오류 발생");
 		return new ResponseEntity<>(new ReturnMsg("출석체크 도중 오류가 발생했습니다. 서버 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
 	
 	
 	

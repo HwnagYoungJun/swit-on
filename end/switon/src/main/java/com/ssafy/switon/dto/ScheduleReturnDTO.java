@@ -4,12 +4,14 @@ import java.sql.Timestamp;
 
 import io.swagger.annotations.ApiParam;
 
-public class Schedule {
+public class ScheduleReturnDTO {
 	
 	@ApiParam(value = "스케줄 id (PK)", required = false, hidden = true)
 	int id;
 	@ApiParam(value = "소모임 id (FK)", required = false, hidden = true)
 	int study_id;
+	@ApiParam(value = "소모임 이름", required = false, hidden = true)
+	String study_name;
 	@ApiParam(value = "스케줄 이름", required = true)
 	String title;
 	@ApiParam(value = "스케줄 시작시간 (예: 2020-07-20 14:00)", required = true)
@@ -31,6 +33,12 @@ public class Schedule {
 	}
 	public void setStudy_id(int study_id) {
 		this.study_id = study_id;
+	}
+	public String getStudy_name() {
+		return study_name;
+	}
+	public void setStudy_name(String study_name) {
+		this.study_name = study_name;
 	}
 	public String getTitle() {
 		return title;
@@ -64,9 +72,18 @@ public class Schedule {
 	}
 	@Override
 	public String toString() {
-		return "Schedule [id=" + id + ", study_id=" + study_id + ", title=" + title + ", start=" + start + ", end="
-				+ end + ", bg_color=" + bg_color + ", user_id=" + user_id + "]";
+		return "ScheduleReturnDTO [id=" + id + ", study_id=" + study_id + ", study_name=" + study_name + ", title="
+				+ title + ", start=" + start + ", end=" + end + ", bg_color=" + bg_color + ", user_id=" + user_id + "]";
 	}
-	
+	public ScheduleReturnDTO(Schedule schedule) {
+		this.id = schedule.getId();
+		this.study_id = schedule.getStudy_id();
+		this.title = schedule.getTitle();
+		this.start = schedule.getStart();
+		this.end = schedule.getEnd();
+		this.bg_color = schedule.getBg_color();
+		this.user_id = schedule.getUser_id();
+	}
 
+	
 }

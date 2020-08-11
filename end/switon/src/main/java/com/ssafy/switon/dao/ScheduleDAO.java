@@ -18,4 +18,6 @@ public interface ScheduleDAO {
 	int updateSchedule(Schedule schedule);
 	// 스케쥴 하나 삭제
 	int deleteSchedule(int id);
+	// 이 사람이 가장 최근에 만든 스케줄 아이디 하나 반환
+	int selectRecentScheduleId(int userId);
 }
