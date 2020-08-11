@@ -217,7 +217,8 @@ import { createStudy } from '@/api/studies';
 export default {
 	data() {
 		return {
-			fileRoute: '',
+			hasImage: false,
+			image: null,
 			weekData: [],
 			uppercategory_id: null,
 			studyData: {
@@ -274,6 +275,9 @@ export default {
 	@media screen and (max-width: 768px) {
 		width: 95%;
 	}
+}
+#fileInput {
+	display: none;
 }
 
 .studyform-header {
