@@ -39,15 +39,16 @@
 			<router-link :to="{ name: 'repository' }"
 				>저장소<span></span
 			></router-link>
-			<router-link :to="{ name: 'notice' }">공지<span></span></router-link>
 			<router-link :to="{ name: 'qna' }">Q&A<span></span></router-link>
+			<router-link :to="{ name: 'notice' }">공지<span></span></router-link>
+			<router-link :to="{ name: 'meeting' }">회의<span></span></router-link>
 			<hr />
 			<div class="study-sub-content">
 				<router-view :id="id"></router-view>
 			</div>
 		</div>
 		<div v-else class="study-sub-content">
-			<p class="title">{{ study.name }} 소개</p>
+			<p class="title">모임 소개</p>
 			<p>
 				{{ study.description }}
 			</p>

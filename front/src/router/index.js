@@ -21,6 +21,15 @@ const routes = [
 		component: () => import('@/views/studies/StudyPage.vue'),
 	},
 	{
+		path: '/study/room/:room',
+		name: 'room',
+		props: route => ({
+			room: String(route.params.room),
+		}),
+		component: () => import('@/views/studies/StudyRoomPage.vue'),
+		beforeEnter,
+	},
+	{
 		path: '/study/new',
 		name: 'addstudy',
 		component: () => import('@/views/studies/StudyAddPage.vue'),
@@ -68,6 +77,11 @@ const routes = [
 				path: 'qna',
 				name: 'qna',
 				component: () => import('@/views/studies/children/StudyQuestion.vue'),
+			},
+			{
+				path: 'meeting',
+				name: 'meeting',
+				component: () => import('@/views/studies/children/StudyMeeting.vue'),
 			},
 		],
 	},
