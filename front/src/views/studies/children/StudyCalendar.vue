@@ -1,23 +1,28 @@
 <template>
-	<calendar
-		:calendars="calendarList"
-		:schedules="scheduleList"
-		:view="view"
-		:taskView="taskView"
-		:scheduleView="scheduleView"
-		:theme="theme"
-		:week="week"
-		:month="month"
-		:timezones="timezones"
-		:disableDblClick="disableDblClick"
-		:isReadOnly="isReadOnly"
-		:template="template"
-		:useCreationPopup="useCreationPopup"
-		:useDetailPopup="useDetailPopup"
-	/>
+	<div class="calendar-wrap">
+		<scheduleAddBtn />
+		<calendar
+			:calendars="calendarList"
+			:schedules="scheduleList"
+			:view="view"
+			:taskView="taskView"
+			:scheduleView="scheduleView"
+			:theme="theme"
+			:week="week"
+			:month="month"
+			:timezones="timezones"
+			:disableDblClick="disableDblClick"
+			:isReadOnly="isReadOnly"
+			:template="template"
+			:useCreationPopup="useCreationPopup"
+			:useDetailPopup="useDetailPopup"
+		/>
+	</div>
 </template>
 
 <script>
+import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
+
 import 'tui-calendar/dist/tui-calendar.css';
 import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 
@@ -28,6 +33,7 @@ import 'tui-time-picker/dist/tui-time-picker.css';
 export default {
 	components: {
 		Calendar,
+		scheduleAddBtn,
 	},
 	data() {
 		return {
@@ -112,6 +118,9 @@ export default {
 </script>
 
 <style>
+.calendar-wrap {
+	position: relative;
+}
 .tui-full-calendar-timegrid-container {
 	height: 300px !important;
 }

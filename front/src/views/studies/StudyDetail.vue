@@ -1,8 +1,5 @@
 <template>
 	<div>
-		<button>
-			<router-link :to="`/study/${id}/schedule`">가가가</router-link>
-		</button>
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
 				<li>
