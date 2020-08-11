@@ -14,57 +14,78 @@
 			<swatches class="swatchesPC" v-model="bgColor" inline />
 			<swatches class="swatchesMobile" v-model="bgColor" />
 		</div>
-		<h1 @click="makeSchedule">test</h1>
-		{{ startTime }}, {{ endTime }}
+		<button @click="submitSchedule">test</button>
 	</div>
 </template>
 
 <script>
+import { baseAuth } from '@/api/index';
 import Swatches from 'vue-swatches';
+import cookies from 'vue-cookies';
 export default {
+	props: {
+		study_id: Number,
+	},
 	components: {
 		Swatches,
 	},
 	data() {
 		return {
 			bgColor: '#000000',
-			scheduleArray: [],
+			scheduleObject: null,
 			title: null,
 			date: null,
 			startTime: null,
 			endTime: null,
-			studyId: 1,
+			userId: null,
 		};
 	},
 	watch: {},
 	methods: {
+		async submitSchedule() {
+			await this.makeSchedule();
+			const el = this.scheduleObject;
+			// console.log(el);
+			try {
+				await baseAuth.post(`study/${this.study_id}/schedule/`, el);
+			} catch (err) {
+				console.log(err);
+			}
+			this.$router.push(`/study/${this.study_id}`);
+		},
+
 		async makeSchedule() {
-			await this.pushSchedule();
+			const { data } = await baseAuth(`accounts/${cookies.get('name')}`);
+			// console.log(data);
+			this.userId = data.id;
+			this.pushSchedule();
 		},
 		pushSchedule() {
 			var tempDate = this.date.split('-').map(Number);
-			let date = new Date(tempDate[0], tempDate[1], tempDate[2]);
-			let dateStart = date;
-			let dateEnd = date;
+			let dateS = new Date(tempDate[0], tempDate[1] - 1, tempDate[2]);
+			let dateE = new Date(tempDate[0], tempDate[1] - 1, tempDate[2]);
+			let dateStart = dateS;
+			let dateEnd = dateE;
 			var tempStart = this.startTime.split(':').map(Number);
 			var tempEnd = this.endTime.split(':').map(el => parseInt(el));
+			// console.log(tempStart, tempEnd);
 			dateStart.setHours(tempStart[0], tempStart[1]);
+			let start = dateStart;
 			dateEnd.setHours(tempEnd[0], tempEnd[1]);
 			let end = dateEnd;
-			let start = dateStart;
+			// console.log(start, end);
 			start = start.toISOString();
 			end = end.toISOString();
-			this.scheduleArray.push({
-				calendarId: this.studyId,
-				title: this.title,
-				category: 'time',
+			this.scheduleObject = {
+				bg_color: this.bgColor,
 				start: start,
 				end: end,
-				color: this.bgColor === '#dde6e8' ? '#000000' : '#ffffff',
-				bgColor: this.bgColor,
-				leader: '',
-				participants: [],
-			});
+				study_id: this.study_id,
+				title: this.title,
+				// color: this.bgColor === '#dde6e8' ? '#000000' : '#ffffff',
+				// leader: '',
+				user_id: this.userId,
+			};
 		},
 	},
 };

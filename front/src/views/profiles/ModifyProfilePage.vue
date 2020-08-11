@@ -42,7 +42,7 @@
 
 <script>
 import { baseAuth } from '@/api/index';
-import cookies from 'vue-cookies';
+import { mapMutations } from 'vuex';
 export default {
 	props: {
 		userName: String,
@@ -53,12 +53,13 @@ export default {
 			email: null,
 			introduce: null,
 			profileImg: null,
-			name: this.$store.state.name
-				? this.$store.state.name
-				: cookies.get('name'),
+			name: this.$store.state.name ? this.$store.state.name : this.userName,
+			pastName: null,
 		};
 	},
 	methods: {
+		...mapMutations(['setUserName']),
+
 		onChangeFile() {
 			this.profileImg = this.$refs.inputFile.files[0];
 			var tempImg = this.$refs.inputFile.files[0];
@@ -74,6 +75,7 @@ export default {
 				const { data } = await baseAuth.get(`accounts/${this.name}`);
 				this.email = data.email;
 				this.introduce = data.introduce;
+				this.name = data.name;
 				this.profileImg = data.profile_image;
 			} catch (err) {
 				console.log(err);
@@ -81,26 +83,25 @@ export default {
 		},
 		async modifyData() {
 			try {
-				await baseAuth.put(`accounts/${this.name}`, {
-					name: this.name,
-					introduce: this.introduce,
-					profile_image: this.profileImg,
-				});
-				console.log('변경성공');
-				this.$router.push({ path: `profile/${this.name}` });
+				const formdata = new FormData();
+				formdata.append('name', this.name);
+				formdata.append('introduce', this.introduce);
+				formdata.append('img', this.profileImg);
+				await baseAuth.put(`accounts/${this.pastName}`, formdata);
+				this.setUserName(this.name);
+				this.$router.push(`profile/${this.name}`);
 			} catch (err) {
 				console.log(err);
 			}
 		},
 	},
 	created() {
+		this.pastName = this.name;
 		this.fetchData();
 	},
 	computed: {
 		profileImgCom() {
-			return this.swichFile
-				? `${this.profileImg}`
-				: `${this.baseURL}${this.profileImg}`;
+			return this.swichFile ? null : `${this.baseURL}${this.profileImg}`;
 		},
 		baseURL() {
 			return process.env.VUE_APP_API_URL;

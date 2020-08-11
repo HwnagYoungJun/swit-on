@@ -17,7 +17,9 @@
 						alt="icon_img"
 					/>
 					<h2>{{ userName }}</h2>
-					<router-link :to="{ name: 'modifyprofile' }">
+					<router-link
+						:to="{ name: 'modifyprofile', props: { userName: userName } }"
+					>
 						<div class="modify-profile">프로필 수정하기</div>
 					</router-link>
 				</div>
@@ -48,10 +50,7 @@ export default {
 	},
 	data() {
 		return {
-			// 추후 DB에서 오는 데이터
-			// name: this.$store.state.name
-			// 	? this.$store.state.name
-			// 	: cookies.get('name'),
+			profile: null,
 			introduce: null,
 			profileImg: null,
 			studying: 5,
@@ -64,6 +63,7 @@ export default {
 				const name = this.userName;
 				const { data } = await fetchProfile(name);
 				console.log(data);
+				this.profile = data;
 				this.introduce = data.introduce;
 				this.profileImg = data.profile_image;
 			} catch (err) {
