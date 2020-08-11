@@ -14,21 +14,6 @@ const routes = [
 		component: () => import('@/views/calendar/makeScheduleForm.vue'),
 	},
 	{
-		path: '/test2',
-		name: 'test2',
-		component: () => import('@/views/Test2.vue'),
-	},
-	{
-		path: '/test3',
-		name: 'test3',
-		component: () => import('@/views/ItemTemplate.vue'),
-	},
-	{
-		path: '/test4',
-		name: 'test4',
-		component: () => import('@/views/Test4.vue'),
-	},
-	{
 		path: '/',
 		name: 'main',
 		component: () => import('@/views/Main.vue'),
