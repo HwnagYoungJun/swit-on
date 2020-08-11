@@ -12,16 +12,32 @@
 				/></router-link>
 			</div>
 			<label for="search" class="a11y-hidden">search: </label>
-			<input
-				@keypress.enter="
-					check();
-					reset();
-				"
-				v-model="searchData"
-				type="search"
-				id="search"
-				placeholder="소모임을 검색하세요"
-			/>
+			<div
+				class="auto-complete"
+				@keyup.down="selectStudy('down')"
+				@keyup.up="selectStudy('up')"
+			>
+				<input
+					autocomplete="off"
+					v-model="searchData"
+					v-on:input="fetchAutoComplete"
+					type="search"
+					id="search"
+					placeholder="소모임을 검색하세요"
+				/>
+				<div v-if="searchedData" class="searched-datas">
+					<ul>
+						<li
+							v-for="data in searchedData"
+							:key="data.id"
+							@click="moveStudy(data.id)"
+							@keyup.enter="moveStudy(data.id)"
+						>
+							{{ data.name }}
+						</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 		<nav class="nav-router">
 			<template v-if="!isUserLogin">
@@ -52,10 +68,12 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex';
+import { searchStudy } from '@/api/studies.js';
 export default {
 	data() {
 		return {
 			searchData: '',
+			searchedData: [],
 			baseURL: process.env.VUE_APP_API_URL,
 			userName: this.name ? this.name : null,
 		};
@@ -81,6 +99,28 @@ export default {
 		onChangeSearch(val) {
 			this.searchData = val;
 		},
+		async fetchAutoComplete(e) {
+			try {
+				if (!e.target.value) {
+					return (this.searchedData = []);
+				}
+				const { data } = await searchStudy(e.target.value);
+				this.searchedData = data;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		clearSearchedData() {
+			this.searchData = '';
+			this.searchedData = [];
+		},
+		moveStudy(id) {
+			this.clearSearchedData();
+			this.$router.push(`/study/${id}`);
+		},
+		selectStudy(key) {
+			console.log(key);
+		},
 	},
 };
 </script>
@@ -97,12 +137,15 @@ header {
 		justify-content: flex-start;
 	}
 }
+.list-block {
+	display: block;
+}
+.list-none {
+	display: none;
+}
 .nav-white {
 	background: none;
 	color: white;
-	.switon {
-		// display: none;
-	}
 	#search {
 		display: none;
 	}
@@ -160,6 +203,27 @@ header {
 		font-size: $font-bold;
 		color: -internal-light-dark(black, white);
 		margin: 0.5rem;
+	}
+	.auto-complete {
+		position: relative;
+		.searched-datas {
+			width: 420px;
+			position: absolute;
+			top: 60px;
+			background: #fff;
+			box-shadow: 0 3px 7px rgb(214, 214, 214);
+			z-index: 999;
+			li {
+				padding: 10px 10px;
+				&:hover {
+					background: #f2f2f2;
+					cursor: pointer;
+				}
+			}
+			@media screen and (max-width: 768px) {
+				width: 220px;
+			}
+		}
 	}
 }
 .nav-router {

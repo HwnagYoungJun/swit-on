@@ -35,6 +35,9 @@ function fetchStudy(studyId) {
 	return study.get(`/${studyId}`);
 }
 
+function searchStudy(query) {
+	return study.get(`?keyword=${query}`);
+}
 function JoinStudy(studyId) {
 	return study.post(`/${studyId}/join`);
 }
@@ -45,5 +48,6 @@ export {
 	deleteStudy,
 	updateStudy,
 	fetchStudy,
+	searchStudy,
 	JoinStudy,
 };

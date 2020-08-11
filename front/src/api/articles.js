@@ -32,19 +32,6 @@ function fetchArticle(studyId, boardName, articleId) {
 	return boardArticles.get(`/${studyId}/${boardName}/${articleId}/`);
 }
 
-function fetchRepositoryArticles(studyId) {
-	return boardArticles.get(`/${studyId}/repository/`);
-}
-function fetchRepositoryArticle(studyId, repoId) {
-	return boardArticles.get(`/${studyId}/repository/${repoId}`);
-}
-function fetchQnaArticles(studyId) {
-	return boardArticles.get(`/${studyId}/qna/`);
-}
-function fetchNoticeArticles(studyId) {
-	return boardArticles.get(`/${studyId}/notice/`);
-}
-
 function createComment(studyId, boardName, articleId, commentData) {
 	return boardArticles.post(
 		`/${studyId}/${boardName}/${articleId}/comments/`,
@@ -65,10 +52,6 @@ export {
 	createArticle,
 	deleteArticle,
 	updateArticle,
-	fetchRepositoryArticles,
-	fetchRepositoryArticle,
-	fetchQnaArticles,
-	fetchNoticeArticles,
 	fetchFeeds,
 	createComment,
 	createArticleLike,

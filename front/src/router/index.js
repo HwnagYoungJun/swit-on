@@ -21,6 +21,11 @@ const routes = [
 		component: () => import('@/views/ItemTemplate.vue'),
 	},
 	{
+		path: '/test4',
+		name: 'test4',
+		component: () => import('@/views/Test4.vue'),
+	},
+	{
 		path: '/',
 		name: 'main',
 		component: () => import('@/views/Main.vue'),

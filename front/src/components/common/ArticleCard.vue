@@ -27,24 +27,9 @@
 </template>
 
 <script>
-import { fetchRepositoryArticle } from '@/api/articles';
-
 export default {
-	data() {
-		return {
-			article: null,
-		};
-	},
-	methods: {
-		async fetchArticle() {
-			const studyId = this.$route.params.id;
-			const repoId = this.$route.params.repo_id;
-			const { data } = await fetchRepositoryArticle(studyId, repoId);
-			this.article = data;
-		},
-	},
-	created() {
-		this.fetchArticle();
+	props: {
+		article: Object,
 	},
 };
 </script>
