@@ -29,8 +29,6 @@
 					</div>
 					<div class="group-body">
 						<GruopCardSmall></GruopCardSmall>
-						<GruopCardSmall></GruopCardSmall>
-						<GruopCardSmall></GruopCardSmall>
 					</div>
 				</div>
 				<div class="schedule-box">
@@ -63,41 +61,22 @@
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import GruopCardSmall from '@/components/common/GruopCardSmall.vue';
 import { fetchFeeds } from '@/api/articles';
+import { baseAuth } from '@/api/index';
 // import { fetchStudy } from '@/api/studies';
 import 'tui-calendar/dist/tui-calendar.css';
 import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
+import cookies from 'vue-cookies';
 export default {
 	components: { ArticleCard, GruopCardSmall, Calendar },
+
 	data() {
 		return {
+			userName: cookies.get('name') ? cookies.get('name') : null,
 			articles: null,
-			calendarList: [
-				{
-					id: '0',
-					name: 'home',
-				},
-				{
-					id: '1',
-					name: 'office',
-				},
-			],
-			scheduleList: [
-				{
-					id: '1',
-					calendarId: '1',
-					title: 'my schedule',
-					category: 'time',
-					dueDateClass: '',
-					start: '2020-07-30T12:30:00+09:00',
-					end: '2020-07-30T17:31:00+09:00',
-					color: '#ffffff',
-					bgColor: '#ff5583',
-					dragBgColor: '#ff5583',
-					borderColor: '#ff5583',
-				},
-			],
+			calendarList: null,
+			scheduleList: null,
 			view: 'day',
 			taskView: false,
 			scheduleView: ['time'],
@@ -138,7 +117,40 @@ export default {
 		};
 	},
 	methods: {
+		async fetchScheduleData() {
+			const { data } = await baseAuth.get(
+				`/accounts/${this.userName}/myschedule/`,
+			);
+			this.calendarList = data.reduce((acc, el) => {
+				acc.push({
+					id: el.schedule.study_id,
+					name: el.schedule.study_name,
+				});
+				return acc;
+			}, []);
+
+			this.scheduleList = data.reduce((acc, el, idx) => {
+				acc.push({
+					id: idx,
+					calendarId: this.calendarList.findIndex(
+						i => i.id === el.schedule.study_id,
+					),
+					title: el.schedule.title,
+					category: 'time',
+					dueDateClass: '',
+					start: el.schedule.start,
+					end: el.schedule.end,
+					color: el.schedule.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
+					bgColor: el.schedule.bg_color,
+					dragBgColor: el.schedule.bg_color,
+					borderColor: el.schedule.bg_color,
+				});
+				return acc;
+			}, []);
+		},
+
 		async fetchData() {
+			await this.fetchScheduleData();
 			const { data } = await fetchFeeds();
 			this.articles = data.reverse();
 		},
