@@ -1,5 +1,8 @@
 <template>
 	<div>
+		<button>
+			<router-link :to="`/study/${id}/schedule`">가가가</router-link>
+		</button>
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
 				<li>
@@ -9,9 +12,9 @@
 					><span aria-hidden="true">></span>
 				</li>
 				<li>
-					<router-link :to="`/study/${id}`" aria-current="page"
-						>python 소모임</router-link
-					>
+					<router-link :to="`/study/${id}`" aria-current="page">{{
+						study.name
+					}}</router-link>
 				</li>
 			</ol>
 		</nav>
@@ -99,6 +102,9 @@ export default {
 </script>
 
 <style lang="scss">
+.study-main {
+	margin-bottom: 2rem;
+}
 .breadcrumb {
 	ol {
 		padding: 0;
@@ -116,20 +122,29 @@ export default {
 	}
 }
 .study-description {
-	display: flex;
+	width: 100%;
+	height: 14rem;
+	display: grid;
+	grid-template-areas: 'content logo';
+	grid-template-rows: 100%;
+	grid-template-columns: 60% 40%;
 	margin-bottom: 30px;
 	padding: 2%;
 	color: rgb(107, 107, 107);
 	box-shadow: 0 3px 6px rgb(214, 214, 214);
 	border-radius: 4px;
 	.study-logo {
-		flex: 1.5;
+		grid-area: logo;
+		width: 100%;
+		height: 100%;
 		img {
 			width: 100%;
+			height: 100%;
+			object-fit: fill;
 		}
 	}
 	.study-content {
-		flex: 2;
+		grid-area: content;
 		margin: 0 30px;
 		p {
 			margin: 5px 0;
@@ -140,6 +155,31 @@ export default {
 		}
 	}
 }
+// .study-description {
+// 	display: flex;
+// 	margin-bottom: 30px;
+// 	padding: 2%;
+// 	color: rgb(107, 107, 107);
+// 	box-shadow: 0 3px 6px rgb(214, 214, 214);
+// 	border-radius: 4px;
+// 	.study-logo {
+// 		flex: 1.5;
+// 		img {
+// 			width: 100%;
+// 		}
+// 	}
+// 	.study-content {
+// 		flex: 2;
+// 		margin: 0 30px;
+// 		p {
+// 			margin: 5px 0;
+// 		}
+// 		.study-title {
+// 			margin-bottom: 10px;
+// 			font-size: $font-bold;
+// 		}
+// 	}
+// }
 .study-category {
 	a {
 		display: inline-block;
