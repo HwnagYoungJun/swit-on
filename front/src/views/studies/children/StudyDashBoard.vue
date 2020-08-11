@@ -1,5 +1,7 @@
 <template>
 	<div class="dashboard-wrap">
+		<scheduleAddBtn />
+
 		<div class="card-wrap">
 			<router-link
 				:key="article.id"
@@ -103,6 +105,7 @@
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import { fetchArticles } from '@/api/articles';
+import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
 export default {
 	props: {
 		id: Number,
@@ -116,6 +119,7 @@ export default {
 	},
 	components: {
 		ArticleCard,
+		scheduleAddBtn,
 	},
 	methods: {
 		async fetchData() {
@@ -137,6 +141,7 @@ export default {
 <style lang="scss" scoped>
 .dashboard-wrap {
 	display: flex;
+	position: relative;
 	@media screen and (max-width: 1350px) {
 		flex-direction: column-reverse;
 	}

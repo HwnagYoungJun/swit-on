@@ -10,13 +10,24 @@
 				<button @click.prevent="$router.go(-1)" class="studyform-btn-cancle">
 					취소
 				</button>
-				<button class="hide-btn">작성</button>
-				<button class="studyform-btn-submit" type="submit">작성</button>
+				<button :disabled="!isVaildId" class="hide-btn">작성</button>
+				<button
+					:disabled="!isVaildId"
+					class="studyform-btn-submit"
+					type="submit"
+				>
+					작성
+				</button>
 			</div>
 		</div>
 		<section class="studyform-main">
 			<div class="studyform-title">
-				<label class="head-label" for="name">이름</label>
+				<label class="head-label" for="name"
+					>이름
+					<span class="study-title-vaildate" v-if="!isVaildId">
+						(※ 이름은 10자 이하로 작성해주세요)
+					</span>
+				</label>
 				<input
 					class="studyform-input"
 					v-model="studyData.name"
@@ -217,12 +228,11 @@ import { createStudy } from '@/api/studies';
 export default {
 	data() {
 		return {
-			hasImage: false,
-			image: null,
+			fileRoute: null,
 			weekData: [],
 			uppercategory_id: null,
 			studyData: {
-				name: null,
+				name: '',
 				description: null,
 				week: null,
 				isRecruit: 1,
@@ -264,6 +274,13 @@ export default {
 			this.studyData.img = this.$refs.inputFile.files[0];
 		},
 	},
+
+	computed: {
+		isVaildId() {
+			let a = this.studyData.name.length;
+			return a < 11 ? true : false;
+		},
+	},
 };
 </script>
 
@@ -280,6 +297,12 @@ export default {
 	display: none;
 }
 
+.study-title-vaildate {
+	color: red;
+	font-size: $font-light;
+	padding-left: 0.75rem;
+}
+
 .studyform-header {
 	display: flex;
 	position: relative;
@@ -294,6 +317,9 @@ export default {
 		@include form-btn('purple');
 		position: relative;
 		right: 0;
+		:disabled {
+			display: none;
+		}
 	}
 	.hide-btn {
 		border: none;
@@ -307,6 +333,9 @@ export default {
 		color: #fff;
 		position: absolute;
 		right: 0;
+		:disabled {
+			background-color: gray;
+		}
 	}
 }
 .studyform-main {
