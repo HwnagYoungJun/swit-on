@@ -41,7 +41,10 @@
 							{{ data.name }}
 						</li>
 					</ul>
-					<p v-if="searchedUpperData">상위카테고리</p>
+					<hr
+						v-if="searchedStudyData && (searchedUpperData || searchedLowerData)"
+					/>
+					<p v-if="searchedUpperData">상위 카테고리</p>
 					<ul v-if="searchedUpperData">
 						<li
 							v-for="data in searchedUpperData"
@@ -53,7 +56,8 @@
 							{{ data.name }}
 						</li>
 					</ul>
-					<p v-if="searchedLowerData">하위카테고리</p>
+					<hr v-if="searchedUpperData && searchedLowerData" />
+					<p v-if="searchedLowerData">하위 카테고리</p>
 					<ul v-if="searchedLowerData">
 						<li
 							v-for="data in searchedLowerData"
@@ -291,12 +295,26 @@ header {
 			background: #fff;
 			box-shadow: 0 3px 7px rgb(214, 214, 214);
 			z-index: 999;
+			p {
+				padding: 3px 10px;
+				font-size: $font-light;
+				font-weight: bold;
+			}
 			li {
-				padding: 10px 10px;
+				padding: 10px;
 				&:hover {
 					background: #f2f2f2;
 					cursor: pointer;
 				}
+				&:focus {
+					background: #f2f2f2;
+					outline: none;
+				}
+			}
+			hr {
+				width: 95%;
+				border: none;
+				border-bottom: 1px solid #d1d1d1;
 			}
 			@media screen and (max-width: 768px) {
 				width: 220px;
