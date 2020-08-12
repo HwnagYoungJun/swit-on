@@ -1,23 +1,28 @@
 <template>
-	<calendar
-		:calendars="calendarList"
-		:schedules="scheduleList"
-		:view="view"
-		:taskView="taskView"
-		:scheduleView="scheduleView"
-		:theme="theme"
-		:week="week"
-		:month="month"
-		:timezones="timezones"
-		:disableDblClick="disableDblClick"
-		:isReadOnly="isReadOnly"
-		:template="template"
-		:useCreationPopup="useCreationPopup"
-		:useDetailPopup="useDetailPopup"
-	/>
+	<div class="calendar-wrap">
+		<scheduleAddBtn v-if="isLeader" />
+		<calendar
+			:calendars="calendarList"
+			:schedules="scheduleList"
+			:view="view"
+			:taskView="taskView"
+			:scheduleView="scheduleView"
+			:theme="theme"
+			:week="week"
+			:month="month"
+			:timezones="timezones"
+			:disableDblClick="disableDblClick"
+			:isReadOnly="isReadOnly"
+			:template="template"
+			:useCreationPopup="useCreationPopup"
+			:useDetailPopup="useDetailPopup"
+		/>
+	</div>
 </template>
 
 <script>
+import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
+import { baseAuth } from '@/api/index';
 import 'tui-calendar/dist/tui-calendar.css';
 import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 
@@ -28,47 +33,51 @@ import 'tui-time-picker/dist/tui-time-picker.css';
 export default {
 	components: {
 		Calendar,
+		scheduleAddBtn,
+	},
+	props: {
+		isLeader: Boolean,
+		id: Number,
+	},
+	created() {
+		this.fetchData();
+	},
+	methods: {
+		async fetchData() {
+			const { data } = await baseAuth.get(`study/${this.id}/schedule`);
+			console.log(data);
+			this.calendarList = data.reduce((acc, el) => {
+				if (acc.findIndex(i => i.name === el.study_name) === -1) {
+					acc.push({
+						id: el.study_id,
+						name: el.study_name,
+					});
+				}
+				return acc;
+			}, []);
+
+			this.scheduleList = data.reduce((acc, el, idx) => {
+				acc.push({
+					id: idx,
+					calendarId: el.study_id,
+					title: el.title,
+					category: 'time',
+					dueDateClass: '',
+					start: el.start,
+					end: el.end,
+					color: el.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
+					bgColor: el.bg_color,
+					dragBgColor: el.bg_color,
+					borderColor: el.bg_color,
+				});
+				return acc;
+			}, []);
+		},
 	},
 	data() {
 		return {
-			calendarList: [
-				{
-					id: '0',
-					name: 'home',
-				},
-				{
-					id: '1',
-					name: 'office',
-				},
-			],
-			scheduleList: [
-				{
-					id: '1',
-					calendarId: '1',
-					title: 'my schedule',
-					category: 'time',
-					dueDateClass: '',
-					start: '2020-07-27T12:30:00+09:00',
-					end: '2020-07-31T17:31:00+09:00',
-					color: '#ffffff',
-					bgColor: '#ff5583',
-					dragBgColor: '#ff5583',
-					borderColor: '#ff5583',
-				},
-				{
-					id: '2',
-					calendarId: '1',
-					title: 'second schedule',
-					category: 'time',
-					dueDateClass: '',
-					start: '2020-08-01T12:30:00+09:00',
-					end: '2020-08-05T17:31:00+09:00',
-					color: '#ffffff',
-					bgColor: '#ff5583',
-					dragBgColor: '#ff5583',
-					borderColor: '#ff5583',
-				},
-			],
+			calendarList: null,
+			scheduleList: null,
 			view: 'month',
 			taskView: false,
 			scheduleView: ['time'],
@@ -95,7 +104,7 @@ export default {
 				},
 			],
 			disableDblClick: true,
-			isReadOnly: false,
+			isReadOnly: true,
 			template: {
 				milestone: function(schedule) {
 					return `<span style="color:red;">${schedule.title}</span>`;
@@ -112,6 +121,9 @@ export default {
 </script>
 
 <style>
+.calendar-wrap {
+	position: relative;
+}
 .tui-full-calendar-timegrid-container {
 	height: 300px !important;
 }

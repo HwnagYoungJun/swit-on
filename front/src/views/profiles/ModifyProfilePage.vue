@@ -4,13 +4,14 @@
 		autocomplete="off"
 		@submit.prevent="modifyData"
 	>
-		<img
-			class="img-box"
-			src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.0-9/51195329_2188965328018448_6283346633593716736_n.jpg?_nc_cat=110&_nc_sid=85a577&_nc_ohc=oEFV7dFTDEwAX9IiKKx&_nc_ht=scontent-ssn1-1.xx&oh=91b2c49439a416691eccd803c50bd221&oe=5F4024D8"
-			alt="profile_img"
-		/>
+		<img class="img-box" id="img-box" :src="profileImgCom" alt="profile_img" />
 		<div class="img-change">
-			<input type="file" />
+			<input
+				ref="inputFile"
+				id="inputFile"
+				type="file"
+				@change="onChangeFile"
+			/>
 		</div>
 		<h2>{{ email }}</h2>
 		<div class="input-container">
@@ -40,40 +41,71 @@
 </template>
 
 <script>
-import axios from 'axios';
-
+import { baseAuth } from '@/api/index';
+import { mapMutations } from 'vuex';
 export default {
+	props: {
+		userName: String,
+	},
 	data() {
 		return {
+			swichFile: false,
 			email: null,
-			name: null,
 			introduce: null,
+			profileImg: null,
+			name: this.$store.state.name ? this.$store.state.name : this.userName,
+			pastName: null,
 		};
 	},
-	method: {
-		// 태인이형님이 만들어 두신걸 알지만 제가 만듭니다 ㅎㅎ
+	methods: {
+		...mapMutations(['setUserName']),
+
+		onChangeFile() {
+			this.profileImg = this.$refs.inputFile.files[0];
+			var tempImg = this.$refs.inputFile.files[0];
+			var reader = new FileReader();
+			reader.readAsDataURL(tempImg);
+			reader.onload = function() {
+				document.querySelector('#img-box').src = reader.result;
+			};
+			this.swichFile = true;
+		},
 		async fetchData() {
 			try {
-				const res = await axios.get('http://200.20.20.20/accounts/');
-				this.email = res.email;
-				this.name = res.name;
-				this.introduce = res.introduce;
+				const { data } = await baseAuth.get(`accounts/${this.name}`);
+				this.email = data.email;
+				this.introduce = data.introduce;
+				this.name = data.name;
+				this.profileImg = data.profile_image;
 			} catch (err) {
-				console.log(err.msg);
+				console.log(err);
 			}
 		},
 		async modifyData() {
 			try {
-				await axios.put('유알엘을 씁시다', {
-					name: this.name,
-					introduce: this.introduce,
-				});
+				const formdata = new FormData();
+				formdata.append('name', this.name);
+				formdata.append('introduce', this.introduce);
+				formdata.append('img', this.profileImg);
+				await baseAuth.put(`accounts/${this.pastName}`, formdata);
+				this.setUserName(this.name);
+				this.$router.push(`profile/${this.name}`);
 			} catch (err) {
 				console.log(err);
 			}
 		},
 	},
+	created() {
+		this.pastName = this.name;
+		this.fetchData();
+	},
 	computed: {
+		profileImgCom() {
+			return this.swichFile ? null : `${this.baseURL}${this.profileImg}`;
+		},
+		baseURL() {
+			return process.env.VUE_APP_API_URL;
+		},
 		isVaildIntro() {
 			var lenIntro = 0;
 			if (this.introduce !== null) {
@@ -82,9 +114,6 @@ export default {
 			var isVaild = lenIntro < 21 ? true : false;
 			return isVaild;
 		},
-	},
-	created() {
-		this.fetchData();
 	},
 };
 </script>

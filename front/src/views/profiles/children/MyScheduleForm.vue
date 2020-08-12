@@ -20,8 +20,7 @@
 <script>
 import 'tui-calendar/dist/tui-calendar.css';
 import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
-
-// If you use the default popups, use this.
+import { baseAuth } from '@/api/index';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 
@@ -29,46 +28,49 @@ export default {
 	components: {
 		Calendar,
 	},
+	props: {
+		userName: String,
+	},
+	created() {
+		this.fetchData();
+	},
+	methods: {
+		async fetchData() {
+			const { data } = await baseAuth.get(
+				`/accounts/${this.userName}/myschedule/`,
+			);
+			this.calendarList = data.reduce((acc, el) => {
+				if (acc.findIndex(i => i.name === el.schedule.study_name) === -1) {
+					acc.push({
+						id: el.schedule.study_id,
+						name: el.schedule.study_name,
+					});
+				}
+				return acc;
+			}, []);
+
+			this.scheduleList = data.reduce((acc, el, idx) => {
+				acc.push({
+					id: idx,
+					calendarId: el.schedule.study_id,
+					title: el.schedule.title,
+					category: 'time',
+					dueDateClass: '',
+					start: el.schedule.start,
+					end: el.schedule.end,
+					color: el.schedule.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
+					bgColor: el.schedule.bg_color,
+					dragBgColor: el.schedule.bg_color,
+					borderColor: el.schedule.bg_color,
+				});
+				return acc;
+			}, []);
+		},
+	},
 	data() {
 		return {
-			calendarList: [
-				{
-					id: '0',
-					name: 'home',
-				},
-				{
-					id: '1',
-					name: 'office',
-				},
-			],
-			scheduleList: [
-				{
-					id: '1',
-					calendarId: '1',
-					title: 'my schedule',
-					category: 'time',
-					dueDateClass: '',
-					start: '2020-07-27T12:30:00+09:00',
-					end: '2020-07-31T17:31:00+09:00',
-					color: '#ffffff',
-					bgColor: '#ff5583',
-					dragBgColor: '#ff5583',
-					borderColor: '#ff5583',
-				},
-				{
-					id: '2',
-					calendarId: '1',
-					title: 'second schedule',
-					category: 'time',
-					dueDateClass: '',
-					start: '2020-08-01T12:30:00+09:00',
-					end: '2020-08-05T17:31:00+09:00',
-					color: '#ffffff',
-					bgColor: '#ff5583',
-					dragBgColor: '#ff5583',
-					borderColor: '#ff5583',
-				},
-			],
+			calendarList: [],
+			scheduleList: null,
 			view: 'month',
 			taskView: false,
 			scheduleView: ['time'],
@@ -95,7 +97,7 @@ export default {
 				},
 			],
 			disableDblClick: true,
-			isReadOnly: false,
+			isReadOnly: true,
 			template: {
 				milestone: function(schedule) {
 					return `<span style="color:red;">${schedule.title}</span>`;

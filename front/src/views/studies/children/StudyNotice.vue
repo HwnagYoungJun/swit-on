@@ -1,6 +1,10 @@
 <template>
 	<div class="card-wrap">
+		<div v-if="!articles">
+			<ArticleNotFound />
+		</div>
 		<router-link
+			v-else
 			v-for="article in articles"
 			:key="article.id"
 			:to="{
@@ -12,7 +16,11 @@
 				},
 			}"
 		>
-			<ArticleCard :article="article" />
+			<ArticleCard :article="article">
+				<div slot="logo">
+					<img src="@/assets/dd.png" alt="" />
+				</div>
+			</ArticleCard>
 		</router-link>
 		<ArticleAddBtn boardName="notice" />
 	</div>
@@ -21,6 +29,7 @@
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
+import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import { fetchArticles } from '@/api/articles';
 export default {
 	props: {
@@ -28,18 +37,19 @@ export default {
 	},
 	data() {
 		return {
-			articles: [],
+			articles: null,
 		};
 	},
 	components: {
 		ArticleCard,
 		ArticleAddBtn,
+		ArticleNotFound,
 	},
 	methods: {
 		async fetchNotice() {
 			const studyId = this.id;
 			const { data } = await fetchArticles(studyId, 'notice');
-			this.articles = data.reverse();
+			this.articles = data.length ? data : null;
 		},
 	},
 	created() {

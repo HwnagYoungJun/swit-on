@@ -14,7 +14,7 @@
 <script>
 import axios from 'axios';
 import StudyCard from '@/components/common/StudyCard.vue';
-
+import { lowerCategoryId } from '@/utils/category';
 export default {
 	components: {
 		StudyCard,
@@ -27,13 +27,21 @@ export default {
 		};
 	},
 	props: {
+		upperCategory: Number,
 		lowerCategory: String,
 	},
 	watch: {
 		lowerCategory() {
 			this.studies = [];
-			this.fetchStudy();
-			console.log(this.lowerCategory);
+			if (this.lowerCategory === '전체') {
+				this.fetchUpperStudy();
+			} else {
+				this.fetchLowerStudy();
+			}
+		},
+		$route() {
+			this.studies = [];
+			this.fetchUpperStudy();
 		},
 	},
 	computed: {
@@ -42,46 +50,21 @@ export default {
 		},
 	},
 	methods: {
-		async fetchStudy() {
+		async fetchUpperStudy() {
 			const { data } = await axios.get(`${this.baseURL}study`, {
 				params: {
-					lowercategory_id: this.lowerCategoryId(this.lowerCategory),
+					uppercategory_id: this.upperCategory,
 				},
 			});
-			console.log(this.lowerCategoryId(this.lowerCategory));
 			this.studies = data;
 		},
-		lowerCategoryId(lowerCategoryString) {
-			switch (lowerCategoryString) {
-				case 'Django':
-					return 1;
-				case 'Spring':
-					return 2;
-				case 'Node.js':
-					return 3;
-				case 'Vue':
-					return 4;
-				case 'React':
-					return 5;
-				case 'html/CSS':
-					return 6;
-				case 'JS':
-					return 7;
-				case 'DB':
-					return 8;
-				case '기타':
-					return 9;
-				case '안드로이드':
-					return 10;
-				case 'IOS':
-					return 11;
-				case '플러터':
-					return 12;
-				case '리액트네이티브':
-					return 13;
-				case '파이썬':
-					return 15;
-			}
+		async fetchLowerStudy() {
+			const { data } = await axios.get(`${this.baseURL}study`, {
+				params: {
+					lowercategory_id: lowerCategoryId(this.lowerCategory),
+				},
+			});
+			this.studies = data;
 		},
 	},
 };
@@ -95,22 +78,25 @@ export default {
 }
 .study-box {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 	width: 100%;
 	flex-wrap: wrap;
 	.study-li {
 		width: 20%;
+		margin: 0 2.5%;
 		overflow: hidden;
 	}
 	@media screen and (max-width: 1024px) {
 		.study-li {
 			width: 30%;
+			margin: 0 1.65%;
 			overflow: hidden;
 		}
 	}
 	@media screen and (max-width: 640px) {
 		.study-li {
 			width: 45%;
+			justify-content: space-between;
 			overflow: hidden;
 		}
 	}

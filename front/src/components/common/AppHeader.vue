@@ -11,18 +11,7 @@
 					<img v-else src="@/assets/color.png" alt="logo" class="switon"
 				/></router-link>
 			</div>
-			<label for="search" class="a11y-hidden">search: </label>
-			<input
-				@keypress.enter="
-					check();
-					reset();
-				"
-				v-model="searchData"
-				type="search"
-				id="search"
-				placeholder="소모임을 검색하세요"
-			/>
-			<i class="icon ion-md-search nav-search-icon"></i>
+			<Search />
 		</div>
 		<nav class="nav-router">
 			<template v-if="!isUserLogin">
@@ -31,32 +20,49 @@
 				>
 			</template>
 			<template v-else>
-				<router-link class="nav-router-item" :to="{ name: 'addstudy' }"
-					>만들기</router-link
-				>
 				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
-					>뉴스피드</router-link
-				>
+					><span class="nav-router-full">뉴스피드</span
+					><i class="icon ion-md-home nav-router-medium"></i
+				></router-link>
+				<router-link class="nav-router-item" :to="{ name: 'addstudy' }"
+					><span class="nav-router-full">만들기</span
+					><i class="icon ion-md-add nav-router-medium"></i
+				></router-link>
 				<a class="nav-router-item" href="javascript:;" @click="logoutUser"
-					>로그아웃</a
-				>
+					><span class="nav-router-full">로그아웃</span
+					><i class="icon ion-md-power nav-router-medium"></i
+				></a>
 			</template>
-			<router-link class="nav-router-item" :to="{ name: 'mypage' }"
-				><img class="nav-router-img" src="@/assets/logo.png" alt="프로필"
+			<router-link v-if="name" class="nav-router-item" :to="`/profile/${name}`"
+				><img
+					class="nav-router-img"
+					:src="`${baseURL}${profileImg}`"
+					alt="프로필"
 			/></router-link>
 		</nav>
 	</header>
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
+import { baseAuth } from '@/api/index';
+import Search from '@/components/common/Search.vue';
+
 export default {
 	data() {
 		return {
-			searchData: '',
+			userName: this.name ? this.name : null,
+			profileImg: null,
 		};
 	},
+	components: {
+		Search,
+	},
 	computed: {
+		...mapState(['name']),
+		baseURL() {
+			return process.env.VUE_APP_API_URL;
+		},
 		isUserLogin() {
 			return this.$store.getters.isLogin;
 		},
@@ -66,16 +72,23 @@ export default {
 	},
 	methods: {
 		...mapMutations(['clearUserEmail', 'clearToken']),
+		async fetchImg() {
+			const { data } = await baseAuth.get('accounts/');
+			this.profileImg = data.profile_image;
+		},
 		logoutUser() {
 			this.clearUserEmail();
 			this.clearToken();
 			this.$cookies.remove('auth-token');
-			this.$cookies.remove('email');
+			this.$cookies.remove('name');
 			this.$router.push({ name: 'main' });
 		},
 		onChangeSearch(val) {
 			this.searchData = val;
 		},
+	},
+	created() {
+		this.fetchImg();
 	},
 };
 </script>
@@ -92,24 +105,31 @@ header {
 		justify-content: flex-start;
 	}
 }
+.list-block {
+	display: block;
+}
+.list-none {
+	display: none;
+}
 .nav-white {
 	background: none;
 	color: white;
-	.switon {
-		// display: none;
-	}
 	#search {
-		display: none;
-	}
-	i {
 		display: none;
 	}
 	.nav-router-item {
 		color: white;
 	}
+	i {
+		color: white;
+		font-size: 24px;
+		font-weight: 600;
+	}
 }
 .switon-logo {
-	padding-bottom: 0;
+	// padding-bottom: 0;
+	display: flex;
+	align-items: center;
 }
 .switon {
 	@include scale(width, 50px);
@@ -120,24 +140,6 @@ header {
 	align-items: center;
 	.nav-logo {
 		@include scale(margin-right, 32px);
-	}
-	#search {
-		@include scale(width, 400px);
-		padding: 0.8rem 2rem 0.8rem 0.75rem;
-		font-size: $font-light;
-		border: 1px solid #dbdbdb;
-		color: -internal-light-dark(black, white);
-		box-shadow: rgba(0, 0, 0, 0.04) 0px 0px 1px 0px,
-			rgba(41, 42, 43, 0.16) 0px 1px 3px 0px;
-		border-radius: 3px;
-		transition: all 0.35s ease;
-		&:focus {
-			outline: none;
-			background: rgb(248, 248, 249);
-			border: none;
-			@include scale(width, 420px);
-			box-shadow: none;
-		}
 	}
 	.nav-search-icon {
 		position: absolute;
@@ -155,13 +157,30 @@ header {
 	.nav-router-item {
 		margin-right: 0.5rem;
 	}
+	.nav-router-full {
+		display: inline;
+	}
+	.nav-router-medium {
+		display: none;
+	}
 	.nav-router-img {
 		width: 2rem;
+		height: 2rem;
 		border-radius: 50%;
 		object-fit: cover;
+		border: 0.5px solid purple;
 	}
-	@media screen and (max-width: 640px) {
-		display: none;
+	@media screen and (max-width: 768px) {
+		.nav-router-full {
+			display: none;
+		}
+		.nav-router-medium {
+			display: inline;
+		}
+		i {
+			font-size: 24px;
+			font-weight: 600;
+		}
 	}
 }
 .a11y-hidden {

@@ -18,6 +18,7 @@ function createStudy(studyData) {
 	formdata.append('start_term', studyData.start_term);
 	formdata.append('end_term', studyData.end_term);
 	formdata.append('week', studyData.week);
+	formdata.append('users_limit', studyData.users_limit);
 
 	return study.post('/', formdata);
 }
@@ -34,6 +35,9 @@ function fetchStudy(studyId) {
 	return study.get(`/${studyId}`);
 }
 
+function searchStudy(query) {
+	return study.get(`?keyword=${query}`);
+}
 function JoinStudy(studyId) {
 	return study.post(`/${studyId}/join`);
 }
@@ -44,5 +48,6 @@ export {
 	deleteStudy,
 	updateStudy,
 	fetchStudy,
+	searchStudy,
 	JoinStudy,
 };

@@ -6,6 +6,14 @@ Vue.use(VueRouter);
 
 const routes = [
 	{
+		path: '/study/:study_id/schedule',
+		name: 'makeschedule',
+		props: route => ({
+			study_id: Number(route.params.study_id),
+		}),
+		component: () => import('@/views/calendar/makeScheduleForm.vue'),
+	},
+	{
 		path: '/',
 		name: 'main',
 		component: () => import('@/views/Main.vue'),
@@ -14,6 +22,15 @@ const routes = [
 		path: '/study',
 		name: 'studies',
 		component: () => import('@/views/studies/StudyPage.vue'),
+	},
+	{
+		path: '/study/room/:room',
+		name: 'room',
+		props: route => ({
+			room: String(route.params.room),
+		}),
+		component: () => import('@/views/studies/StudyRoomPage.vue'),
+		beforeEnter,
 	},
 	{
 		path: '/study/new',
@@ -64,6 +81,11 @@ const routes = [
 				name: 'qna',
 				component: () => import('@/views/studies/children/StudyQuestion.vue'),
 			},
+			{
+				path: 'meeting',
+				name: 'meeting',
+				component: () => import('@/views/studies/children/StudyMeeting.vue'),
+			},
 		],
 	},
 	{
@@ -109,8 +131,11 @@ const routes = [
 		},
 	},
 	{
-		path: '/mypage/',
-		name: 'mypage',
+		path: '/profile/:userName',
+		name: 'profile',
+		props: route => ({
+			userName: String(route.params.userName),
+		}),
 		component: () => import('@/views/profiles/ProfilePage.vue'),
 		children: [
 			{

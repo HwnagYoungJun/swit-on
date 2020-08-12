@@ -1,72 +1,100 @@
 <template>
 	<div class="card">
 		<div class="card-info">
-			<p class="card-info-title">{{ article.title }}</p>
-			<div>
-				<span class="study-info">
-					<img src="@/assets/color.png" alt="" />
-					<span>{{ article.study.name }}</span>
-				</span>
-				<span class="user-info">
+			<div class="card-img">
+				<slot name="logo">
 					<img src="@/assets/dd.png" alt="" />
-					<span>{{ article.user.name }}</span>
-				</span>
-				<p>{{ article.created_at | formatDate }}</p>
+					<!-- {{ article.study.name }} -->
+				</slot>
 			</div>
-		</div>
-		<div class="card-content">
-			<p>{{ article.content }}</p>
+			<div class="card-content">
+				<p class="card-info-title">
+					{{ article.title }}
+					<span class="bread-span"><slot name="bread"> </slot></span>
+				</p>
+				<p>
+					<span v-if="article.user">
+						<span class="card-info-user">{{ article.user.name }}</span>
+					</span>
+					<span class="card-info-time">{{
+						article.created_at | formatDate
+					}}</span>
+				</p>
+				<p class="card-content-viewer">
+					<!-- <Viewer :initialValue="article.content | truncate" /> -->
+					<!-- {{ article.content | truncate }} -->
+				</p>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+// import Viewer from '@toast-ui/vue-editor/src/Viewer.vue';
+
 export default {
 	props: {
 		article: Object,
+	},
+	components: {
+		// Viewer,
 	},
 };
 </script>
 
 <style lang="scss" scoped>
 .card {
-	width: 505px;
-	margin: 10px 5px 50px;
-	padding: 15px;
-	border-bottom: 1px solid rgb(228, 228, 228);
+	width: 480px;
+	height: 150px;
+	margin: 10px 5px 10px;
+	// padding: 20px 10px;
+	border-radius: 5px;
+	background: #fff;
+	box-shadow: 0px 5px 4px rgba(175, 175, 175, 0.2);
+	position: relative;
+	overflow: hidden;
+	// &::before {
+	// 	content: '';
+	// 	display: block;
+	// 	width: 150px;
+	// 	height: 200px;
+	// 	background: $btn-purple-opacity;
+	// 	position: absolute;
+	// 	transform: translate(-55px, -30px) skewX(23deg);
+	// }
 	.card-info {
-		margin-bottom: 30px;
+		display: flex;
+		align-items: center;
 		font-size: $font-light;
 		position: relative;
-		.card-info-title {
-			margin-bottom: 8px;
-			font-size: $font-bold;
-		}
-		div {
-			color: rgb(90, 90, 90);
-			.study-info {
-				display: flex;
-				// flex-direction: column;
-				// justify-content: center;
-				align-items: center;
-				img {
-					margin-right: 5px;
-					width: 20px;
-				}
+		overflow: hidden;
+		.card-img {
+			flex: 1;
+			display: grid;
+			place-items: center;
+			img {
+				width: 80%;
+				// border-radius: 50%;
 			}
-			.user-info {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				position: absolute;
-				top: 10px;
-				right: 10px;
-				img {
-					width: 50px;
+		}
+		.card-content {
+			flex: 2;
+			.card-info-title {
+				margin-bottom: 8px;
+				font-size: $font-bold;
+				position: relative;
+				.bread-span {
+					position: absolute;
+					bottom: 3px;
+					margin-left: 10px;
+					font-size: $font-light;
 				}
 			}
 			p {
 				margin-top: 10px;
+			}
+			span {
+				margin-right: 10px;
 			}
 		}
 	}

@@ -1,16 +1,13 @@
 <template>
-	<button class="add-btn" @click="addArticle">새 글 작성</button>
+	<button class="add-btn" @click="addSchedule">일정 생성</button>
 </template>
 
 <script>
 export default {
-	props: {
-		boardName: String,
-	},
 	methods: {
-		addArticle() {
+		addSchedule() {
 			const studyId = this.$route.params.id;
-			this.$router.push(`/study/${studyId}/${this.boardName}/new`);
+			this.$router.push(`/study/${studyId}/schedule`);
 		},
 	},
 };
@@ -27,6 +24,9 @@ export default {
 	position: absolute;
 	right: 0;
 	top: -50px;
+	&:focus {
+		outline: none;
+	}
 	&:hover {
 		color: $main-color;
 		background: #fff;

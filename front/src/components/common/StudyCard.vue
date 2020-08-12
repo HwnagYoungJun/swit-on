@@ -1,21 +1,23 @@
 <template>
 	<div class="card">
-		<div class="img-box">
-			<img src="@/assets/cloud.png/" alt="" />
-		</div>
-		<div class="etc-box">
-			<div>
-				<h3>{{ studyData.name }}</h3>
+		<router-link :to="`/study/${studyData.id}`">
+			<div class="img-box">
+				<img :src="`${BaseUrl}${studyData.logo}`" alt="logo_img" />
 			</div>
-			<div>
-				<span>{{ studyData.posPeople }} / {{ studyData.maxPeople }}명</span>
+			<div class="etc-box">
+				<div>
+					<h3>{{ studyData.name }}</h3>
+				</div>
+				<div>
+					<span>{{ studyData.posPeople }} / {{ studyData.maxPeople }}명</span>
+				</div>
+				<div>
+					<p>{{ studyData.week }}</p>
+					<p>{{ studyData.startTime }} ~ {{ studyData.endTime }}</p>
+					<p class="expireDay">{{ studyData.expireDay }} 까지</p>
+				</div>
 			</div>
-			<div>
-				<p>{{ studyData.week }}</p>
-				<p>{{ studyData.startTime }} ~ {{ studyData.endTime }}</p>
-				<p class="expireDay">{{ studyData.expireDay }} 까지</p>
-			</div>
-		</div>
+		</router-link>
 	</div>
 </template>
 
@@ -33,6 +35,7 @@ export default {
 				expireDay: this.$props.study.end_term,
 				posPeople: this.$props.study.users_current,
 				maxPeople: this.$props.study.users_limit,
+				logo: this.$props.study.logo,
 			},
 		};
 	},
@@ -45,6 +48,9 @@ export default {
 	computed: {
 		weekArray() {
 			return formatWeekday(this.$props.study.week);
+		},
+		BaseUrl() {
+			return process.env.VUE_APP_API_URL;
 		},
 	},
 	created() {

@@ -3,15 +3,16 @@
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
 				<li>
-					<router-link :to="`/category/${study.uppercategory_name}`">{{
-						study.uppercategory_name
-					}}</router-link
+					<router-link
+						:to="`/category/${study.uppercategory_name}`"
+						tabindex="-1"
+						>{{ study.uppercategory_name }}</router-link
 					><span aria-hidden="true">></span>
 				</li>
 				<li>
-					<router-link :to="`/study/${id}`" aria-current="page"
-						>python 소모임</router-link
-					>
+					<router-link :to="`/study/${id}`" aria-current="page" tabindex="-1">{{
+						study.name
+					}}</router-link>
 				</li>
 			</ol>
 		</nav>
@@ -24,11 +25,12 @@
 					{{ study.week | formatWeekday }}
 					{{ study.start_time }}시-{{ study.end_time }}시
 				</p>
+				<!-- <small>{{ study }}</small> -->
 				<small>{{ study.users_current }}/{{ study.users_limit }}명</small>
 			</div>
 			<div class="study-logo">
-				<img v-if="study.logo" :src="study.logo" alt="" />
-				<!-- <img src="@/assets/django.png" alt="" /> -->
+				<img v-if="study.logo" :src="`${BaseUrl}${study.logo}`" alt="" />
+				<img v-else src="@/assets/django.png" alt="" />
 			</div>
 		</div>
 		<div v-if="isJoined" class="study-category">
@@ -39,15 +41,16 @@
 			<router-link :to="{ name: 'repository' }"
 				>저장소<span></span
 			></router-link>
-			<router-link :to="{ name: 'notice' }">공지<span></span></router-link>
 			<router-link :to="{ name: 'qna' }">Q&A<span></span></router-link>
+			<router-link :to="{ name: 'notice' }">공지<span></span></router-link>
+			<router-link :to="{ name: 'meeting' }">회의<span></span></router-link>
 			<hr />
 			<div class="study-sub-content">
-				<router-view :id="id"></router-view>
+				<router-view :id="id" :isLeader="isLeader"></router-view>
 			</div>
 		</div>
 		<div v-else class="study-sub-content">
-			<p class="title">{{ study.name }} 소개</p>
+			<p class="title">모임 소개</p>
 			<p>
 				{{ study.description }}
 			</p>
@@ -65,6 +68,7 @@ export default {
 	data() {
 		return {
 			isJoined: false,
+			isLeader: null,
 			study: {},
 		};
 	},
@@ -75,6 +79,7 @@ export default {
 			console.log(data);
 			this.study = data.study;
 			this.isJoined = data.isJoined;
+			this.isLeader = data.isLeader;
 		},
 		async studyJoin() {
 			const studyId = this.id;
@@ -82,18 +87,26 @@ export default {
 			this.fetchData();
 		},
 	},
+	computed: {
+		BaseUrl() {
+			return process.env.VUE_APP_API_URL;
+		},
+	},
 	created() {
 		this.fetchData();
 	},
-	// watch: {
-	// 	id() {
-	// 		this.fetchData();
-	// 	},
-	// },
+	watch: {
+		id() {
+			this.fetchData();
+		},
+	},
 };
 </script>
 
 <style lang="scss">
+.study-main {
+	margin-bottom: 2rem;
+}
 .breadcrumb {
 	ol {
 		padding: 0;
@@ -111,20 +124,29 @@ export default {
 	}
 }
 .study-description {
-	display: flex;
+	width: 100%;
+	height: 14rem;
+	display: grid;
+	grid-template-areas: 'content logo';
+	grid-template-rows: 100%;
+	grid-template-columns: 60% 40%;
 	margin-bottom: 30px;
 	padding: 2%;
 	color: rgb(107, 107, 107);
 	box-shadow: 0 3px 6px rgb(214, 214, 214);
 	border-radius: 4px;
 	.study-logo {
-		flex: 1.5;
+		grid-area: logo;
+		width: 100%;
+		height: 100%;
 		img {
 			width: 100%;
+			height: 100%;
+			object-fit: fill;
 		}
 	}
 	.study-content {
-		flex: 2;
+		grid-area: content;
 		margin: 0 30px;
 		p {
 			margin: 5px 0;
@@ -135,6 +157,31 @@ export default {
 		}
 	}
 }
+// .study-description {
+// 	display: flex;
+// 	margin-bottom: 30px;
+// 	padding: 2%;
+// 	color: rgb(107, 107, 107);
+// 	box-shadow: 0 3px 6px rgb(214, 214, 214);
+// 	border-radius: 4px;
+// 	.study-logo {
+// 		flex: 1.5;
+// 		img {
+// 			width: 100%;
+// 		}
+// 	}
+// 	.study-content {
+// 		flex: 2;
+// 		margin: 0 30px;
+// 		p {
+// 			margin: 5px 0;
+// 		}
+// 		.study-title {
+// 			margin-bottom: 10px;
+// 			font-size: $font-bold;
+// 		}
+// 	}
+// }
 .study-category {
 	a {
 		display: inline-block;

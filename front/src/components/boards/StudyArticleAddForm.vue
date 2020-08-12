@@ -20,6 +20,7 @@
 				placeholder="제목을 입력해주세요"
 				class="articleform-input"
 				v-model="title"
+				required
 			/>
 			<Editor
 				ref="toastuiEditor"

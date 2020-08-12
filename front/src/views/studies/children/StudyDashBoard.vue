@@ -1,45 +1,73 @@
 <template>
 	<div class="dashboard-wrap">
+		<scheduleAddBtn v-if="isLeader" />
+
 		<div class="card-wrap">
-			<router-link
-				:key="article.id"
-				v-for="article in qnaArticles"
-				:to="{
-					name: 'BoardArticleDetail',
-					params: {
-						id,
-						board_name: 'repository',
-						article_id: article.id,
-					},
-				}"
-				><ArticleCard :article="article"
-			/></router-link>
-			<router-link
-				:key="article.id"
-				v-for="article in repositoryArticles"
-				:to="{
-					name: 'BoardArticleDetail',
-					params: {
-						id,
-						board_name: 'repository',
-						article_id: article.id,
-					},
-				}"
-				><ArticleCard :article="article"
-			/></router-link>
-			<router-link
-				:key="article.id"
-				v-for="article in noticeArticles"
-				:to="{
-					name: 'BoardArticleDetail',
-					params: {
-						id,
-						board_name: 'notice',
-						article_id: article.id,
-					},
-				}"
-				><ArticleCard :article="article"
-			/></router-link>
+			<div v-if="!articles">
+				<ArticleNotFound />
+			</div>
+			<div v-else>
+				<router-link
+					:key="article.id"
+					v-for="article in qnaArticles"
+					:to="{
+						name: 'BoardArticleDetail',
+						params: {
+							id,
+							board_name: 'repository',
+							article_id: article.id,
+						},
+					}"
+					><ArticleCard :article="article">
+						<div slot="logo">
+							<img src="@/assets/dd.png" alt="" />
+						</div>
+						<div slot="bread">
+							<span>web>python</span>
+						</div>
+					</ArticleCard>
+				</router-link>
+				<router-link
+					:key="article.id"
+					v-for="article in repositoryArticles"
+					:to="{
+						name: 'BoardArticleDetail',
+						params: {
+							id,
+							board_name: 'repository',
+							article_id: article.id,
+						},
+					}"
+					><ArticleCard :article="article">
+						<div slot="logo">
+							<img src="@/assets/color.png" alt="" />
+						</div>
+						<div slot="bread">
+							<span>web>python</span>
+						</div>
+					</ArticleCard>
+				</router-link>
+				<router-link
+					:key="article.id"
+					v-for="article in noticeArticles"
+					:to="{
+						name: 'BoardArticleDetail',
+						params: {
+							id,
+							board_name: 'notice',
+							article_id: article.id,
+						},
+					}"
+					><ArticleCard :article="article">
+						<div slot="logo">
+							<img src="@/assets/dd.png" alt="" />
+						</div>
+						<div slot="bread">
+							<span>web>python</span>
+						</div>
+					</ArticleCard>
+				</router-link>
+			</div>
 		</div>
 		<aside>
 			<div class="schedule">
@@ -82,9 +110,12 @@
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import { fetchArticles } from '@/api/articles';
+import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
+import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 export default {
 	props: {
 		id: Number,
+		isLeader: Boolean,
 	},
 	data() {
 		return {
@@ -95,6 +126,8 @@ export default {
 	},
 	components: {
 		ArticleCard,
+		scheduleAddBtn,
+		ArticleNotFound,
 	},
 	methods: {
 		async fetchData() {
@@ -102,9 +135,9 @@ export default {
 			const {
 				data: { notice, repository, qna },
 			} = await fetchArticles(studyId, 'dashboard');
-			this.repositoryArticles = repository;
-			this.noticeArticles = notice;
-			this.qnaArticles = qna;
+			this.repositoryArticles = repository.length ? repository : null;
+			this.noticeArticles = notice.length ? notice : null;
+			this.qnaArticles = qna.length ? qna : null;
 		},
 	},
 	created() {
@@ -116,6 +149,7 @@ export default {
 <style lang="scss" scoped>
 .dashboard-wrap {
 	display: flex;
+	position: relative;
 	@media screen and (max-width: 1350px) {
 		flex-direction: column-reverse;
 	}
