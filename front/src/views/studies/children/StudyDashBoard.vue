@@ -3,7 +3,7 @@
 		<scheduleAddBtn v-if="isLeader" />
 
 		<div class="card-wrap">
-			<div v-if="!articles">
+			<div v-if="!isArticles">
 				<ArticleNotFound />
 			</div>
 			<div v-else>
@@ -123,6 +123,11 @@ export default {
 			noticeArticles: null,
 			qnaArticles: null,
 		};
+	},
+	computed: {
+		isArticles() {
+			return this.repositoryArticles || this.noticeArticles || this.qnaArticles;
+		},
 	},
 	components: {
 		ArticleCard,
