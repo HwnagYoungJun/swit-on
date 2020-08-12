@@ -15,4 +15,25 @@ function fetchProfile(userName) {
 	return baseAuth.get(`accounts/${userName}`);
 }
 
-export { registerUser, loginUser, fetchProfile };
+function fetchMyStudy(userName) {
+	console.log(`accounts/${userName}/mystudy`);
+	return baseAuth.get(`accounts/${userName}/mystudy`);
+}
+
+function fetchMyRepository(userName) {
+	console.log(`accounts/${userName}/myrepository`);
+	return baseAuth.get(`accounts/${userName}/myrepository`);
+}
+function fetchMyQNA(userName) {
+	console.log(`accounts/${userName}/myqna`);
+	return baseAuth.get(`accounts/${userName}/myqna`);
+}
+
+export {
+	registerUser,
+	loginUser,
+	fetchProfile,
+	fetchMyStudy,
+	fetchMyRepository,
+	fetchMyQNA,
+};

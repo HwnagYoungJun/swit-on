@@ -13,7 +13,9 @@
 					<span class="bread-span"><slot name="bread"> </slot></span>
 				</p>
 				<p>
-					<span class="card-info-user">{{ article.user.name }}</span>
+					<span v-if="article.user">
+						<span class="card-info-user">{{ article.user.name }}</span>
+					</span>
 					<span class="card-info-time">{{
 						article.created_at | formatDate
 					}}</span>
