@@ -1,5 +1,6 @@
 package com.ssafy.switon.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -46,6 +47,16 @@ public class ScheduleDAOImpl implements ScheduleDAO {
 	
 	public int selectRecentScheduleId(int userId) {
 		return sqlsession.selectOne("schedule.selectRecentScheduleId", userId);
+	}
+
+	@Override
+	public int finishSchedule(int id) {
+		return sqlsession.update("schedule.finishSchedule", id);
+	}
+
+	@Override
+	public List<Integer> selectNotFinishedScheduleIds(Timestamp time) {
+		return sqlsession.selectList("schedule.selectNotFinishedScheduleIds", time);
 	}
 
 }

@@ -24,10 +24,9 @@
 			lowercategory_id,
 			logo,
 			users_limit,
-			(select codunt(*) from `join` where study_id = study.id) as users_current
+			(select count(*) from `join` where study_id = study.id) as users_current
 		from study
 		where name like #{keyword}
-		or lowercategory_id in (select id from lowercategory where name like #{keyword})
 	</select>
 
 	<!-- 내가 만든 최신 스터디의 아이디 한개 가져오기 -->
@@ -39,7 +38,7 @@
 		limit 1
 	</select>
 	
-	<!-- 카테고리 아이디로 스터디 리스트 반환 -->
+	<!-- lower 카테고리 아이디로 스터디 리스트 반환 -->
 	<select id="selectStudiesByLowercategoryId" resultType="Study">
 		select id,
 			name,
@@ -131,7 +130,7 @@
 	
 	<!-- 스터디 생성 -->
 	<insert id="insertStudy" parameterType="Study">
-		insert into Study(
+		insert into study(
 				name,
 				user_id,
 				description,

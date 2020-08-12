@@ -104,4 +104,36 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return scheduleDAO.deleteSchedule(id)==1;
 	}
 
+	@Override
+	public String finishSchedules(Timestamp time) {
+		// 아직 종료되지 않은 스케줄 중에서 시간이 다 된 스케줄 검색
+		List<Integer> ids = scheduleDAO.selectNotFinishedScheduleIds(time);
+		String result;
+		if(ids.size() != 0) {
+			result = "스케줄 완료 작업 실행!! : ";			
+			// 해당 id의 유저 참가 정보를 검색하여 다음 작업을 수행
+			for(int id : ids) {
+				List<UserSchedule> userSchedules = userScheduleDAO.selectUserSchedulesByScheduleId(id);
+				result += id + "번 스케줄 작업 시작(";
+				for(UserSchedule userSchedule : userSchedules) {
+					int status = userSchedule.getStatus();
+					if((status & (1 << 2)) == 0) {
+						status += 4;
+					}
+					userSchedule.setStatus(status);
+					if(status == 7) {
+						userSchedule.setSuccess(true);
+					}
+					userScheduleDAO.updateSchedule(userSchedule);
+					result += userSchedule.getUser_id() + "번 유저 작업완료 |";
+				}
+				// 스케줄 종료 처리
+				scheduleDAO.finishSchedule(id);
+				result += "끝! )";
+			}
+			return result;
+		}
+		return null;
+	}
+
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.switon.dto.LowerCategory;
+import com.ssafy.switon.dto.LowerCategorySimpleDTO;
 import com.ssafy.switon.dto.UpperCategory;
 
 @Repository
@@ -47,7 +48,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 	}
 
 	@Override
-	public List<LowerCategory> selectLowByKeyword(String keyword) {
+	public List<LowerCategorySimpleDTO> selectLowByKeyword(String keyword) {
 		keyword = "%" + keyword + "%";
 		return sqlsession.selectList("category.selectLowerCategoryByKeyword", keyword);
 	}

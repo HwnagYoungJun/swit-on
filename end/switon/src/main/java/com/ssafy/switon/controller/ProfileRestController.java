@@ -129,7 +129,11 @@ public class ProfileRestController {
 	@ApiOperation(value = "유저가 가입한 스터디 목록을 반환한다.")
 	@GetMapping("{name}/mystudy")
 	public Object myStudyList(@PathVariable("name") String name) {
-		int userId = userService.searchUserIdByName(name);
+		if(name == null) {
+			System.out.println("스터디 목록 반환 실패 - 유저 닉네임에 널값");
+			return new ResponseEntity<>(new ReturnMsg("유저 닉네임을 받아올 수 없었습니다."), HttpStatus.OK);
+		}
+		Integer userId = userService.searchUserIdByName(name);
 		if(userId == 0) {
 			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
 		}

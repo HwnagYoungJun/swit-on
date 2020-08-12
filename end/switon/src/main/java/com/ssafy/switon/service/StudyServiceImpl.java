@@ -14,9 +14,12 @@ import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Join;
 import com.ssafy.switon.dto.Like;
 import com.ssafy.switon.dto.LowerCategory;
+import com.ssafy.switon.dto.LowerCategorySimpleDTO;
+import com.ssafy.switon.dto.SearchReturnDTO;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyCardDTO;
 import com.ssafy.switon.dto.StudyReturnDTO;
+import com.ssafy.switon.dto.StudySimple;
 import com.ssafy.switon.dto.UpperCategory;
 import com.ssafy.switon.dto.UserStudyInfoDTO;
 
@@ -83,6 +86,7 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	public List<UserStudyInfoDTO> searchUserStudies(int userId) {
 		List<UserStudyInfoDTO> list = new ArrayList<>();
+		System.out.println(userId + "번 유저의 스터디 찾기 시도");
 		List<Join> joins = joinDao.selectJoinsByUserId(userId);
 		for(Join join : joins) {
 			UserStudyInfoDTO dto = new UserStudyInfoDTO();
@@ -153,8 +157,17 @@ public class StudyServiceImpl implements StudyService {
 	}
 	
 	@Override
-	public List<Study> searchStudyByKeyword(String keyword) {
-		return studyDao.selectStudyByKeyword(keyword);
+	public SearchReturnDTO searchStudyByKeyword(String keyword) {
+		List<Study> originalStudies = studyDao.selectStudyByKeyword(keyword);
+		List<StudySimple> studies = new ArrayList<StudySimple>();
+		for(Study originalStudy : originalStudies) {
+			StudySimple study = new StudySimple(originalStudy);
+			studies.add(study);
+		}
+		List<LowerCategorySimpleDTO> lowercategories = categoryDao.selectLowByKeyword(keyword);
+		List<UpperCategory> uppercategories = categoryDao.selectUpByKeyword(keyword);
+		
+		return new SearchReturnDTO(studies, lowercategories, uppercategories);
 	}
 
 	

@@ -18,12 +18,14 @@ public interface UserScheduleDAO {
 	int updateSuccess(UserSchedule userSchedule);
 	// 스케쥴 삭제
 	int deleteUserSchedule(int id);
-	// 스케쥴 아이디로 참가한 유저 조회
-	
+	// 스케쥴 아이디로 유저 참가 정보들 조회
+	List<UserSchedule> selectUserSchedulesByScheduleId(int scheduleId);
 	// 스케줄 아이디의 모든 스케줄 참석정보 삭제
 	int deleteAllByScheduleId(int scheduleId);
 	// 스케줄 아이디 + 유저 아이디로 참석 정보 삭제
 	int deleteParticipate(UserSchedule userSchedule);
 	// 스케줄 아이디 + 유저 아이디로 참석 정보 조회
 	UserSchedule selectParticipate(UserSchedule userSchedule);
+	// 스케줄의 상태와 성공여부 동시에 변경... (나머지는 안 변경)
+	int updateSchedule(UserSchedule userSchedule);
 }

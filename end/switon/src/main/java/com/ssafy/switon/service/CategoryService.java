@@ -3,6 +3,7 @@ package com.ssafy.switon.service;
 import java.util.List;
 
 import com.ssafy.switon.dto.LowerCategory;
+import com.ssafy.switon.dto.LowerCategorySimpleDTO;
 import com.ssafy.switon.dto.UpperCategory;
 
 public interface CategoryService {
@@ -16,5 +17,5 @@ public interface CategoryService {
 	// 키워드로 대분류 조회
 	List<UpperCategory> searchUpByKeyword(String keyword);
 	// 키워드로 소분류 조회
-	List<LowerCategory> searchLowByKeyword(String keyword);
+	List<LowerCategorySimpleDTO> searchLowByKeyword(String keyword);
 }

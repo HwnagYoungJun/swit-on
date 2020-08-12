@@ -20,6 +20,13 @@
 		where user_id = #{user_id}
 	</select>
 	
+	<!-- 유저 아이디로 스케줄 조회 -->
+	<select id="selectUserSchedulesByScheduleId" resultType="UserSchedule">
+		select id, user_id, schedule_id, status, success
+		from userschedule
+		where schedule_id = #{scheduleId}
+	</select>
+	
 	<!-- 유저스케줄 생성 (* status는 자동으로 생성됨, 입력X) -->
 	<insert id="insertUserSchedule" parameterType="UserSchedule">
 		insert into `userschedule`(user_id, schedule_id)
@@ -37,6 +44,14 @@
 	<update id="updateSuccess" parameterType="UserSchedule">
 		update `userschedule`
 		set success = #{success}
+		where id = #{id}
+	</update>
+	
+	<!-- 스케줄의 상태와 성공여부 동시에 변경 -->
+	<update id="updateSchedule" parameterType="UserSchedule">
+		update `userschedule`
+		set success = #{success},
+			status = #{status}
 		where id = #{id}
 	</update>
 	

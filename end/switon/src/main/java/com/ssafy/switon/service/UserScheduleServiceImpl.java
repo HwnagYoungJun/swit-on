@@ -74,6 +74,10 @@ public class UserScheduleServiceImpl implements UserScheduleService {
 		int originalStatus = userSchedule.getStatus();
 		if((originalStatus & (1 << (status - 1))) == 0) {
 			userSchedule.setStatus(originalStatus + status);
+			if(userSchedule.getStatus() == 7) {
+				userSchedule.setSuccess(true);
+				userscheduleDAO.updateSuccess(userSchedule);
+			}
 		}
 		return userscheduleDAO.updateStatus(userSchedule)==1;
 	}

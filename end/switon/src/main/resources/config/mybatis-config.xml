@@ -6,7 +6,7 @@
 <package name="com.ssafy.switon.dto"/>
    </typeAliases>
    <mappers>
-      <mapper resource="mappers/User.xml" /> 
+      <mapper resource="mappers/User.xml" />  
       <mapper resource="mappers/Study.xml" />
       <mapper resource="mappers/Board.xml" />
       <mapper resource="mappers/Article.xml" />

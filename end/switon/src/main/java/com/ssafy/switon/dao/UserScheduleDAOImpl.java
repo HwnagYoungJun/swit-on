@@ -59,4 +59,14 @@ public class UserScheduleDAOImpl implements UserScheduleDAO {
 		return sqlsession.selectOne("userschedule.selectParticipate", userSchedule);
 	}
 
+	@Override
+	public int updateSchedule(UserSchedule userSchedule) {
+		return sqlsession.update("userschedule.updateSchedule", userSchedule);
+	}
+
+	@Override
+	public List<UserSchedule> selectUserSchedulesByScheduleId(int scheduleId) {
+		return sqlsession.selectList("userschedule.selectUserSchedulesByScheduleId", scheduleId);
+	}
+
 }

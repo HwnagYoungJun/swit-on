@@ -1,5 +1,6 @@
 package com.ssafy.switon.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.ssafy.switon.dto.Schedule;
@@ -19,5 +20,7 @@ public interface ScheduleService {
 	boolean updateSchedule(Schedule schedule);
 	// 스케쥴 삭제
 	boolean deleteSchedule(int id);
+	// 스케줄을 종료시켜주기
+	String finishSchedules(Timestamp time);
 	
 }

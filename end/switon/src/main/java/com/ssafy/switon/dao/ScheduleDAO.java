@@ -1,5 +1,6 @@
 package com.ssafy.switon.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.ssafy.switon.dto.Schedule;
@@ -20,4 +21,8 @@ public interface ScheduleDAO {
 	int deleteSchedule(int id);
 	// 이 사람이 가장 최근에 만든 스케줄 아이디 하나 반환
 	int selectRecentScheduleId(int userId);
+	// 스케줄 끝남 상태로 만들기
+	int finishSchedule(int id);
+	// 종료시간이 됐는데 아직 종료되지 않은 스케줄만 반환
+	List<Integer> selectNotFinishedScheduleIds(Timestamp time);
 }

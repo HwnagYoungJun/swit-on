@@ -6,6 +6,21 @@
 	
 <mapper namespace="schedule">
 
+	<!-- 종료처리 안 된 스케줄 중에서 시간이 다 된 스케줄 id만 반환 -->
+	<select id="selectNotFinishedScheduleIds" resultType="Integer">	
+		select id
+		from schedule
+		where isFinish = false
+		and end <![CDATA[ <= ]]> #{time}
+	</select>
+	
+	<!-- 종료처리 해주기 -->
+	<update id="finishSchedule">
+		update `schedule`
+		set isFinish = true
+		where id = #{id}
+	</update>
+
 	<!-- 모든 스케줄 조회(테스트용) -->
 	<select	id="selectAll" resultType="Schedule">
 		select id, study_id, title, start, end, bg_color, user_id
