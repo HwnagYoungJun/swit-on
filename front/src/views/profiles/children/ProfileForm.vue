@@ -97,10 +97,12 @@ export default {
 	flex-direction: column;
 	width: 100%;
 	.modify-profile {
-		border: 1px solid purple;
-		border-radius: 0.3rem;
+		@include common-btn();
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		margin-left: 3rem;
-		padding: 0.5rem;
+		width: 8rem;
 	}
 	.middle-box {
 		display: flex;

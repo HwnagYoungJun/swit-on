@@ -23,10 +23,9 @@
 <script>
 import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
 import { baseAuth } from '@/api/index';
-import 'tui-calendar/dist/tui-calendar.css';
-import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 
-// If you use the default popups, use this.
+import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
+import 'tui-calendar/dist/tui-calendar.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 
@@ -76,8 +75,8 @@ export default {
 	},
 	data() {
 		return {
-			calendarList: null,
-			scheduleList: null,
+			calendarList: [],
+			scheduleList: [],
 			view: 'month',
 			taskView: false,
 			scheduleView: ['time'],
