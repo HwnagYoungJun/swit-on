@@ -18,8 +18,9 @@
 						article.created_at | formatDate
 					}}</span>
 				</p>
-				<p>
-					{{ article.content | truncate }}
+				<p class="card-content-viewer">
+					<!-- <Viewer :initialValue="article.content | truncate" /> -->
+					<!-- {{ article.content | truncate }} -->
 				</p>
 			</div>
 		</div>
@@ -27,9 +28,14 @@
 </template>
 
 <script>
+// import Viewer from '@toast-ui/vue-editor/src/Viewer.vue';
+
 export default {
 	props: {
 		article: Object,
+	},
+	components: {
+		// Viewer,
 	},
 };
 </script>
@@ -37,22 +43,23 @@ export default {
 <style lang="scss" scoped>
 .card {
 	width: 480px;
-	margin: 10px 5px 50px;
-	padding: 30px 15px;
-	border-radius: 2px;
+	height: 150px;
+	margin: 10px 5px 10px;
+	// padding: 20px 10px;
+	border-radius: 5px;
 	background: #fff;
 	box-shadow: 0px 5px 4px rgba(175, 175, 175, 0.2);
 	position: relative;
 	overflow: hidden;
-	&::before {
-		content: '';
-		display: block;
-		width: 150px;
-		height: 200px;
-		background: $btn-purple-opacity;
-		position: absolute;
-		transform: translate(-85px, -30px) skewX(23deg);
-	}
+	// &::before {
+	// 	content: '';
+	// 	display: block;
+	// 	width: 150px;
+	// 	height: 200px;
+	// 	background: $btn-purple-opacity;
+	// 	position: absolute;
+	// 	transform: translate(-55px, -30px) skewX(23deg);
+	// }
 	.card-info {
 		display: flex;
 		align-items: center;
@@ -64,8 +71,8 @@ export default {
 			display: grid;
 			place-items: center;
 			img {
-				width: 100px;
-				border-radius: 50%;
+				width: 80%;
+				// border-radius: 50%;
 			}
 		}
 		.card-content {

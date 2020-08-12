@@ -36,7 +36,7 @@
 				}"
 				><ArticleCard :article="article">
 					<div slot="logo">
-						<img src="@/assets/dd.png" alt="" />
+						<img src="@/assets/color.png" alt="" />
 					</div>
 					<div slot="bread">
 						<span>web>python</span>

@@ -25,13 +25,42 @@
 					id="search"
 					placeholder="소모임을 검색하세요"
 				/>
-				<div v-if="searchedData" class="searched-datas">
-					<ul>
+				<div
+					v-if="searchedStudyData || searchedUpperData || searchedLowerData"
+					class="searched-datas"
+				>
+					<!-- <p v-if="searchedStudyData">스터디</p> -->
+					<ul v-if="searchedStudyData">
 						<li
-							v-for="data in searchedData"
+							v-for="data in searchedStudyData"
 							:key="data.id"
 							@click="moveStudy(data.id)"
 							@keyup.enter="moveStudy(data.id)"
+							tabindex="0"
+						>
+							{{ data.name }}
+						</li>
+					</ul>
+					<!-- <p v-if="searchedUpperData">상위카테고리</p> -->
+					<ul v-if="searchedUpperData">
+						<li
+							v-for="data in searchedUpperData"
+							:key="data.id"
+							@click="moveStudy(data.id)"
+							@keyup.enter="moveStudy(data.id)"
+							tabindex="0"
+						>
+							{{ data.name }}
+						</li>
+					</ul>
+					<!-- <p v-if="searchedLowerData">하위카테고리</p> -->
+					<ul v-if="searchedLowerData">
+						<li
+							v-for="data in searchedLowerData"
+							:key="data.id"
+							@click="moveStudy(data.id)"
+							@keyup.enter="moveStudy(data.id)"
+							tabindex="0"
 						>
 							{{ data.name }}
 						</li>
@@ -69,11 +98,17 @@
 <script>
 import { mapMutations, mapState } from 'vuex';
 import { searchStudy } from '@/api/studies.js';
+
+// 방향키 index
+let index = -1;
+
 export default {
 	data() {
 		return {
 			searchData: '',
-			searchedData: [],
+			searchedUpperData: [],
+			searchedLowerData: [],
+			searchedStudyData: [],
 			baseURL: process.env.VUE_APP_API_URL,
 			userName: this.name ? this.name : null,
 		};
@@ -102,24 +137,45 @@ export default {
 		async fetchAutoComplete(e) {
 			try {
 				if (!e.target.value) {
-					return (this.searchedData = []);
+					this.searchedUpperData = [];
+					this.searchedLowerData = [];
+					this.searchedStudyData = [];
+					return;
 				}
 				const { data } = await searchStudy(e.target.value);
-				this.searchedData = data;
+
+				this.searchedUpperData = data.uppercategories;
+				this.searchedLowerData = data.lowercategories;
+				this.searchedStudyData = data.studies;
 			} catch (error) {
 				console.log(error);
 			}
 		},
 		clearSearchedData() {
 			this.searchData = '';
-			this.searchedData = [];
+			this.searchedUpperData = [];
+			this.searchedLowerData = [];
+			this.searchedStudyData = [];
 		},
 		moveStudy(id) {
 			this.clearSearchedData();
 			this.$router.push(`/study/${id}`);
 		},
+		// 방향키
 		selectStudy(key) {
-			console.log(key);
+			const search = document.querySelector('#search');
+			let list = document.querySelectorAll('.searched-datas li');
+			let size = list.length - 1;
+			if (key === 'down' && index < size) {
+				index++;
+			} else if (key === 'up' && index > 0) {
+				index--;
+			} else {
+				search.focus();
+				index = -1;
+				return;
+			}
+			list[index].focus();
 		},
 	},
 };
