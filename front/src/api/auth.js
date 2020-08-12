@@ -29,6 +29,11 @@ function fetchMyQNA(userName) {
 	return baseAuth.get(`accounts/${userName}/myqna`);
 }
 
+function fetchMySchedule(userName) {
+	console.log(`accounts/${userName}/myschedule`);
+	return baseAuth.get(`accounts/${userName}/myschedule`);
+}
+
 export {
 	registerUser,
 	loginUser,
@@ -36,4 +41,5 @@ export {
 	fetchMyStudy,
 	fetchMyRepository,
 	fetchMyQNA,
+	fetchMySchedule,
 };

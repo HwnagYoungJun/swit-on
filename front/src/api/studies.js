@@ -41,7 +41,13 @@ function searchStudy(query) {
 function JoinStudy(studyId) {
 	return study.post(`/${studyId}/join`);
 }
-
+// 스터디 Schedule
+function fetchStudySchedule(studyId) {
+	return study.get(`/${studyId}/schedule`);
+}
+function isJoin(studyId, scheduleId) {
+	return study.post(`${studyId}/schedule/${scheduleId}/participate`);
+}
 export {
 	fetchStudies,
 	createStudy,
@@ -50,4 +56,6 @@ export {
 	fetchStudy,
 	searchStudy,
 	JoinStudy,
+	fetchStudySchedule,
+	isJoin,
 };

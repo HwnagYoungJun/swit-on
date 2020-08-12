@@ -21,7 +21,21 @@ $mobile-contents-width: 640px; // 쪼그라들기 시작할 시점
     #{$property}: $vws;
   }
 }
-
+@mixin common-btn() {
+  	// width: 6rem;
+	height: 35px;
+	border: 1px solid $main-color;
+	border-radius: 4px;
+	color: #fff;
+	background: $btn-purple;
+	&:focus {
+		outline: none;
+	}
+	&:hover {
+		color: $main-color;
+		background: #fff;
+	}
+}
 @mixin form-btn($color) {
     border: none;
     border-radius: 3px;
