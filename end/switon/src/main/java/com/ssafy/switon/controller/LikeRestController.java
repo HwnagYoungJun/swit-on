@@ -1,9 +1,11 @@
 package com.ssafy.switon.controller;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,11 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.switon.dto.ArticleFav;
 import com.ssafy.switon.dto.ArticleLike;
 import com.ssafy.switon.dto.CommentLike;
+import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.StudyLike;
 import com.ssafy.switon.service.ArticleFavService;
 import com.ssafy.switon.service.ArticleLikeService;
 import com.ssafy.switon.service.CommentLikeService;
 import com.ssafy.switon.service.StudyLikeService;
+import com.ssafy.switon.util.JWTUtil;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -23,7 +27,10 @@ import io.swagger.annotations.ApiOperation;
 public class LikeRestController {
 
 	@Autowired
-	ArticleFavService articlefavService;
+	private JWTUtil jwtUtil;
+	
+	@Autowired
+	StudyLikeService studylikeService;
 	
 	@Autowired
 	ArticleLikeService articlelikeService;
@@ -32,174 +39,319 @@ public class LikeRestController {
 	CommentLikeService commentlikeService;
 	
 	@Autowired
-	StudyLikeService studylikeService;
+	ArticleFavService articlefavService;
 	
-	///////////////////////ArticleFavRetController///////////////////////
-	@ApiOperation(value = "글 즐겨찾기 목록을 전체 반환한다", response = List.class)
-	@GetMapping("/articlefav/list")
-	public List<ArticleFav> searchAllArticleFav() {
-		System.out.println("글 즐겨찾기 목록 전체 반환");
-		return articlefavService.searchAll();
+	@ApiOperation(value = "소모임에 좋아요 누른다.")
+	@PostMapping("/study/{studyId}/like")
+	public Object studyLike(@PathVariable("studyId") int studyId, HttpServletRequest request) {
+			System.out.println("소모임 좋아요 누르기");
+			
+			int userId = getUserPK(request);
+			StudyLike studylike = studylikeService.searchByUser_Study(userId, studyId);
+			
+			if(studylike != null) {
+				System.out.println(studyId + "에 내가 이미 좋아요 누름!!");
+				return new ResponseEntity<>("fail", HttpStatus.OK);
+			}
+			
+			studylike = new StudyLike();
+			studylike.setStudy_id(studyId);
+			studylike.setUser_id(userId);
+			if(studylikeService.createStudyLike(studylike)) {
+				return new ResponseEntity<>("success", HttpStatus.OK);
+			}
+			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@ApiOperation(value = "글 즐겨찾기 목록을 상세 반환한다", response = ArticleFav.class)
-	@GetMapping("/articlefav/{articlefavid}")
-	public ArticleFav searchArticleFav(@PathVariable("articlefavid") int id) {
-		System.out.println("글 즐겨찾기 목록 상세 반환");
-		return articlefavService.search(id);
-	}
-	
-	@ApiOperation(value = "글 즐겨찾기 등록한다", response = String.class)
-	@PostMapping("/articlefav/write")
-	public String writeArticleFav(ArticleFav articlefav) {
-		System.out.println("글 즐겨찾기 등록");
-		if(articlefavService.create(articlefav)) {
-			System.out.println("글 즐겨찾기 등록 성공!!!");
-			return "success";
-		} else {
-			System.out.println("글 즐겨찾기 등록 실패...");
-			return "fail";
+	@ApiOperation(value = "소모임에 눌럿던 좋아요를 취소한다.")
+	@DeleteMapping("/study/{studyId}/unlike")
+	public Object studyUnLike(@PathVariable("studyId") int studyId, HttpServletRequest request) {
+		System.out.println("소모임 좋아요 취소");
+		
+		int userId = getUserPK(request);
+		StudyLike studylike = studylikeService.searchByUser_Study(userId, studyId);
+		
+		if(studylike == null) {
+			System.out.println(studyId + "에 좋아요를 누르지 않았음!!");
+			return new ResponseEntity<>("fail", HttpStatus.OK);
 		}
-	}
-	
-	@ApiOperation(value = "글 즐겨찾기 삭제한다", response = String.class)
-	@GetMapping("/articlefav/delete/{articlefavid}")
-	public String deleteArticleFav(@PathVariable("articlefavid") int id) {
-		System.out.println("글 즐겨찾기 삭제");
-		if(articlefavService.delete(id)) {
-			System.out.println("글 즐겨찾기 삭제 성공!!!");
-			return "success";
-		} else {
-			System.out.println("글 즐겨찾기 삭제 실패...");
-			return "fail";
+		
+
+		System.out.println(studyId + "에 내가 이미 좋아요 누름!!");
+		if(studylikeService.deleteStudyLikeByUser(userId, studyId)) {
+			return new ResponseEntity<>("success", HttpStatus.OK);				
+			
 		}
+		
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	///////////////////////////ArticleLikeRestController////////////////
+	@ApiOperation(value = "qna게시판 글에 좋아요 누른다.")
+	@PostMapping("/study/{studyId}/qna/{articleId}/like")
+	public Object studyQnaLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+			System.out.println("qna게시판 글에 좋아요 누르기");
+			
+			int userId = getUserPK(request);
+			ArticleLike articlelike = articlelikeService.searchByUser_Article(userId, articleId);
+			
+			if(articlelike != null) {
+				System.out.println(articleId + "번 글에 내가 이미 좋아요 누름!!");
+				return new ResponseEntity<>("fail", HttpStatus.OK);
+			}
+			
+			articlelike = new ArticleLike();
+			articlelike.setArticle_id(articleId);
+			articlelike.setUser_id(userId);
+			if(articlelikeService.createArticleLike(articlelike)) {
+				return new ResponseEntity<>("success", HttpStatus.OK);
+			}
+			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
-	// 글좋아요 목록 반환
-	@ApiOperation(value = "글좋아요 전체 목록을 반환한다.", response = List.class)
-	@GetMapping("/articlelike/list")
-	public List<ArticleLike> searchAllArticleLike() {
-		System.out.println("글좋아요 목록 조회");
-		return articlelikeService.searchAll();
-	}
-	// 글좋아요 목록 상세반환
-	@ApiOperation(value = "글좋아요 목록을 반환한다.", response = ArticleLike.class)
-	@GetMapping("/articlelike/{articlelikeid}")
-	public ArticleLike searchArticleLike(@PathVariable("articlelikeid") int id) {
-		System.out.println(id + "번을 상세 조회");
-		return articlelikeService.search(id);
-	}
-	// 글좋아요 등록 반환
-	@ApiOperation(value = "글좋아요 작성한다.", response = String.class)
-	@PostMapping("/articlelike/write")
-	public String writeArticleLike(ArticleLike articlelike) {
-		System.out.println("글좋아요를 등록");
-		if(articlelikeService.createArticleLike(articlelike)) {
-			System.out.println("글좋아요 등록 성공!!!");
-			return "success";
-		} else {
-			System.out.println("글좋아요 등록 실패...");
-			return "fail";
+	@ApiOperation(value = "qna게시판 글에 눌렀던 좋아요를 취소한다")
+	@DeleteMapping("/study/{studyId}/qna/{articleId}/unlike")
+	public Object studyQnaUnLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+		System.out.println("qna게시판 글에 눌렀던 좋아요 취소");
+		
+		int userId = getUserPK(request);
+		ArticleLike articlelike = articlelikeService.searchByUser_Article(userId, articleId);
+		
+		if(articlelike == null) {
+			System.out.println(articleId + "번 글에 좋아요를 누르지 않았음!!");
+			return new ResponseEntity<>("fail", HttpStatus.OK);
 		}
-	}
-	// 글좋아요 삭제 반환
-	@ApiOperation(value = "글좋아요 삭제한다.", response = String.class)
-	@GetMapping("/articlelike/delete/{articlelikeid}")
-	public String deleteArticleLike(@PathVariable("articlelikeid") int id) {
-		System.out.println(id + "번 삭제");
-		if(articlelikeService.deleteArticleLike(id)) {
-			System.out.println("글좋아요 삭제 성공!!!");
-			return "success";
-		} else {
-			System.out.println("글좋아요 삭제 실패...");
-			return "fail";
+		
+		System.out.println(articleId + "번 글에 내가 이미 좋아요 누름!!");
+		if(articlelikeService.deleteArticleLikeByUser(userId, articleId)) {
+			return new ResponseEntity<>("success", HttpStatus.OK);				
+			
 		}
+		
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	////////////////////////////CommentLikeRestController///////////////
-	
-	@ApiOperation(value = "댓글좋아요 전체 목록을 반환한다" , response = List.class)
-	@GetMapping("/commentlike/list")
-	public List<CommentLike> searchAllCommentLike() {
-		System.out.println("댓글좋아요 전체 목록 조회");
-		return commentlikeService.searchAll();
+	@ApiOperation(value = "자료실게시판 글에 좋아요 누른다.")
+	@PostMapping("/study/{studyId}/repository/{articleId}/like")
+	public Object studyRepoLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+			System.out.println("자료실게시판 글에 좋아요 누르기");
+			
+			int userId = getUserPK(request);
+			ArticleLike articlelike = articlelikeService.searchByUser_Article(userId, articleId);
+			
+			if(articlelike != null) {
+				System.out.println(articleId + "번 글에 내가 이미 좋아요 누름!!");
+				return new ResponseEntity<>("fail", HttpStatus.OK);
+			}
+			
+			articlelike = new ArticleLike();
+			articlelike.setArticle_id(articleId);
+			articlelike.setUser_id(userId);
+			if(articlelikeService.createArticleLike(articlelike)) {
+				return new ResponseEntity<>("success", HttpStatus.OK);
+			}
+			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@ApiOperation(value = "댓글좋아요 상세 목록을 반환한다", response = CommentLike.class)
-	@GetMapping("/commentlike/{commentlikeid}")
-	public CommentLike searchCommentLike(@PathVariable("commentlikeid") int id) {
-		System.out.println(id + "번을 상세 조회");
-		return commentlikeService.search(id);
+	@ApiOperation(value = "자료실게시판 글에 눌렀던 좋아요를 취소한다")
+	@DeleteMapping("/study/{studyId}/repository/{articleId}/unlike")
+	public Object studyRepoUnLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+		System.out.println("자료실게시판 글에 눌렀던 좋아요 취소");
+		
+		int userId = getUserPK(request);
+		ArticleLike articlelike = articlelikeService.searchByUser_Article(userId, articleId);
+		
+		if(articlelike == null) {
+			System.out.println(articleId + "번 글에 좋아요를 누르지 않았음!!");
+			return new ResponseEntity<>("fail", HttpStatus.OK);
+		}
+		
+		System.out.println(articleId + "번 글에 내가 이미 좋아요 누름!!");
+		if(articlelikeService.deleteArticleLikeByUser(userId, articleId)) {
+			return new ResponseEntity<>("success", HttpStatus.OK);				
+			
+		}
+		
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@ApiOperation(value = "댓글좋아요 등록한다", response = String.class)
-	@PostMapping("/commentlike/write")
-	public String writeCommentLike(CommentLike commentlike) {
-		System.out.println("댓글좋아요 등록");
+	@ApiOperation(value = "qna게시판 글 댓글에 좋아요 누른다.")
+	@PostMapping("/study/{studyId}/qna/{articleId}/{commentId}/like")
+	public Object studyQnaCommentLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
+		System.out.println("qna게시판 글 댓글에 좋아요 누르기");
+		
+		int userId = getUserPK(request);
+		CommentLike commentlike = commentlikeService.searchByUser_Comment(userId, commentId);
+		
+		if(commentlike != null) {
+			System.out.println(commentId + "번 댓글에 내가 이미 좋아요 누름!!");
+			return new ResponseEntity<>("fail", HttpStatus.OK);
+		}
+		
+		commentlike = new CommentLike();
+		commentlike.setComment_id(commentId);
+		commentlike.setUser_id(userId);
 		if(commentlikeService.create(commentlike)) {
-			System.out.println("댓글좋아요 등록성공!!!!");
-			return "success";
-		} else {
-			System.out.println("댓글좋아요 등록실패...");
-			return "fail";
+			return new ResponseEntity<>("success", HttpStatus.OK);
 		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@ApiOperation(value = "댓글좋아요 삭제한다", response = String.class)
-	@GetMapping("/commentlike/delete/{commentlikeid}")
-	public String deleteCommentLike(@PathVariable("commentlikeid") int id) {
-		System.out.println( id + "번을 삭제");
-		if(commentlikeService.delete(id)) {
-			System.out.println("댓글좋아요 삭제 성공!!!");
-			return "success";
-		} else {
-			System.out.println("댓글좋아요 삭제 실패...");
-			return "fail";
+	@ApiOperation(value = "qna게시판 글 댓글에 눌렀던 좋아요를 취소한다")
+	@DeleteMapping("/study/{studyId}/qna/{articleId}/{commentId}/unlike")
+	public Object studyQnaCommentUnLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
+		System.out.println("qna게시판 글 댓글에 눌렀던 좋아요 취소");
+		
+		int userId = getUserPK(request);
+		CommentLike commentlike = commentlikeService.searchByUser_Comment(userId, commentId);
+		
+		if(commentlike == null) {
+			System.out.println(commentId + "번 댓글에 좋아요를 누르지 않았음!!");
+			return new ResponseEntity<>("fail", HttpStatus.OK);
 		}
+		
+		System.out.println(commentId + "번 댓글에 내가 이미 좋아요 누름!!");
+		if(commentlikeService.deleteByUser(userId, commentId)) {
+			return new ResponseEntity<>("success", HttpStatus.OK);				
+			
+		}
+		
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ApiOperation(value = "자료실게시판 글 댓글에 좋아요 누른다.")
+	@PostMapping("/study/{studyId}/repository/{articleId}/{commentId}/like")
+	public Object studyRepoCommentLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
+		System.out.println("자료실게시판 글 댓글에 좋아요 누르기");
+		
+		int userId = getUserPK(request);
+		CommentLike commentlike = commentlikeService.searchByUser_Comment(userId, commentId);
+		
+		if(commentlike != null) {
+			System.out.println(commentId + "번 댓글에 내가 이미 좋아요 누름!!");
+			return new ResponseEntity<>("fail", HttpStatus.OK);
+		}
+		
+		commentlike = new CommentLike();
+		commentlike.setComment_id(commentId);
+		commentlike.setUser_id(userId);
+		if(commentlikeService.create(commentlike)) {
+			return new ResponseEntity<>("success", HttpStatus.OK);
+		}
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ApiOperation(value = "자료실게시판 글 댓글에 눌렀던 좋아요를 취소한다")
+	@DeleteMapping("/study/{studyId}/repository/{articleId}/{commentId}/unlike")
+	public Object studyRepoCommentUnLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
+		System.out.println("자료실게시판 글 댓글에 눌렀던 좋아요 취소");
+		
+		int userId = getUserPK(request);
+		CommentLike commentlike = commentlikeService.searchByUser_Comment(userId, commentId);
+		
+		if(commentlike == null) {
+			System.out.println(commentId + "번 댓글에 좋아요를 누르지 않았음!!");
+			return new ResponseEntity<>("fail", HttpStatus.OK);
+		}
+		
+		System.out.println(commentId + "번 댓글에 내가 이미 좋아요 누름!!");
+		if(commentlikeService.deleteByUser(userId, commentId)) {
+			return new ResponseEntity<>("success", HttpStatus.OK);				
+			
+		}
+		
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ApiOperation(value = "qna 글에 즐겨찾기 누른다.")
+	@PostMapping("/study/{studyId}/qna/{articleId}/fav")
+	public Object articleQnAFav(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+			System.out.println("글에 즐겨찾기 누르기");
+			
+			int userId = getUserPK(request);
+			ArticleFav articlefav = articlefavService.searchByUser_Article(userId, articleId);
+			
+			if(articlefav != null) {
+				System.out.println(articleId + "번 글에 내가 이미 즐겨찾기 누름!!");
+				return new ResponseEntity<>(new ReturnMsg("이미 즐겨찾기를 누른 글입니다."), HttpStatus.OK);
+			}
+			
+			articlefav = new ArticleFav();
+			articlefav.setArticle_id(articleId);
+			articlefav.setUser_id(userId);
+			if(articlefavService.create(articlefav)) {
+				return new ResponseEntity<>("success", HttpStatus.OK);
+			}
+			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ApiOperation(value = "자료실 글에 즐겨찾기 누른다.")
+	@PostMapping("/study/{studyId}/repository/{articleId}/fav")
+	public Object articleRepoFav(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+			System.out.println("글에 즐겨찾기 누르기");
+			
+			int userId = getUserPK(request);
+			ArticleFav articlefav = articlefavService.searchByUser_Article(userId, articleId);
+			
+			if(articlefav != null) {
+				System.out.println(articleId + "번 글에 내가 이미 즐겨찾기 누름!!");
+				return new ResponseEntity<>("fail", HttpStatus.OK);
+			}
+			
+			articlefav = new ArticleFav();
+			articlefav.setArticle_id(articleId);
+			articlefav.setUser_id(userId);
+			if(articlefavService.create(articlefav)) {
+				return new ResponseEntity<>("success", HttpStatus.OK);
+			}
+			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ApiOperation(value = "qna 글에 눌렀던 즐겨찾기를 취소한다")
+	@DeleteMapping("/study/{studyId}/qna/{articleId}/unfav")
+	public Object articleQnAUnFav(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+		System.out.println("글에 눌렀던 즐겨찾기를 취소");
+		
+		int userId = getUserPK(request);
+		ArticleFav articlefav = articlefavService.searchByUser_Article(userId, articleId);
+		
+		if(articlefav == null) {
+			System.out.println(articleId + "번 글에 즐겨찾기를 누르지 않았음!!");
+			return new ResponseEntity<>("fail", HttpStatus.OK);
+		}
+		
+		System.out.println(articleId + "번 글에 내가 이미 즐겨찾기 누름!!");
+		if(articlefavService.deleteByUser(userId, articleId)) {
+			return new ResponseEntity<>("success", HttpStatus.OK);				
+			
+		}
+		
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ApiOperation(value = "자료실 글에 눌렀던 즐겨찾기를 취소한다")
+	@DeleteMapping("/study/{studyId}/repository/{articleId}/unfav")
+	public Object articleRepoUnFav(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+		System.out.println("글에 눌렀던 즐겨찾기를 취소");
+		
+		int userId = getUserPK(request);
+		ArticleFav articlefav = articlefavService.searchByUser_Article(userId, articleId);
+		
+		if(articlefav == null) {
+			System.out.println(articleId + "번 글에 즐겨찾기를 누르지 않았음!!");
+			return new ResponseEntity<>("fail", HttpStatus.OK);
+		}
+		
+		System.out.println(articleId + "번 글에 내가 이미 즐겨찾기 누름!!");
+		if(articlefavService.deleteByUser(userId, articleId)) {
+			return new ResponseEntity<>("success", HttpStatus.OK);				
+			
+		}
+		
+		return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	////////////////////////////StudyLikeRestController//////////////////
-	
-	@ApiOperation(value = "소모임좋아요 전체 목록을 반환한다.", response = List.class)
-	@GetMapping("/studylike/list")
-	public List<StudyLike> searchAllStudyLike() {
-		System.out.println("소모임 좋아요 전체 조회");
-		return studylikeService.searchAll();
-	}
-	
-	@ApiOperation(value = "소모임좋아요 목록을 반환한다.", response = ArticleLike.class)
-	@GetMapping("/studylike/{studylikeid}")
-	public StudyLike searchStudyLike(@PathVariable("studylikeid") int id) {
-		System.out.println(id + "번을 상세 조회");
-		return studylikeService.search(id);
-	}
-	
-	@ApiOperation(value = "소모임좋아요 작성한다.", response = String.class)
-	@PostMapping("/studylike/write")
-	public String writeStudyLike(StudyLike studylike) {
-		System.out.println("소모임 좋아요 등록");
-		if(studylikeService.createStudyLike(studylike)) {
-			System.out.println("소모임 좋아요 등록 성공!!!");
-			return "success";
-		} else {
-			System.out.println("소모임 좋아요 등록 실패...");
-			return "fail";
-		}
-	}
-	
-	@ApiOperation(value = "소모임좋아요 삭제한다.", response = String.class)
-	@GetMapping("/studylike/delete/{studylikeid}")
-	public String deleteStudyLike(@PathVariable("studylikeid") int id) {
-		System.out.println(id + "번을 삭제");
-		if(studylikeService.deleteStudyLike(id)) {
-			System.out.println("소모임 삭제 성공!!!");
-			return "success";
-		} else {
-			System.out.println("소모임 삭제 실패...");
-			return "fail";
-		}
+	private int getUserPK(HttpServletRequest request) {
+		return jwtUtil.getUserPK(request.getHeader("Authentication").substring("Bearer ".length()));
 	}
 	
 }

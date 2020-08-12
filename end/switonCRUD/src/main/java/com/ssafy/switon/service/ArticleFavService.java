@@ -3,6 +3,7 @@ package com.ssafy.switon.service;
 import java.util.List;
 
 import com.ssafy.switon.dto.ArticleFav;
+import com.ssafy.switon.dto.ArticleLike;
 
 public interface ArticleFavService {
 	
@@ -16,4 +17,8 @@ public interface ArticleFavService {
 	boolean create(ArticleFav articlefav);
 	// 글 즐겨찾기 삭제
 	boolean delete(int id);
+	// 해당 유저가 누른 글 즐겨찾기 삭제
+	boolean deleteByUser(int user_id, int article_id);
+	// 유저가 즐겨찾기 누른 글 조회
+	ArticleFav searchByUser_Article(int userId, int articleId);
 }

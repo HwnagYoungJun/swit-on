@@ -1,6 +1,7 @@
 package com.ssafy.switon.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import io.swagger.annotations.ApiParam;
 
@@ -18,14 +19,14 @@ public class Study {
 	String code;
 	@ApiParam(value = "비공개 여부, true=1, false=0", required = true)
 	int isPrivate;
-	@ApiParam(value = "모집 여부, true=1, false=0", required = true)
+	@ApiParam(value = "모집 여부, true=1, false=0", defaultValue = "1")
 	int isRecruit;
 	@ApiParam(value = "시작일, 형식: 2020-07-20", required = true)
 	Date start_term;
 	@ApiParam(value = "완료일, 형식: 2020-08-02", required = true)
 	Date end_term;
-	@ApiParam(value = "생성일", required = false, hidden = true)
-	Date created_at;
+	@ApiParam(value = "생성일", readOnly = true, required = false)
+	Timestamp created_at;
 	@ApiParam(value = "비트마스킹으로 월~일 표시")
 	int week; // 비트마스킹으로 월~일 표시
 	@ApiParam(value = "시작 시간, 형식: 14:00", required = true)
@@ -34,18 +35,35 @@ public class Study {
 	String end_time;
 	@ApiParam(value = "소모임 소분류 id(FK)", required = true)
 	int lowercategory_id;
-	@ApiParam(value = "소모임 대표 이미지 주소")
+	@ApiParam(value = "소모임 대표 이미지 주소", required = false, hidden = true)
 	String logo;
 	@ApiParam(value = "소모임 최대 회원 수 제한")
 	int users_limit;
+	@ApiParam(value = "현재 인원 수", required = false, hidden = true)
+	int users_current;
+	@ApiParam(value = "소모임 대분류(상위카테고리) id", required = false, hidden = true)
+	int uppercategory_id;
+	@ApiParam(value = "소모임 소분류(상위카테고리) 이름", required = false, hidden = true)
+	String uppercategory_name;
 	
-	@Override
-	public String toString() {
-		return "Study [id=" + id + ", name=" + name + ", user_id=" + user_id + ", description=" + description
-				+ ", code=" + code + ", isPrivate=" + isPrivate + ", isRecruit=" + isRecruit + ", start_term="
-				+ start_term + ", end_term=" + end_term + ", created_at=" + created_at + ", week=" + week
-				+ ", start_time=" + start_time + ", end_time=" + end_time + ", lowercategory_id=" + lowercategory_id
-				+ ", logo=" + logo + "]";
+	
+	public int getUppercategory_id() {
+		return uppercategory_id;
+	}
+	public void setUppercategory_id(int uppercategory_id) {
+		this.uppercategory_id = uppercategory_id;
+	}
+	public String getUppercategory_name() {
+		return uppercategory_name;
+	}
+	public void setUppercategory_name(String uppercategory_name) {
+		this.uppercategory_name = uppercategory_name;
+	}
+	public int getUsers_current() {
+		return users_current;
+	}
+	public void setUsers_current(int users_current) {
+		this.users_current = users_current;
 	}
 	public int getId() {
 		return id;
@@ -101,10 +119,10 @@ public class Study {
 	public void setEnd_term(Date end_term) {
 		this.end_term = end_term;
 	}
-	public Date getCreated_at() {
+	public Timestamp getCreated_at() {
 		return created_at;
 	}
-	public void setCreated_at(Date created_at) {
+	public void setCreated_at(Timestamp created_at) {
 		this.created_at = created_at;
 	}
 	public int getWeek() {
@@ -137,5 +155,18 @@ public class Study {
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}
-
+	public int getUsers_limit() {
+		return users_limit;
+	}
+	public void setUsers_limit(int users_limit) {
+		this.users_limit = users_limit;
+	}
+	@Override
+	public String toString() {
+		return "Study [id=" + id + ", name=" + name + ", user_id=" + user_id + ", description=" + description
+				+ ", code=" + code + ", isPrivate=" + isPrivate + ", isRecruit=" + isRecruit + ", start_term="
+				+ start_term + ", end_term=" + end_term + ", created_at=" + created_at + ", week=" + week
+				+ ", start_time=" + start_time + ", end_time=" + end_time + ", lowercategory_id=" + lowercategory_id
+				+ ", logo=" + logo + ", users_limit=" + users_limit + ", users_current=" + users_current + "]";
+	}
 }

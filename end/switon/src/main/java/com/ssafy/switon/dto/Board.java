@@ -4,8 +4,6 @@ import io.swagger.annotations.ApiParam;
 
 public class Board {
 	
-	
-	
 	public Board(int study_id, int type) {
 		this.study_id = study_id;
 		this.type = type;

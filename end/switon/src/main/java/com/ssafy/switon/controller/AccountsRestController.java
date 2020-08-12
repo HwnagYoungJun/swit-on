@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.User;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserLoginDTO;
@@ -55,17 +56,17 @@ public class AccountsRestController {
 			System.out.println("** 로그인 실패!!");
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(new ReturnMsg("일치하는 계정이 없습니다."), HttpStatus.UNAUTHORIZED);
 	}
 	
-//	@ApiOperation(value = "(테스트용) 헤더의 토큰을 읽어서 해당하는 유저 정보를 반환한다.", response = UserInfoDTO.class)
-//	@GetMapping("/info")
-//	public Object info(HttpServletRequest request) {
-//		String userToken = request.getHeader("Token");
-//		System.out.println("유저 정보 반환");
-//		UserInfoDTO user = userService.search(jwtUtil.getUserPK(userToken));
-//		return new ResponseEntity<>(user, HttpStatus.OK);
-//	}
+	@ApiOperation(value = "(테스트용) 헤더의 토큰을 읽어서 해당하는 유저 정보를 반환한다.", response = UserInfoDTO.class)
+	@GetMapping("/")
+	public Object info(HttpServletRequest request) {
+		String userToken = request.getHeader("Authentication").substring("Bearer ".length());
+		System.out.println("유저 정보 반환");
+		UserInfoDTO user = userService.search(jwtUtil.getUserPK(userToken));
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
 	
 	@ApiOperation(value = "회원 가입을 한다. 가입 성공시 로그인을 자동으로 수행하여 토큰을 반환한다.", response = UserReturnDTO.class)
 	@PostMapping("/register")
@@ -86,16 +87,16 @@ public class AccountsRestController {
 					return new ResponseEntity<>(dto, HttpStatus.OK);
 				} else {
 					System.out.println("** 로그인 실패");
-					return new ResponseEntity<>("fail", HttpStatus.UNAUTHORIZED);
+					return new ResponseEntity<>(new ReturnMsg("다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 				}
 			} else {
 				System.out.println("** 회원가입 실패");
-				return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>(new ReturnMsg("회원가입에 실패했습니다. 입력한 정보를 확인해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		} catch (Exception e) {
 			System.out.println("** 서버 에러!!");
 			e.printStackTrace();
-			return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("회원가입에 실패했습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

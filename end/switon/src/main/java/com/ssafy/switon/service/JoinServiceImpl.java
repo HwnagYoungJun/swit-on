@@ -25,16 +25,6 @@ public class JoinServiceImpl implements JoinService {
 	}
 
 	@Override
-	public boolean create(Join join) {
-		return joinDAO.insertJoin(join)==1;
-	}
-
-	@Override
-	public boolean delete(int id) {
-		return joinDAO.deleteJoin(id)==1;
-	}
-
-	@Override
 	public boolean createLeader(Join join) {
 		return joinDAO.insertJoinLeader(join) == 1;
 	}
@@ -50,6 +40,22 @@ public class JoinServiceImpl implements JoinService {
 		join.setStudy_id(studyId);
 		join.setUser_id(userId);
 		return joinDAO.isMember(join) == 1;
+	}
+
+	@Override
+	public boolean join(int studyId, int userId) {
+		Join join = new Join();
+		join.setStudy_id(studyId);
+		join.setUser_id(userId);
+		return joinDAO.insertJoin(join) == 1;
+	}
+
+	@Override
+	public boolean leave(int studyId, int userId) {
+		Join join = new Join();
+		join.setStudy_id(studyId);
+		join.setUser_id(userId);
+		return joinDAO.deleteJoinByIds(join) == 1;
 	}
 
 }

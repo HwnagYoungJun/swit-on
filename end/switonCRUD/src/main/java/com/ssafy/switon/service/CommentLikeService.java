@@ -2,6 +2,7 @@ package com.ssafy.switon.service;
 
 import java.util.List;
 
+import com.ssafy.switon.dto.ArticleLike;
 import com.ssafy.switon.dto.CommentLike;
 
 public interface CommentLikeService {
@@ -15,4 +16,8 @@ public interface CommentLikeService {
 	boolean create(CommentLike commentlike);
 	// 댓글 좋아요 삭제
 	boolean delete(int id);
+	// 해당 유저가 누른댓글 좋아요 삭제
+	boolean deleteByUser(int user_id, int comment_id);
+	// 유저가 좋아요 누른 댓글 조회
+	CommentLike searchByUser_Comment(int userId, int commentId);
 }

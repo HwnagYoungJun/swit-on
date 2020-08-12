@@ -30,4 +30,14 @@ public class CategoryDAOImpl implements CategoryDAO {
 		return sqlsession.selectList("category.selectUp_LowCategory", uppercategory_id);
 	}
 
+	@Override
+	public LowerCategory selectLowOne(int id) {
+		return sqlsession.selectOne("category.selectLowerCategoryById", id);
+	}
+
+	@Override
+	public UpperCategory selectUpOne(int id) {
+		return sqlsession.selectOne("category.selectUpperCategoryById", id);
+	}
+
 }

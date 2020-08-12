@@ -50,4 +50,10 @@ public class StudyDAOImpl implements StudyDAO {
 		return sqlSession.selectList("study.selectLeaderStudiesByUserId", userId);
 	}
 
+	@Override
+	public List<Study> selectStudiesByLowercategoryId(int lowercategory_id) {
+		List<Study> list = sqlSession.selectList("study.selectStudiesByLowercategoryId", lowercategory_id);
+		return list;
+	}
+
 }

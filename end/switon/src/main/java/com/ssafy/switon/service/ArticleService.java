@@ -3,6 +3,7 @@ package com.ssafy.switon.service;
 import java.util.List;
 
 import com.ssafy.switon.dto.Article;
+import com.ssafy.switon.dto.ArticleReturnDTO;
 
 public interface ArticleService {
 	
@@ -26,5 +27,11 @@ public interface ArticleService {
 	boolean modify(Article article);
 	// 게시글 삭제
 	boolean delete(int id);
-
+	// 게시판의 게시글 반환 new type
+	List<ArticleReturnDTO> searchArticlesByBoardId(int studyId, int boardId, int type, int userId);
+	// 게시판의 게시글 반환 new type 최신순
+	List<ArticleReturnDTO> searchArticlesByBoardIdOrdered(int studyId, int boardId, int type, int userId);
+	// 내가 가입한 스타디들의 게시글 반환 new type 최신순
+	List<ArticleReturnDTO> searchFeeds(int userId);
+	List<ArticleReturnDTO> searchArticlesByBoardIdLimit5(int studyId, int boardId, int type, int userId);
 }

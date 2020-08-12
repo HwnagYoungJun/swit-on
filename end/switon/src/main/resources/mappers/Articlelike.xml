@@ -13,10 +13,24 @@
 	</select>
 	
 	<!-- 글좋아요 상세 정보 반환 -->
-	<select id="selectArticleLikeById" resultType="ArticleLike">
+	<select id="selectArticleLike" resultType="ArticleLike">
 		select id, user_id, article_id
 		from articlelike
 		where id = #{id}
+	</select>
+	
+	<!-- 해당유저가 좋아요를 누른 글 반환 -->
+	<select id="selectArticleLikeByUser_Article" parameterType="ArticleLike" resultType="ArticleLike">
+		select id, user_id, article_id
+		from articlelike
+		where user_id = #{user_id} and article_id = #{article_id}
+	</select>
+	
+	<!-- 해당글의 좋아요 수 반환 -->
+	<select id="likeCount" resultType="Integer">
+    	select count(*) as cnt
+    	from articlelike
+    	where article_id = #{article_id}
 	</select>
 	
 	<!-- 글좋아요 등록 -->
@@ -29,6 +43,12 @@
 	<delete id="deleteArticleLike">
 		delete from articlelike
    		where id = #{id}
+	</delete>
+
+	<!-- 해당 유저가 누른 글좋아요 삭제 -->
+	<delete id="deleteArticleLikeByUser">
+		delete from articlelike
+   		where user_id = #{user_id} and article_id = #{article_id}
 	</delete>
 
 </mapper>

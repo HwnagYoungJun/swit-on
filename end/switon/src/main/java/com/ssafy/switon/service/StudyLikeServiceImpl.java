@@ -34,4 +34,19 @@ public class StudyLikeServiceImpl implements StudyLikeService {
 		return studylikeDAO.deleteStudyLike(id)==1;
 	}
 
+	@Override
+	public int searchLikeCount(int study_id) {
+		return studylikeDAO.selectLikeCount(study_id);
+	}
+
+	@Override
+	public StudyLike searchByUser_Study(int user_id, int study_id) {
+		return studylikeDAO.selectStudyLikeByUser_Study(user_id, study_id);
+	}
+
+	@Override
+	public boolean deleteStudyLikeByUser(int user_id, int study_id) {
+		return studylikeDAO.deleteStudyLikeByUser(user_id, study_id)==1;
+	}
+
 }

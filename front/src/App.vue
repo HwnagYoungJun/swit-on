@@ -2,11 +2,7 @@
 	<div id="app">
 		<section v-if="isMainRoute" class="main-page">
 			<AppHeader v-if="!isAccountsRoute"></AppHeader>
-			<input
-				type="search"
-				class="main-input"
-				placeholder="소모임을 검색하세요"
-			/>
+			<Search />
 			<div v-if="studies" class="popular-wrap">
 				<p class="popular-title">인기 소모임</p>
 				<router-link
@@ -52,10 +48,13 @@
 
 <script>
 import AppHeader from '@/components/common/AppHeader.vue';
+import Search from '@/components/common/Search.vue';
 import { fetchStudies } from '@/api/studies';
+
 export default {
 	components: {
 		AppHeader,
+		Search,
 	},
 	data() {
 		return {
@@ -115,19 +114,19 @@ export default {
 	min-height: 100vh;
 	max-height: 100%;
 	background: $btn-purple-opacity;
-	.main-input {
-		width: 30%;
-		padding: 13px 25px;
-		line-height: 2;
-		border: none;
-		border-radius: 4px;
-		background: rgba(255, 255, 255, 0.5);
-		box-shadow: 3px 3px 5px rgba(83, 83, 83, 0.35);
-		&:focus {
-			outline: none;
-			background: rgba(255, 255, 255, 1);
-		}
-	}
+	// .main-input {
+	// 	width: 30%;
+	// 	padding: 13px 25px;
+	// 	line-height: 2;
+	// 	border: none;
+	// 	border-radius: 4px;
+	// 	background: rgba(255, 255, 255, 0.5);
+	// 	box-shadow: 3px 3px 5px rgba(83, 83, 83, 0.35);
+	// 	&:focus {
+	// 		outline: none;
+	// 		background: rgba(255, 255, 255, 1);
+	// 	}
+	// }
 	.popular-wrap {
 		width: 80%;
 		margin: 0 auto;

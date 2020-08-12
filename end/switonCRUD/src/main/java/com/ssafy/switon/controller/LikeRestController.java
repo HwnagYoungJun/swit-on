@@ -49,7 +49,7 @@ public class LikeRestController {
 		return articlefavService.search(id);
 	}
 	
-	@ApiOperation(value = "사용자가 즐겨찾기한 글 목록을 반환한다", response = List.class)
+	@ApiOperation(value = "사용자가 즐겨찾기한 글 목록을 반환", response = List.class)
 	@GetMapping("/articlefav/list/{user_id}")
 	public List<ArticleFav> searchArticleFavByUser(@PathVariable("user_id") int user_id) {
 		System.out.println("사용자가 즐겨찾기한 목록 반환");

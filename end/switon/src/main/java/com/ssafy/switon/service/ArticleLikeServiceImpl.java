@@ -34,4 +34,19 @@ public class ArticleLikeServiceImpl implements ArticleLikeService {
 		return articlelikeDAO.deleteArticleLike(id)==1;
 	}
 
+	@Override
+	public int searchLikeCount(int article_id) {
+		return articlelikeDAO.selectLikeCount(article_id);
+	}
+
+	@Override
+	public ArticleLike searchByUser_Article(int userId, int articleId) {
+		return articlelikeDAO.selectArticleLikeByUser_Article(userId, articleId);
+	}
+
+	@Override
+	public boolean deleteArticleLikeByUser(int user_id, int article_id) {
+		return articlelikeDAO.deleteArticleLikeByUser(user_id, article_id)==1;
+	}
+
 }

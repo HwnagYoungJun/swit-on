@@ -34,4 +34,25 @@ public class StudyLikeDAOImpl implements StudyLikeDAO {
 		return sqlsession.delete("studylike.deleteStudyLike", id);
 	}
 
+	@Override
+	public int selectLikeCount(int study_id) {
+		return sqlsession.selectOne("studylike.likeCount", study_id);
+	}
+
+	@Override
+	public StudyLike selectStudyLikeByUser_Study(int user_id, int study_id) {
+		StudyLike studylike = new StudyLike();
+		studylike.setUser_id(user_id);
+		studylike.setStudy_id(study_id);
+		return sqlsession.selectOne("studylike.selectStudyLikeByUser_Study", studylike);
+	}
+
+	@Override
+	public int deleteStudyLikeByUser(int user_id, int study_id) {
+		StudyLike studylike = new StudyLike();
+		studylike.setUser_id(user_id);
+		studylike.setStudy_id(study_id);
+		return sqlsession.delete("studylike.deleteStudyLikeByUser", studylike);
+	}
+
 }

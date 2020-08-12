@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.ssafy.switon.Interceptors.AuthInterceptor;
 import com.ssafy.switon.Interceptors.CORSInterceptor;
 import com.ssafy.switon.Interceptors.GetRequestInterceptor;
 import com.ssafy.switon.Interceptors.OtherRequestInterceptor;
@@ -33,8 +31,12 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		.addPathPatterns("/study/**");
 		
 		registry.addInterceptor(getInterceptor)
-		.addPathPatterns("/**/myqna")
-		.addPathPatterns("/**/myrepository");
+		.addPathPatterns("/accounts/**/myqna")
+		.addPathPatterns("/accounts/**/myrepository")
+		.addPathPatterns("/study/**/qna/**")
+		.addPathPatterns("/study/**/repository/**")
+		.addPathPatterns("/feeds")
+		.addPathPatterns("/study/**/dashboard");
 		
 //		registry.addInterceptor(authInterceptor)
 //		.addPathPatterns("/accounts/info")
