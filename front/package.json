@@ -15,6 +15,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "emailjs-com": "^2.6.3",
+    "rtcmulticonnection": "^3.7.0",
     "tui-calendar": "^1.12.13",
     "uuid": "^8.3.0",
     "vue": "^2.6.11",

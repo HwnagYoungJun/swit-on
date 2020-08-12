@@ -64,7 +64,6 @@
 					v-on:opened-room="logEvent"
 					v-on:share-started="logEvent"
 					v-on:share-stopped="logEvent"
-					:enableAudio="audioFlag"
 					@error="onError"
 				/>
 			</div>
@@ -77,10 +76,6 @@
 						<i class="fas fa-video"></i>
 						<span>Join</span>
 					</div>
-					<!-- <div @click="onMute" class="main__controls__button main__mute_button">
-						<i class="fas fa-microphone"></i>
-						<span>Mute</span>
-					</div> -->
 					<div @click="onShareScreen" class="main__controls__button">
 						<i class="fas fa-shield-alt"></i>
 						<span>ShareScreen</span>
@@ -93,26 +88,12 @@
 				</div>
 			</div>
 		</div>
-		<div class="main__right">
-			<div class="main__header">
-				<h6>Chat</h6>
-			</div>
-			<div class="main__chat_window">
-				<ul class="messages"></ul>
-			</div>
-			<div class="main__message_container">
-				<input
-					id="chat_message"
-					type="text"
-					placeholder="Type message here..."
-				/>
-			</div>
-		</div>
 	</div>
 </template>
 
 <script>
-import { WebRTC } from 'vue-webrtc';
+// import { WebRTC } from 'vue-webrtc';
+import WebRTC from '@/components/common/WebRTC.vue';
 export default {
 	props: {
 		room: String,
@@ -122,7 +103,6 @@ export default {
 		return {
 			img: null,
 			roomId: this.room,
-			audioFlag: false,
 		};
 	},
 	methods: {
@@ -158,13 +138,9 @@ export default {
 }
 
 .main__left {
-	flex: 0.8;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
-}
-
-.main__right {
-	flex: 0.2;
 }
 
 .main__videos {
@@ -173,7 +149,7 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 40px;
+	// padding: 40px;
 }
 
 .main__controls {
@@ -218,34 +194,6 @@ export default {
 .main__right {
 	display: flex;
 	flex-direction: column;
-}
-
-.main__header {
-	padding-top: 5px;
-	color: #f5f5f5;
-	text-align: center;
-}
-
-.main__chat_window {
-	flex-grow: 1;
-	overflow-y: auto;
-}
-
-.messages {
-	color: white;
-	list-style: none;
-}
-
-.main__message_container {
-	padding: 22px 12px;
-	display: flex;
-}
-
-.main__message_container input {
-	flex-grow: 1;
-	background-color: transparent;
-	border: none;
-	color: #f5f5f5;
 }
 
 .leave_meeting {
