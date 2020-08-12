@@ -27,9 +27,6 @@ export default {
 	position: absolute;
 	right: 0;
 	top: -50px;
-	&:focus {
-		outline: none;
-	}
 	&:hover {
 		color: $main-color;
 		background: #fff;

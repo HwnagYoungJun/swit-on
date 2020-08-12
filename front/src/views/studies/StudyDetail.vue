@@ -3,13 +3,14 @@
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
 				<li>
-					<router-link :to="`/category/${study.uppercategory_name}`">{{
-						study.uppercategory_name
-					}}</router-link
+					<router-link
+						:to="`/category/${study.uppercategory_name}`"
+						tabindex="-1"
+						>{{ study.uppercategory_name }}</router-link
 					><span aria-hidden="true">></span>
 				</li>
 				<li>
-					<router-link :to="`/study/${id}`" aria-current="page">{{
+					<router-link :to="`/study/${id}`" aria-current="page" tabindex="-1">{{
 						study.name
 					}}</router-link>
 				</li>
@@ -24,6 +25,7 @@
 					{{ study.week | formatWeekday }}
 					{{ study.start_time }}시-{{ study.end_time }}시
 				</p>
+				<!-- <small>{{ study }}</small> -->
 				<small>{{ study.users_current }}/{{ study.users_limit }}명</small>
 			</div>
 			<div class="study-logo">
