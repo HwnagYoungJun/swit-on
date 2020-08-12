@@ -29,7 +29,7 @@
 					v-if="searchedStudyData || searchedUpperData || searchedLowerData"
 					class="searched-datas"
 				>
-					<!-- <p v-if="searchedStudyData">스터디</p> -->
+					<p v-if="searchedStudyData">스터디</p>
 					<ul v-if="searchedStudyData">
 						<li
 							v-for="data in searchedStudyData"
@@ -41,19 +41,19 @@
 							{{ data.name }}
 						</li>
 					</ul>
-					<!-- <p v-if="searchedUpperData">상위카테고리</p> -->
+					<p v-if="searchedUpperData">상위카테고리</p>
 					<ul v-if="searchedUpperData">
 						<li
 							v-for="data in searchedUpperData"
 							:key="data.id"
-							@click="moveStudy(data.id)"
-							@keyup.enter="moveStudy(data.id)"
+							@click="moveCategory(data.name)"
+							@keyup.enter="moveCategory(data.name)"
 							tabindex="0"
 						>
 							{{ data.name }}
 						</li>
 					</ul>
-					<!-- <p v-if="searchedLowerData">하위카테고리</p> -->
+					<p v-if="searchedLowerData">하위카테고리</p>
 					<ul v-if="searchedLowerData">
 						<li
 							v-for="data in searchedLowerData"
@@ -106,9 +106,9 @@ export default {
 	data() {
 		return {
 			searchData: '',
-			searchedUpperData: [],
-			searchedLowerData: [],
-			searchedStudyData: [],
+			searchedUpperData: null,
+			searchedLowerData: null,
+			searchedStudyData: null,
 			baseURL: process.env.VUE_APP_API_URL,
 			userName: this.name ? this.name : null,
 		};
@@ -137,29 +137,37 @@ export default {
 		async fetchAutoComplete(e) {
 			try {
 				if (!e.target.value) {
-					this.searchedUpperData = [];
-					this.searchedLowerData = [];
-					this.searchedStudyData = [];
+					this.searchedUpperData = null;
+					this.searchedLowerData = null;
+					this.searchedStudyData = null;
 					return;
 				}
 				const { data } = await searchStudy(e.target.value);
 
-				this.searchedUpperData = data.uppercategories;
-				this.searchedLowerData = data.lowercategories;
-				this.searchedStudyData = data.studies;
+				this.searchedUpperData = data.uppercategories.length
+					? data.uppercategories
+					: null;
+				this.searchedLowerData = data.lowercategories.length
+					? data.lowercategories
+					: null;
+				this.searchedStudyData = data.studies.length ? data.studies : null;
 			} catch (error) {
 				console.log(error);
 			}
 		},
 		clearSearchedData() {
 			this.searchData = '';
-			this.searchedUpperData = [];
-			this.searchedLowerData = [];
-			this.searchedStudyData = [];
+			this.searchedUpperData = null;
+			this.searchedLowerData = null;
+			this.searchedStudyData = null;
 		},
 		moveStudy(id) {
 			this.clearSearchedData();
 			this.$router.push(`/study/${id}`);
+		},
+		moveCategory(name) {
+			this.clearSearchedData();
+			this.$router.push(`/category/${name}`);
 		},
 		// 방향키
 		selectStudy(key) {
