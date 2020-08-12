@@ -44,7 +44,7 @@
 			<router-link :to="{ name: 'meeting' }">회의<span></span></router-link>
 			<hr />
 			<div class="study-sub-content">
-				<router-view :id="id"></router-view>
+				<router-view :id="id" :isLeader="isLeader"></router-view>
 			</div>
 		</div>
 		<div v-else class="study-sub-content">
@@ -66,6 +66,7 @@ export default {
 	data() {
 		return {
 			isJoined: false,
+			isLeader: null,
 			study: {},
 		};
 	},
@@ -76,6 +77,7 @@ export default {
 			console.log(data);
 			this.study = data.study;
 			this.isJoined = data.isJoined;
+			this.isLeader = data.isLeader;
 		},
 		async studyJoin() {
 			const studyId = this.id;

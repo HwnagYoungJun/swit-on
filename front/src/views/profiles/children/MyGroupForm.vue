@@ -1,12 +1,8 @@
 <template>
 	<div class="container">
 		<div class="temp">
-			<div class="group-container">
-				<GroupCard></GroupCard>
-				<GroupCard></GroupCard>
-				<GroupCard></GroupCard>
-				<GroupCard></GroupCard>
-				<GroupCard></GroupCard>
+			<div class="group-container" :key="study.id" v-for="study in studies">
+				<GroupCard :study="study" />
 			</div>
 		</div>
 	</div>
@@ -14,8 +10,30 @@
 
 <script>
 import GroupCard from '@/components/group/GroupCard.vue';
+import { fetchMyStudy } from '@/api/auth';
 export default {
 	components: { GroupCard },
+	data() {
+		return {
+			studies: [],
+		};
+	},
+	props: {
+		userName: {
+			type: String,
+			required: true,
+		},
+	},
+	methods: {
+		async fetchMyStudy() {
+			const { data } = await fetchMyStudy(this.userName);
+			data.forEach(el => this.studies.push(el.study));
+			console.log(this.studies);
+		},
+	},
+	created() {
+		this.fetchMyStudy();
+	},
 };
 </script>
 

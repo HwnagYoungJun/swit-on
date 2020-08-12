@@ -40,19 +40,19 @@ export default {
 				`/accounts/${this.userName}/myschedule/`,
 			);
 			this.calendarList = data.reduce((acc, el) => {
-				acc.push({
-					id: el.schedule.study_id,
-					name: el.schedule.study_name,
-				});
+				if (acc.findIndex(i => i.name === el.schedule.study_name) === -1) {
+					acc.push({
+						id: el.schedule.study_id,
+						name: el.schedule.study_name,
+					});
+				}
 				return acc;
 			}, []);
 
 			this.scheduleList = data.reduce((acc, el, idx) => {
 				acc.push({
 					id: idx,
-					calendarId: this.calendarList.findIndex(
-						i => i.id === el.schedule.study_id,
-					),
+					calendarId: el.schedule.study_id,
 					title: el.schedule.title,
 					category: 'time',
 					dueDateClass: '',

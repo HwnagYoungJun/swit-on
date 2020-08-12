@@ -1,10 +1,10 @@
 <template>
 	<div class="group-box">
-		<router-link :to="`/study/${1}`">
+		<router-link :to="`/study/${study.id}`">
 			<div class="img-box">
 				<img :src="imgLink" alt="imgLink" />
 			</div>
-			<p class="groupName">{{ studyName }}</p>
+			<p class="groupName">{{ study.name }}</p>
 		</router-link>
 	</div>
 </template>
@@ -12,15 +12,19 @@
 <script>
 export default {
 	data() {
-		return {
-			// 여기에 에밋으로 내려줄꺼임
-			studyName: 'Python 부셔버리기',
-			on: 1,
-		};
+		return {};
+	},
+	props: {
+		study: Object,
 	},
 	computed: {
+		baseUrl() {
+			return process.env.VUE_APP_API_URL;
+		},
 		imgLink() {
-			return 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/768px-Python-logo-notext.svg.png';
+			return this.study.logo === null
+				? `@/assets/logo.png`
+				: `${this.baseUrl}${this.study.logo}`;
 		},
 	},
 };

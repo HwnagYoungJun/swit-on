@@ -1,6 +1,6 @@
 <template>
 	<div class="dashboard-wrap">
-		<scheduleAddBtn />
+		<scheduleAddBtn v-if="isLeader" />
 
 		<div class="card-wrap">
 			<router-link
@@ -109,6 +109,7 @@ import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
 export default {
 	props: {
 		id: Number,
+		isLeader: Boolean,
 	},
 	data() {
 		return {

@@ -157,6 +157,8 @@ export default {
 .img-box {
 	width: 100%;
 	height: 100%;
+	border: 0.05rem solid black;
+	padding: 1rem;
 	border-radius: 50%;
 	object-fit: cover;
 }

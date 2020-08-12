@@ -59,7 +59,7 @@ export function lowerCategoryId(lowerCategoryString) {
 			return 17;
 		case 'C++':
 			return 18;
-		case 'Jave':
+		case 'Java':
 			return 19;
 		case '코틀린':
 			return 20;

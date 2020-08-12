@@ -33,10 +33,12 @@ export default {
 	watch: {
 		lowerCategory() {
 			this.studies = [];
-			this.fetchLowerStudy();
-			console.log(this.lowerCategory);
+			if (this.lowerCategory === '전체') {
+				this.fetchUpperStudy();
+			} else {
+				this.fetchLowerStudy();
+			}
 		},
-
 		$route() {
 			this.studies = [];
 			this.fetchUpperStudy();
@@ -51,7 +53,7 @@ export default {
 		async fetchUpperStudy() {
 			const { data } = await axios.get(`${this.baseURL}study`, {
 				params: {
-					uppercategory_id: lowerCategoryId(this.lowerCategory),
+					uppercategory_id: this.upperCategory,
 				},
 			});
 			this.studies = data;

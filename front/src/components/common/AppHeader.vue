@@ -89,7 +89,10 @@
 				></a>
 			</template>
 			<router-link v-if="name" class="nav-router-item" :to="`/profile/${name}`"
-				><img class="nav-router-img" src="@/assets/logo.png" alt="프로필"
+				><img
+					class="nav-router-img"
+					:src="`${baseURL}${profileImg}`"
+					alt="프로필"
 			/></router-link>
 		</nav>
 	</header>
@@ -97,6 +100,7 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex';
+import { baseAuth } from '@/api/index';
 import { searchStudy } from '@/api/studies.js';
 
 // 방향키 index
@@ -109,12 +113,15 @@ export default {
 			searchedUpperData: null,
 			searchedLowerData: null,
 			searchedStudyData: null,
-			baseURL: process.env.VUE_APP_API_URL,
 			userName: this.name ? this.name : null,
+			profileImg: null,
 		};
 	},
 	computed: {
 		...mapState(['name']),
+		baseURL() {
+			return process.env.VUE_APP_API_URL;
+		},
 		isUserLogin() {
 			return this.$store.getters.isLogin;
 		},
@@ -124,6 +131,10 @@ export default {
 	},
 	methods: {
 		...mapMutations(['clearUserEmail', 'clearToken']),
+		async fetchImg() {
+			const { data } = await baseAuth.get('accounts/');
+			this.profileImg = data.profile_image;
+		},
 		logoutUser() {
 			this.clearUserEmail();
 			this.clearToken();
@@ -185,6 +196,9 @@ export default {
 			}
 			list[index].focus();
 		},
+	},
+	created() {
+		this.fetchImg();
 	},
 };
 </script>
@@ -306,8 +320,10 @@ header {
 	}
 	.nav-router-img {
 		width: 2rem;
+		height: 2rem;
 		border-radius: 50%;
 		object-fit: cover;
+		border: 0.5px solid purple;
 	}
 	@media screen and (max-width: 768px) {
 		.nav-router-full {
