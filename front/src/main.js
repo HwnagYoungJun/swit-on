@@ -4,6 +4,9 @@ import router from './router';
 import store from './store';
 import VueCookies from 'vue-cookies';
 import { formatDate, formatWeekday, truncate } from '@/utils/filters';
+import WebRTC from 'vue-webrtc';
+
+Vue.use(WebRTC);
 
 Vue.use(VueCookies);
 Vue.filter('formatDate', formatDate);
