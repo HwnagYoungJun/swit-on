@@ -11,11 +11,12 @@
 			v-on:input="fetchAutoComplete"
 			type="search"
 			id="search"
+			:class="[isMainRoute ? 'main-input' : 'search']"
 			placeholder="소모임을 검색하세요"
 		/>
 		<div
 			v-if="searchedStudyData || searchedUpperData || searchedLowerData"
-			class="searched-datas"
+			:class="['searched-datas', isMainRoute ? 'main-searched-datas' : '']"
 		>
 			<p v-if="searchedStudyData">스터디</p>
 			<ul v-if="searchedStudyData">
@@ -75,6 +76,11 @@ export default {
 			searchedStudyData: null,
 		};
 	},
+	computed: {
+		isMainRoute() {
+			return this.$route.name === 'main';
+		},
+	},
 	methods: {
 		async fetchAutoComplete(e) {
 			try {
@@ -106,6 +112,7 @@ export default {
 		moveStudy(id) {
 			this.clearSearchedData();
 			this.$router.push(`/study/${id}`);
+			index = -1;
 		},
 		moveCategory(name) {
 			this.clearSearchedData();
@@ -132,7 +139,7 @@ export default {
 </script>
 
 <style lang="scss">
-#search {
+.search {
 	width: 400px;
 	padding: 0.8rem 2rem 0.8rem 0.75rem;
 	font-size: $font-light;
@@ -148,6 +155,25 @@ export default {
 		border: none;
 		width: 420px;
 		box-shadow: none;
+	}
+	@media screen and (max-width: 768px) {
+		width: 200px;
+		&:focus {
+			width: 220px;
+		}
+	}
+}
+.main-input {
+	width: 400px;
+	padding: 13px 25px;
+	line-height: 2;
+	border: none;
+	border-radius: 4px;
+	background: rgba(255, 255, 255, 0.5);
+	box-shadow: 3px 3px 5px rgba(83, 83, 83, 0.35);
+	&:focus {
+		outline: none;
+		background: rgba(255, 255, 255, 1);
 	}
 	@media screen and (max-width: 768px) {
 		width: 200px;
@@ -189,6 +215,10 @@ export default {
 		@media screen and (max-width: 768px) {
 			width: 220px;
 		}
+	}
+	.main-searched-datas {
+		width: 400px;
+		box-shadow: none;
 	}
 }
 .a11y-hidden {
