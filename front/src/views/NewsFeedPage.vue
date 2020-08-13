@@ -54,9 +54,9 @@
 				</div>
 			</aside>
 		</main>
+		<div id="bottomSensor"></div>
 	</div>
 </template>
-
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import GruopCardSmall from '@/components/common/GruopCardSmall.vue';
@@ -117,6 +117,34 @@ export default {
 		};
 	},
 	methods: {
+		async getArticles() {
+			try {
+				const { data } = await fetchFeeds();
+				this.articles = [...this.articles, data];
+			} catch (err) {
+				console.log(err);
+			}
+		},
+		loadUntilViewportIsFull() {
+			const bottomSensor = document.querySelector('#bottomSensor');
+			const watcher = scrollMonitor.create(bottomSensor);
+			// bottomSensor가 화면 안에 있으면
+			if (watcher.isFullyInViewport) {
+				// post 가져와
+				this.getArticles();
+			}
+		},
+		addScrollWatcher() {
+			const bottomSensor = document.querySelector('#bottomSensor');
+			const watcher = scrollMonitor.create(bottomSensor);
+			// bottomSensor가 나갔다 새로 들어오면
+			watcher.enterViewport(() => {
+				this.getArticles();
+				// setTimeout(() => {
+				//     this.getPosts()
+				// }, 500)
+			});
+		},
 		async fetchScheduleData() {
 			const { data } = await baseAuth.get(
 				`/accounts/${this.userName}/myschedule/`,
@@ -148,15 +176,10 @@ export default {
 				return acc;
 			}, []);
 		},
-
-		async fetchData() {
-			await this.fetchScheduleData();
-			const { data } = await fetchFeeds();
-			this.articles = data.reverse();
-		},
 	},
 	created() {
-		this.fetchData();
+		this.fetchScheduleData();
+		this.addScrollWatcher();
 	},
 };
 </script>
