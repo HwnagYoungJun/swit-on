@@ -16,11 +16,7 @@
 				},
 			}"
 		>
-			<ArticleFeed :article="article">
-				<!-- <div slot="logo">
-					<img src="@/assets/color2.png" alt="" />
-				</div> -->
-			</ArticleFeed>
+			<ArticleFeed :article="article" />
 		</router-link>
 		<ArticleAddBtn boardName="repository" />
 	</div>
