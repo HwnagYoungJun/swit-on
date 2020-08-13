@@ -13,7 +13,12 @@
 			</div>
 			<Search />
 		</div>
-		<nav class="nav-router">
+		<nav
+			:class="[
+				'nav-router',
+				isMainRoute ? 'nav-router-color' : 'nav-router-white',
+			]"
+		>
 			<template v-if="!isUserLogin">
 				<router-link class="nav-router-item" :to="{ name: 'login' }"
 					><span class="nav-router-full">로그인</span>
@@ -129,6 +134,8 @@ header {
 		display: none;
 	}
 	.nav-router-item {
+		width: 24px;
+		height: 24px;
 		color: white;
 	}
 	i {
@@ -175,13 +182,15 @@ header {
 		display: none;
 	}
 	.nav-router-img {
-		width: 2rem;
-		height: 2rem;
+		width: 100%;
+		height: 100%;
 		border-radius: 50%;
 		object-fit: cover;
-		border: 0.5px solid purple;
 	}
 	@media screen and (max-width: 768px) {
+		.main-page {
+			position: relative;
+		}
 		.nav-router-full {
 			display: none;
 		}
@@ -190,9 +199,17 @@ header {
 		}
 		i {
 			font-size: 28px;
-			// font-weight: 600;
 		}
 	}
+}
+.nav-router-white {
+	background: #fff;
+	i {
+		color: rgb(97, 97, 97);
+	}
+}
+.nav-router-color {
+	background: $main-color;
 }
 .a11y-hidden {
 	overflow: hidden;
@@ -202,11 +219,5 @@ header {
 	width: 1px;
 	height: 1px;
 	margin: -1px;
-}
-@media screen and (max-width: 768px) {
-	// .search input {
-	// 	width: 150px;
-	// 	padding-left: 8px;
-	// }
 }
 </style>

@@ -205,5 +205,14 @@ export default {
 	.main-container {
 		width: 95%;
 	}
+	.nav-router {
+		width: 100%;
+		height: 50px;
+		justify-content: space-around;
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		z-index: 888;
+	}
 }
 </style>
