@@ -7,7 +7,7 @@
 						v-if="isMainRoute"
 						src="@/assets/white.png"
 						alt="logo"
-						class="switon"/>
+						:class="['switon', isMainRoute ? 'switon-pos' : '']"/>
 					<img v-else src="@/assets/color.png" alt="logo" class="switon"
 				/></router-link>
 			</div>
@@ -133,6 +133,9 @@ header {
 	#search {
 		display: none;
 	}
+	.switon-pos-block {
+		display: none;
+	}
 	.nav-router-item {
 		color: white;
 	}
@@ -212,6 +215,11 @@ header {
 .nav-router-color {
 	@media screen and (max-width: 768px) {
 		background: $btn-purple;
+	}
+}
+.switon-pos {
+	@media screen and (max-width: 768px) {
+		display: none;
 	}
 }
 .a11y-hidden {
