@@ -173,9 +173,8 @@ export default {
 			});
 			that.videoList = newList;
 			//clear messages
-			if (this.enableChat) {
-				this.clearMessages(stream);
-			}
+			that.$emit('clear-message');
+
 			that.$emit('left-room', stream.streamid);
 		};
 		this.rtcmConnection.onmessage = function(stream) {

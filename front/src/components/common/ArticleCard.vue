@@ -12,7 +12,7 @@
 					{{ article.title }}
 					<span class="bread-span"><slot name="bread"> </slot></span>
 				</p>
-				<p>
+				<p class="card-info-all">
 					<span v-if="article.user">
 						<span class="card-info-user">{{ article.user.name }}</span>
 					</span>
@@ -64,7 +64,7 @@ export default {
 	// }
 	.card-info {
 		display: flex;
-		align-items: center;
+		//align-items: center;
 		font-size: $font-light;
 		position: relative;
 		overflow: hidden;
@@ -80,18 +80,39 @@ export default {
 		.card-content {
 			flex: 2;
 			.card-info-title {
+				// text-decoration: underline;
+				// text-decoration-color:linear-gradient(to right, #9200b9 8%, #6c23c0 75%, #5600c7);
 				margin-bottom: 8px;
 				font-size: $font-bold;
 				position: relative;
+				// border-bottom: 2px solid rgba(169, 169, 169, 1);
+				padding-bottom: 15px;
 				.bread-span {
+					background-color: rgba(86, 0, 199, 0.1);
+					width: 65%;
+					height: 6px;
+					left: 0;
 					position: absolute;
 					bottom: 3px;
-					margin-left: 10px;
 					font-size: $font-light;
 				}
 			}
+			.card-info-all {
+				position: absolute;
+				bottom: 5px;
+				right: 5px;
+			}
+			.card-info-time {
+				color: rgba(94, 54, 97, 0.5);
+				font-weight: 600;
+			}
+			.card-info-user {
+				color: rgba(94, 54, 97, 1);
+				font-weight: 600;
+			}
 			p {
 				margin-top: 10px;
+				margin-bottom: 10px;
 			}
 			span {
 				margin-right: 10px;
