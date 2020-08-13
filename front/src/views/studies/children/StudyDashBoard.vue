@@ -73,18 +73,17 @@
 			<div class="schedule">
 				<span class="schedule-title">소모임 일정</span>
 				<ul>
-					<li>07.20 Mon 11:00-13:00 <button class="active">참여중</button></li>
-					<li>07.20 Mon 11:00-13:00 <button>참여하기</button></li>
-					<li>07.20 Mon 11:00-13:00 <button>참여하기</button></li>
+					<li :key="s.id" v-for="s in schedules">
+						{{ s.startMonth }}.{{ s.startDate }} {{ s.startDay }}
+						{{ s.startHours }}:{{ s.startMinutes }}-{{ s.endHours }}:{{
+							s.endMinutes
+						}}<button class="active">참여중</button>
+					</li>
 				</ul>
 			</div>
 			<div class="schedule">
 				<span class="schedule-title">나의 일정</span>
-				<ul>
-					<li>07.20 Mon 11:00-13:00 <button class="active">출석</button></li>
-					<li>07.20 Mon 11:00-13:00 <button>대기중</button></li>
-					<li>07.20 Mon 11:00-13:00 <button>대기중</button></li>
-				</ul>
+				<ul></ul>
 			</div>
 			<div class="schedule">
 				<span class="schedule-title">나의 출석</span>
@@ -110,6 +109,8 @@
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import { fetchArticles } from '@/api/articles';
+import { fetchStudySchedule } from '@/api/studies';
+// import { fetchMySchedule } from '@/api/auth';
 import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 export default {
@@ -119,6 +120,7 @@ export default {
 	},
 	data() {
 		return {
+			schedules: [],
 			repositoryArticles: null,
 			noticeArticles: null,
 			qnaArticles: null,
@@ -144,9 +146,45 @@ export default {
 			this.noticeArticles = notice.length ? notice : null;
 			this.qnaArticles = qna.length ? qna : null;
 		},
+		// async fetchMyScheduleStudy(){
+		// 	const {data} = await fetchMySchedule
+		// }
+		async fetchSchedule() {
+			const { data } = await fetchStudySchedule(this.id);
+			var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+			data.forEach(el => {
+				// ISO -> date 객체
+				const start = new Date(Date.parse(el.start));
+				const end = new Date(Date.parse(el.end));
+				const startMonth = ('00' + (start.getMonth() + 1)).slice(-2);
+				const startDate = ('00' + start.getDate()).slice(-2);
+				const startDay = days[start.getDay()];
+				const startHours = ('00' + start.getHours()).slice(-2);
+				const startMinutes = ('00' + start.getMinutes()).slice(-2);
+				// const endMonth = ('00' + (end.getMonth() + 1)).slice(-2);
+				// const endDate = ('00' + end.getDate()).slice(-2);
+				const endHours = ('00' + end.getHours()).slice(-2);
+				const endMinutes = ('00' + end.getMinutes()).slice(-2);
+				const scheduleId = el.id;
+				const ScheduleData = {
+					startMonth,
+					startDate,
+					startDay,
+					startHours,
+					startMinutes,
+					// endMonth,
+					// endDate,
+					endHours,
+					endMinutes,
+					scheduleId,
+				};
+				this.schedules.push(ScheduleData);
+			});
+		},
 	},
 	created() {
 		this.fetchData();
+		this.fetchSchedule();
 	},
 };
 </script>
@@ -191,22 +229,28 @@ aside {
 	}
 	li {
 		margin: 20px;
+		align-items: center;
 		@media screen and (max-width: 370px) {
 			margin: 10px 20px;
 		}
 		button {
+			// display: inline-block;
+			// width: 100px;
+			// padding: 7px 0;
+			// border: 1px solid $main-color;
+			// border-radius: 30px;
+			// color: $main-color;
+			// background: none;
+			// position: absolute;
+			// right: 20px;
+			// &:focus {
+			// 	outline: none;
+			// }
+			@include common-btn();
 			display: inline-block;
-			width: 100px;
-			padding: 7px 0;
-			border: 1px solid $main-color;
-			border-radius: 30px;
-			color: $main-color;
-			background: none;
+			width: 6rem;
 			position: absolute;
 			right: 20px;
-			&:focus {
-				outline: none;
-			}
 			@media screen and (max-width: 370px) {
 				width: 100%;
 				margin: 8px 0;

@@ -345,14 +345,6 @@ export default {
 	div {
 		margin-bottom: 0.75rem;
 	}
-	input[type='radio'] {
-		margin-right: 0.15rem;
-		margin-left: 0.75rem;
-	}
-	input[type='checkbox'] {
-		margin-right: 0.15rem;
-		margin-left: 0.5rem;
-	}
 	.studyform-input {
 		width: 100%;
 		padding: 10px;

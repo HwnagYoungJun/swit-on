@@ -1,5 +1,5 @@
 <template>
-	<button class="add-btn" @click="addArticle">새 글 작성</button>
+	<button class="add-btn" @click="addArticle">글작성</button>
 </template>
 
 <script>
@@ -18,18 +18,10 @@ export default {
 
 <style lang="scss">
 .add-btn {
-	width: 100px;
-	height: 30px;
-	border: 1px solid $main-color;
-	border-radius: 4px;
-	color: #fff;
-	background: $btn-purple;
+	@include common-btn();
 	position: absolute;
+	width: 70px;
 	right: 0;
-	top: -50px;
-	&:hover {
-		color: $main-color;
-		background: #fff;
-	}
+	top: -60px;
 }
 </style>

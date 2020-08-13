@@ -97,10 +97,12 @@ export default {
 	flex-direction: column;
 	width: 100%;
 	.modify-profile {
-		border: 1px solid purple;
-		border-radius: 0.3rem;
+		@include common-btn();
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		margin-left: 3rem;
-		padding: 0.5rem;
+		width: 8rem;
 	}
 	.middle-box {
 		display: flex;
@@ -143,22 +145,32 @@ export default {
 	}
 }
 .profile-wrap {
+	display: inline-block;
 	max-height: 15rem;
 	max-width: 15rem;
 	min-width: 15rem;
 	min-width: 15rem;
 	width: 15rem;
 	height: 15rem;
+	border: 5px solid transparent;
+	border-image: linear-gradient(
+		336deg,
+		rgba(146, 0, 185, 0.7) 8%,
+		rgba(108, 35, 192, 0.7) 75%,
+		rgba(86, 0, 199, 0.7)
+	);
+	border-image-slice: 1;
+	padding: 9px;
 	margin-right: 4rem;
 	@media screen and (max-width: 1024px) {
 		margin-right: 0;
 	}
 }
 .img-box {
+	display: block;
 	width: 100%;
 	height: 100%;
-	border: 0.05rem solid black;
-	padding: 1rem;
+
 	border-radius: 50%;
 	object-fit: cover;
 }

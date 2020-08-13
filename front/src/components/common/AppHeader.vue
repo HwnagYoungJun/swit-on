@@ -16,29 +16,40 @@
 		<nav class="nav-router">
 			<template v-if="!isUserLogin">
 				<router-link class="nav-router-item" :to="{ name: 'login' }"
-					>로그인</router-link
-				>
+					><span class="nav-router-full">로그인</span>
+					<i class="icon ion-md-log-in nav-router-medium"></i>
+				</router-link>
 			</template>
 			<template v-else>
 				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
+					><span class="nav-router-full">알림</span
+					><i class="icon ion-md-notifications nav-router-medium"></i
+				></router-link>
+				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
 					><span class="nav-router-full">뉴스피드</span
-					><i class="icon ion-md-home nav-router-medium"></i
+					><i class="icon ion-md-list-box nav-router-medium"></i
 				></router-link>
 				<router-link class="nav-router-item" :to="{ name: 'addstudy' }"
 					><span class="nav-router-full">만들기</span
-					><i class="icon ion-md-add nav-router-medium"></i
+					><i class="icon ion-md-add-circle nav-router-medium"></i
 				></router-link>
 				<a class="nav-router-item" href="javascript:;" @click="logoutUser"
 					><span class="nav-router-full">로그아웃</span
-					><i class="icon ion-md-power nav-router-medium"></i
+					><i class="icon ion-md-log-out nav-router-medium"></i
 				></a>
+				<router-link
+					v-if="name"
+					class="nav-router-item"
+					:to="`/profile/${name}`"
+					><img
+						v-if="profileImg"
+						class="nav-router-img"
+						:src="`${baseURL}${profileImg}`"
+						alt="프로필"
+					/>
+					<i v-else class="icon ion-md-contact"></i>
+				</router-link>
 			</template>
-			<router-link v-if="name" class="nav-router-item" :to="`/profile/${name}`"
-				><img
-					class="nav-router-img"
-					:src="`${baseURL}${profileImg}`"
-					alt="프로필"
-			/></router-link>
 		</nav>
 	</header>
 </template>
@@ -178,8 +189,8 @@ header {
 			display: inline;
 		}
 		i {
-			font-size: 24px;
-			font-weight: 600;
+			font-size: 28px;
+			// font-weight: 600;
 		}
 	}
 }

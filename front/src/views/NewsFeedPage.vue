@@ -75,8 +75,8 @@ export default {
 		return {
 			userName: cookies.get('name') ? cookies.get('name') : null,
 			articles: null,
-			calendarList: null,
-			scheduleList: null,
+			calendarList: [],
+			scheduleList: [],
 			view: 'day',
 			taskView: false,
 			scheduleView: ['time'],
