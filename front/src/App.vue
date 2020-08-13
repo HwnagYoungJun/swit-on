@@ -114,19 +114,6 @@ export default {
 	min-height: 100vh;
 	max-height: 100%;
 	background: $btn-purple-opacity;
-	// .main-input {
-	// 	width: 30%;
-	// 	padding: 13px 25px;
-	// 	line-height: 2;
-	// 	border: none;
-	// 	border-radius: 4px;
-	// 	background: rgba(255, 255, 255, 0.5);
-	// 	box-shadow: 3px 3px 5px rgba(83, 83, 83, 0.35);
-	// 	&:focus {
-	// 		outline: none;
-	// 		background: rgba(255, 255, 255, 1);
-	// 	}
-	// }
 	.popular-wrap {
 		width: 80%;
 		margin: 0 auto;
@@ -204,6 +191,15 @@ export default {
 @media screen and (max-width: 768px) {
 	.main-container {
 		width: 95%;
+	}
+	.nav-router {
+		width: 100%;
+		height: 37px;
+		justify-content: space-around;
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		z-index: 888;
 	}
 }
 </style>

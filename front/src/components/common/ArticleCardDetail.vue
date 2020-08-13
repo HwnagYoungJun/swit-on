@@ -25,6 +25,7 @@
 				</div>
 				<div class="card-detail-content">
 					<Viewer :initialValue="article.content" />
+					<p>{{ article.file }}</p>
 					<div class="logo">
 						<i
 							@click="articleUnLike"

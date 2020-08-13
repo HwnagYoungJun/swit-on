@@ -7,13 +7,18 @@
 						v-if="isMainRoute"
 						src="@/assets/white.png"
 						alt="logo"
-						class="switon"/>
+						:class="['switon', isMainRoute ? 'switon-pos' : '']"/>
 					<img v-else src="@/assets/color.png" alt="logo" class="switon"
 				/></router-link>
 			</div>
 			<Search />
 		</div>
-		<nav class="nav-router">
+		<nav
+			:class="[
+				'nav-router',
+				isMainRoute ? 'nav-router-color' : 'nav-router-white',
+			]"
+		>
 			<template v-if="!isUserLogin">
 				<router-link class="nav-router-item" :to="{ name: 'login' }"
 					><span class="nav-router-full">로그인</span>
@@ -39,7 +44,7 @@
 				></a>
 				<router-link
 					v-if="name"
-					class="nav-router-item"
+					class="nav-router-img-item"
 					:to="`/profile/${name}`"
 					><img
 						v-if="profileImg"
@@ -128,6 +133,9 @@ header {
 	#search {
 		display: none;
 	}
+	.switon-pos-block {
+		display: none;
+	}
 	.nav-router-item {
 		color: white;
 	}
@@ -138,7 +146,6 @@ header {
 	}
 }
 .switon-logo {
-	// padding-bottom: 0;
 	display: flex;
 	align-items: center;
 }
@@ -168,6 +175,10 @@ header {
 	.nav-router-item {
 		margin-right: 0.5rem;
 	}
+	.nav-router-img-item {
+		width: 24px;
+		height: 24px;
+	}
 	.nav-router-full {
 		display: inline;
 	}
@@ -175,13 +186,15 @@ header {
 		display: none;
 	}
 	.nav-router-img {
-		width: 2rem;
-		height: 2rem;
+		width: 100%;
+		height: 100%;
 		border-radius: 50%;
 		object-fit: cover;
-		border: 0.5px solid purple;
 	}
 	@media screen and (max-width: 768px) {
+		.main-page {
+			position: relative;
+		}
 		.nav-router-full {
 			display: none;
 		}
@@ -189,9 +202,24 @@ header {
 			display: inline;
 		}
 		i {
-			font-size: 28px;
-			// font-weight: 600;
+			font-size: 24px;
 		}
+	}
+}
+.nav-router-white {
+	background: #fff;
+	i {
+		color: rgb(97, 97, 97);
+	}
+}
+.nav-router-color {
+	@media screen and (max-width: 768px) {
+		background: $btn-purple;
+	}
+}
+.switon-pos {
+	@media screen and (max-width: 768px) {
+		display: none;
 	}
 }
 .a11y-hidden {
@@ -202,11 +230,5 @@ header {
 	width: 1px;
 	height: 1px;
 	margin: -1px;
-}
-@media screen and (max-width: 768px) {
-	// .search input {
-	// 	width: 150px;
-	// 	padding-left: 8px;
-	// }
 }
 </style>

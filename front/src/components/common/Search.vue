@@ -4,16 +4,24 @@
 		@keyup.down="selectStudy('down')"
 		@keyup.up="selectStudy('up')"
 	>
-		<label for="search" class="a11y-hidden">search: </label>
-		<input
-			autocomplete="off"
-			v-model="searchData"
-			v-on:input="fetchAutoComplete"
-			type="search"
-			id="search"
-			:class="[isMainRoute ? 'main-input' : 'search']"
-			placeholder="소모임을 검색하세요"
-		/>
+		<div class="main-logo-wrap">
+			<!-- <img
+				v-if="isMainRoute"
+				src="@/assets/white.png"
+				alt="logo"
+				:class="[isMainRoute ? 'switon-pos-block' : '']"
+			/> -->
+			<label for="search" class="a11y-hidden">search: </label>
+			<input
+				autocomplete="off"
+				v-model="searchData"
+				v-on:input="fetchAutoComplete"
+				type="search"
+				id="search"
+				:class="[isMainRoute ? 'main-input' : 'search']"
+				placeholder="소모임을 검색하세요"
+			/>
+		</div>
 		<div
 			v-if="searchedStudyData || searchedUpperData || searchedLowerData"
 			:class="['searched-datas', isMainRoute ? 'main-searched-datas' : '']"
@@ -184,6 +192,16 @@ export default {
 }
 .auto-complete {
 	position: relative;
+	.main-logo-wrap {
+		position: relative;
+		.switon-pos-block {
+			display: block;
+			position: absolute;
+			top: 5px;
+			left: 5px;
+			@include scale(width, 50px);
+		}
+	}
 	.searched-datas {
 		width: 420px;
 		position: absolute;

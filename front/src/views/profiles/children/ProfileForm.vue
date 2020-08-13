@@ -4,10 +4,11 @@
 			<div class="profile-wrap">
 				<img
 					v-if="profileImg"
-					class="img-box"
+					class="profile-logo"
 					:src="`${baseURL}${profileImg}`"
 					alt="profile_img"
 				/>
+				<img v-else class="profile-logo" src="@/assets/color.png" alt="" />
 			</div>
 			<div class="info-box">
 				<div class="name-box">
@@ -42,7 +43,6 @@
 </template>
 
 <script>
-// import cookies from 'vue-cookies';
 import { fetchProfile } from '@/api/auth';
 export default {
 	props: {
@@ -62,7 +62,6 @@ export default {
 			try {
 				const name = this.userName;
 				const { data } = await fetchProfile(name);
-				console.log(data);
 				this.profile = data;
 				this.introduce = data.introduce;
 				this.profileImg = data.profile_image;
@@ -93,6 +92,7 @@ export default {
 	}
 }
 .info-box {
+	flex: 2;
 	display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -145,35 +145,40 @@ export default {
 	}
 }
 .profile-wrap {
-	display: inline-block;
-	max-height: 15rem;
-	max-width: 15rem;
-	min-width: 15rem;
-	min-width: 15rem;
-	width: 15rem;
-	height: 15rem;
-	border: 5px solid transparent;
-	border-image: linear-gradient(
-		336deg,
-		rgba(146, 0, 185, 0.7) 8%,
-		rgba(108, 35, 192, 0.7) 75%,
-		rgba(86, 0, 199, 0.7)
-	);
-	border-image-slice: 1;
-	padding: 9px;
-	margin-right: 4rem;
+	width: 170px;
+	height: 170px;
+	margin-right: 100px;
+	position: relative;
+	border: 4px solid transparent;
+	border-radius: 50%;
+	background: #fff;
+	background-clip: padding-box;
+	display: grid;
+	place-items: center;
+	&::after {
+		width: 170px;
+		height: 170px;
+		position: absolute;
+		top: -4px;
+		bottom: -4px;
+		left: -4px;
+		right: -4px;
+		background: linear-gradient(235deg, #bc69d3 8%, #6c23c0 75%, #43009b);
+		content: '';
+		z-index: -1;
+		border-radius: 50%;
+	}
 	@media screen and (max-width: 1024px) {
 		margin-right: 0;
 	}
+	.profile-logo {
+		width: 150px;
+		height: 150px;
+		border-radius: 50%;
+		// object-fit: cover;
+	}
 }
-.img-box {
-	display: block;
-	width: 100%;
-	height: 100%;
 
-	border-radius: 50%;
-	object-fit: cover;
-}
 .icon-box {
 	display: flex;
 	width: 50px;
