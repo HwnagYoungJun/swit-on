@@ -44,7 +44,7 @@
 			<router-link :to="{ name: 'qna' }">Q&A<span></span></router-link>
 			<router-link :to="{ name: 'notice' }">공지<span></span></router-link>
 			<router-link :to="{ name: 'meeting' }">회의<span></span></router-link>
-			<hr />
+			<!-- <hr /> -->
 			<div class="study-sub-content">
 				<router-view :id="id" :isLeader="isLeader"></router-view>
 			</div>

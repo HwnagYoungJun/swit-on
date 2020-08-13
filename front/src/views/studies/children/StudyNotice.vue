@@ -22,7 +22,7 @@
 				</div>
 			</ArticleCard>
 		</router-link>
-		<ArticleAddBtn boardName="notice" />
+		<ArticleAddBtn v-if="isLeader" boardName="notice" />
 	</div>
 </template>
 
@@ -34,6 +34,7 @@ import { fetchArticles } from '@/api/articles';
 export default {
 	props: {
 		id: Number,
+		isLeader: Boolean,
 	},
 	data() {
 		return {
