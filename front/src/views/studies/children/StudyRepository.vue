@@ -53,9 +53,10 @@ export default {
 	},
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .card-wrap {
 	display: flex;
+	flex-direction: column;
 	flex-wrap: wrap;
 	position: relative;
 	@media screen and (max-width: 1500px) {
