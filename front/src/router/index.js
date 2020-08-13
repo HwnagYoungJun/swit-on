@@ -166,9 +166,30 @@ const routes = [
 		component: () => import('@/views/profiles/ModifyProfilePage.vue'),
 	},
 	{
-		path: '/category/:UpperCategoryName',
+		path: '/category/:upperCategoryName',
 		name: 'categorydetail',
-		component: () => import('@/views/categorys/CategoryPage.vue'),
+		props: route => ({
+			upperCategoryName: String(route.params.upperCategoryName),
+		}),
+		component: () => import('@/views/categories/CategoryPage.vue'),
+		children: [
+			{
+				path: '',
+				name: 'upperCategoryList',
+				component: () =>
+					import('@/views/categories/children/UpperCategoryList.vue'),
+			},
+			{
+				path: ':lowerCategoryName',
+				name: 'lowerCategoryList',
+				props: route => ({
+					upperCategoryName: String(route.params.upperCategoryName),
+					lowerCategoryName: String(route.params.lowerCategoryName),
+				}),
+				component: () =>
+					import('@/views/categories/children/LowerCategoryList.vue'),
+			},
+		],
 	},
 	{
 		path: '/newsfeed',
