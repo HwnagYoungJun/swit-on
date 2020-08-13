@@ -1,23 +1,21 @@
 <template>
 	<div class="card">
-		<router-link :to="`/study/${studyData.id}`">
-			<div class="img-box">
-				<img :src="`${BaseUrl}${studyData.logo}`" alt="logo_img" />
+		<div class="img-box">
+			<img :src="`${BaseUrl}${studyData.logo}`" alt="logo_img" />
+		</div>
+		<div class="etc-box">
+			<div>
+				<h3>{{ studyData.name }}</h3>
 			</div>
-			<div class="etc-box">
-				<div>
-					<h3>{{ studyData.name }}</h3>
-				</div>
-				<div>
-					<span>{{ studyData.posPeople }} / {{ studyData.maxPeople }}명</span>
-				</div>
-				<div>
-					<p>{{ studyData.week }}</p>
-					<p>{{ studyData.startTime }} ~ {{ studyData.endTime }}</p>
-					<p class="expireDay">{{ studyData.expireDay }} 까지</p>
-				</div>
+			<div>
+				<span>{{ studyData.posPeople }} / {{ studyData.maxPeople }}명</span>
 			</div>
-		</router-link>
+			<div>
+				<p>{{ studyData.week }}</p>
+				<p>{{ studyData.startTime }} ~ {{ studyData.endTime }}</p>
+				<p class="expireDay">{{ studyData.expireDay }} 까지</p>
+			</div>
+		</div>
 	</div>
 </template>
 
