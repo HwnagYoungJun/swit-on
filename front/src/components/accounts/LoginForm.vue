@@ -39,10 +39,17 @@
 			</button>
 		</div>
 		<hr />
+		<KakaoLogin
+			:api-key="apiKey"
+			image="kakao_account_login_btn_medium_wide"
+			:on-success="onSuccess"
+			:on-failure="onFailure"
+		/>
 	</form>
 </template>
 
 <script>
+import KakaoLogin from 'vue-kakao-login';
 import InputBox from '@/components/common/InputBox.vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { validateEmail } from '@/utils/validation';
@@ -51,6 +58,7 @@ import cookies from 'vue-cookies';
 export default {
 	components: {
 		InputBox,
+		KakaoLogin,
 	},
 	data() {
 		return {
@@ -79,6 +87,9 @@ export default {
 		isCookie() {
 			return cookies.isKey('id') ? true : false;
 		},
+		apiKey() {
+			return process.env.VUE_APP_KAKAO_KEY;
+		},
 	},
 	methods: {
 		...mapActions(['LOGIN']),
@@ -92,6 +103,14 @@ export default {
 				// console.log(error.response.data);
 				console.log(error);
 			}
+		},
+		onSuccess(data) {
+			console.log(data);
+			console.log('success');
+		},
+		onFailure(data) {
+			console.log(data);
+			console.log('failure');
 		},
 
 		setCookie(name, vaule, days) {
