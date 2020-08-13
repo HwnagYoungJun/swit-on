@@ -2,7 +2,9 @@
 	<div>
 		<ul class="study-box">
 			<li :key="study.id" v-for="study in studies" class="study-li">
-				<StudyCard :study="study" />
+				<router-link :to="`/study/${study.id}`">
+					<StudyCard :study="study" />
+				</router-link>
 			</li>
 		</ul>
 		<div class="noStudy" v-if="!isStudy">

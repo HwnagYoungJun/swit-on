@@ -8,7 +8,9 @@
 		<label for="rep">저장소</label>
 		<ul>
 			<li :key="article.id" v-for="article in WhatCheck">
+				<!-- <router-link :to="`study`"> -->
 				<ArticleCard :article="article" />
+				<!-- </router-link> -->
 			</li>
 		</ul>
 	</div>
