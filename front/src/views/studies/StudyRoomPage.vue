@@ -1,69 +1,19 @@
 <template>
-	<!-- <div class="container">
-		<div class="row">
-			<div class="col-md-12 my-3">
-				<h2>Room</h2>
-				<input v-model="roomId" />
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="">
-					<WebRTC
-						ref="webrtc"
-						width="100%"
-						:roomId="roomId"
-						v-on:joined-room="logEvent"
-						v-on:left-room="logEvent"
-						v-on:opened-room="logEvent"
-						v-on:share-started="logEvent"
-						v-on:share-stopped="logEvent"
-						@error="onError"
-					/>
-				</div>
-				<div class="row">
-					<div class="col-md-12 my-3">
-						<button type="button" class="btn btn-primary" @click="onJoin">
-							Join
-						</button>
-						<button type="button" class="btn btn-primary" @click="onLeave">
-							Leave
-						</button>
-						<button type="button" class="btn btn-primary" @click="onCapture">
-							Capture
-						</button>
-						<button
-							type="button"
-							class="btn btn-primary"
-							@click="onShareScreen"
-						>
-							ScreenSharing
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<h2>Captured Image</h2>
-				<figure class="figure">
-					<img :src="img" class="img-responsive" />
-				</figure>
-			</div>
-		</div>
-	</div> -->
 	<div class="main">
 		<div class="main__left">
 			<div class="main__videos">
 				<WebRTC
 					ref="webrtc"
 					width="100%"
-					:roomId="roomId"
+					:roomId="room"
+					:messages="messages"
 					v-on:joined-room="logEvent"
 					v-on:left-room="logEvent"
 					v-on:opened-room="logEvent"
 					v-on:share-started="logEvent"
 					v-on:share-stopped="logEvent"
+					v-on:sent-message="makeMessage"
+					v-on:received-message="logEvent"
 					@error="onError"
 				/>
 			</div>
@@ -92,7 +42,6 @@
 </template>
 
 <script>
-// import { WebRTC } from 'vue-webrtc';
 import WebRTC from '@/components/common/WebRTC.vue';
 export default {
 	props: {
@@ -103,6 +52,7 @@ export default {
 		return {
 			img: null,
 			roomId: this.room,
+			messages: [],
 		};
 	},
 	methods: {
@@ -123,6 +73,9 @@ export default {
 		},
 		logEvent(event) {
 			console.log('Event : ', event);
+		},
+		makeMessage(message) {
+			this.messages.push({ message });
 		},
 	},
 	beforeDestroy() {
