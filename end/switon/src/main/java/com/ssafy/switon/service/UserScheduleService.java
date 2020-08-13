@@ -7,6 +7,7 @@ import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.UserSchedule;
 import com.ssafy.switon.dto.UserScheduleReturnDTO;
 import com.ssafy.switon.dto.UserScheduleSimpleDTO;
+import com.ssafy.switon.dto.UserSimpleDTO;
 
 public interface UserScheduleService {
 
@@ -30,4 +31,6 @@ public interface UserScheduleService {
 	UserSchedule getParticipate(int userId, int scheduleId);
 	// 유저의 참석 정보 상세하게 반환
 	ParticipateInfo getParticipateInfo(int userId, int scheduleId);
+	// 참가자 정보들 반환
+	List<UserSimpleDTO> searchParticipants(int scheduleId);
 }

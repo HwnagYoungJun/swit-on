@@ -9,14 +9,18 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.ScheduleDAO;
 import com.ssafy.switon.dao.StudyDAO;
+import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dao.UserScheduleDAO;
 import com.ssafy.switon.dto.ParticipateInfo;
 import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.ScheduleReturnDTO;
 import com.ssafy.switon.dto.Study;
+import com.ssafy.switon.dto.UserDTO;
+import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserSchedule;
 import com.ssafy.switon.dto.UserScheduleReturnDTO;
 import com.ssafy.switon.dto.UserScheduleSimpleDTO;
+import com.ssafy.switon.dto.UserSimpleDTO;
 
 @Service
 public class UserScheduleServiceImpl implements UserScheduleService {
@@ -29,6 +33,9 @@ public class UserScheduleServiceImpl implements UserScheduleService {
 	
 	@Autowired
 	StudyDAO studyDAO;
+	
+	@Autowired
+	UserDAO userDAO;
 	
 	@Override
 	public List<UserSchedule> selectAll() {
@@ -127,7 +134,23 @@ public class UserScheduleServiceImpl implements UserScheduleService {
 	@Override
 	public ParticipateInfo getParticipateInfo(int userId, int scheduleId) {
 		UserSchedule userSchedule = userscheduleDAO.selectParticipate(new UserSchedule(userId, scheduleId));
+		if(userSchedule == null) {
+			return null;
+		}
 		return new ParticipateInfo(userSchedule.getStatus(), userSchedule.getSuccess());
+	}
+
+	@Override
+	public List<UserSimpleDTO> searchParticipants(int scheduleId) {
+		List<UserSimpleDTO> members = new ArrayList<UserSimpleDTO>();
+		List<UserSchedule> userSchedules = userscheduleDAO.selectUserSchedulesByScheduleId(scheduleId);
+		for(UserSchedule userSchedule : userSchedules) {
+			int userId = userSchedule.getUser_id();
+			UserInfoDTO user = userDAO.selectUserById(userId);
+			UserSimpleDTO member = new UserSimpleDTO(user);
+			members.add(member);
+		}
+		return members;
 	}
 
 }

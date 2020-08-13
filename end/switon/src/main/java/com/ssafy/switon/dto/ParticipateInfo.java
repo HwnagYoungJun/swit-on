@@ -1,11 +1,18 @@
 package com.ssafy.switon.dto;
 
 public class ParticipateInfo {
-	
+	boolean isJoin;
 	boolean checkIn;
 	boolean checkOut;
 	boolean timeover;
 	boolean success;
+	
+	public boolean isJoin() {
+		return isJoin;
+	}
+	public void setJoin(boolean isJoin) {
+		this.isJoin = isJoin;
+	}
 	public boolean isCheckIn() {
 		return checkIn;
 	}
@@ -36,6 +43,7 @@ public class ParticipateInfo {
 				+ ", success=" + success + "]";
 	}
 	public ParticipateInfo(int status, boolean success) {
+		isJoin = true;
 		checkIn = false;
 		checkOut = false;
 		timeover = false;
@@ -50,6 +58,10 @@ public class ParticipateInfo {
 		}
 		this.success = success;
 	}
+	public ParticipateInfo() {
+	}
+	
+	
 	
 	
 }

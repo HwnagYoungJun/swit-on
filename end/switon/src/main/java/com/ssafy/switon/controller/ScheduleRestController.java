@@ -23,6 +23,7 @@ import com.ssafy.switon.dto.ScheduleReturnDTO;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.UserSchedule;
 import com.ssafy.switon.dto.UserScheduleReturnDTO;
+import com.ssafy.switon.dto.UserSimpleDTO;
 import com.ssafy.switon.service.JoinService;
 import com.ssafy.switon.service.ScheduleService;
 import com.ssafy.switon.service.StudyService;
@@ -105,6 +106,8 @@ public class ScheduleRestController {
 		}
 		Study study = studyService.search(studyId);
 		dto.setStudy_name(study.getName());
+		List<UserSimpleDTO> members = userscheduleService.searchParticipants(scheduleId);
+		dto.setMembers(members);
 		System.out.println(scheduleId + "번 스케줄 조회 성공");
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
@@ -162,6 +165,9 @@ public class ScheduleRestController {
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		ParticipateInfo info = userscheduleService.getParticipateInfo(userId, scheduleId);
+		if(info == null) {
+			return new ResponseEntity<>(new ParticipateInfo(), HttpStatus.OK);
+		}
 		System.out.println(scheduleId + "번 스케줄 참가 여부 및 상태 반환");
 		return new ResponseEntity<>(info, HttpStatus.OK);
 	}

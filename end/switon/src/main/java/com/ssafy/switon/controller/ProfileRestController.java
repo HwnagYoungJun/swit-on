@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ssafy.switon.dto.Article;
+import com.ssafy.switon.dto.ArticleFavReturnDTO;
+import com.ssafy.switon.dto.ArticleWithStudyDTO;
 import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.UserDTO;
@@ -27,6 +29,7 @@ import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserScheduleReturnDTO;
 import com.ssafy.switon.dto.UserScheduleSimpleDTO;
 import com.ssafy.switon.dto.UserStudyInfoDTO;
+import com.ssafy.switon.service.ArticleFavService;
 import com.ssafy.switon.service.ArticleService;
 import com.ssafy.switon.service.JoinService;
 import com.ssafy.switon.service.ScheduleService;
@@ -54,6 +57,9 @@ public class ProfileRestController {
 	
 	@Autowired
 	ArticleService articleService;
+	
+	@Autowired
+	ArticleFavService articleFavService;
 	
 	@Autowired
 	JWTUtil jwtUtil;
@@ -154,7 +160,7 @@ public class ProfileRestController {
 			System.out.println("유저 QnA글 리스트 반환 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		List<Article> qnas = articleService.searchUserQnAs(userId);
+		List<ArticleWithStudyDTO> qnas = articleService.searchUserQnAs(userId);
 		System.out.println("유저 QnA글 리스트 반환");
 		return new ResponseEntity<>(qnas, HttpStatus.OK);
 	}
@@ -171,7 +177,7 @@ public class ProfileRestController {
 			System.out.println("유저 자료실 글 리스트 반환 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		List<Article> repos = articleService.searchUserRepositories(userId);
+		List<ArticleWithStudyDTO> repos = articleService.searchUserRepositories(userId);
 		System.out.println("유저 자료실 글 리스트 반환");
 		return new ResponseEntity<>(repos, HttpStatus.OK);		
 		
@@ -211,6 +217,38 @@ public class ProfileRestController {
 		}
 		List<UserScheduleReturnDTO> schedules = userScheduleService.getUserSchedules(userId);
 		return new ResponseEntity<>(schedules, HttpStatus.OK);
+	}
+	
+//	@ApiOperation(value = "유저가 즐겨찾기한 글 목록 반환", response = List.class)
+//	@GetMapping("/{name}/fav")
+//	public Object userFavorite(@PathVariable("name") String name, HttpServletRequest request) {
+//		int userId = userService.searchUserIdByName(name);
+//		if(userId == 0) {
+//			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+//		}
+//		int userIdFromToken = getUserPK(request);
+//		if(userIdFromToken != userId) {
+//			System.out.println("** 즐겨찾기 조회 실패 - 권한이 없습니다.");
+//			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+//		}
+//		List<ArticleFavReturnDTO> list = articleFavService.searchFavList(userId);
+//		return new ResponseEntity<>(list, HttpStatus.OK);
+//	}
+	
+	@ApiOperation(value = "유저가 즐겨찾기한 글 목록 반환", response = List.class)
+	@GetMapping("/{name}/fav")
+	public Object userFavorite(@PathVariable("name") String name, HttpServletRequest request) {
+		int userId = userService.searchUserIdByName(name);
+		if(userId == 0) {
+			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+		}
+		int userIdFromToken = getUserPK(request);
+		if(userIdFromToken != userId) {
+			System.out.println("** 즐겨찾기 조회 실패 - 권한이 없습니다.");
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+		}
+		List<ArticleWithStudyDTO> list = articleFavService.searchFavArticles(userId);
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
 	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img) {

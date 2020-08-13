@@ -1,5 +1,6 @@
 package com.ssafy.switon.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,6 +169,24 @@ public class StudyServiceImpl implements StudyService {
 		List<UpperCategory> uppercategories = categoryDao.selectUpByKeyword(keyword);
 		
 		return new SearchReturnDTO(studies, lowercategories, uppercategories);
+	}
+
+	@Override
+	public String finishStudies(Timestamp timestamp) {
+		// isFinish가 FALSE인 스터디들 중에서 시간이 다 된 스터디 검색
+		List<Integer> ids = studyDao.selectNotFinishedStudyIds(timestamp);
+		String result;
+		if(ids.size() != 0) {
+			result = "스터디 완료 작업 실행!! : ";
+			for(int id : ids) {
+				result += id + "번 스터디 작업 ";
+				joinDao.updateJoinComplete(id);
+				studyDao.updateStudyFinish(id);
+				result += "완료 | ";
+			}
+			return result;
+		}
+		return null;
 	}
 
 	

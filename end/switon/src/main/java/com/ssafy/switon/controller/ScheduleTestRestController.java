@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.switon.dto.Schedule;
@@ -61,7 +62,7 @@ public class ScheduleTestRestController {
 //	}
 	
 	@ApiOperation(value = "스케쥴 삭제한다", response = String.class)
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/deleteSchedule/{id}")
 	public String deleteSchedule(@PathVariable("id") int id) {
 		System.out.println("스케쥴 삭제");
 		if(scheduleService.deleteSchedule(id)) {
@@ -130,8 +131,8 @@ public class ScheduleTestRestController {
 //	}
 	
 	@ApiOperation(value = "유저 스케쥴 삭제한다", response = String.class)
-	@DeleteMapping("/delete/{id}/2")
-	public String deleteUserSchedule(int id) {
+	@DeleteMapping("/delete/{id}")
+	public String deleteUserSchedule(@PathVariable("id") int id) {
 		System.out.println("유저 스케쥴 삭제");
 		if(userscheduleService.deleteUserSchedule(id)) {
 			System.out.println("유저 스케쥴 삭제 성공!!!");

@@ -6,6 +6,21 @@
 
 <mapper namespace="study">
 
+	<!-- 스터디를 종료시킨다 -->
+	<update id="updateStudyFinish">
+		update study
+		set isFinish = true
+		where id = #{id}
+	</update>
+	
+	<!-- 아직 종료되지 않은 스터디 중에서 시간이 만료된 스터디의 아이디 검색 -->
+	<select id="selectNotFinishedStudyIds" resultType="Integer">
+		select id
+		from study
+		where isFinish = false
+		and end_term <![CDATA[ < ]]> #{time}
+	</select>
+
 	<!-- 키워드로 스터디 검색 -->
 	<select id="selectStudyByKeyword" resultType="Study">
 		select id,
@@ -188,5 +203,15 @@
 		delete from study
 		where id = #{id}
 	</delete>
+	
+	<!-- 스터디인포를 모두 조회 -->
+	<!-- <select id="selectStudyInfo" resultType="StudyInfo">
+		select id,
+			   (select count(*) from `join` where study_id = study.id) as user,
+			   (select count(*) from `studylike` where study_id = study.id) as likes,
+			   (select count(*) from `schedule` where study_id = study.id) as schedule,
+			   (select count(id) from article where board_id in (select id from board where study_id = study.id)) as articles
+		from study
+	</select> -->
 
 </mapper>

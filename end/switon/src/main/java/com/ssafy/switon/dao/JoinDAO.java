@@ -23,4 +23,11 @@ public interface JoinDAO {
 	int isMember(Join join);
 	// 소모임id와 userId로 레코드 삭제(탈퇴처리)
 	int deleteJoinByIds(Join join);
+	// 소모임에 가입한 멤버들의 userId리스트 반환
+	List<Integer> selectMemberIds(int studyId);
+	// 스터디 아이디로 가입 정보들 반환
+	List<Join> selectJoinsByStudyId(int studyId);
+	// 스터디 아이디로 소모임 완료 표시
+	int updateJoinComplete(int studyId);
+	
 }

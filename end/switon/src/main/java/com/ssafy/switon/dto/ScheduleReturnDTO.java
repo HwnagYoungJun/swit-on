@@ -1,11 +1,18 @@
 package com.ssafy.switon.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import io.swagger.annotations.ApiParam;
 
 public class ScheduleReturnDTO {
 	
+	public List<UserSimpleDTO> getMembers() {
+		return members;
+	}
+	public void setMembers(List<UserSimpleDTO> members) {
+		this.members = members;
+	}
 	@ApiParam(value = "스케줄 id (PK)", required = false, hidden = true)
 	int id;
 	@ApiParam(value = "소모임 id (FK)", required = false, hidden = true)
@@ -22,6 +29,8 @@ public class ScheduleReturnDTO {
 	String bg_color;
 	@ApiParam(value = "스케줄 생성한 사람 id (FK)", required = false, hidden = true)
 	int user_id;
+	List<UserSimpleDTO> members;
+	
 	public int getId() {
 		return id;
 	}

@@ -20,7 +20,7 @@
 		where user_id = #{user_id}
 	</select>
 	
-	<!-- 유저 아이디로 스케줄 조회 -->
+	<!-- 스케줄 아이디로 참석한 유저 정보 조회 -->
 	<select id="selectUserSchedulesByScheduleId" resultType="UserSchedule">
 		select id, user_id, schedule_id, status, success
 		from userschedule
@@ -75,6 +75,12 @@
 		where user_id = #{user_id}
 		and schedule_id = #{schedule_id}
 	</select>
+	
+	<!-- id로 유저 스케줄 삭제 -->
+	<delete id="deleteUserSchedule">
+		delete from userschedule
+		where id = #{id}
+	</delete>
 	
 	<!-- 더이상의 수정, 삭제는 없음! -->
 

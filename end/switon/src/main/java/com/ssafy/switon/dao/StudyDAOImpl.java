@@ -1,5 +1,6 @@
 package com.ssafy.switon.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -61,6 +62,16 @@ public class StudyDAOImpl implements StudyDAO {
 		System.out.println("검색어: " + keyword);
 		keyword = "%" + keyword + "%";
 		return sqlSession.selectList("study.selectStudyByKeyword", keyword);
+	}
+
+	@Override
+	public List<Integer> selectNotFinishedStudyIds(Timestamp time) {
+		return sqlSession.selectList("study.selectNotFinishedStudyIds", time);
+	}
+
+	@Override
+	public int updateStudyFinish(int id) {
+		return sqlSession.update("study.updateStudyFinish", id);
 	}
 
 }

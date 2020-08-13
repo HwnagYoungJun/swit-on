@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.CommentDAO;
+import com.ssafy.switon.dao.CommentLikeDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Comment;
 import com.ssafy.switon.dto.CommentReturnDTO;
+import com.ssafy.switon.dto.Like;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserSimpleDTO;
 
@@ -21,6 +23,9 @@ public class CommentServiceImpl implements CommentService {
 	
 	@Autowired
 	UserDAO userDAO;
+	
+	@Autowired
+	CommentLikeDAO commentLikeDAO;
 	
 	@Override
 	public List<Comment> searchAll() {
@@ -53,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public List<CommentReturnDTO> searchArticleCommentsIncludingProfile(int articleId) {
+	public List<CommentReturnDTO> searchArticleCommentsIncludingProfile(int articleId, int readerId) {
 		List<Comment> originalComments = commentDAO.selectCommentsByArticleId(articleId);
 		List<CommentReturnDTO> comments = new ArrayList<CommentReturnDTO>();
 		for(Comment originalComment : originalComments) {
@@ -62,7 +67,9 @@ public class CommentServiceImpl implements CommentService {
 			user.setId(userInfo.getId());
 			user.setName(userInfo.getName());
 			user.setProfile_image(userInfo.getProfile_image());
-			CommentReturnDTO comment = new CommentReturnDTO(originalComment, user);
+			Like like = new Like(commentLikeDAO.selectLikeCount(originalComment.getId())
+					, commentLikeDAO.selectCommentLikeByUser_Comment(readerId, originalComment.getId()) != null);
+			CommentReturnDTO comment = new CommentReturnDTO(originalComment, user, like);
 			comments.add(comment);
 		}
 		return comments;

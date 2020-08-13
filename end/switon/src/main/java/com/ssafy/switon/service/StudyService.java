@@ -1,5 +1,6 @@
 package com.ssafy.switon.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.ssafy.switon.dto.SearchReturnDTO;
@@ -36,6 +37,8 @@ public interface StudyService {
 	List<StudyCardDTO> searchStudyCards();
 	// 키워드로 스터디 검색
 	SearchReturnDTO searchStudyByKeyword(String keyword);
+	// 스터디를 종료해주기, join에서도 isFinish 처리해줘야함
+	String finishStudies(Timestamp timestamp);
 	
 
 }

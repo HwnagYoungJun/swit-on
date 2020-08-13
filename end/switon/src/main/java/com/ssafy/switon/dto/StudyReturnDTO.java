@@ -1,14 +1,30 @@
 package com.ssafy.switon.dto;
 
+import java.util.List;
+
 public class StudyReturnDTO {
 	
 	Study study;
+	String leaderName;
 	Boolean isJoined;
 	Boolean isLeader;
 	Like like;
+	List<UserSimpleDTO> members;
 	
 	
 	
+	public List<UserSimpleDTO> getMembers() {
+		return members;
+	}
+	public void setMembers(List<UserSimpleDTO> members) {
+		this.members = members;
+	}
+	public String getLeaderName() {
+		return leaderName;
+	}
+	public void setLeaderName(String leaderName) {
+		this.leaderName = leaderName;
+	}
 	public Like getLike() {
 		return like;
 	}
@@ -31,6 +47,7 @@ public class StudyReturnDTO {
 		return isLeader;
 	}
 	public StudyReturnDTO(Study study, Boolean isJoined, Boolean isLeader, Like like) {
+		
 		this.study = study;
 		this.isJoined = isJoined;
 		this.isLeader = isLeader;
@@ -41,7 +58,9 @@ public class StudyReturnDTO {
 	}
 	@Override
 	public String toString() {
-		return "StudyReturnDTO [study=" + study + ", isJoined=" + isJoined + ", isLeader=" + isLeader + "]";
+		return "StudyReturnDTO [study=" + study + ", leaderName=" + leaderName + ", isJoined=" + isJoined + ", isLeader="
+				+ isLeader + ", like=" + like + "]";
 	}
+	
 	
 }

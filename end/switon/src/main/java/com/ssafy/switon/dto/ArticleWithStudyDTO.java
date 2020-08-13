@@ -1,11 +1,11 @@
 package com.ssafy.switon.dto;
 
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.List;
 
 import io.swagger.annotations.ApiParam;
 
-public class ArticleDetailReturnDTO {
+public class ArticleWithStudyDTO {
 	
 	@ApiParam(value = "게시글 id (PK)", required = false, hidden = true)
 	int id;
@@ -15,7 +15,7 @@ public class ArticleDetailReturnDTO {
 	String content;
 	@ApiParam(value = "작성자 (토큰에서 긁어옴)", required = false, hidden = true)
 	int user_id;
-	@ApiParam(value = "첨부파일")
+	@ApiParam(value = "첨부파일", required = false, hidden = true)
 	String file;
 	@ApiParam(value = "게시판 아이디 (스터디id에서 얻어냄)", required = false, hidden = true)
 	int board_id;
@@ -23,18 +23,10 @@ public class ArticleDetailReturnDTO {
 	Timestamp created_at;
 	@ApiParam(value = "게시글 수정시간", required = false, hidden = true)
 	Timestamp updated_at;
-	// 간단한 스터디 정보
 	StudySimple study;
-	// 간단한 작성자 정보
-	UserSimpleDTO user;
-	// 댓글도 함께 반환해야 해서...
-	List<CommentReturnDTO> comments;
-	// 좋아요 상태도 함께 반환해야 해서...
-	Like like;
-	// 북마크 여부 반환
-	boolean isfavorite;
+	String board_name;
 	
-	public ArticleDetailReturnDTO(Article article, List<CommentReturnDTO> comments, Like like) {
+	public ArticleWithStudyDTO(Article article, StudySimple study, String board_name) {
 		this.id = article.getId();
 		this.title = article.getTitle();
 		this.content = article.getContent();
@@ -43,44 +35,15 @@ public class ArticleDetailReturnDTO {
 		this.board_id = article.getBoard_id();
 		this.created_at = article.getCreated_at();
 		this.updated_at = article.getUpdated_at();
-		this.comments = comments;
-		this.like = like;
+		this.study = study;
+		this.board_name = board_name;
 	}
-	
 	public StudySimple getStudy() {
 		return study;
 	}
-
-	public boolean isIsfavorite() {
-		return isfavorite;
-	}
-
-	public void setIsfavorite(boolean isfavorite) {
-		this.isfavorite = isfavorite;
-	}
-
 	public void setStudy(StudySimple study) {
 		this.study = study;
 	}
-
-
-
-	public Like getLike() {
-		return like;
-	}
-
-	public void setLike(Like like) {
-		this.like = like;
-	}
-
-	public UserSimpleDTO getUser() {
-		return user;
-	}
-
-	public void setUser(UserSimpleDTO user) {
-		this.user = user;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -129,18 +92,12 @@ public class ArticleDetailReturnDTO {
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
-	public List<CommentReturnDTO> getComments() {
-		return comments;
-	}
-	public void setComments(List<CommentReturnDTO> comments) {
-		this.comments = comments;
-	}
-
 	@Override
 	public String toString() {
-		return "ArticleDetailReturnDTO [id=" + id + ", title=" + title + ", content=" + content + ", user_id=" + user_id
+		return "ArticleWithStudyDTO [id=" + id + ", title=" + title + ", content=" + content + ", user_id=" + user_id
 				+ ", file=" + file + ", board_id=" + board_id + ", created_at=" + created_at + ", updated_at="
-				+ updated_at + ", user=" + user + ", comments=" + comments + "]";
+				+ updated_at + ", study=" + study + "]";
 	}
+	
 	
 }
