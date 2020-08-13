@@ -12,7 +12,7 @@ function createArticle(studyId, boardName, articleData) {
 	const formdata = new FormData();
 	formdata.append('title', articleData.title);
 	formdata.append('content', articleData.content);
-	formdata.append('file', articleData.file);
+	formdata.append('upload', articleData.file);
 	return boardArticles.post(`/${studyId}/${boardName}/`, formdata);
 }
 
@@ -24,7 +24,7 @@ function updateArticle(studyId, boardName, articleId, articleData) {
 	const formdata = new FormData();
 	formdata.append('title', articleData.title);
 	formdata.append('content', articleData.content);
-	formdata.append('file', articleData.file);
+	formdata.append('upload', articleData.file);
 	return boardArticles.put(`/${studyId}/${boardName}/${articleId}/`, formdata);
 }
 
