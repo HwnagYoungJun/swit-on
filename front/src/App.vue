@@ -10,7 +10,7 @@
 					v-for="study in studies"
 					:to="`/study/${study.id}`"
 				>
-					<div class="popular-item">
+					<!-- <div class="popular-item">
 						<div class="popular-img">
 							<img
 								v-if="study.logo"
@@ -33,7 +33,8 @@
 								{{ study.start_time }}-{{ study.end_time }}
 							</p>
 						</div>
-					</div>
+					</div> -->
+					<MainCard :study="study" colorPick="white" />
 				</router-link>
 			</div>
 		</section>
@@ -50,11 +51,13 @@
 import AppHeader from '@/components/common/AppHeader.vue';
 import Search from '@/components/common/Search.vue';
 import { fetchStudies } from '@/api/studies';
+import MainCard from '@/components/common/MainCard.vue';
 
 export default {
 	components: {
 		AppHeader,
 		Search,
+		MainCard,
 	},
 	data() {
 		return {
@@ -68,9 +71,6 @@ export default {
 		},
 		isMainRoute() {
 			return this.$route.name === 'main';
-		},
-		BaseUrl() {
-			return process.env.VUE_APP_API_URL;
 		},
 	},
 	methods: {

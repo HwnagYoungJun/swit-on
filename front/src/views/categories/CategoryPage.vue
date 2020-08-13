@@ -7,27 +7,30 @@
 		<LowerCategoryNavForm
 			@changeLower="changeLower"
 			:upperCategory="upperCategory"
+			:upperCategoryName="upperCategoryName"
 		/>
 		<br />
-		<h2>{{ lowerCategory }} 스터디</h2>
-		<hr />
-		<CategoryForm
+		<!-- <h2>{{ lowerCategory }} 스터디</h2>
+		<hr /> -->
+		<router-view :upperCategoryName="upperCategoryName"></router-view>
+		<!-- <CategoryForm
 			:lowerCategory="lowerCategory"
 			:upperCategory="upperCategory"
-		/>
+		/> -->
 	</div>
 </template>
 
 <script>
-import CategoryForm from '@/components/categorys/CategoryForm.vue';
-import CategoryNavForm from '@/components/categorys/CategoryNavForm.vue';
-import LowerCategoryNavForm from '@/components/categorys/children/LowerCategoryNavForm.vue';
+import CategoryNavForm from '@/components/categories/CategoryNavForm.vue';
+import LowerCategoryNavForm from '@/components/categories/children/LowerCategoryNavForm.vue';
 import { upperCategoryId } from '@/utils/category';
 export default {
 	components: {
-		CategoryForm,
 		CategoryNavForm,
 		LowerCategoryNavForm,
+	},
+	props: {
+		upperCategoryName: String,
 	},
 	data() {
 		return {
@@ -49,10 +52,10 @@ export default {
 	},
 	computed: {
 		initName() {
-			return this.$route.params.UpperCategoryName;
+			return this.upperCategoryName;
 		},
 		upperCategory() {
-			return upperCategoryId(this.$route.params.UpperCategoryName);
+			return upperCategoryId(this.upperCategoryName);
 		},
 	},
 };

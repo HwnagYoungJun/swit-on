@@ -5,19 +5,19 @@
 		</nav>
 		<section class="study-section">
 			<h2>인기 스터디</h2>
-			<CategoryForm :categoryName="categoryName"></CategoryForm>
+			<!-- <CategoryForm :categoryName="categoryName"></CategoryForm> -->
 		</section>
 	</section>
 </template>
 
 <script>
-import CategoryNavForm from '@/components/categorys/CategoryNavForm.vue';
-import CategoryForm from '@/components/categorys/CategoryForm.vue';
+import CategoryNavForm from '@/components/categories/CategoryNavForm.vue';
+// import CategoryForm from '@/components/categories/CategoryForm.vue';
 
 export default {
 	components: {
 		CategoryNavForm,
-		CategoryForm,
+		// CategoryForm,
 	},
 };
 </script>
