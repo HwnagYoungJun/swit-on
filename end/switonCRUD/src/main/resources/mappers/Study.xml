@@ -187,5 +187,15 @@
 		from study
 		where name like #{keyword}
 	</select>
+	
+	<!-- 스터디인포를 모두 조회 -->
+	<select id="selectStudyInfo" resultType="StudyInfo">
+		select id,
+			   (select count(*) from `join` where study_id = study.id) as user,
+			   (select count(*) from `studylike` where study_id = study.id) as likes,
+			   (select count(*) from `schedule` where study_id = study.id) as schedule,
+			   (select count(id) from article where board_id in (select id from board where study_id = study.id)) as articles
+		from study
+	</select>
 
 </mapper>
