@@ -45,32 +45,34 @@ export default {
 		async fetchData() {
 			const { data } = await baseAuth.get(`study/${this.id}/schedule`);
 			console.log(data);
-			this.calendarList = data.reduce((acc, el) => {
-				if (acc.findIndex(i => i.name === el.study_name) === -1) {
-					acc.push({
-						id: el.study_id,
-						name: el.study_name,
-					});
-				}
-				return acc;
-			}, []);
+			if (data.length) {
+				this.calendarList = data.reduce((acc, el) => {
+					if (acc.findIndex(i => i.name === el.study_name) === -1) {
+						acc.push({
+							id: el.study_id,
+							name: el.study_name,
+						});
+					}
+					return acc;
+				}, []);
 
-			this.scheduleList = data.reduce((acc, el, idx) => {
-				acc.push({
-					id: idx,
-					calendarId: el.study_id,
-					title: el.title,
-					category: 'time',
-					dueDateClass: '',
-					start: el.start,
-					end: el.end,
-					color: el.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
-					bgColor: el.bg_color,
-					dragBgColor: el.bg_color,
-					borderColor: el.bg_color,
-				});
-				return acc;
-			}, []);
+				this.scheduleList = data.reduce((acc, el, idx) => {
+					acc.push({
+						id: idx,
+						calendarId: el.study_id,
+						title: el.title,
+						category: 'time',
+						dueDateClass: '',
+						start: el.start,
+						end: el.end,
+						color: el.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
+						bgColor: el.bg_color,
+						dragBgColor: el.bg_color,
+						borderColor: el.bg_color,
+					});
+					return acc;
+				}, []);
+			}
 		},
 	},
 	data() {

@@ -28,6 +28,13 @@ function updateArticle(studyId, boardName, articleId, articleData) {
 	return boardArticles.put(`/${studyId}/${boardName}/${articleId}/`, formdata);
 }
 
+function createArticleBookmark(studyId, boardName, articleId) {
+	return boardArticles.post(`/${studyId}/${boardName}/${articleId}/fav/`);
+}
+function deleteArticleBookmark(studyId, boardName, articleId) {
+	return boardArticles.delete(`/${studyId}/${boardName}/${articleId}/fav/`);
+}
+
 function fetchArticle(studyId, boardName, articleId) {
 	return boardArticles.get(`/${studyId}/${boardName}/${articleId}/`);
 }
@@ -38,12 +45,28 @@ function createComment(studyId, boardName, articleId, commentData) {
 		commentData,
 	);
 }
+function deleteComment(studyId, boardName, articleId, commentId) {
+	return boardArticles.delete(
+		`/${studyId}/${boardName}/${articleId}/comments/${commentId}`,
+	);
+}
 
 function createArticleLike(studyId, boardName, articleId) {
 	return boardArticles.post(`/${studyId}/${boardName}/${articleId}/like/`);
 }
 function deleteArticleLike(studyId, boardName, articleId) {
 	return boardArticles.delete(`/${studyId}/${boardName}/${articleId}/like/`);
+}
+
+function createArticleCommentLike(studyId, boardName, articleId, commentId) {
+	return boardArticles.post(
+		`/${studyId}/${boardName}/${articleId}/${commentId}/like/`,
+	);
+}
+function deleteArticleCommentLike(studyId, boardName, articleId, commentId) {
+	return boardArticles.delete(
+		`/${studyId}/${boardName}/${articleId}/${commentId}/like/`,
+	);
 }
 
 export {
@@ -54,6 +77,11 @@ export {
 	updateArticle,
 	fetchFeeds,
 	createComment,
+	deleteComment,
 	createArticleLike,
 	deleteArticleLike,
+	createArticleCommentLike,
+	deleteArticleCommentLike,
+	createArticleBookmark,
+	deleteArticleBookmark,
 };
