@@ -54,13 +54,16 @@
 				</div>
 			</aside>
 		</main>
-		<div id="bottomSensor"></div>
+		<InfiniteLoading
+			@infinite="infiniteHandler"
+			spinner="waveDots"
+		></InfiniteLoading>
 	</div>
 </template>
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import GruopCardSmall from '@/components/common/GruopCardSmall.vue';
-import { fetchFeeds } from '@/api/articles';
+// import { fetchFeeds } from '@/api/articles';
 import { baseAuth } from '@/api/index';
 // import { fetchStudy } from '@/api/studies';
 import 'tui-calendar/dist/tui-calendar.css';
@@ -68,11 +71,18 @@ import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 import cookies from 'vue-cookies';
+import InfiniteLoading from 'vue-infinite-loading';
 export default {
-	components: { ArticleCard, GruopCardSmall, Calendar },
+	components: {
+		InfiniteLoading,
+		ArticleCard,
+		GruopCardSmall,
+		Calendar,
+	},
 
 	data() {
 		return {
+			limit: 0,
 			userName: cookies.get('name') ? cookies.get('name') : null,
 			articles: null,
 			calendarList: [],
@@ -117,34 +127,23 @@ export default {
 		};
 	},
 	methods: {
-		async getArticles() {
-			try {
-				const { data } = await fetchFeeds();
-				this.articles = [...this.articles, data];
-			} catch (err) {
-				console.log(err);
-			}
+		infiniteHandler() {
+			console.log('!!');
+			// const { data } = await fetchFeeds();
+			// setTimeout(() => {
+			// 	if (data.length) {
+			// 		this.articles = [...this.articles, data];
+			// 		$state.loaded();
+			// 		this.limit += 5;
+			// 		if (this.articles.length / 5 === 0) {
+			// 			$state.complete();
+			// 		}
+			// 	} else {
+			// 		$state.complete();
+			// 	}
+			// }, 500);
 		},
-		loadUntilViewportIsFull() {
-			const bottomSensor = document.querySelector('#bottomSensor');
-			const watcher = scrollMonitor.create(bottomSensor);
-			// bottomSensor가 화면 안에 있으면
-			if (watcher.isFullyInViewport) {
-				// post 가져와
-				this.getArticles();
-			}
-		},
-		addScrollWatcher() {
-			const bottomSensor = document.querySelector('#bottomSensor');
-			const watcher = scrollMonitor.create(bottomSensor);
-			// bottomSensor가 나갔다 새로 들어오면
-			watcher.enterViewport(() => {
-				this.getArticles();
-				// setTimeout(() => {
-				//     this.getPosts()
-				// }, 500)
-			});
-		},
+
 		async fetchScheduleData() {
 			const { data } = await baseAuth.get(
 				`/accounts/${this.userName}/myschedule/`,
@@ -179,7 +178,6 @@ export default {
 	},
 	created() {
 		this.fetchScheduleData();
-		this.addScrollWatcher();
 	},
 };
 </script>
