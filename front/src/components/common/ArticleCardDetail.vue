@@ -6,15 +6,18 @@
 					<a href="#">프로그래밍 언어</a><span aria-hidden="true">></span>
 				</li> -->
 				<li>
-					<router-link :to="{ name: 'dashboard' }">{{
+					<router-link :to="{ name: 'dashboard' }" tabindex="-1">{{
 						article.study.name
 					}}</router-link
 					><span aria-hidden="true">></span>
 				</li>
 				<li>
-					<router-link :to="{ name: `${board_name}` }" aria-current="page">{{
-						board_name
-					}}</router-link>
+					<router-link
+						:to="{ name: `${board_name}` }"
+						aria-current="page"
+						tabindex="-1"
+						>{{ board_name }}</router-link
+					>
 				</li>
 			</ol>
 		</nav>
@@ -26,7 +29,7 @@
 				<div class="card-detail-content">
 					<Viewer :initialValue="article.content" />
 					<p>{{ article.file }}</p>
-					<div class="logo">
+					<div class="logo" v-if="board_name !== 'notice'">
 						<i
 							@click="articleUnLike"
 							v-if="isLiked"
@@ -34,16 +37,18 @@
 						></i>
 						<i @click="articleLike" v-else class="icon ion-md-heart unlike"></i>
 						<span>좋아요 {{ likeCount }}개</span>
-						<i
-							v-if="isBookmarked"
-							@click="removeBookmark"
-							class="icon ion-md-bookmark bookmark"
-						></i>
-						<i
-							v-else
-							@click="addBookmark"
-							class="icon ion-md-bookmark unlike"
-						></i>
+						<div class="bookmark" v-if="board_name === 'repository'">
+							<i
+								v-if="isBookmarked"
+								@click="removeBookmark"
+								class="icon ion-md-bookmark bookmark"
+							></i>
+							<i
+								v-else
+								@click="addBookmark"
+								class="icon ion-md-bookmark unlike"
+							></i>
+						</div>
 					</div>
 					<div class="content-info">
 						<a href="">{{ article.user.name }}</a>

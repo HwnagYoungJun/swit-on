@@ -16,18 +16,18 @@
 				},
 			}"
 		>
-			<ArticleCard :article="article">
-				<div slot="logo">
+			<ArticleFeed :article="article">
+				<!-- <div slot="logo">
 					<img src="@/assets/color2.png" alt="" />
-				</div>
-			</ArticleCard>
+				</div> -->
+			</ArticleFeed>
 		</router-link>
 		<ArticleAddBtn boardName="repository" />
 	</div>
 </template>
 
 <script>
-import ArticleCard from '@/components/common/ArticleCard.vue';
+import ArticleFeed from '@/components/common/ArticleFeed.vue';
 import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import { fetchArticles } from '@/api/articles';
@@ -41,7 +41,7 @@ export default {
 		};
 	},
 	components: {
-		ArticleCard,
+		ArticleFeed,
 		ArticleAddBtn,
 		ArticleNotFound,
 	},

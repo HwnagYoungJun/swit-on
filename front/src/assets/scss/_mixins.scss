@@ -28,9 +28,6 @@ $mobile-contents-width: 640px; // 쪼그라들기 시작할 시점
 	border-radius: 4px;
 	color: #fff;
 	background: $btn-purple;
-	&:focus {
-		outline: none;
-	}
 	&:hover {
 		color: $main-color;
 		background: #fff;
