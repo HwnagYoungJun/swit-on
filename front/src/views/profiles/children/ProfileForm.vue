@@ -2,13 +2,13 @@
 	<div>
 		<div class="profile-box">
 			<div class="profile-wrap">
-				<!-- <img
+				<img
 					v-if="profileImg"
 					class="profile-logo"
 					:src="`${baseURL}${profileImg}`"
 					alt="profile_img"
-				/> -->
-				<img class="profile-logo" src="@/assets/color.png" alt="" />
+				/>
+				<img v-else class="profile-logo" src="@/assets/color.png" alt="" />
 			</div>
 			<div class="info-box">
 				<div class="name-box">
@@ -43,7 +43,6 @@
 </template>
 
 <script>
-// import cookies from 'vue-cookies';
 import { fetchProfile } from '@/api/auth';
 export default {
 	props: {
@@ -63,7 +62,6 @@ export default {
 			try {
 				const name = this.userName;
 				const { data } = await fetchProfile(name);
-				console.log(data);
 				this.profile = data;
 				this.introduce = data.introduce;
 				this.profileImg = data.profile_image;
@@ -147,13 +145,9 @@ export default {
 	}
 }
 .profile-wrap {
-	// display: inline-block;
-	// max-height: 15rem;
-	// max-width: 15rem;
-	// min-width: 15rem;
-	// min-width: 15rem;
 	width: 170px;
 	height: 170px;
+	margin-right: 100px;
 	position: relative;
 	border: 4px solid transparent;
 	border-radius: 50%;

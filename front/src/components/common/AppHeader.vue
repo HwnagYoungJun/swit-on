@@ -44,7 +44,7 @@
 				></a>
 				<router-link
 					v-if="name"
-					class="nav-router-item"
+					class="nav-router-img-item"
 					:to="`/profile/${name}`"
 					><img
 						v-if="profileImg"
@@ -134,8 +134,6 @@ header {
 		display: none;
 	}
 	.nav-router-item {
-		width: 24px;
-		height: 24px;
 		color: white;
 	}
 	i {
@@ -145,7 +143,6 @@ header {
 	}
 }
 .switon-logo {
-	// padding-bottom: 0;
 	display: flex;
 	align-items: center;
 }
@@ -175,6 +172,10 @@ header {
 	.nav-router-item {
 		margin-right: 0.5rem;
 	}
+	.nav-router-img-item {
+		width: 24px;
+		height: 24px;
+	}
 	.nav-router-full {
 		display: inline;
 	}
@@ -198,7 +199,7 @@ header {
 			display: inline;
 		}
 		i {
-			font-size: 28px;
+			font-size: 24px;
 		}
 	}
 }
@@ -209,7 +210,9 @@ header {
 	}
 }
 .nav-router-color {
-	background: $main-color;
+	@media screen and (max-width: 768px) {
+		background: $btn-purple;
+	}
 }
 .a11y-hidden {
 	overflow: hidden;
