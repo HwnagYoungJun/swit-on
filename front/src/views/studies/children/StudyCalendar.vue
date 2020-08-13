@@ -23,10 +23,9 @@
 <script>
 import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
 import { baseAuth } from '@/api/index';
-import 'tui-calendar/dist/tui-calendar.css';
-import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 
-// If you use the default popups, use this.
+import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
+import 'tui-calendar/dist/tui-calendar.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 
@@ -46,38 +45,40 @@ export default {
 		async fetchData() {
 			const { data } = await baseAuth.get(`study/${this.id}/schedule`);
 			console.log(data);
-			this.calendarList = data.reduce((acc, el) => {
-				if (acc.findIndex(i => i.name === el.study_name) === -1) {
-					acc.push({
-						id: el.study_id,
-						name: el.study_name,
-					});
-				}
-				return acc;
-			}, []);
+			if (data.length) {
+				this.calendarList = data.reduce((acc, el) => {
+					if (acc.findIndex(i => i.name === el.study_name) === -1) {
+						acc.push({
+							id: el.study_id,
+							name: el.study_name,
+						});
+					}
+					return acc;
+				}, []);
 
-			this.scheduleList = data.reduce((acc, el, idx) => {
-				acc.push({
-					id: idx,
-					calendarId: el.study_id,
-					title: el.title,
-					category: 'time',
-					dueDateClass: '',
-					start: el.start,
-					end: el.end,
-					color: el.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
-					bgColor: el.bg_color,
-					dragBgColor: el.bg_color,
-					borderColor: el.bg_color,
-				});
-				return acc;
-			}, []);
+				this.scheduleList = data.reduce((acc, el, idx) => {
+					acc.push({
+						id: idx,
+						calendarId: el.study_id,
+						title: el.title,
+						category: 'time',
+						dueDateClass: '',
+						start: el.start,
+						end: el.end,
+						color: el.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
+						bgColor: el.bg_color,
+						dragBgColor: el.bg_color,
+						borderColor: el.bg_color,
+					});
+					return acc;
+				}, []);
+			}
 		},
 	},
 	data() {
 		return {
-			calendarList: null,
-			scheduleList: null,
+			calendarList: [],
+			scheduleList: [],
 			view: 'month',
 			taskView: false,
 			scheduleView: ['time'],

@@ -1,12 +1,14 @@
 <template>
-	<div>
+	<div v-if="article">
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
-				<li>
+				<!-- <li>
 					<a href="#">프로그래밍 언어</a><span aria-hidden="true">></span>
-				</li>
+				</li> -->
 				<li>
-					<router-link :to="{ name: 'dashboard' }">python 소모임</router-link
+					<router-link :to="{ name: 'dashboard' }">{{
+						article.study.name
+					}}</router-link
 					><span aria-hidden="true">></span>
 				</li>
 				<li>
@@ -17,9 +19,8 @@
 			</ol>
 		</nav>
 		<div class="card-detail-wrap">
-			<div v-if="article" class="card-detail">
+			<div class="card-detail">
 				<div class="card-detail-title">
-					<!-- <img src="@/assets/color2.png" alt="" class="img" /> -->
 					<p>{{ article.title }}</p>
 				</div>
 				<div class="card-detail-content">
@@ -32,40 +33,49 @@
 						></i>
 						<i @click="articleLike" v-else class="icon ion-md-heart unlike"></i>
 						<span>좋아요 {{ likeCount }}개</span>
+						<i
+							v-if="isBookmarked"
+							@click="removeBookmark"
+							class="icon ion-md-bookmark bookmark"
+						></i>
+						<i
+							v-else
+							@click="addBookmark"
+							class="icon ion-md-bookmark unlike"
+						></i>
 					</div>
 					<div class="content-info">
 						<a href="">{{ article.user.name }}</a>
-						<!-- <span>#python</span> <span>#django</span> -->
 					</div>
 					<div class="comment-body">
 						<ul>
-							<li v-for="comment in article.comments" :key="comment.id">
-								<span class="comment-user">{{ comment.user.name }}</span>
-								{{ comment.content }}
-
-								<!-- {{ cmt.like_users }}
-								<i
-									v-if="isLikeUser"
-									@click="
-										unlikeComment({ feedId: feed.id, commentId: cmt.id });
-										isLike();
-									"
-									class="fas fa-heart heart-color"
-								></i>
-								<i
-									v-else
-									@click="
-										likeComment({ feedId: feed.id, commentId: cmt.id });
-										isLike();
-									"
-									class="far fa-heart"
-								></i>
-								<i
-									v-if="$store.state.username === cmt.user.username"
-									@click="deleteComment({ feedId: feed.id, commentId: cmt.id })"
-									class="fas fa-times comment-delete"
-								>
-								</i> -->
+							<li
+								class="comment-list"
+								v-for="comment in article.comments"
+								:key="comment.id"
+							>
+								<div class="comment-contentbox">
+									<span class="comment-user">{{ comment.user.name }}</span>
+									{{ comment.content }}
+								</div>
+								<div class="comment-btnbox">
+									<i
+										v-if="comment.like.liked"
+										@click="commentUnLike(comment.id)"
+										class="icon ion-md-heart like"
+									></i>
+									<i
+										v-else
+										@click="commentLike(comment.id)"
+										class="icon ion-md-heart unlike"
+									></i>
+									<i
+										v-if="getName === comment.user.name"
+										@click="removeComment(comment.id)"
+										class="icon ion-md-trash"
+									>
+									</i>
+								</div>
 							</li>
 						</ul>
 					</div>
@@ -98,11 +108,17 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import {
 	fetchArticle,
 	createComment,
+	deleteComment,
 	createArticleLike,
 	deleteArticleLike,
+	createArticleCommentLike,
+	deleteArticleCommentLike,
+	createArticleBookmark,
+	deleteArticleBookmark,
 } from '@/api/articles';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import Viewer from '@toast-ui/vue-editor/src/Viewer.vue';
@@ -123,11 +139,15 @@ export default {
 		};
 	},
 	computed: {
+		...mapGetters(['getName']),
 		isLiked() {
 			return this.article.like.liked;
 		},
 		likeCount() {
 			return this.article.like.like_cnt;
+		},
+		isBookmarked() {
+			return this.article.isfavorite;
 		},
 	},
 	methods: {
@@ -143,6 +163,23 @@ export default {
 				console.log(error);
 			}
 		},
+		isCommentLiked(flag) {
+			return flag;
+		},
+		async addBookmark() {
+			const studyId = this.id;
+			const boardName = this.board_name;
+			const articleId = this.article_id;
+			await createArticleBookmark(studyId, boardName, articleId);
+			this.fetchData();
+		},
+		async removeBookmark() {
+			const studyId = this.id;
+			const boardName = this.board_name;
+			const articleId = this.article_id;
+			await deleteArticleBookmark(studyId, boardName, articleId);
+			this.fetchData();
+		},
 		async AddComment() {
 			try {
 				const studyId = this.id;
@@ -152,6 +189,17 @@ export default {
 				await createComment(studyId, boardName, articleId, {
 					content,
 				});
+				this.fetchData();
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		async removeComment(commentId) {
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				await deleteComment(studyId, boardName, articleId, commentId);
 				this.fetchData();
 			} catch (error) {
 				console.log(error);
@@ -179,6 +227,38 @@ export default {
 				console.log(error);
 			}
 		},
+		async commentLike(commentId) {
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				await createArticleCommentLike(
+					studyId,
+					boardName,
+					articleId,
+					commentId,
+				);
+				this.fetchData();
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		async commentUnLike(commentId) {
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				await deleteArticleCommentLike(
+					studyId,
+					boardName,
+					articleId,
+					commentId,
+				);
+				this.fetchData();
+			} catch (error) {
+				console.log(error);
+			}
+		},
 		resetContent() {
 			this.commentContent = null;
 		},
@@ -193,6 +273,17 @@ export default {
 </script>
 
 <style lang="scss">
+.comment-list {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.comment-btnbox {
+	font-size: $font-normal;
+	i {
+		margin-right: 5px;
+	}
+}
 .breadcrumb {
 	ol {
 		padding: 0;
@@ -248,11 +339,8 @@ export default {
 			font-size: $font-light;
 			color: #999999;
 		}
-		.like {
-			color: crimson;
-		}
-		.unlike {
-			color: grey;
+		.bookmark {
+			color: $btn-purple;
 		}
 	}
 	.content-info {
@@ -307,5 +395,11 @@ export default {
 		font-weight: bold;
 		cursor: pointer;
 	}
+}
+.like {
+	color: crimson;
+}
+.unlike {
+	color: grey;
 }
 </style>
