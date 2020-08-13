@@ -31,6 +31,17 @@ export default {
 </script>
 
 <style lang="scss">
+.tui-editor-contents {
+	p {
+		width: 100%;
+		height: 100%;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+}
 .feed-wrap {
 	width: 600px;
 	margin-bottom: 30px;

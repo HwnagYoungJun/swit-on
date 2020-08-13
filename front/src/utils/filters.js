@@ -51,3 +51,7 @@ export function formatWeekday(n) {
 
 	return days;
 }
+
+export function fileDownload(file) {
+	return file.replace('upload/', '');
+}

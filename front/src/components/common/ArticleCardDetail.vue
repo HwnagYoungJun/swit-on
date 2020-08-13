@@ -25,7 +25,10 @@
 				</div>
 				<div class="card-detail-content">
 					<Viewer :initialValue="article.content" />
-					<p>{{ article.file }}</p>
+					<!-- <p>{{ article.file }}</p> -->
+					<a :href="`${BaseUrl}${article.file}`" download>{{
+						article.file | fileDownload
+					}}</a>
 					<div class="logo" v-if="board_name !== 'notice'">
 						<i
 							@click="articleUnLike"
@@ -47,7 +50,7 @@
 							></i>
 							<router-link
 								:to="
-									`study/${article.study.id}/${board_name}/${article.id}/edit`
+									`/study/${article.study.id}/${board_name}/${article.id}/edit`
 								"
 								>수정</router-link
 							>
@@ -157,6 +160,9 @@ export default {
 		},
 		isBookmarked() {
 			return this.article.isfavorite;
+		},
+		BaseUrl() {
+			return process.env.VUE_APP_API_URL;
 		},
 	},
 	methods: {
@@ -330,6 +336,17 @@ export default {
 }
 .card-detail-content {
 	padding: 10px;
+	.tui-editor-contents {
+		p {
+			width: 100%;
+			height: 100%;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+	}
 	.main-img {
 		width: 100%;
 		margin: 30px 0;
