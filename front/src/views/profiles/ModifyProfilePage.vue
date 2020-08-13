@@ -4,39 +4,72 @@
 		autocomplete="off"
 		@submit.prevent="modifyData"
 	>
-		<img class="img-box" id="img-box" :src="profileImgCom" alt="profile_img" />
-		<div class="img-change">
-			<input
-				ref="inputFile"
-				id="inputFile"
-				type="file"
-				@change="onChangeFile"
-			/>
-		</div>
-		<h2>{{ email }}</h2>
-		<div class="input-container">
-			<div class="input-box">
-				<span>이름</span>
-				<input type="text" v-model="name" />
-			</div>
-			<div class="input-box">
-				<span>소개</span>
-				<textarea
-					name=""
-					id=""
-					cols="10"
-					rows="2"
-					v-model="introduce"
-				></textarea>
+		<div class="modify-header">
+			<h2>프로필 변경하기</h2>
+			<div class="study-btnbox">
+				<button @click.prevent="$router.go(-1)" class="studyform-btn-cancle">
+					취소
+				</button>
+				<button :disabled="!isVaildIntro" class="hide-btn">작성</button>
+				<button
+					:disabled="!isVaildIntro"
+					class="studyform-btn-submit"
+					type="submit"
+				>
+					작성
+				</button>
 			</div>
 		</div>
-		<div class="hiddenMsg" v-if="!isVaildIntro">
-			소개는 20자 이하입니다!
+		<div class="modify-main">
+			<p class="modify-text">{{ email }}</p>
+			<div class="imgimgimg">
+				<div class="img-container">
+					<img
+						class="img-box"
+						id="img-box"
+						:src="profileImgCom"
+						alt="profile_img"
+					/>
+				</div>
+			</div>
+
+			<div class="upload-btn_wrap">
+				<input
+					v-model="profileImg"
+					ref="inputFile"
+					class="upload_text"
+					title="첨부"
+					readonly="readonly"
+					placeholder="첨부된 파일이 없습니다."
+					@change="onChangeFile"
+				/>
+				<button type="button" title="첨부">
+					<span>첨부</span>
+				</button>
+				<input
+					ref="inputFile"
+					type="file"
+					class="input_file"
+					title="첨부"
+					@change="onChangeFile"
+				/>
+			</div>
+
+			<div class="input-container">
+				<div class="modify-input">
+					<label for="name">이름</label>
+					<input to="name" type="text" class="head-label" v-model="name" />
+				</div>
+				<div class="modify-input">
+					<label to="intro" class="head-label">소개</label>
+					<textarea name="intro" id="" rows="2" v-model="introduce"></textarea>
+				</div>
+			</div>
+			<div class="hiddenMsg" v-if="!isVaildIntro">
+				(※ 소개는 20자 이하입니다.)
+			</div>
+			<div class="hiddenMsg" v-else></div>
 		</div>
-		<div class="hiddenMsg" v-else></div>
-		<button class="submit-btn" :disabled="!isVaildIntro">
-			제출
-		</button>
 	</form>
 </template>
 
@@ -119,16 +152,82 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.modify-text {
+	text-align: center;
+	font-size: $font-bold;
+}
 .modify-container {
-	border: 1px solid #ffe375;
-	background: #fff6d2;
-	padding: 1rem;
-	border-radius: 2rem;
-	width: 350px;
-	margin: 0 auto;
+	width: 70%;
+	margin: 0 auto 3rem;
+	height: 100%;
+	@media screen and (max-width: 768px) {
+		width: 95%;
+	}
+}
+.modify-header {
 	display: flex;
-	flex-direction: column;
+	position: relative;
+	justify-content: space-between;
 	align-items: center;
+	margin-bottom: 1rem;
+	.studyform-btn-cancle {
+		@include form-btn('white');
+		margin-right: 5px;
+	}
+	.studyform-btn-submit {
+		@include form-btn('purple');
+		position: relative;
+		right: 0;
+		:disabled {
+			display: none;
+		}
+	}
+	.hide-btn {
+		border: none;
+		border-radius: 3px;
+		height: 40px;
+		padding: 0 1.125rem;
+		font-size: 1rem;
+		font-weight: 700;
+		text-decoration: none solid #000;
+		background: #000;
+		color: #fff;
+		position: absolute;
+		right: 0;
+		:disabled {
+			background-color: gray;
+		}
+	}
+}
+.modify-main {
+	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
+	padding: 1rem;
+	border-radius: 4px;
+	div {
+	}
+	.modify-input {
+		width: 100%;
+		padding: 10px;
+		border: none;
+		border-radius: 0;
+		border-bottom: 1px solid black;
+		&:focus {
+			outline: none;
+			border-bottom: 1px solid black;
+		}
+	}
+	textarea {
+		height: 5rem;
+	}
+}
+.imgimgimg {
+	display: flex;
+	justify-content: center;
+}
+.img-container {
+	width: 15rem;
+	height: 15rem;
+	border-radius: 50%;
 }
 .img-box {
 	width: 15rem;
@@ -156,22 +255,57 @@ export default {
 			width: 100%;
 			height: 2rem;
 		}
-		textarea {
-			width: 100%;
-			height: 4rem;
-			border: 1px solid black;
-			resize: vertical;
-		}
 	}
 }
-.submit-btn {
-	width: 10rem;
-	height: 3rem;
-	margin-top: 2rem;
-	background: $btn-purple;
-	color: white;
+.head-label {
+	display: block;
+	font-weight: 600;
 }
 .hiddenMsg {
+	height: 1rem;
+	padding-left: 0.5rem;
+	color: red;
+}
+input.upload_text {
+	flex: 1;
 	height: 2rem;
+	// padding: 0 0.5rem 1rem;
+	// border-top: 1px solid #bbb;
+	margin-top: 1rem;
+	// margin-bottom: 1rem;
+}
+div.upload-btn_wrap input.input_file {
+	position: absolute;
+	top: 0;
+	right: 0;
+	@include scale(width, 75px);
+	opacity: 0;
+	filter: alpha(opacity=0);
+	-ms-filter: 'alpha(opacity=0)';
+	-moz-opacity: 0;
+	margin-top: 0.6rem;
+	&:hover {
+		cursor: pointer;
+	}
+}
+div.upload-btn_wrap {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 2rem;
+	padding-left: 3px;
+	margin-top: 1rem;
+	padding-left: 1rem;
+}
+div.upload-btn_wrap button {
+	@include scale(width, 70px);
+	height: 2rem;
+	font-weight: bold;
+	background: rgb(225, 225, 225);
+	border: none;
+	border-radius: 3px;
+	color: rgb(150, 149, 149);
+	margin-top: 1rem;
 }
 </style>

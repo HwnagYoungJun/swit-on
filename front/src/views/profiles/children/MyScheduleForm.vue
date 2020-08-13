@@ -70,7 +70,7 @@ export default {
 	data() {
 		return {
 			calendarList: [],
-			scheduleList: null,
+			scheduleList: [],
 			view: 'month',
 			taskView: false,
 			scheduleView: ['time'],
