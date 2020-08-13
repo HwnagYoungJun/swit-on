@@ -25,7 +25,7 @@
 				</div>
 				<div class="card-detail-content">
 					<Viewer :initialValue="article.content" />
-					<a :href="`${BaseUrl}${article.file}`" download>{{
+					<a v-if="article.file" :href="`${BaseUrl}${article.file}`" download>{{
 						article.file | fileDownload
 					}}</a>
 					<div class="logo" v-if="board_name !== 'notice'">
