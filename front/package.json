@@ -21,11 +21,8 @@
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.2",
     "vue-flickity": "^1.2.1",
-<<<<<<< HEAD
     "vue-kakao-login": "^1.0.5",
-=======
     "vue-infinite-loading": "^2.4.5",
->>>>>>> aaa5cab4267b35e1a6cf95cce9bb8adff8bfdabf
     "vue-router": "^3.2.0",
     "vue-swatches": "^2.1.0",
     "vue-template-compiler": "^2.6.11",
