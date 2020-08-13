@@ -2,7 +2,9 @@
 	<div>
 		<br />
 		<span :key="name" v-for="name in names">
-			<LowerCategoryCard @changeLower="changeLower" :name="name" />
+			<router-link :to="`/category/${upperCategoryName}/${name}`">
+				<LowerCategoryCard @changeLower="changeLower" :name="name" />
+			</router-link>
 		</span>
 	</div>
 </template>
@@ -19,6 +21,7 @@ export default {
 	},
 	props: {
 		upperCategory: Number,
+		upperCategoryName: String,
 	},
 	components: {
 		LowerCategoryCard,

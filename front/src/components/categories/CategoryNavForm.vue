@@ -11,12 +11,7 @@
 			</div>
 			<div :key="categoryElement" v-for="categoryElement in categoryElements">
 				<div class="category-element">
-					<router-link
-						:to="{
-							name: 'categorydetail',
-							params: { UpperCategoryName: categoryElement },
-						}"
-					>
+					<router-link :to="`/category/${categoryElement}`">
 						{{ categoryElement }}
 					</router-link>
 				</div>
