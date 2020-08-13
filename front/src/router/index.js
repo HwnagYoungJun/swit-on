@@ -49,6 +49,17 @@ const routes = [
 		beforeEnter,
 	},
 	{
+		path: '/study/:id/:board_name/:article_id/edit',
+		name: 'editArticle',
+		component: () => import('@/views/boards/StudyArticleEditPage.vue'),
+		props: route => ({
+			id: Number(route.params.id),
+			board_name: String(route.params.board_name),
+			article_id: Number(route.params.article_id),
+		}),
+		beforeEnter,
+	},
+	{
 		path: '/study/:id',
 		name: 'studydetail',
 		props: route => ({

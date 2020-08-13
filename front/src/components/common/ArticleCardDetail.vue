@@ -27,23 +27,37 @@
 					<Viewer :initialValue="article.content" />
 					<p>{{ article.file }}</p>
 					<div class="logo">
-						<i
-							@click="articleUnLike"
-							v-if="isLiked"
-							class="icon ion-md-heart like"
-						></i>
-						<i @click="articleLike" v-else class="icon ion-md-heart unlike"></i>
-						<span>좋아요 {{ likeCount }}개</span>
-						<i
-							v-if="isBookmarked"
-							@click="removeBookmark"
-							class="icon ion-md-bookmark bookmark"
-						></i>
-						<i
-							v-else
-							@click="addBookmark"
-							class="icon ion-md-bookmark unlike"
-						></i>
+						<div class="logo-likes">
+							<i
+								@click="articleUnLike"
+								v-if="isLiked"
+								class="icon ion-md-heart like"
+							></i>
+							<i
+								@click="articleLike"
+								v-else
+								class="icon ion-md-heart unlike"
+							></i>
+							<span>좋아요 {{ likeCount }}개</span>
+						</div>
+						<div class="logo-boxbtn">
+							<i
+								v-if="isBookmarked"
+								@click="removeBookmark"
+								class="icon ion-md-bookmark bookmark"
+							></i>
+							<i
+								v-else
+								@click="addBookmark"
+								class="icon ion-md-bookmark unlike"
+							></i>
+							<router-link
+								:to="
+									`study/${article.study.id}/${board_name}/${article.id}/edit`
+								"
+								>수정</router-link
+							>
+						</div>
 					</div>
 					<div class="content-info">
 						<a href="">{{ article.user.name }}</a>
@@ -73,7 +87,7 @@
 									<i
 										v-if="getName === comment.user.name"
 										@click="removeComment(comment.id)"
-										class="icon ion-md-trash"
+										class="icon ion-md-trash unlike"
 									>
 									</i>
 								</div>
@@ -341,7 +355,7 @@ export default {
 			color: #999999;
 		}
 		.bookmark {
-			color: $btn-purple;
+			color: #ffe066;
 		}
 	}
 	.content-info {
