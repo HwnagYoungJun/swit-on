@@ -14,6 +14,7 @@
 					v-on:share-stopped="logEvent"
 					v-on:sent-message="makeMessage"
 					v-on:received-message="logEvent"
+					v-on:clear-message="clearMessage"
 					@error="onError"
 				/>
 			</div>
@@ -76,6 +77,9 @@ export default {
 		},
 		makeMessage(message) {
 			this.messages.push({ message });
+		},
+		clearMessage() {
+			this.messages = [];
 		},
 	},
 	beforeDestroy() {
