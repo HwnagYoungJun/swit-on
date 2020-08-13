@@ -110,6 +110,7 @@
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import { fetchArticles } from '@/api/articles';
 import { fetchStudySchedule } from '@/api/studies';
+// import { fetchMySchedule } from '@/api/auth';
 import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 export default {
@@ -145,6 +146,9 @@ export default {
 			this.noticeArticles = notice.length ? notice : null;
 			this.qnaArticles = qna.length ? qna : null;
 		},
+		// async fetchMyScheduleStudy(){
+		// 	const {data} = await fetchMySchedule
+		// }
 		async fetchSchedule() {
 			const { data } = await fetchStudySchedule(this.id);
 			var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
