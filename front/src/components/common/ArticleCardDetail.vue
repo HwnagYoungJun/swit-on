@@ -25,39 +25,44 @@
 				</div>
 				<div class="card-detail-content">
 					<Viewer :initialValue="article.content" />
-					<!-- <p>{{ article.file }}</p> -->
 					<a :href="`${BaseUrl}${article.file}`" download>{{
 						article.file | fileDownload
 					}}</a>
 					<div class="logo" v-if="board_name !== 'notice'">
-						<i
-							@click="articleUnLike"
-							v-if="isLiked"
-							class="icon ion-md-heart like"
-						></i>
-						<i @click="articleLike" v-else class="icon ion-md-heart unlike"></i>
-						<span>좋아요 {{ likeCount }}개</span>
-						<div class="bookmark" v-if="board_name === 'repository'">
+						<div class="logo-likebox">
 							<i
-								v-if="isBookmarked"
-								@click="removeBookmark"
-								class="icon ion-md-bookmark bookmark"
+								@click="articleUnLike"
+								v-if="isLiked"
+								class="icon ion-md-heart like"
 							></i>
 							<i
+								@click="articleLike"
 								v-else
-								@click="addBookmark"
-								class="icon ion-md-bookmark unlike"
+								class="icon ion-md-heart unlike"
 							></i>
-							<router-link
-								:to="
-									`/study/${article.study.id}/${board_name}/${article.id}/edit`
-								"
-								>수정</router-link
-							>
+							<span>좋아요 {{ likeCount }}개</span>
+						</div>
+						<div class="logo-btnbox">
+							<div class="bookmark" v-if="board_name === 'repository'">
+								<i
+									v-if="isBookmarked"
+									@click="removeBookmark"
+									class="icon ion-md-bookmark bookmark"
+								></i>
+								<i
+									v-else
+									@click="addBookmark"
+									class="icon ion-md-bookmark unlike"
+								></i>
+							</div>
+							<span class="span-btn" @click="editRouter">수정</span>
+							<span class="span-btn" @click="removeArticle">삭제</span>
 						</div>
 					</div>
 					<div class="content-info">
-						<a href="">{{ article.user.name }}</a>
+						<router-link :to="`/profile/${article.user.name}`">{{
+							article.user.name
+						}}</router-link>
 					</div>
 					<div class="comment-body">
 						<ul>
@@ -125,6 +130,7 @@ import {
 	fetchArticle,
 	createComment,
 	deleteComment,
+	deleteArticle,
 	createArticleLike,
 	deleteArticleLike,
 	createArticleCommentLike,
@@ -274,8 +280,24 @@ export default {
 				console.log(error);
 			}
 		},
+		async removeArticle() {
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				await deleteArticle(studyId, boardName, articleId);
+				this.$router.push(`/study/${studyId}/${boardName}`);
+			} catch (error) {
+				console.log(error);
+			}
+		},
 		resetContent() {
 			this.commentContent = null;
+		},
+		editRouter() {
+			this.$router.push(
+				`/study/${this.id}/${this.board_name}/${this.article_id}/edit`,
+			);
 		},
 	},
 	created() {
@@ -353,12 +375,24 @@ export default {
 	}
 	.logo {
 		display: flex;
+		justify-content: space-between;
 		align-items: center;
 		margin: 50px 0 10px;
 		color: crimson;
 		font-size: $font-bold;
+		.logo-likebox {
+			display: flex;
+			align-items: center;
+		}
+		.logo-btnbox {
+			display: flex;
+			align-items: center;
+			.span-btn {
+				margin-left: 5px;
+			}
+		}
 		i {
-			margin-right: 10px;
+			margin-right: 5px;
 			cursor: pointer;
 		}
 		span {
@@ -427,5 +461,8 @@ export default {
 }
 .unlike {
 	color: grey;
+}
+.span-btn {
+	cursor: pointer;
 }
 </style>
