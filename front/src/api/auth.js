@@ -33,8 +33,12 @@ function fetchMySchedule(userName) {
 	console.log(`accounts/${userName}/myschedule`);
 	return baseAuth.get(`accounts/${userName}/myschedule`);
 }
-
+function fetchMyFav(userName) {
+	console.log(`accounts/${userName}/fav`);
+	return baseAuth.get(`accounts/${userName}/fav`);
+}
 export {
+	fetchMyFav,
 	registerUser,
 	loginUser,
 	fetchProfile,

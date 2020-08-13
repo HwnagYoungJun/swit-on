@@ -44,7 +44,7 @@
 				></a>
 				<router-link
 					v-if="name"
-					class="nav-router-img-item"
+					class="nav-router-item"
 					:to="`/profile/${name}`"
 					><img
 						v-if="profileImg"

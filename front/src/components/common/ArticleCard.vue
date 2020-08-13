@@ -42,7 +42,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .card {
 	width: 480px;
 	height: 150px;
