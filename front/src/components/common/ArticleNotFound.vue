@@ -1,6 +1,6 @@
 <template>
 	<div class="article-not-found">
-		<p>작성하신 게시글이 없어요 :)</p>
+		<p>작성하신 게시글이 없어요 :(</p>
 	</div>
 </template>
 

@@ -23,7 +23,7 @@
 							<img src="@/assets/dd.png" alt="" />
 						</div>
 						<div slot="bread">
-							<span>web>python</span>
+							<span>Q&A</span>
 						</div>
 					</ArticleCard>
 				</router-link>
@@ -43,7 +43,7 @@
 							<img src="@/assets/color.png" alt="" />
 						</div>
 						<div slot="bread">
-							<span>web>python</span>
+							<span>저장소</span>
 						</div>
 					</ArticleCard>
 				</router-link>
@@ -63,7 +63,7 @@
 							<img src="@/assets/dd.png" alt="" />
 						</div>
 						<div slot="bread">
-							<span>web>python</span>
+							<span>공지</span>
 						</div>
 					</ArticleCard>
 				</router-link>
@@ -74,10 +74,16 @@
 				<span class="schedule-title">소모임 일정</span>
 				<ul>
 					<li :key="s.id" v-for="s in schedules">
-						{{ s.startMonth }}.{{ s.startDate }} {{ s.startDay }}
-						{{ s.startHours }}:{{ s.startMinutes }}-{{ s.endHours }}:{{
-							s.endMinutes
-						}}<button class="active">참여중</button>
+						<span>
+							<span>{{ s.startMonth }}.{{ s.startDate }}</span>
+							<span>{{ s.startDay }}</span>
+							<span
+								>{{ s.startHours }}:{{ s.startMinutes }}-{{ s.endHours }}:{{
+									s.endMinutes
+								}}</span
+							>
+						</span>
+						<button class="active">참여중</button>
 					</li>
 				</ul>
 			</div>
@@ -151,7 +157,7 @@ export default {
 		// }
 		async fetchSchedule() {
 			const { data } = await fetchStudySchedule(this.id);
-			var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+			var days = ['일', '월', '화', '수', '목', '금', '토'];
 			data.forEach(el => {
 				// ISO -> date 객체
 				const start = new Date(Date.parse(el.start));
@@ -214,48 +220,38 @@ aside {
 	flex: 1.5;
 }
 .schedule {
-	margin: 30px;
-	padding: 25px 15px 15px;
-	border: 1px solid rgb(228, 228, 228);
-	border-radius: 4px;
+	margin: 50px 0;
+	padding: 25px 0 15px;
 	position: relative;
 	color: rgb(138, 138, 138);
 	.schedule-title {
-		padding: 0 15px;
 		position: absolute;
-		top: -10px;
+		top: -5px;
+		left: -15px;
 		color: rgb(90, 90, 90);
+		font-weight: bold;
 		background: #fff;
 	}
 	li {
-		margin: 20px;
+		display: flex;
+		justify-content: space-between;
+		margin: 10px 0;
 		align-items: center;
+		color: rgb(90, 90, 90);
 		@media screen and (max-width: 370px) {
+			display: inline;
 			margin: 10px 20px;
 		}
+		span {
+			margin-right: 10px;
+		}
 		button {
-			// display: inline-block;
-			// width: 100px;
-			// padding: 7px 0;
-			// border: 1px solid $main-color;
-			// border-radius: 30px;
-			// color: $main-color;
-			// background: none;
-			// position: absolute;
-			// right: 20px;
-			// &:focus {
-			// 	outline: none;
-			// }
 			@include common-btn();
 			display: inline-block;
-			width: 6rem;
-			position: absolute;
-			right: 20px;
+			width: 5rem;
 			@media screen and (max-width: 370px) {
 				width: 100%;
 				margin: 8px 0;
-				position: static;
-				right: 0;
 			}
 		}
 		.active {
@@ -264,15 +260,17 @@ aside {
 		}
 	}
 	.attend-wrap {
+		padding-top: 5px;
 		.attend {
 			p {
-				margin-bottom: 10px;
+				color: rgb(90, 90, 90);
+				margin-bottom: 4px;
 			}
 			.progress-bar {
 				width: 100%;
 				color: white;
 				border-radius: 8px;
-				background: rgb(233, 233, 233);
+				background: rgb(238, 238, 238);
 				.join-percent {
 					display: inline-block;
 					width: 35%;
