@@ -6,7 +6,7 @@
 				:src="`${BaseUrl}${study.logo}`"
 				alt="study-logo"
 			/>
-			<img v-else src="@/assets/django.png" alt="" />
+			<img v-else :src="`${BaseUrl}upload/noStudy.jpg`" alt="" />
 			<p class="temp">{{ study.users_current }} / {{ study.users_limit }}</p>
 		</div>
 		<div

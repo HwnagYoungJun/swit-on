@@ -3,7 +3,7 @@
 		<div class="card-info">
 			<div class="card-img">
 				<slot name="logo">
-					<img src="@/assets/dd.png" alt="" />
+					<img :src="studyImg" alt="noImg" />
 					<!-- {{ article.study.name }} -->
 				</slot>
 			</div>
@@ -38,6 +38,16 @@ export default {
 	},
 	components: {
 		// Viewer,
+	},
+	computed: {
+		baseURL() {
+			return process.env.VUE_APP_API_URL;
+		},
+		studyImg() {
+			return this.article.study.logo === null
+				? this.baseURL + 'upload/noStudy.jpg'
+				: this.baseURL + this.article.study.logo;
+		},
 	},
 };
 </script>
@@ -74,7 +84,7 @@ export default {
 			place-items: center;
 			img {
 				width: 80%;
-				// border-radius: 50%;
+				height: 80%;
 			}
 		}
 		.card-content {

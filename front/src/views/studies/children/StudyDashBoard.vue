@@ -74,8 +74,8 @@
 				<span class="schedule-title">소모임 일정</span>
 				<ul>
 					<li :key="s.id" v-for="s in schedules">
-						{{ s.startMonth }}.{{ s.startDate }} {{ s.startDay }}
-						{{ s.startHours }}:{{ s.startMinutes }}-{{ s.endHours }}:{{
+						1. {{ s.startMonth }}.{{ s.startDate }} {{ s.startDay }}
+						{{ s.startHours }}:{{ s.startMinutes }} ~ {{ s.endHours }}:{{
 							s.endMinutes
 						}}<button class="active">참여중</button>
 					</li>
@@ -151,7 +151,7 @@ export default {
 		// }
 		async fetchSchedule() {
 			const { data } = await fetchStudySchedule(this.id);
-			var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+			var days = ['일', '월', '화', '수', '목', '금', '토'];
 			data.forEach(el => {
 				// ISO -> date 객체
 				const start = new Date(Date.parse(el.start));

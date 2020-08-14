@@ -3,7 +3,6 @@
 		<ProfileForm :userName="userName" />
 		<ProfileNavForm :userName="userName" />
 		<router-view :userName="userName" />
-		<hr />
 	</div>
 </template>
 
