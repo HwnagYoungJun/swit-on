@@ -1,28 +1,25 @@
 <template>
-	<div class="card">
+	<div class="card" v-if="article">
 		<div class="card-info">
-			<div class="card-img">
+			<!-- <div class="card-img">
 				<slot name="logo">
-					<img src="@/assets/dd.png" alt="" />
-					<!-- {{ article.study.name }} -->
+					<img src="@/assets/dd.png" alt="profile-image" />
+					{{ article.study.name }}
 				</slot>
-			</div>
+			</div> -->
 			<div class="card-content">
 				<p class="card-info-title">
 					{{ article.title }}
 					<span class="bread-span"><slot name="bread"> </slot></span>
 				</p>
 				<p class="card-info-all">
-					<span v-if="article.user">
+					<img :src="BaseURL" class="card-info-image" />
+					<span>
 						<span class="card-info-user">{{ article.user.name }}</span>
 					</span>
 					<span class="card-info-time">{{
 						article.created_at | formatDate
 					}}</span>
-				</p>
-				<p class="card-content-viewer">
-					<!-- <Viewer :initialValue="article.content | truncate" /> -->
-					<!-- {{ article.content | truncate }} -->
 				</p>
 			</div>
 		</div>
@@ -30,14 +27,18 @@
 </template>
 
 <script>
-// import Viewer from '@toast-ui/vue-editor/src/Viewer.vue';
-
 export default {
 	props: {
 		article: Object,
 	},
-	components: {
-		// Viewer,
+	computed: {
+		BaseURL() {
+			return `${process.env.VUE_APP_API_URL}${this.article.user.profile_image}`;
+		},
+	},
+
+	created() {
+		console.log(this.article);
 	},
 };
 </script>
@@ -45,7 +46,7 @@ export default {
 <style lang="scss">
 .card {
 	width: 480px;
-	height: 150px;
+	height: 7rem;
 	margin: 10px 5px 10px;
 	// padding: 20px 10px;
 	border-radius: 5px;
@@ -53,43 +54,46 @@ export default {
 	box-shadow: 0px 5px 4px rgba(175, 175, 175, 0.2);
 	position: relative;
 	overflow: hidden;
-	// &::before {
-	// 	content: '';
-	// 	display: block;
-	// 	width: 150px;
-	// 	height: 200px;
-	// 	background: $btn-purple-opacity;
-	// 	position: absolute;
-	// 	transform: translate(-55px, -30px) skewX(23deg);
-	// }
+	&::before {
+		content: '';
+		display: block;
+		width: 150px;
+		height: 200px;
+		background: $btn-purple-opacity;
+		position: absolute;
+		transform: translate(-90px, -30px) skewX(23deg);
+		opacity: 0.7;
+	}
 	.card-info {
 		display: flex;
+		height: 100%;
 		//align-items: center;
 		font-size: $font-light;
 		position: relative;
 		overflow: hidden;
-		.card-img {
-			flex: 1;
-			display: grid;
-			place-items: center;
-			img {
-				width: 80%;
-				// border-radius: 50%;
-			}
-		}
+		// .card-img {
+		// 	flex: 1;
+		// 	display: grid;
+		// 	place-items: center;
+		// 	img {
+		// 		width: 80%;
+		// 		// border-radius: 50%;
+		// 	}
+		// }
 		.card-content {
-			flex: 2;
+			flex: 1;
+			padding: 1rem;
+			position: relative;
 			.card-info-title {
-				// text-decoration: underline;
-				// text-decoration-color:linear-gradient(to right, #9200b9 8%, #6c23c0 75%, #5600c7);
+				margin-top: 0;
 				margin-bottom: 8px;
 				font-size: $font-bold;
 				position: relative;
-				// border-bottom: 2px solid rgba(169, 169, 169, 1);
-				padding-bottom: 15px;
+				padding-bottom: 8px;
+				left: 50px;
 				.bread-span {
 					background-color: rgba(86, 0, 199, 0.1);
-					width: 65%;
+					width: 40%;
 					height: 6px;
 					left: 0;
 					position: absolute;
@@ -98,9 +102,16 @@ export default {
 				}
 			}
 			.card-info-all {
+				display: flex;
+				align-items: center;
 				position: absolute;
 				bottom: 5px;
 				right: 5px;
+				.card-info-image {
+					width: 20px;
+					height: 20px;
+					margin-right: 2px;
+				}
 			}
 			.card-info-time {
 				color: rgba(94, 54, 97, 0.5);
@@ -115,7 +126,7 @@ export default {
 				margin-bottom: 10px;
 			}
 			span {
-				margin-right: 10px;
+				margin-right: 8px;
 			}
 		}
 	}

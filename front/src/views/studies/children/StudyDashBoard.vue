@@ -19,12 +19,12 @@
 						},
 					}"
 					><ArticleCard :article="article">
-						<div slot="logo">
+						<!-- <div slot="logo">
 							<img src="@/assets/dd.png" alt="" />
 						</div>
 						<div slot="bread">
 							<span>web>python</span>
-						</div>
+						</div> -->
 					</ArticleCard>
 				</router-link>
 				<router-link
@@ -39,12 +39,12 @@
 						},
 					}"
 					><ArticleCard :article="article">
-						<div slot="logo">
+						<!-- <div slot="logo">
 							<img src="@/assets/color.png" alt="" />
 						</div>
 						<div slot="bread">
 							<span>web>python</span>
-						</div>
+						</div> -->
 					</ArticleCard>
 				</router-link>
 				<router-link
@@ -59,12 +59,12 @@
 						},
 					}"
 					><ArticleCard :article="article">
-						<div slot="logo">
+						<!-- <div slot="logo">
 							<img src="@/assets/dd.png" alt="" />
 						</div>
 						<div slot="bread">
 							<span>web>python</span>
-						</div>
+						</div> -->
 					</ArticleCard>
 				</router-link>
 			</div>
