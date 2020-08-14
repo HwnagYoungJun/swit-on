@@ -6,9 +6,23 @@
 
 <mapper namespace="join">
 
+	<!-- 스터디 아이디로 가입 정보들 반환 -->
+	<select id="selectJoinsByStudyId" resultType="Join">
+		select id, user_id, study_id, isComplete, reg_date, isLeader
+		from `join`
+		where study_id = #{study_id}
+	</select>
+
 	<!-- 스터디의 현재 가입자수 반환 -->
 	<select id="userCount" resultType="Integer">
 		select count(*) as cnt
+		from `join`
+		where study_id = #{study_id}
+	</select>
+	
+	<!-- 스터디의 현재 멤버들 id 반환 -->
+	<select id="selectMemberIds" resultType="Integer">
+		select user_id
 		from `join`
 		where study_id = #{study_id}
 	</select>

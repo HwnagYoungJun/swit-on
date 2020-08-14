@@ -61,4 +61,19 @@ public class JoinDAOImpl implements JoinDAO {
 		return sqlsession.delete("join.deleteJoinByIds", join);
 	}
 
+	@Override
+	public List<Integer> selectMemberIds(int studyId) {
+		return sqlsession.selectList("join.selectMemberIds", studyId);
+	}
+
+	@Override
+	public List<Join> selectJoinsByStudyId(int studyId) {
+		return sqlsession.selectList("join.selectJoinsByStudyId", studyId);
+	}
+
+	@Override
+	public int updateJoinComplete(int studyId) {
+		return sqlsession.update("join.updateJoinComplete", studyId);
+	}
+
 }

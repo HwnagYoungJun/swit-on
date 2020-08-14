@@ -29,7 +29,25 @@ public class ArticleReturnDTO {
 	UserSimpleDTO user;
 	Like like;
 	
+	public ArticleReturnDTO() {
+		
+	}
 	
+	public ArticleReturnDTO(Article article, String board_name, StudySimple study, UserSimpleDTO user,
+			Like like) {
+		this.id = article.getId();
+		this.title = article.getTitle();
+		this.content = article.getContent();
+		this.user_id = article.getUser_id();
+		this.file = article.getFile();
+		this.board_id = article.getBoard_id();
+		this.created_at = article.getCreated_at();
+		this.updated_at = article.getUpdated_at();
+		this.board_name = board_name;
+		this.study = study;
+		this.user = user;
+		this.like = like;
+	}
 	public Like getLike() {
 		return like;
 	}

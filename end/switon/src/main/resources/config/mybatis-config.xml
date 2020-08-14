@@ -6,7 +6,7 @@
 <package name="com.ssafy.switon.dto"/>
    </typeAliases>
    <mappers>
-      <mapper resource="mappers/User.xml" /> 
+      <mapper resource="mappers/User.xml" />  
       <mapper resource="mappers/Study.xml" />
       <mapper resource="mappers/Board.xml" />
       <mapper resource="mappers/Article.xml" />
@@ -18,5 +18,8 @@
       <mapper resource="mappers/Commentlike.xml" />
       <mapper resource="mappers/Studylike.xml" />
       <mapper resource="mappers/Join.xml" />
+      
+      <mapper resource="mappers/Schedule.xml" />
+      <mapper resource="mappers/Userschedule.xml" />
    </mappers>
 </configuration>

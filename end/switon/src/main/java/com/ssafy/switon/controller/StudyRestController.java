@@ -2,6 +2,7 @@ package com.ssafy.switon.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,13 +28,15 @@ import com.ssafy.switon.dto.Board;
 import com.ssafy.switon.dto.Comment;
 import com.ssafy.switon.dto.CommentReturnDTO;
 import com.ssafy.switon.dto.Like;
-import com.ssafy.switon.dto.LowerCategory;
 import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyReturnDTO;
+import com.ssafy.switon.dto.StudySimple;
 import com.ssafy.switon.dto.User;
+import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserSimpleDTO;
+import com.ssafy.switon.service.ArticleFavService;
 import com.ssafy.switon.service.ArticleLikeService;
 import com.ssafy.switon.service.ArticleService;
 import com.ssafy.switon.service.BoardService;
@@ -81,15 +85,26 @@ public class StudyRestController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private ArticleFavService articleFavService;
+	
 	@ApiOperation(value = "스터디 리스트를 반환한다.", response = List.class)
 	@GetMapping("")
-	public List<Study> showAllStudies(@RequestParam(value="lowercategory_id", required = false) String lowercategory_id){
-		System.out.println(lowercategory_id);
+	public Object showAllStudies(@RequestParam(value="lowercategory_id", required = false) String lowercategory_id,
+									@RequestParam(value="uppercategory_id", required = false) String uppercategory_id,
+									@RequestParam(value="keyword", required = false) String keyword){
+		Object dto;
 		if(lowercategory_id != null) {
-			return studyService.searchStudiesByLowercategory(Integer.parseInt(lowercategory_id));
+			dto = studyService.searchStudiesByLowercategory(Integer.parseInt(lowercategory_id));
+		} else if(uppercategory_id != null) {
+			dto = studyService.searchStudiesByUppercategory(Integer.parseInt(uppercategory_id));
+		} else if(keyword != null) {
+			dto = studyService.searchStudyByKeyword(keyword);
+		} else {
+			dto = studyService.searchAll();			
 		}
 		System.out.println("스터디 리스트 출력");
-		return studyService.searchAll();
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "스터디 id로 스터디 상세정보를 반환한다.", response = Study.class)
@@ -100,7 +115,7 @@ public class StudyRestController {
 		boolean isJoined = false;
 		boolean isLeader = false;
 		int userId = 0;
-		if(auth != null) {	// 로그인한 경우
+		if(auth != null && auth.contains("Bearer ") && auth.length() > 15) {	// 로그인한 경우
 			auth = auth.substring("Bearer ".length());	
 			userId = getUserPK(request);
 			if(joinService.isMember(studyId, userId)) { // 가입한 회원인 경우 가입여부 변경
@@ -111,17 +126,32 @@ public class StudyRestController {
 			}
 		}
 		StudyReturnDTO dto = studyService.search(studyId, isJoined, isLeader, userId);
-		
+		System.out.println(dto);
+		int leaderId = dto.getStudy().getUser_id();
+		System.out.println(leaderId);
+		String leaderName = userService.search(leaderId).getName();
+		System.out.println(leaderName);
+		dto.setLeaderName(leaderName);
+		List<UserSimpleDTO> members = joinService.searchMembers(studyId);
+		dto.setMembers(members);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "새로운 스터디를 생성한다. 로그인한 사용자가 모임장이 된다. (로그인 필요)")
 	@PostMapping("/")
 	public Object createStudy(@RequestParam(value = "img", required = false) MultipartFile img, Study study, HttpServletRequest request) {
-		
+		System.out.println("****** study.users_limit : " + study.getUsers_limit());
 		int userId = getUserPK(request);
 //		String baseDirectory = "src"+ File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "upload";
 //		String baseDirectory = request.getSession().getServletContext().getRealPath("upload");
+		int startTime = Integer.parseInt((study.getStart_time().replace(":", "")));
+		int endTime = Integer.parseInt(study.getEnd_time().replace(":", ""));
+		if(endTime - startTime <= 0) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 시간을 입력했습니다."), HttpStatus.I_AM_A_TEAPOT);
+		}
+		if(study.getStart_term().after(study.getEnd_term())) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 기간을 입력했습니다."), HttpStatus.I_AM_A_TEAPOT);
+		}
 		if(img != null) {
 			String RealPath = getUploadRealPath(request, userId, img);
 			String path = getUploadPath(userId, img);
@@ -157,6 +187,15 @@ public class StudyRestController {
 	@PutMapping("/{studyId}")
 	public Object modifyStudy(@RequestParam(value = "img", required = false) MultipartFile img,
 							Study study, @PathVariable("studyId") int studyId, HttpServletRequest request) {
+		int startTime = Integer.parseInt((study.getStart_time().replace(":", "")));
+		int endTime = Integer.parseInt(study.getEnd_time().replace(":", ""));
+		if(endTime - startTime <= 0) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 시간을 입력했습니다."), HttpStatus.I_AM_A_TEAPOT);
+		}
+		if(study.getStart_term().after(study.getEnd_term())) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 기간을 입력했습니다."), HttpStatus.I_AM_A_TEAPOT);
+		}
+		
 		int userId = getUserPK(request);
 		if(img != null) {
 			String RealPath = getUploadRealPath(request, userId, img);
@@ -256,7 +295,7 @@ public class StudyRestController {
 	public Object showNotice(@PathVariable("studyId") int studyId, HttpServletRequest request) {
 		int userId = 0;
 		String auth = request.getHeader("Authentication");
-		if(auth != null) {
+		if(auth != null && auth.contains("Bearer ") && auth.length() > 15) {
 			userId = getUserPK(request);
 		}
 		int noticeBoardId = boardService.findNoticeBoardId(studyId);
@@ -333,7 +372,7 @@ public class StudyRestController {
 	
 	@ApiOperation(value = "스터디의 qna 게시판에 글을 작성한다. (로그인 필요)")
 	@PostMapping("/{studyId}/qna")
-	public Object writeQna(@RequestParam(value = "img", required = false) MultipartFile img, Article article, @PathVariable("studyId") int studyId, HttpServletRequest request) {
+	public Object writeQna(@RequestParam(value = "upload", required = false) MultipartFile img, Article article, @PathVariable("studyId") int studyId, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** qna 글 작성 실패 - 가입하지 않은 멤버입니다.");
@@ -364,7 +403,7 @@ public class StudyRestController {
 	
 	@ApiOperation(value = "스터디의 자료실 게시판에 글을 작성한다. (로그인 필요)")
 	@PostMapping("/{studyId}/repository")
-	public Object writeRepo(@RequestParam(value = "img", required = false) MultipartFile img, Article article, @PathVariable("studyId") int studyId, HttpServletRequest request) {
+	public Object writeRepo(@RequestParam(value = "upload", required = false) MultipartFile img, Article article, @PathVariable("studyId") int studyId, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 자료실 글 작성 실패 - 가입하지 않은 멤버입니다.");
@@ -398,12 +437,12 @@ public class StudyRestController {
 	public Object readNotice(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		int userId = 0;
 		String auth = request.getHeader("Authentication");
-		if(auth != null) {
+		if(auth != null && auth.contains("Bearer ") && auth.length() > 15) {
 			userId = getUserPK(request);
 		}
 		Article originalArticle = articleService.search(articleId);
 		if(originalArticle != null) {
-			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId);
+			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId, userId);
 			Like like = new Like(articleLikeService.searchLikeCount(articleId),
 					articleLikeService.searchByUser_Article(userId, articleId) != null);
 			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments, like);
@@ -415,6 +454,14 @@ public class StudyRestController {
 			user.setName(userInfo.getName());
 			user.setProfile_image(userInfo.getProfile_image());
 			article.setUser(user);
+			
+			// 스터디 정보 등록하는 부분...
+			Study studyInfo = studyService.search(studyId);
+			StudySimple study = new StudySimple(studyInfo);
+			article.setStudy(study);
+			
+			// 즐겨찾기한 글인지...
+			article.setIsfavorite(articleFavService.searchByUser_Article(userId, articleId) != null);
 			
 			System.out.println(articleId + "번 글 조회 성공!");
 			return new ResponseEntity<>(article, HttpStatus.OK);
@@ -433,7 +480,7 @@ public class StudyRestController {
 		}
 		Article originalArticle = articleService.search(articleId);
 		if(originalArticle != null) {
-			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId);
+			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId, userId);
 			Like like = new Like(articleLikeService.searchLikeCount(articleId),
 					articleLikeService.searchByUser_Article(userId, articleId) != null);
 			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments, like);
@@ -446,6 +493,14 @@ public class StudyRestController {
 			user.setProfile_image(userInfo.getProfile_image());
 			article.setUser(user);
 			
+			// 스터디 정보 등록하는 부분...
+			Study studyInfo = studyService.search(studyId);
+			StudySimple study = new StudySimple(studyInfo);
+			article.setStudy(study);
+			
+			// 즐겨찾기한 글인지...
+			article.setIsfavorite(articleFavService.searchByUser_Article(userId, articleId) != null);
+
 			System.out.println(articleId + "번 글 조회 성공!");
 			return new ResponseEntity<>(article, HttpStatus.OK);
 		}
@@ -463,7 +518,7 @@ public class StudyRestController {
 		}
 		Article originalArticle = articleService.search(articleId);
 		if(originalArticle != null) {
-			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId);
+			List<CommentReturnDTO> comments = commentService.searchArticleCommentsIncludingProfile(articleId, userId);
 			Like like = new Like(articleLikeService.searchLikeCount(articleId),
 					articleLikeService.searchByUser_Article(userId, articleId) != null);
 			ArticleDetailReturnDTO article = new ArticleDetailReturnDTO(originalArticle, comments, like);
@@ -475,6 +530,14 @@ public class StudyRestController {
 			user.setName(userInfo.getName());
 			user.setProfile_image(userInfo.getProfile_image());
 			article.setUser(user);
+			
+			// 스터디 정보 등록하는 부분...
+			Study studyInfo = studyService.search(studyId);
+			StudySimple study = new StudySimple(studyInfo);
+			article.setStudy(study);
+
+			// 즐겨찾기한 글인지...
+			article.setIsfavorite(articleFavService.searchByUser_Article(userId, articleId) != null);
 			
 			System.out.println(articleId + "번 글 조회 성공!");
 			return new ResponseEntity<>(article, HttpStatus.OK);
@@ -509,7 +572,7 @@ public class StudyRestController {
 	
 	@ApiOperation(value = "스터디의 QnA 게시판 글 수정 (로그인 필요)")
 	@PutMapping("/{studyId}/qna/{articleId}")
-	public Object modifyQna(@RequestParam(value = "img", required = false) MultipartFile img, 
+	public Object modifyQna(@RequestParam(value = "upload", required = false) MultipartFile img, 
 						Article article, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		if(img != null) {
@@ -546,7 +609,7 @@ public class StudyRestController {
 	
 	@ApiOperation(value = "스터디의 자료실 게시판 글 수정 (로그인 필요)")
 	@PutMapping("/{studyId}/repository/{articleId}")
-	public Object modifyRepo(@RequestParam(value = "img", required = false) MultipartFile img, 
+	public Object modifyRepo(@RequestParam(value = "upload", required = false) MultipartFile img, 
 							Article article, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		if(img != null) {
@@ -648,6 +711,14 @@ public class StudyRestController {
 		return new ResponseEntity<>(new ReturnMsg("삭제에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
+	@ApiOperation(value = "notice 게시글의 댓글 리스트 반환")
+	@GetMapping("/{studyId}/notice/{articleId}/comments")
+	public Object showNoticeComments(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId) {
+		List<Comment> comments = commentService.searchArticleComments(articleId);
+		System.out.println("qna 게시글의 댓글 리스트 반환 성공!");
+		return new ResponseEntity<>(comments, HttpStatus.OK);
+	}
+	
 	@ApiOperation(value = "qna 게시글의 댓글 리스트 반환")
 	@GetMapping("/{studyId}/qna/{articleId}/comments")
 	public Object showQnaComments(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId) {
@@ -664,9 +735,24 @@ public class StudyRestController {
 		return new ResponseEntity<>(comments, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "notice 게시글의 댓글 작성")
+	@PostMapping("/{studyId}/notice/{articleId}/comments")
+	public Object createNoticeComment(@RequestBody Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+		int userId = getUserPK(request);
+		comment.setArticle_id(articleId);
+		comment.setUser_id(userId);
+		
+		if(commentService.create(comment)) {
+			System.out.println("댓글 작성 성공!");
+			return new ResponseEntity<>(new ReturnMsg("댓글을 성공적으로 작성했습니다."), HttpStatus.OK);			
+		}
+		System.out.println("** 댓글 작성 실패 - 서버 오류...");
+		return new ResponseEntity<>(new ReturnMsg("작성에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 	@ApiOperation(value = "qna 게시글의 댓글 작성")
 	@PostMapping("/{studyId}/qna/{articleId}/comments")
-	public Object createQnaComment(Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+	public Object createQnaComment(@RequestBody Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		comment.setArticle_id(articleId);
 		comment.setUser_id(userId);
@@ -681,7 +767,7 @@ public class StudyRestController {
 	
 	@ApiOperation(value = "자료실 게시글의 댓글 작성")
 	@PostMapping("/{studyId}/repository/{articleId}/comments")
-	public Object createRepoComment(Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
+	public Object createRepoComment(@RequestBody Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		comment.setArticle_id(articleId);
 		comment.setUser_id(userId);
@@ -692,6 +778,29 @@ public class StudyRestController {
 		}
 		System.out.println("** 댓글 작성 실패 - 서버 오류...");
 		return new ResponseEntity<>(new ReturnMsg("작성에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ApiOperation(value = "notice 게시글의 댓글 수정")
+	@PutMapping("/{studyId}/notice/{articleId}/comments/{commentId}")
+	public Object modifyNoticeComment(Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
+		int userId = getUserPK(request);
+		Comment originalComment = commentService.search(commentId);
+		if(originalComment == null) {
+			System.out.println("** 댓글 수정 실패 - 댓글이 존재하지 않음...");
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 댓글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		if(originalComment.getUser_id() != userId) {	// 내가 쓴 댓글이 아닐 경우 실패
+			System.out.println("** 댓글 수정 실패 - 권한 없음...");
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+		}
+		comment.setId(commentId);
+		
+		if(commentService.update(comment)) {
+			System.out.println("댓글 수정 성공!");
+			return new ResponseEntity<>(new ReturnMsg("댓글을 성공적으로 수정했습니다."), HttpStatus.OK);			
+		}
+		System.out.println("** 댓글 수정 실패 - 서버 오류...");
+		return new ResponseEntity<>(new ReturnMsg("수정에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "qna 게시글의 댓글 수정")
@@ -738,6 +847,27 @@ public class StudyRestController {
 		}
 		System.out.println("** 댓글 수정 실패 - 서버 오류...");
 		return new ResponseEntity<>(new ReturnMsg("수정에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ApiOperation(value = "notice 게시글의 댓글 삭제")
+	@DeleteMapping("/{studyId}/notice/{articleId}/comments/{commentId}")
+	public Object deleteNoticeComment(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
+		int userId = getUserPK(request);
+		Comment originalComment = commentService.search(commentId);
+		if(originalComment == null) {
+			System.out.println("** 댓글 삭제 실패 - 댓글이 존재하지 않음...");
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 댓글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		if(originalComment.getUser_id() != userId) {	// 내가 쓴 댓글이 아닐 경우 실패
+			System.out.println("** 댓글 삭제 실패 - 권한 없음...");
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+		}
+		if(commentService.delete(commentId)) {
+			System.out.println("댓글 삭제 성공!");
+			return new ResponseEntity<>(new ReturnMsg("댓글을 삭제했습니다."), HttpStatus.OK);			
+		}
+		System.out.println("** 댓글 삭제 실패 - 서버 오류...");
+		return new ResponseEntity<>(new ReturnMsg("삭제에 실패했습니다. 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "QnA 게시글의 댓글 삭제")
@@ -816,19 +946,22 @@ public class StudyRestController {
 	}
 	
 	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img) {
+		System.out.println("img가 있나요?: " + img != null);
 		String fileName = img.getOriginalFilename();
+		System.out.println("파일이름: " + fileName);
 		int pos = fileName.lastIndexOf(".");
 		String ext = fileName.substring(pos);
-		return request.getServletContext().getRealPath("static"+ File.separator + "upload")
+		String result = request.getServletContext().getRealPath("static"+ File.separator + "upload")
 				+ File.separator + userId + "_" + System.currentTimeMillis() + ext;
+		System.out.println("저장이 어디에 될거냐면: " + result);
+		return result;
 	}
 	
 	private String getUploadPath(int userId, MultipartFile img) {
 		String fileName = img.getOriginalFilename();
 		int pos = fileName.lastIndexOf(".");
 		String ext = fileName.substring(pos);
-		return "static"+ File.separator + "upload"
-				+ File.separator + userId + "_" + System.currentTimeMillis() + ext;
+		return "upload/" + userId + "_" + System.currentTimeMillis() + ext;
 	}
 	
 	

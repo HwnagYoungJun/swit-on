@@ -3,6 +3,7 @@ package com.ssafy.switon.dao;
 import java.util.List;
 
 import com.ssafy.switon.dto.Article;
+import com.ssafy.switon.dto.FeedsIndexDTO;
 
 public interface ArticleDAO {
 	
@@ -28,5 +29,7 @@ public interface ArticleDAO {
 	List<Article> selectQnasByUserId(int userId);
 	// 유저 아이디로 repository 게시글 모두 반환
 	List<Article> selectRepositoriesByUserId(int userId);
+	// 유저 피드 반환 (최신순으로 startIdx ~ endIdx 까지)
+	List<Article> selectFeeds(FeedsIndexDTO feedsIndexDTO);
 
 }

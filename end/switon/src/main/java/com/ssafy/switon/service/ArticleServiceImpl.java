@@ -10,12 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.ArticleDAO;
+import com.ssafy.switon.dao.ArticleLikeDAO;
 import com.ssafy.switon.dao.BoardDAO;
 import com.ssafy.switon.dao.JoinDAO;
 import com.ssafy.switon.dao.StudyDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleReturnDTO;
+import com.ssafy.switon.dto.ArticleWithStudyDTO;
+import com.ssafy.switon.dto.Board;
+import com.ssafy.switon.dto.FeedsIndexDTO;
 import com.ssafy.switon.dto.Join;
 import com.ssafy.switon.dto.Like;
 import com.ssafy.switon.dto.Study;
@@ -40,6 +44,9 @@ public class ArticleServiceImpl implements ArticleService {
 	
 	@Autowired
 	BoardDAO boardDao;
+	
+	@Autowired
+	ArticleLikeDAO articleLikeDao;
 	
 	@Autowired
 	ArticleLikeService articleLikeService;
@@ -85,13 +92,63 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<Article> searchUserQnAs(int userId) {
-		return articleDao.selectQnasByUserId(userId);
+	public List<ArticleWithStudyDTO> searchUserQnAs(int userId) {
+		List<Article> originalArticles = articleDao.selectQnasByUserId(userId);
+		List<ArticleWithStudyDTO> articles = new ArrayList<ArticleWithStudyDTO>();
+		if(originalArticles.size() != 0) {
+			for(Article article : originalArticles) {
+				Board board = boardDao.selectBoardById(article.getBoard_id());
+				
+				String board_name = "repository";
+				switch(board.getType()) {
+				case 1:
+					board_name = "notice";
+					break;
+				case 2:
+					board_name = "qna";
+					break;
+				case 3:
+					board_name = "repository";
+					break;
+				}
+				
+				int studyId = boardDao.findStudyIdById(board.getId());
+				StudySimple study = new StudySimple(studyDao.selectStudyById(studyId));
+				articles.add(new ArticleWithStudyDTO(article, study, board_name));
+			}
+			return articles;
+		}
+		return null;
 	}
 
 	@Override
-	public List<Article> searchUserRepositories(int userId) {
-		return articleDao.selectRepositoriesByUserId(userId);
+	public List<ArticleWithStudyDTO> searchUserRepositories(int userId) {
+		List<Article> originalArticles = articleDao.selectRepositoriesByUserId(userId);
+		List<ArticleWithStudyDTO> articles = new ArrayList<ArticleWithStudyDTO>();
+		if(originalArticles.size() != 0) {
+			for(Article article : originalArticles) {
+				Board board = boardDao.selectBoardById(article.getBoard_id());
+				
+				String board_name = "repository";
+				switch(board.getType()) {
+				case 1:
+					board_name = "notice";
+					break;
+				case 2:
+					board_name = "qna";
+					break;
+				case 3:
+					board_name = "repository";
+					break;
+				}
+				
+				int studyId = boardDao.findStudyIdById(board.getId());
+				StudySimple study = new StudySimple(studyDao.selectStudyById(studyId));
+				articles.add(new ArticleWithStudyDTO(article, study, board_name));
+			}
+			return articles;
+		}
+		return null;
 	}
 
 	@Override
@@ -199,23 +256,30 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleReturnDTO> searchFeeds(int userId) {
-		List<Join> joins = joinDao.selectJoinsByUserId(userId);
+	public List<ArticleReturnDTO> searchFeeds(int userId, int startIdx, int endIdx) {
+		FeedsIndexDTO dto = new FeedsIndexDTO(userId, startIdx, endIdx);
+		List<Article> originalArticles = articleDao.selectFeeds(dto);
 		List<ArticleReturnDTO> articles = new LinkedList<ArticleReturnDTO>();
-		for(Join join : joins) { // 유저가 가입한 스터디 id마다 boardId들을 추출해서 List 얻어내기
-			int studyId = join.getStudy_id();
-			for(int i = 1; i <= 3; i++) {
-				List<ArticleReturnDTO> boardArticles = searchArticlesByBoardIdLimit5(studyId, boardDao.findBoardId(studyId, i), i, userId);
-				articles.addAll(boardArticles);
+		if(originalArticles.size() != 0) {
+			for(Article originalArticle : originalArticles) {
+				String board_name = "repository";
+				Board board = boardDao.selectBoardById(originalArticle.getBoard_id());
+				switch(board.getId()) {
+				case 1: 
+					board_name = "notice";
+					break;
+				case 2: 
+					board_name = "qna";
+					break;
+				case 3:
+					board_name = "repository";
+					break;
+				}
+				StudySimple study = new StudySimple(studyDao.selectStudyById(board.getStudy_id()));
+//				Like like = 
+//				ArticleReturnDTO articleLikeDao = new ArticleReturnDTO();
 			}
 		}
-		Collections.sort(articles, new Comparator<ArticleReturnDTO>() {
-			@Override
-			public int compare(ArticleReturnDTO article1, ArticleReturnDTO article2) {
-				return article2.getCreated_at().compareTo(article1.getCreated_at());
-			}
-		});
-		
 		return articles;
 	}
 

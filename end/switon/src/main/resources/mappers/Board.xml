@@ -49,10 +49,16 @@
 		and type = 3
 	</select>
 	
+	<!-- 보드 아이디로 스터디 아이디 검색 -->
+	<select id="findStudyIdById" resultType="Integer">
+		select study_id
+		from board
+		where id = #{id}
+	</select>
 	
 	
 	<!-- 게시판 상세 정보 반환 -->
-	<select id="selectBoard" resultType="Board">
+	<select id="selectBoardById" resultType="Board">
 		select id,
 			study_id,
 			type

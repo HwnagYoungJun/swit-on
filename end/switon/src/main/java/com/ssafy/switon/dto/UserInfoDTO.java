@@ -6,13 +6,13 @@ public class UserInfoDTO {
 	
 	@ApiParam(value = "유저 id (PK)", required = false, hidden = true)
 	int id;
-	@ApiParam(value = "유저 닉네임")
+	@ApiParam(value = "유저 닉네임(닉네임이 이거로 변경됨)")
 	String name;
 	@ApiParam(value = "유저 아이디(이메일)", required = false, hidden = true)
 	String email;
 	@ApiParam(value = "유저 소갯말")
 	String introduce;
-	@ApiParam(value = "유저 프로필 이미지")
+	@ApiParam(value = "유저 프로필 이미지", required = false, hidden = true)
 	String profile_image;
 	@ApiParam(value = "유저 관심 카테고리(소카테고리) id (FK)")
 	String interests;
