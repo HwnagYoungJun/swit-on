@@ -1,9 +1,7 @@
 package com.ssafy.switon.service;
 
-import java.sql.Timestamp;
 import java.util.List;
 
-import com.ssafy.switon.dto.SearchReturnDTO;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyCardDTO;
 import com.ssafy.switon.dto.StudyReturnDTO;
@@ -27,18 +25,9 @@ public interface StudyService {
 	List<UserStudyInfoDTO> searchUserStudies(int userId);
 	// 카테고리 아이디로 스터디 검색
 	List<Study> searchStudiesByLowercategory(int lowercategory_id);
-	// 상위카테고리 아이디로 스터디 검색
-	List<Study> searchStudiesByUppercategory(int uppercategory_id);
-	// 하위 카테고리 아이디로 스터디카드 검색
-	List<StudyCardDTO> searchStudyCardsByLowercategoryId(int lowercategory_id);
-	// 상위카테고리 아이디로 스터디카드 검색
-	List<StudyCardDTO> searchStudyCardsByUppercategory(int uppercategory_id);
+	// 카테고리 아이디로 스터디카드 검색
+	List<StudyCardDTO> searchStudyCardsByLowercategoryId(int parseInt);
 	// 스터디 카드 전체 검색
 	List<StudyCardDTO> searchStudyCards();
-	// 키워드로 스터디 검색
-	SearchReturnDTO searchStudyByKeyword(String keyword);
-	// 스터디를 종료해주기, join에서도 isFinish 처리해줘야함
-	String finishStudies(Timestamp timestamp);
-	
 
 }

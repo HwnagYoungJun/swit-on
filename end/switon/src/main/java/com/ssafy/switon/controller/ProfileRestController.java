@@ -20,21 +20,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ssafy.switon.dto.Article;
-import com.ssafy.switon.dto.ArticleFavReturnDTO;
-import com.ssafy.switon.dto.ArticleWithStudyDTO;
 import com.ssafy.switon.dto.ReturnMsg;
-import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
-import com.ssafy.switon.dto.UserScheduleReturnDTO;
-import com.ssafy.switon.dto.UserScheduleSimpleDTO;
 import com.ssafy.switon.dto.UserStudyInfoDTO;
-import com.ssafy.switon.service.ArticleFavService;
 import com.ssafy.switon.service.ArticleService;
 import com.ssafy.switon.service.JoinService;
-import com.ssafy.switon.service.ScheduleService;
 import com.ssafy.switon.service.StudyService;
-import com.ssafy.switon.service.UserScheduleService;
 import com.ssafy.switon.service.UserService;
 import com.ssafy.switon.util.JWTUtil;
 
@@ -59,45 +51,28 @@ public class ProfileRestController {
 	ArticleService articleService;
 	
 	@Autowired
-	ArticleFavService articleFavService;
-	
-	@Autowired
 	JWTUtil jwtUtil;
 	
-	@Autowired
-	ScheduleService scheduleService;
-	
-	@Autowired
-	UserScheduleService userScheduleService;
-	
 	@ApiOperation(value = "유저 정보를 반환한다.", response = UserInfoDTO.class)
-	@GetMapping("{name}")
-	public Object userInfo(@PathVariable("name") String name) {
+	@GetMapping("{id}")
+	public Object userInfo(@PathVariable int id) {
 		System.out.println("유저 정보 반환");
-		int userId = userService.searchUserIdByName(name);
-		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
-		}
-		UserInfoDTO user = userService.search(userId);
+		UserInfoDTO user = userService.search(id);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "유저 정보를 수정한다.", response = UserInfoDTO.class)
-	@PutMapping("{username}")
+	@ApiOperation(value = "유저 정보를 수정한다.(만드는중)", response = UserInfoDTO.class)
+	@PutMapping("{id}")
 	public Object modifyUser(@RequestParam(value = "img", required = false) MultipartFile img, 
-							@PathVariable("username") String name, UserInfoDTO userInfoDTO, HttpServletRequest request) {
-		int userId = userService.searchUserIdByName(name);
-		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
-		}
-		int userIdFromToken = getUserPK(request);
-		if(userIdFromToken != userId) {
+							@PathVariable int id, UserInfoDTO userInfoDTO, HttpServletRequest request) {
+		int userId = getUserPK(request);
+		if(userId != id) {
 			System.out.println("** 유저 정보 수정 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("유저 정보 수정에 실패했습니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);			
 		}
 		if(img != null) {
-			String RealPath = getUploadRealPath(request, userIdFromToken, img);
-			String path = getUploadPath(userIdFromToken, img);
+			String RealPath = getUploadRealPath(request, userId, img);
+			String path = getUploadPath(userId, img);
 			try {
 				img.transferTo(new File(RealPath));
 				userInfoDTO.setProfile_image(path);
@@ -107,8 +82,8 @@ public class ProfileRestController {
 				e.printStackTrace();
 			}
 		}
-		UserInfoDTO originalUserDTO = userService.search(userIdFromToken);
-		userInfoDTO.setId(userIdFromToken);
+		UserInfoDTO originalUserDTO = userService.search(userId);
+		userInfoDTO.setId(userId);
 		userInfoDTO.setEmail(originalUserDTO.getEmail());
 		if(userInfoDTO.getName() == null) {
 			userInfoDTO.setName(originalUserDTO.getName());
@@ -133,122 +108,55 @@ public class ProfileRestController {
 	}
 	
 	@ApiOperation(value = "유저가 가입한 스터디 목록을 반환한다.")
-	@GetMapping("{name}/mystudy")
-	public Object myStudyList(@PathVariable("name") String name) {
-		if(name == null) {
-			System.out.println("스터디 목록 반환 실패 - 유저 닉네임에 널값");
-			return new ResponseEntity<>(new ReturnMsg("유저 닉네임을 받아올 수 없었습니다."), HttpStatus.OK);
-		}
-		Integer userId = userService.searchUserIdByName(name);
-		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
-		}
-		List<UserStudyInfoDTO> dtos = studyService.searchUserStudies(userId);
+	@GetMapping("{id}/mystudy")
+	public Object myStudyList(@PathVariable int id) {
+		List<UserStudyInfoDTO> dtos = studyService.searchUserStudies(id);
 		System.out.println("유저 스터디 리스트 반환");
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "유저가 작성한 QnA 글 목록을 반환한다. (로그인 필요)")
-	@GetMapping("{name}/myqna")
-	public Object myQnaList(@PathVariable("name") String name, HttpServletRequest request) {
-		int userId = userService.searchUserIdByName(name);
-		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+	@GetMapping("{id}/myqna")
+	public Object myQnaList(@PathVariable int id, HttpServletRequest request) {
+		int userId = getUserPK(request);
+		if(id == userId) {
+			List<Article> qnas = articleService.searchUserQnAs(id);
+			System.out.println("유저 QnA글 리스트 반환");
+			return new ResponseEntity<>(qnas, HttpStatus.OK);
 		}
-		int userIdFromToken = getUserPK(request);
-		if(userId != userIdFromToken) {
-			System.out.println("유저 QnA글 리스트 반환 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
-		}
-		List<ArticleWithStudyDTO> qnas = articleService.searchUserQnAs(userId);
-		System.out.println("유저 QnA글 리스트 반환");
-		return new ResponseEntity<>(qnas, HttpStatus.OK);
+		System.out.println("유저 QnA글 리스트 반환 실패 - 권한 없음");
+		return new ResponseEntity<>(new ReturnMsg("가입하지 않은 소모임입니다."), HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ApiOperation(value = "유저가 작성한 자료실 글 목록을 반환한다. (로그인 필요)")
-	@GetMapping("/{name}/myrepository")
-	public Object myRepositoryList(@PathVariable("name") String name, HttpServletRequest request) {
-		int userId = userService.searchUserIdByName(name);
-		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
-		}
-		int userIdFromToken = getUserPK(request);
-		if(userId != userIdFromToken) {
-			System.out.println("유저 자료실 글 리스트 반환 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
-		}
-		List<ArticleWithStudyDTO> repos = articleService.searchUserRepositories(userId);
-		System.out.println("유저 자료실 글 리스트 반환");
-		return new ResponseEntity<>(repos, HttpStatus.OK);		
-		
+	@GetMapping("/{id}/myrepository")
+	public Object myRepositoryList(@PathVariable int id, HttpServletRequest request) {
+		System.out.println(request.getHeader("Authentication"));
+		int userId = getUserPK(request);
+		System.out.println(userId);
+		if(id == userId) {
+			List<Article> repos = articleService.searchUserRepositories(id);
+			System.out.println("유저 자료실 글 리스트 반환");
+			return new ResponseEntity<>(repos, HttpStatus.OK);
+		}		
+		System.out.println("유저 자료실 글 리스트 반환 실패 - 권한 없음");
+		return new ResponseEntity<>(new ReturnMsg("가입하지 않은 소모임입니다."), HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ApiOperation(value = "회원탈퇴를 한다.", response = UserInfoDTO.class)
-	@DeleteMapping("/{name}")
-	public Object userDelete(@PathVariable("name") String name, HttpServletRequest request) {
-		int userId = userService.searchUserIdByName(name);
-		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
-		}
-		int userIdFromToken = getUserPK(request);
-		if(userIdFromToken != userId) {
+	@DeleteMapping("{id}")
+	public Object userDelete(@PathVariable int id, HttpServletRequest request) {
+		int userId = getUserPK(request);
+		if(userId != id) {
 			System.out.println("** 회원 탈퇴 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		if(userService.signOut(userIdFromToken)) {
+		if(userService.signOut(userId)) {
 			System.out.println("유저 탈퇴 성공!");
 			return new ResponseEntity<>(new ReturnMsg("정상적으로 탈퇴되었습니다. 이용해주셔서 감사합니다."), HttpStatus.OK);
 		}
 		System.out.println("** 회원 탈퇴 실패 - 서버 문제");
 		return new ResponseEntity<>(new ReturnMsg("탈퇴 중 문제가 발생했습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.OK);
-	}
-	
-	@ApiOperation(value = "유저가 참여한 스케쥴들만 모아서 반환", response = List.class)
-	@GetMapping("/{name}/myschedule")
-	public Object userSchedule(@PathVariable("name") String name, HttpServletRequest request) {
-		int userId = userService.searchUserIdByName(name);
-		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
-		}
-		int userIdFromToken = getUserPK(request);
-		if(userIdFromToken != userId) {
-			System.out.println("** 스케줄 조회 실패 - 권한이 없습니다.");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
-		}
-		List<UserScheduleReturnDTO> schedules = userScheduleService.getUserSchedules(userId);
-		return new ResponseEntity<>(schedules, HttpStatus.OK);
-	}
-	
-//	@ApiOperation(value = "유저가 즐겨찾기한 글 목록 반환", response = List.class)
-//	@GetMapping("/{name}/fav")
-//	public Object userFavorite(@PathVariable("name") String name, HttpServletRequest request) {
-//		int userId = userService.searchUserIdByName(name);
-//		if(userId == 0) {
-//			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
-//		}
-//		int userIdFromToken = getUserPK(request);
-//		if(userIdFromToken != userId) {
-//			System.out.println("** 즐겨찾기 조회 실패 - 권한이 없습니다.");
-//			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
-//		}
-//		List<ArticleFavReturnDTO> list = articleFavService.searchFavList(userId);
-//		return new ResponseEntity<>(list, HttpStatus.OK);
-//	}
-	
-	@ApiOperation(value = "유저가 즐겨찾기한 글 목록 반환", response = List.class)
-	@GetMapping("/{name}/fav")
-	public Object userFavorite(@PathVariable("name") String name, HttpServletRequest request) {
-		int userId = userService.searchUserIdByName(name);
-		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
-		}
-		int userIdFromToken = getUserPK(request);
-		if(userIdFromToken != userId) {
-			System.out.println("** 즐겨찾기 조회 실패 - 권한이 없습니다.");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
-		}
-		List<ArticleWithStudyDTO> list = articleFavService.searchFavArticles(userId);
-		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 	
 	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img) {
@@ -263,7 +171,8 @@ public class ProfileRestController {
 		String fileName = img.getOriginalFilename();
 		int pos = fileName.lastIndexOf(".");
 		String ext = fileName.substring(pos);
-		return "upload/" + userId + "_" + System.currentTimeMillis() + ext;
+		return "static"+ File.separator + "upload"
+				+ File.separator + userId + "_" + System.currentTimeMillis() + ext;
 	}
 	
 	// Token(Authentication)에서 유저 id 정보를 뽑아내는 메소드

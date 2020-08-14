@@ -64,7 +64,7 @@ public class LikeRestController {
 	}
 	
 	@ApiOperation(value = "소모임에 눌럿던 좋아요를 취소한다.")
-	@DeleteMapping("/study/{studyId}/like")
+	@DeleteMapping("/study/{studyId}/unlike")
 	public Object studyUnLike(@PathVariable("studyId") int studyId, HttpServletRequest request) {
 		System.out.println("소모임 좋아요 취소");
 		
@@ -109,7 +109,7 @@ public class LikeRestController {
 	}
 	
 	@ApiOperation(value = "qna게시판 글에 눌렀던 좋아요를 취소한다")
-	@DeleteMapping("/study/{studyId}/qna/{articleId}/like")
+	@DeleteMapping("/study/{studyId}/qna/{articleId}/unlike")
 	public Object studyQnaUnLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		System.out.println("qna게시판 글에 눌렀던 좋아요 취소");
 		
@@ -153,7 +153,7 @@ public class LikeRestController {
 	}
 	
 	@ApiOperation(value = "자료실게시판 글에 눌렀던 좋아요를 취소한다")
-	@DeleteMapping("/study/{studyId}/repository/{articleId}/like")
+	@DeleteMapping("/study/{studyId}/repository/{articleId}/unlike")
 	public Object studyRepoUnLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		System.out.println("자료실게시판 글에 눌렀던 좋아요 취소");
 		
@@ -197,7 +197,7 @@ public class LikeRestController {
 	}
 	
 	@ApiOperation(value = "qna게시판 글 댓글에 눌렀던 좋아요를 취소한다")
-	@DeleteMapping("/study/{studyId}/qna/{articleId}/{commentId}/like")
+	@DeleteMapping("/study/{studyId}/qna/{articleId}/{commentId}/unlike")
 	public Object studyQnaCommentUnLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
 		System.out.println("qna게시판 글 댓글에 눌렀던 좋아요 취소");
 		
@@ -241,7 +241,7 @@ public class LikeRestController {
 	}
 	
 	@ApiOperation(value = "자료실게시판 글 댓글에 눌렀던 좋아요를 취소한다")
-	@DeleteMapping("/study/{studyId}/repository/{articleId}/{commentId}/like")
+	@DeleteMapping("/study/{studyId}/repository/{articleId}/{commentId}/unlike")
 	public Object studyRepoCommentUnLike(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
 		System.out.println("자료실게시판 글 댓글에 눌렀던 좋아요 취소");
 		
@@ -307,7 +307,7 @@ public class LikeRestController {
 	}
 	
 	@ApiOperation(value = "qna 글에 눌렀던 즐겨찾기를 취소한다")
-	@DeleteMapping("/study/{studyId}/qna/{articleId}/fav")
+	@DeleteMapping("/study/{studyId}/qna/{articleId}/unfav")
 	public Object articleQnAUnFav(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		System.out.println("글에 눌렀던 즐겨찾기를 취소");
 		
@@ -329,7 +329,7 @@ public class LikeRestController {
 	}
 	
 	@ApiOperation(value = "자료실 글에 눌렀던 즐겨찾기를 취소한다")
-	@DeleteMapping("/study/{studyId}/repository/{articleId}/fav")
+	@DeleteMapping("/study/{studyId}/repository/{articleId}/unfav")
 	public Object articleRepoUnFav(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		System.out.println("글에 눌렀던 즐겨찾기를 취소");
 		

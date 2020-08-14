@@ -23,16 +23,12 @@ public class ArticleDetailReturnDTO {
 	Timestamp created_at;
 	@ApiParam(value = "게시글 수정시간", required = false, hidden = true)
 	Timestamp updated_at;
-	// 간단한 스터디 정보
-	StudySimple study;
 	// 간단한 작성자 정보
 	UserSimpleDTO user;
 	// 댓글도 함께 반환해야 해서...
 	List<CommentReturnDTO> comments;
 	// 좋아요 상태도 함께 반환해야 해서...
 	Like like;
-	// 북마크 여부 반환
-	boolean isfavorite;
 	
 	public ArticleDetailReturnDTO(Article article, List<CommentReturnDTO> comments, Like like) {
 		this.id = article.getId();
@@ -47,24 +43,6 @@ public class ArticleDetailReturnDTO {
 		this.like = like;
 	}
 	
-	public StudySimple getStudy() {
-		return study;
-	}
-
-	public boolean isIsfavorite() {
-		return isfavorite;
-	}
-
-	public void setIsfavorite(boolean isfavorite) {
-		this.isfavorite = isfavorite;
-	}
-
-	public void setStudy(StudySimple study) {
-		this.study = study;
-	}
-
-
-
 	public Like getLike() {
 		return like;
 	}

@@ -10,14 +10,6 @@ public class StudySimple {
 	String name;
 	@ApiParam(value = "소모임 대표 이미지 주소", required = false, hidden = true)
 	String logo;
-	
-	public StudySimple(Study originalStudy) {
-		this.id = originalStudy.getId();
-		this.name = originalStudy.getName();
-		this.logo = originalStudy.getLogo();
-	}
-	public StudySimple() {
-	}
 	public int getId() {
 		return id;
 	}

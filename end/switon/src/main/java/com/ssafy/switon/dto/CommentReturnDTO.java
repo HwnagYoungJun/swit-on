@@ -20,18 +20,6 @@ public class CommentReturnDTO {
 	Timestamp updated_at;
 	//간단한 유저 정보도 같이 반환
 	UserSimpleDTO user;
-	// 이 코멘트의 좋아요 정보
-	Like like;
-	
-	
-	
-	
-	public Like getLike() {
-		return like;
-	}
-	public void setLike(Like like) {
-		this.like = like;
-	}
 	public int getId() {
 		return id;
 	}
@@ -79,7 +67,7 @@ public class CommentReturnDTO {
 		return "CommentReturnDTO [id=" + id + ", content=" + content + ", user_id=" + user_id + ", article_id="
 				+ article_id + ", created_at=" + created_at + ", updated_at=" + updated_at + ", user=" + user + "]";
 	}
-	public CommentReturnDTO(Comment comment, UserSimpleDTO user, Like like) {
+	public CommentReturnDTO(Comment comment, UserSimpleDTO user) {
 		this.id = comment.getId();
 		this.content = comment.getContent();
 		this.user_id = comment.getUser_id();
@@ -87,6 +75,5 @@ public class CommentReturnDTO {
 		this.created_at = comment.getCreated_at();
 		this.updated_at = comment.getUpdated_at();
 		this.user = user;
-		this.like = like;
 	}
 }

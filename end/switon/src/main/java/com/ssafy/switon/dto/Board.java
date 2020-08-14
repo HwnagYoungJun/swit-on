@@ -8,11 +8,6 @@ public class Board {
 		this.study_id = study_id;
 		this.type = type;
 	}
-	public Board(int id, int study_id, int type) {
-		this.id = id;
-		this.study_id = study_id;
-		this.type = type;
-	}
 	int id;
 	int study_id;
 	int type;

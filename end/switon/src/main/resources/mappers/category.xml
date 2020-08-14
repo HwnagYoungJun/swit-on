@@ -39,18 +39,4 @@
 		where id = #{id}
 	</select>
 	
-	<!-- 소분류 키워드로 검색 -->
-	<select id="selectLowerCategoryByKeyword" resultType="LowerCategorySimpleDTO">
-	    select id, name
-	    from lowercategory
-	    where name like #{keyword}
-	</select>
-
-	<!-- 대분류 키워드로 검색 -->
-	<select id="selectUpperCategoryByKeyword" resultType="UpperCategory">
-	    select id, name
-	    from uppercategory
-	    where name like #{keyword}
-	</select>
-	
 </mapper>

@@ -10,15 +10,6 @@ public class UserSimpleDTO {
 	String name;
 	@ApiParam(value = "유저 프로필 이미지")
 	String profile_image;
-	
-	public UserSimpleDTO() {
-
-	}
-	public UserSimpleDTO(UserInfoDTO userInfo) {
-		this.id = userInfo.getId();
-		this.name = userInfo.getName();
-		this.profile_image = userInfo.getProfile_image();
-	}
 	public int getId() {
 		return id;
 	}

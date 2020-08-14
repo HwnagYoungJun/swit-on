@@ -1,6 +1,5 @@
 package com.ssafy.switon.service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +14,9 @@ import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Join;
 import com.ssafy.switon.dto.Like;
 import com.ssafy.switon.dto.LowerCategory;
-import com.ssafy.switon.dto.LowerCategorySimpleDTO;
-import com.ssafy.switon.dto.SearchReturnDTO;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyCardDTO;
 import com.ssafy.switon.dto.StudyReturnDTO;
-import com.ssafy.switon.dto.StudySimple;
 import com.ssafy.switon.dto.UpperCategory;
 import com.ssafy.switon.dto.UserStudyInfoDTO;
 
@@ -87,7 +83,6 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	public List<UserStudyInfoDTO> searchUserStudies(int userId) {
 		List<UserStudyInfoDTO> list = new ArrayList<>();
-		System.out.println(userId + "번 유저의 스터디 찾기 시도");
 		List<Join> joins = joinDao.selectJoinsByUserId(userId);
 		for(Join join : joins) {
 			UserStudyInfoDTO dto = new UserStudyInfoDTO();
@@ -128,65 +123,6 @@ public class StudyServiceImpl implements StudyService {
 					study.getEnd_term(), study.getUsers_current(), study.getUsers_limit()));
 		}
 		return studyCards;
-	}
-
-	@Override
-	public List<Study> searchStudiesByUppercategory(int uppercategory_id) {
-		List<Study> studies = new ArrayList<Study>();
-		List<LowerCategory> categories = categoryDao.selectUp_Low(uppercategory_id);
-		for(LowerCategory category : categories) {
-			studies.addAll(studyDao.selectStudiesByLowercategoryId(category.getId()));
-		}
-		return studies;
-	}
-
-	@Override
-	public List<StudyCardDTO> searchStudyCardsByUppercategory(int uppercategory_id) {
-		List<Study> studies = new ArrayList<Study>();
-		List<LowerCategory> categories = categoryDao.selectUp_Low(uppercategory_id);
-		for(LowerCategory category : categories) {
-			studies.addAll(studyDao.selectStudiesByLowercategoryId(category.getId()));
-		}
-		
-		List<StudyCardDTO> studyCards = new ArrayList<StudyCardDTO>();
-		for(Study study : studies) {
-			studyCards.add(new StudyCardDTO(study.getId(), study.getName(), 
-					study.getStart_time(), study.getEnd_time(), study.getWeek(), 
-					study.getEnd_term(), study.getUsers_current(), study.getUsers_limit()));
-		}
-		return studyCards;
-	}
-	
-	@Override
-	public SearchReturnDTO searchStudyByKeyword(String keyword) {
-		List<Study> originalStudies = studyDao.selectStudyByKeyword(keyword);
-		List<StudySimple> studies = new ArrayList<StudySimple>();
-		for(Study originalStudy : originalStudies) {
-			StudySimple study = new StudySimple(originalStudy);
-			studies.add(study);
-		}
-		List<LowerCategorySimpleDTO> lowercategories = categoryDao.selectLowByKeyword(keyword);
-		List<UpperCategory> uppercategories = categoryDao.selectUpByKeyword(keyword);
-		
-		return new SearchReturnDTO(studies, lowercategories, uppercategories);
-	}
-
-	@Override
-	public String finishStudies(Timestamp timestamp) {
-		// isFinish가 FALSE인 스터디들 중에서 시간이 다 된 스터디 검색
-		List<Integer> ids = studyDao.selectNotFinishedStudyIds(timestamp);
-		String result;
-		if(ids.size() != 0) {
-			result = "스터디 완료 작업 실행!! : ";
-			for(int id : ids) {
-				result += id + "번 스터디 작업 ";
-				joinDao.updateJoinComplete(id);
-				studyDao.updateStudyFinish(id);
-				result += "완료 | ";
-			}
-			return result;
-		}
-		return null;
 	}
 
 	

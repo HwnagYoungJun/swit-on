@@ -20,5 +20,5 @@ public interface CommentService {
 	// 게시글의 댓글 조회
 	List<Comment> searchArticleComments(int articleId);
 	
-	List<CommentReturnDTO> searchArticleCommentsIncludingProfile(int articleId, int readerId);
+	List<CommentReturnDTO> searchArticleCommentsIncludingProfile(int articleId);
 }

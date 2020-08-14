@@ -19,7 +19,7 @@
 		where id = #{id}
 	</select>
 	
-	<!-- 해당유저가 좋아요를 누른 글이라면 1개가 반환됨 -->
+	<!-- 해당유저가 좋아요를 누른 글 반환 -->
 	<select id="selectArticleLikeByUser_Article" parameterType="ArticleLike" resultType="ArticleLike">
 		select id, user_id, article_id
 		from articlelike

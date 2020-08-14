@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.CategoryDAO;
 import com.ssafy.switon.dto.LowerCategory;
-import com.ssafy.switon.dto.LowerCategorySimpleDTO;
 import com.ssafy.switon.dto.UpperCategory;
 
 @Service
@@ -29,16 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<LowerCategory> searchUp_Low(int uppercategory_id) {
 		return categoryDAO.selectUp_Low(uppercategory_id);
-	}
-	
-	@Override
-	public List<UpperCategory> searchUpByKeyword(String keyword) {
-		return categoryDAO.selectUpByKeyword(keyword);
-	}
-
-	@Override
-	public List<LowerCategorySimpleDTO> searchLowByKeyword(String keyword) {
-		return categoryDAO.selectLowByKeyword(keyword);
 	}
 
 }

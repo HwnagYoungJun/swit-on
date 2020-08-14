@@ -20,7 +20,4 @@ public interface ArticleFavDAO {
 	int deleteArticleFavByUser(int user_id, int article_id);
 	// 해당 유저가 즐겨찾기 누른 글 조회
 	ArticleFav selectArticleFavByUser_Article(int user_id, int article_id);
-	// 유저 아이디로 즐겨찾기를 누른 글 아이디들 반환
-	List<Integer> selectArticleFavIdsByUserId(int userId);
-	
 }

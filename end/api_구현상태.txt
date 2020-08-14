@@ -3,80 +3,31 @@
 
 ** 유저관련(UserRestController) **
 
-POST	/accounts/login
-POST	/accounts/register
+/accounts
+POST	/login
+POST	/register
 
 
 ** 프로필 관련 **
-GET	/accounts/{id}		유저 정보
-GET	/accounts/{id}/mystudy	유저가 가입한 스터디 목록
-GET	/accounts/{id}/myqna	유저가 작성한 QnA 글 목록	(로그인 필요)
-GET	/accounts/{id}/myrepository	유저가 작성한 자료실글 목록 (로그인 필요)
+/accounts	(<- 이거 없이 하려니 swagger 오류 발생해서 그냥 넣음)
+GET	/{id}		유저 정보
+GET	/{id}/mystudy	유저가 가입한 스터디 목록
+GET	/{id}/myqna	유저가 작성한 QnA 글 목록	(로그인 필요)
+GET	/{id}/myrepository	유저가 작성한 자료실글 목록 (로그인 필요)
 
 
 
 ** 스터디 (StudyRestController) **
 
-GET	/study/			스터디 리스트
-POST	/study/			스터디 생성		(로그인 필요)
-GET	/study/{studyId} 		스터디 상세정보 반환
-PUT	/study/{studyId}		스터디 수정		(모임장 로그인 필요)
-DELETE	/study/{studyId}		스터디 삭제		(모임장 로그인 필요)
-GET	/study/{studyId}/notice	공지, qna, 자료실 게시글들 반환
-	/study/{studyId}/qna
-	/study/{studyId}/repository
-POST	/study/{studyId}/qna		QnA글 작성	(로그인 필요)
-POST	/study/{studyId}/repository		자료실글 작성	(로그인 필요)
-GET	/study/{studyId}/qna/{articleId}	QnA글 조회
-GET	/study/{studyId}/repository/{articleId}	자료실글 조회
-PUT	/study/{studyId}/qna/{articleId}	QnA글 수정	(로그인 필요)
-PUT	/study/{studyId}/repository/{articleId}	자료실글 수정	(로그인 필요)
-DELETE	/study/{studyId}/qna/{articleId}	QnA글 삭제	(로그인 필요)
-DELETE	/study/{studyId}/repository/{articleId}	자료실글 삭제	(로그인 필요)
+/study
 
-GET	/study/{studyId}/qna/{articleId}/comments	 QnA 글의 댓글들 조회
-GET	/study/{studyId}/repository/{articleId}/comments 자료실 글의 댓글들 조회
-POST	/study/{studyId}/qna/{articleId}/comments	 QnA글에 댓글 작성	(로그인 필요)
-POST	/study/{studyId}/repository/{articleId}/comments 자료실 글에 댓글 작성	(로그인 필요)
-PUT	/study/{studyId}/qna/{articleId}/{commentId}	 	댓글 수정		(로그인 필요)
-PUT	/study/{studyId}/repository/{articleId}/{commentId}	댓글 수정		(로그인 필요)
-DELETE	/study/{studyId}/qna/{articleId}/{commentId}		댓글 삭제		(로그인 필요)
-DELETE	/study/{studyId}/repository/{articleId}/{commentId}	댓글 삭제		(로그인 필요)
-
-GET	/study/{studyId}/notice		공지글 조회
-POST	/study/{studyId}/notice		공지글 작성	(모임장 로그인 필요)
-PUT	/study/{studyId}/notice/{noticeId}	공지글 수정	(모임장 로그인 필요)
-DELETE	/study/{studyId}/notice/{noticeId}	공지글 삭제	(모임장 로그인 필요)
+GET	/		스터디 리스트
+POST	/create		스터디 생성		(로그인 필요)
+GET	/{studyId} 	스터디 상세정보 반환
+DELETE	/{studyId}/delete	스터디 삭제	(모임장 로그인 필요)
+GET	/{studyId}/notice	공지, qna, 자료실 게시글들 반환
+	/{studyId}/qna
+	/{studyId}/repository
 
 
-
-
-** 좋아요, 좋아요 취소 ** (모두 로그인 필요)
-
-POST	/study/{studyId}/like			
-DELETE	/study/{studyId}/like			
-POST	/study/{studyId}/qna/{articleId}/like
-DELETE	/study/{studyId}/qna/{articleId}/like		
-POST	/study/{studyId}/repository/{articleId}/like
-DELETE	/study/{studyId}/repository/{articleId}/like
-POST	/study/{studyId}/qna/{articleId}/{commentId}/like
-DELETE	/study/{studyId}/qna/{articleId}/{commentId}/like
-POST	/study/{studyId}/repository/{articleId}/{commentId}/like
-DELETE	/study/{studyId}/repository/{articleId}/{commentId}/like
-POST	/study/{studyId}/fav
-DELETE	/study/{studyId}/fav
-
-
-** 스케줄 **	(다 로그인 필요)
-GET	/accounts/{name}/myschedule		유저가 참여한 스케줄들만 모아서 반환 (profileRestController에 있음)
-GET	/study/{studyId}/schedule		해당 스터디의 스케줄들 반환
-POST	/study/{studyId}/schedule		스터디의 스케줄 새로 생성 (모임장만 가능)
-GET	/study/{studyId}/schedule/{scheduleId}	스케줄 조회
-PUT	/study/{studyId}/schedule/{scheduleId}	스케줄 수정 (모임장만 가능)
-DELETE	/study/{studyId}/schedule/{scheduleId}	스케줄 삭제 (모임장만 가능)
-GET	/study/{studyId}/schedule/{scheduleId}/participate	유저의 스케줄 참여 정보 반환 (입실, 퇴실, 시간지남, 출석성공 여부)
-POST	/study/{studyId}/schedule/{scheduleId}/participate	유저의 스케줄 참여	(유저가 참가하겠다고 신청)
-DELETE	/study/{studyId}/schedule/{scheduleId}/participate	유저의 스케줄 참여 취소
-PUT	/study/{studyId}/schedule/{scheduleId}/checkin		유저의 출석체크(입실)
-PUT	/study/{studyId}/schedule/{scheduleId}/checkout	유저의 출석체크(퇴실)
 

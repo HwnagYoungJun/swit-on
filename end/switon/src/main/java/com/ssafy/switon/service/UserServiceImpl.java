@@ -87,9 +87,4 @@ public class UserServiceImpl implements UserService {
 		UserInfoDTO userInfoDTO = userDao.selectUserById(userId);
 		return userDao.updateUserLegacy(userInfoDTO) == 1;
 	}
-
-	@Override
-	public int searchUserIdByName(String name) {
-		return userDao.getUserIdByName(name);
-	}
 }

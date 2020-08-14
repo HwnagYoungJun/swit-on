@@ -6,26 +6,6 @@
 
 <mapper namespace="article">
 
-	<!-- 유저 피드 반환 (최신순으로 startIdx ~ endIdx 까지) -->
-	<select id="selectFeeds" parameterType="FeedsIndexDTO" resultType="Article">
-		select id,
-			title,
-			content,
-			user_id,
-			file,
-			board_id,
-			created_at,
-			updated_at
-		from article
-		where board_id in (select id
-							from board
-							where study_id in (select study_id
-												from `join`
-												where user_id = #{user_id}))
-		order by created_at desc
-		limit #{start_idx}, #{end_idx}
-	</select>
-
 	<!-- 게시판 리스트 반환 -->
 	<select id="selectArticles" resultType="Article">
 		select id,

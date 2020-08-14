@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleReturnDTO;
-import com.ssafy.switon.dto.ArticleWithStudyDTO;
 
 public interface ArticleService {
 	
@@ -15,9 +14,9 @@ public interface ArticleService {
 	// 유저 아이디에 맞는 게시글들 반환
 	List<Article> searchUserArticles(int userId);
 	// 유저 아이디에 맞는 QnA 게시글들 반환
-	List<ArticleWithStudyDTO> searchUserQnAs(int userId);
+	List<Article> searchUserQnAs(int userId);
 	// 유저 아이디에 맞는 자료실 게시글들 반환
-	List<ArticleWithStudyDTO> searchUserRepositories(int userId);
+	List<Article> searchUserRepositories(int userId);
 	// id로 게시글 상세 조회
 	Article search(int id);
 	// 유저 아이디에 맞는 최신 게시글의 id 반환
@@ -33,6 +32,6 @@ public interface ArticleService {
 	// 게시판의 게시글 반환 new type 최신순
 	List<ArticleReturnDTO> searchArticlesByBoardIdOrdered(int studyId, int boardId, int type, int userId);
 	// 내가 가입한 스타디들의 게시글 반환 new type 최신순
-	List<ArticleReturnDTO> searchFeeds(int userId, int startIdx, int endIdx);
+	List<ArticleReturnDTO> searchFeeds(int userId);
 	List<ArticleReturnDTO> searchArticlesByBoardIdLimit5(int studyId, int boardId, int type, int userId);
 }

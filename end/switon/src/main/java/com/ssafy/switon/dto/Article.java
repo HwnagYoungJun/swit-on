@@ -15,7 +15,7 @@ public class Article {
 	String content;
 	@ApiParam(value = "작성자 (토큰에서 긁어옴)", required = false, hidden = true)
 	int user_id;
-	@ApiParam(value = "첨부파일", required = false, hidden = true)
+	@ApiParam(value = "첨부파일")
 	String file;
 	@ApiParam(value = "게시판 아이디 (스터디id에서 얻어냄)", required = false, hidden = true)
 	int board_id;

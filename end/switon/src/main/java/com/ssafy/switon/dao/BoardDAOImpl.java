@@ -73,10 +73,4 @@ public class BoardDAOImpl implements BoardDAO {
 		}
 		return boardId = boardId == null ? 0 : boardId;
 	}
-
-	@Override
-	public int findStudyIdById(int id) {
-		Integer studyId = sqlSession.selectOne("board.findStudyIdById", id);
-		return studyId = studyId == null ? 0 : studyId;
-	}
 }

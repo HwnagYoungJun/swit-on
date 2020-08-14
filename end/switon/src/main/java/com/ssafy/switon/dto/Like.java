@@ -3,7 +3,6 @@ package com.ssafy.switon.dto;
 public class Like {
 	int like_cnt;
 	boolean liked;
-	
 	public Like(int like_cnt, boolean liked) {
 		this.like_cnt = like_cnt;
 		this.liked = liked;

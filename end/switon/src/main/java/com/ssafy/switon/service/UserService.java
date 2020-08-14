@@ -25,6 +25,5 @@ public interface UserService {
 	boolean modify(UserInfoDTO userInfoDTO);
 	// 유저 탈퇴 처리
 	boolean signOut(int userId);
-	int searchUserIdByName(String name);
 
 }

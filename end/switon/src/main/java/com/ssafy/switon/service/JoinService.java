@@ -3,7 +3,6 @@ package com.ssafy.switon.service;
 import java.util.List;
 
 import com.ssafy.switon.dto.Join;
-import com.ssafy.switon.dto.UserSimpleDTO;
 
 public interface JoinService {
 	
@@ -21,7 +20,5 @@ public interface JoinService {
 	List<Join> searchAllByUserId(int userId);
 	// 가입여부 반환
 	boolean isMember(int studyId, int userId);
-	// 소모임에 가입한 멤버들 리스트 반환
-	List<UserSimpleDTO> searchMembers(int studyId);
 	
 }
