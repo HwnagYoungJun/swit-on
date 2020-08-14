@@ -47,7 +47,6 @@ export default {
 	}
 }
 .feed-wrap {
-	width: 600px;
 	margin-bottom: 30px;
 	padding: 15px 20px;
 	border: 1px solid #e0e0e0;

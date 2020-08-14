@@ -1,7 +1,63 @@
 <template>
-	<div class="schedule">
-		<span class="schedule-title">나의 일정</span>
-		<ul></ul>
+	<div>
+		<div class="ranking">
+			<span class="ranking-title">우리 랭킹</span>
+			<ul>
+				<li>
+					<div class="badgegold">
+						<div class="rounded">
+							<i class="icon ion-md-medal"></i>
+						</div>
+					</div>
+					인태
+				</li>
+				<li>
+					<div class="badgesilver">
+						<div class="rounded">
+							<i class="icon ion-md-medal"></i>
+						</div>
+					</div>
+					카우
+				</li>
+				<li>
+					<div class="badgebronze">
+						<div class="rounded">
+							<i class="icon ion-md-medal"></i>
+						</div>
+					</div>
+					아지
+				</li>
+			</ul>
+		</div>
+		<div class="ranking">
+			<span class="ranking-title">인기 글</span>
+			<ul>
+				<li>
+					<div class="first-article">
+						<div class="rounded">
+							<i class="icon ion-md-heart"></i>
+						</div>
+					</div>
+					<p>게시글 제목</p>
+				</li>
+				<li>
+					<div class="second-article">
+						<div class="rounded">
+							<i class="icon ion-md-heart"></i>
+						</div>
+					</div>
+					<p>게시글 제목</p>
+				</li>
+				<li>
+					<div class="third-article">
+						<div class="rounded">
+							<i class="icon ion-md-heart"></i>
+						</div>
+					</div>
+					<p>게시글 제목</p>
+				</li>
+			</ul>
+		</div>
 	</div>
 </template>
 
@@ -9,13 +65,13 @@
 export default {};
 </script>
 
-<style lang="scss">
-.schedule {
-	margin: 50px 0;
-	padding: 25px 0 15px;
+<style lang="scss" scoped>
+.ranking {
 	position: relative;
+	margin: 10px 0 30px;
+	padding: 20px 0;
 	color: rgb(138, 138, 138);
-	.schedule-title {
+	.ranking-title {
 		position: absolute;
 		top: -5px;
 		left: -15px;
@@ -23,31 +79,35 @@ export default {};
 		font-weight: bold;
 		background: #fff;
 	}
+	.badgegold {
+		@include grade-badge('gold', 40px);
+	}
+	.badgesilver {
+		@include grade-badge('silver', 40px);
+	}
+	.badgebronze {
+		@include grade-badge('bronze', 40px);
+	}
+	.first-article {
+		@include popular-article('crimson', 40px);
+	}
+	.second-article {
+		@include popular-article('crimson2', 40px);
+	}
+	.third-article {
+		@include popular-article('crimson3', 40px);
+	}
 	li {
 		display: flex;
-		justify-content: space-between;
-		margin: 10px 0;
 		align-items: center;
+		margin: 10px 0;
 		color: rgb(90, 90, 90);
-		@media screen and (max-width: 370px) {
-			display: inline;
-			margin: 10px 20px;
+		img {
+			width: 30px;
+			object-fit: cover;
 		}
 		span {
 			margin-right: 10px;
-		}
-		button {
-			@include common-btn();
-			display: inline-block;
-			width: 5rem;
-			@media screen and (max-width: 370px) {
-				width: 100%;
-				margin: 8px 0;
-			}
-		}
-		.active {
-			color: #fff;
-			background: $btn-purple;
 		}
 	}
 }

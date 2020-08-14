@@ -4,22 +4,25 @@
 			<ArticleNotFound />
 		</div>
 		<div class="article-wrap" v-else>
-			<router-link
-				class="article-feed"
-				v-for="article in articles"
-				:key="article.id"
-				:to="{
-					name: 'BoardArticleDetail',
-					params: {
-						id,
-						board_name: 'repository',
-						article_id: article.id,
-					},
-				}"
-			>
-				<ArticleFeed :article="article" />
-			</router-link>
-			<ArticleRank class="article-rank" />
+			<div class="article-feed-wrap">
+				<router-link
+					v-for="article in articles"
+					:key="article.id"
+					:to="{
+						name: 'BoardArticleDetail',
+						params: {
+							id,
+							board_name: 'repository',
+							article_id: article.id,
+						},
+					}"
+				>
+					<ArticleFeed :article="article" />
+				</router-link>
+			</div>
+			<div class="rank-wrap">
+				<ArticleRank />
+			</div>
 		</div>
 		<ArticleAddBtn boardName="repository" />
 	</div>
@@ -58,25 +61,27 @@ export default {
 	},
 };
 </script>
-<style lang="scss">
-.card-wrap {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
-	position: relative;
-	@media screen and (max-width: 1500px) {
-		justify-content: center;
-	}
-}
+<style lang="scss" scoped>
 .article-wrap {
 	display: flex;
 	flex-wrap: wrap;
-	align-items: flex-start;
-	.article-feed {
+	.article-feed-wrap {
 		flex: 2;
+		display: flex;
+		flex-direction: column;
+		margin-right: 100px;
+		@media screen and (max-width: 992px) {
+			margin-right: 0;
+		}
 	}
-	.article-rank {
+	.rank-wrap {
 		flex: 1;
+		height: 100%;
+		position: sticky;
+		top: 50px;
+		@media screen and (max-width: 992px) {
+			display: none;
+		}
 	}
 }
 </style>
