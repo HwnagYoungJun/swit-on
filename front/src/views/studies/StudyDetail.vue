@@ -25,7 +25,6 @@
 					{{ study.week | formatWeekday }}
 					{{ study.start_time }}시-{{ study.end_time }}시
 				</p>
-				<!-- <small>{{ study }}</small> -->
 				<small>{{ study.users_current }}/{{ study.users_limit }}명</small>
 			</div>
 			<div class="study-logo">
