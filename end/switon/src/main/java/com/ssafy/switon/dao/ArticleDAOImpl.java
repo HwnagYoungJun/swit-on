@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.switon.dto.Article;
+import com.ssafy.switon.dto.BoardIndexDTO;
 import com.ssafy.switon.dto.FeedsIndexDTO;
 
 @Repository
@@ -67,8 +68,8 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<Article> selectArticlesByBoardIdLimit5(int boardId) {
-		return sqlSession.selectList("article.selectArticlesByBoardIdLimit5", boardId);
+	public List<Article> selectArticlesByBoardIdLimit5(BoardIndexDTO boardIndexDTO) {
+		return sqlSession.selectList("article.selectArticlesByBoardIdLimit5", boardIndexDTO);
 	}
 
 	@Override

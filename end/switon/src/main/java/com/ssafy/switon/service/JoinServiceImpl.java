@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.JoinDAO;
+import com.ssafy.switon.dao.StudyDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Join;
+import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserSimpleDTO;
@@ -21,6 +23,9 @@ public class JoinServiceImpl implements JoinService {
 	
 	@Autowired
 	UserDAO userDAO;
+	
+	@Autowired
+	StudyDAO studyDAO;
 	
 	@Override
 	public List<Join> searchAll() {
@@ -76,6 +81,17 @@ public class JoinServiceImpl implements JoinService {
 			members.add(user);
 		}
 		return members;
+	}
+
+	@Override
+	public boolean isFull(int studyId) {
+		Study study = studyDAO.selectStudyById(studyId);
+		int currentUsersCnt = joinDAO.countUsersByStudyId(studyId);
+		// 유저 제한수보다 현재 인원수가 많거나 같으면 꽉찼다(isFull)를 true로 반환
+		if(study.getUsers_limit() <= currentUsersCnt) {
+			return true;
+		}
+		return false;
 	}
 
 }

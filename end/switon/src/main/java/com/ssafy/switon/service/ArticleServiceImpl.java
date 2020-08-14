@@ -19,6 +19,7 @@ import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleReturnDTO;
 import com.ssafy.switon.dto.ArticleWithStudyDTO;
 import com.ssafy.switon.dto.Board;
+import com.ssafy.switon.dto.BoardIndexDTO;
 import com.ssafy.switon.dto.FeedsIndexDTO;
 import com.ssafy.switon.dto.Join;
 import com.ssafy.switon.dto.Like;
@@ -99,18 +100,7 @@ public class ArticleServiceImpl implements ArticleService {
 			for(Article article : originalArticles) {
 				Board board = boardDao.selectBoardById(article.getBoard_id());
 				
-				String board_name = "repository";
-				switch(board.getType()) {
-				case 1:
-					board_name = "notice";
-					break;
-				case 2:
-					board_name = "qna";
-					break;
-				case 3:
-					board_name = "repository";
-					break;
-				}
+				String board_name = findBoardName(board.getType());
 				
 				int studyId = boardDao.findStudyIdById(board.getId());
 				StudySimple study = new StudySimple(studyDao.selectStudyById(studyId));
@@ -128,20 +118,7 @@ public class ArticleServiceImpl implements ArticleService {
 		if(originalArticles.size() != 0) {
 			for(Article article : originalArticles) {
 				Board board = boardDao.selectBoardById(article.getBoard_id());
-				
-				String board_name = "repository";
-				switch(board.getType()) {
-				case 1:
-					board_name = "notice";
-					break;
-				case 2:
-					board_name = "qna";
-					break;
-				case 3:
-					board_name = "repository";
-					break;
-				}
-				
+				String board_name = findBoardName(board.getType());
 				int studyId = boardDao.findStudyIdById(board.getId());
 				StudySimple study = new StudySimple(studyDao.selectStudyById(studyId));
 				articles.add(new ArticleWithStudyDTO(article, study, board_name));
@@ -154,17 +131,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public List<ArticleReturnDTO> searchArticlesByBoardId(int studyId, int boardId, int type, int userId) {
 		String board_name = "notice";
-		switch(type) {
-		case 1: 
-			board_name = "notice";
-			break;
-		case 2: 
-			board_name = "qna";
-			break;
-		case 3:
-			board_name = "repository";
-			break;
-		}
+		board_name = findBoardName(type);
 		List<Article> articles = articleDao.selectArticlesByBoardId(boardId);
 		List<ArticleReturnDTO> articleReturnDTOs = new ArrayList<ArticleReturnDTO>();
 		Study originalStudy = studyDao.selectStudyById(studyId);
@@ -206,18 +173,8 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public List<ArticleReturnDTO> searchArticlesByBoardIdLimit5(int studyId, int boardId, int type, int userId) {
 		String board_name = "notice";
-		switch(type) {
-		case 1: 
-			board_name = "notice";
-			break;
-		case 2: 
-			board_name = "qna";
-			break;
-		case 3:
-			board_name = "repository";
-			break;
-		}
-		List<Article> articles = articleDao.selectArticlesByBoardIdLimit5(boardId);
+		board_name = findBoardName(type);
+		List<Article> articles = articleDao.selectArticlesByBoardIdLimit5(new BoardIndexDTO(boardId, 0, 5));
 		List<ArticleReturnDTO> articleReturnDTOs = new ArrayList<ArticleReturnDTO>();
 		Study originalStudy = studyDao.selectStudyById(studyId);
 			StudySimple study = new StudySimple();
@@ -236,7 +193,6 @@ public class ArticleServiceImpl implements ArticleService {
 			boolean isLiked = articleLikeService.searchByUser_Article(userId, articleId) != null;
 			Like like = new Like(articleLikeService.searchLikeCount(articleId),
 					isLiked);
-			System.out.println(like);
 			ArticleReturnDTO articleReturnDTO = new ArticleReturnDTO();
 			articleReturnDTO.setId(articleId);
 			articleReturnDTO.setTitle(article.getTitle());
@@ -255,6 +211,8 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleReturnDTOs;
 	}
 
+
+
 	@Override
 	public List<ArticleReturnDTO> searchFeeds(int userId, int startIdx, int endIdx) {
 		FeedsIndexDTO dto = new FeedsIndexDTO(userId, startIdx, endIdx);
@@ -262,22 +220,16 @@ public class ArticleServiceImpl implements ArticleService {
 		List<ArticleReturnDTO> articles = new LinkedList<ArticleReturnDTO>();
 		if(originalArticles.size() != 0) {
 			for(Article originalArticle : originalArticles) {
-				String board_name = "repository";
 				Board board = boardDao.selectBoardById(originalArticle.getBoard_id());
-				switch(board.getId()) {
-				case 1: 
-					board_name = "notice";
-					break;
-				case 2: 
-					board_name = "qna";
-					break;
-				case 3:
-					board_name = "repository";
-					break;
-				}
+				String board_name = findBoardName(board.getType());
 				StudySimple study = new StudySimple(studyDao.selectStudyById(board.getStudy_id()));
-//				Like like = 
-//				ArticleReturnDTO articleLikeDao = new ArticleReturnDTO();
+				int articleId = originalArticle.getId();
+				boolean isLiked = articleLikeService.searchByUser_Article(userId, articleId) != null;
+				Like like = new Like(articleLikeService.searchLikeCount(articleId),
+						isLiked);
+				UserSimpleDTO user = new UserSimpleDTO(userDao.selectUserById(originalArticle.getUser_id()));
+				ArticleReturnDTO article = new ArticleReturnDTO(originalArticle, board_name, study, user, like);
+				articles.add(article);
 			}
 		}
 		return articles;
@@ -294,7 +246,38 @@ public class ArticleServiceImpl implements ArticleService {
 		});
 		return articles;
 	}
+
+	@Override
+	public List<ArticleReturnDTO> searchArticlesWithIndex(int boardId, int userId, int index) {
+		List<Article> originalArticles = articleDao.selectArticlesByBoardIdLimit5(new BoardIndexDTO(boardId, index, index + 5));
+		List<ArticleReturnDTO> articles = new ArrayList<ArticleReturnDTO>();
+		if(originalArticles.size() != 0) {
+			for(Article originalArticle : originalArticles) {
+				Board board = boardDao.selectBoardById(originalArticle.getBoard_id());
+				String board_name = findBoardName(board.getType());
+				StudySimple study = new StudySimple(studyDao.selectStudyById(board.getStudy_id()));
+				UserSimpleDTO user = new UserSimpleDTO(userDao.selectUserById(originalArticle.getUser_id()));
+				int articleId = originalArticle.getId();
+				boolean isLiked = articleLikeService.searchByUser_Article(userId, articleId) != null;
+				Like like = new Like(articleLikeService.searchLikeCount(articleId), isLiked);
+				
+				ArticleReturnDTO article = new ArticleReturnDTO(originalArticle, board_name, study, user, like);
+				articles.add(article);
+			}
+			return articles;
+		}
+		return null;
+	}
 	
-
-
+	private String findBoardName(int type) {
+		switch(type) {
+		case 1: 
+			return "notice";
+		case 2: 
+			return "qna";
+		case 3:
+			return "repository";
+		}
+		return "repository";
+	}
 }

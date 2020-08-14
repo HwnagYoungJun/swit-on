@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,8 +67,8 @@ public class SwitonRestController {
 //	}
 	
 	@ApiOperation(value = "유저가 가입한 스터디의 게시물들을 반환한다. ")
-	@GetMapping("/feeds/{index}")
-	public Object showFeeds(@PathVariable("index") int index, HttpServletRequest request) {
+	@GetMapping("/feeds")
+	public Object showFeeds(@RequestParam int index, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		try {
 			List<ArticleReturnDTO> articles = articleService.searchFeeds(userId, index, index + 5);
@@ -75,7 +76,7 @@ public class SwitonRestController {
 			return new ResponseEntity<>(articles, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(new ReturnMsg("뉴스피드 불러오기를 실패했습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("뉴스피드 불러오기를 실패했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	

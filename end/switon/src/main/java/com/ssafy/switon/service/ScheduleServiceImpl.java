@@ -13,7 +13,9 @@ import com.ssafy.switon.dao.UserScheduleDAO;
 import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.ScheduleReturnDTO;
 import com.ssafy.switon.dto.Study;
+import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserSchedule;
+import com.ssafy.switon.dto.UserSimpleDTO;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -47,6 +49,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			ScheduleReturnDTO dto = new ScheduleReturnDTO(schedule);
 			Study study = studyService.search(schedule.getStudy_id());
 			dto.setStudy_name(study.getName());
+			dto.setMembers(userScheduleService.searchParticipants(schedule.getId()));
 			dtos.add(dto);
 		}
 		return dtos;

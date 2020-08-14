@@ -35,4 +35,6 @@ public interface ArticleService {
 	// 내가 가입한 스타디들의 게시글 반환 new type 최신순
 	List<ArticleReturnDTO> searchFeeds(int userId, int startIdx, int endIdx);
 	List<ArticleReturnDTO> searchArticlesByBoardIdLimit5(int studyId, int boardId, int type, int userId);
+	// 인덱스로 아티클 반환
+	List<ArticleReturnDTO> searchArticlesWithIndex(int boardId, int userId, int index);
 }

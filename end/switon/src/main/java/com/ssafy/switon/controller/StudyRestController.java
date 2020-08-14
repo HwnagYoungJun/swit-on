@@ -152,6 +152,9 @@ public class StudyRestController {
 		if(study.getStart_term().after(study.getEnd_term())) {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 기간을 입력했습니다."), HttpStatus.I_AM_A_TEAPOT);
 		}
+		if(study.getUsers_limit() == 0) {
+			return new ResponseEntity<>(new ReturnMsg("유저수 제한은 0명이 될 수 없습니다."), HttpStatus.I_AM_A_TEAPOT);
+		}
 		if(img != null) {
 			String RealPath = getUploadRealPath(request, userId, img);
 			String path = getUploadPath(userId, img);
@@ -284,7 +287,11 @@ public class StudyRestController {
 			List<ArticleReturnDTO> qna = articleService.searchArticlesByBoardIdLimit5(studyId, qnaBoardId, 2, userId);
 			List<ArticleReturnDTO> repository = articleService.searchArticlesByBoardIdLimit5(studyId, repoBoardId, 3, userId);
 			System.out.println("대쉬보드에 필요한 글들 읽어오기 성공!");
-			return new ResponseEntity<>(new DashBoardReturnDTO(notice, qna, repository), HttpStatus.OK);
+//			if(notice != null && qna != null && repository != null && notice.size() == 0 && qna.size() == 0 && repository.size() == 0) {
+//				return new ResponseEntity<>(new ReturnMsg("아직 올라온 글이 없습니다."), HttpStatus.OK);
+//			}
+			DashBoardReturnDTO dto = new DashBoardReturnDTO(notice, qna, repository);
+			return new ResponseEntity<>(dto, HttpStatus.OK);
 		}
 		System.out.println("** " + studyId + "번 스터디의 대쉬보드 반환 실패");
 		return new ResponseEntity<>(new ReturnMsg("대쉬보드 글들을 받아올 수 없었습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -292,7 +299,7 @@ public class StudyRestController {
 	
 	@ApiOperation(value = "스터디의 공지사항 글 리스트를 반환한다.", response = List.class)
 	@GetMapping("/{studyId}/notice")
-	public Object showNotice(@PathVariable("studyId") int studyId, HttpServletRequest request) {
+	public Object showNotice(@PathVariable("studyId") int studyId, @RequestParam int index, HttpServletRequest request) {
 		int userId = 0;
 		String auth = request.getHeader("Authentication");
 		if(auth != null && auth.contains("Bearer ") && auth.length() > 15) {
@@ -300,8 +307,7 @@ public class StudyRestController {
 		}
 		int noticeBoardId = boardService.findNoticeBoardId(studyId);
 		if(noticeBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, noticeBoardId, 1, userId);
-//			List<Article> articles = articleService.searchBoardArticles(noticeBoardId);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesWithIndex(noticeBoardId, userId, index);
 			System.out.println(studyId + "번 스터디의 공지사항 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
 		}
@@ -311,7 +317,7 @@ public class StudyRestController {
 	
 	@ApiOperation(value = "스터디의 qna 게시판 글 리스트를 반환한다.", response = List.class)
 	@GetMapping("/{studyId}/qna")
-	public Object showQnas(@PathVariable("studyId") int studyId, HttpServletRequest request) {
+	public Object showQnas(@PathVariable("studyId") int studyId, @RequestParam int index, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** qna 게시판 글리스트 조회 실패 - 권한 없음");
@@ -319,8 +325,7 @@ public class StudyRestController {
 		}
 		int qnaBoardId = boardService.findQnABoardId(studyId);
 		if(qnaBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, qnaBoardId, 2, userId);
-//			List<Article> articles = articleService.searchBoardArticles(qnaBoardId);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesWithIndex(qnaBoardId, userId, index);
 			System.out.println(studyId + "번 스터디의 QnA 게시판 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
 		}
@@ -330,7 +335,7 @@ public class StudyRestController {
 	
 	@ApiOperation(value = "스터디의 자료실 게시판 글 리스트를 반환한다.", response = List.class)
 	@GetMapping("/{studyId}/repository")
-	public Object showRepositories(@PathVariable("studyId") int studyId, HttpServletRequest request) {
+	public Object showRepositories(@PathVariable("studyId") int studyId, @RequestParam int index, HttpServletRequest request) {
 		int userId = getUserPK(request);
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 자료실 게시판 글 조회 실패 - 권한 없음");
@@ -338,8 +343,7 @@ public class StudyRestController {
 		}
 		int repoBoardId = boardService.findRepoBoardId(studyId);
 		if(repoBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesByBoardIdOrdered(studyId, repoBoardId, 3, userId);
-//			List<Article> articles = articleService.searchBoardArticles(repoBoardId);
+			List<ArticleReturnDTO> articles = articleService.searchArticlesWithIndex(repoBoardId, userId, index);
 			System.out.println(studyId + "번 스터디의 자료실 글 리스트 반환");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
 		}
@@ -919,6 +923,10 @@ public class StudyRestController {
 		if(joinService.isMember(studyId, userId)) {
 			System.out.println("** 소모임 가입 실패 - 이미 가입한 회원...");
 			return new ResponseEntity<>(new ReturnMsg("이미 가입한 소모임입니다."), HttpStatus.UNAUTHORIZED);
+		}
+		if(joinService.isFull(studyId)) {
+			System.out.println("** 소모임 가입 실패 - 인원 제한이 가득참!...");
+			return new ResponseEntity<>(new ReturnMsg("최대 인원수에 도달하여 더 이상 가입할 수 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		
 		if(joinService.join(studyId, userId)) {

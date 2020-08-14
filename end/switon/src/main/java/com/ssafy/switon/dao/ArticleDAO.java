@@ -3,6 +3,7 @@ package com.ssafy.switon.dao;
 import java.util.List;
 
 import com.ssafy.switon.dto.Article;
+import com.ssafy.switon.dto.BoardIndexDTO;
 import com.ssafy.switon.dto.FeedsIndexDTO;
 
 public interface ArticleDAO {
@@ -12,7 +13,7 @@ public interface ArticleDAO {
 	// 게시판 아이디로 모든 글 조회
 	List<Article> selectArticlesByBoardId(int boardId);
 	// 게시판 아이디로 글 5개까지 조회
-	List<Article> selectArticlesByBoardIdLimit5(int boardId);
+	List<Article> selectArticlesByBoardIdLimit5(BoardIndexDTO boardIndexDTO);
 	// 유저 아이디로 모든 글 조회
 	List<Article> selectArticlesByUserId(int userId);
 	// id로 글 하나 조회

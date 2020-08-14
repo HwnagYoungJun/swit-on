@@ -22,9 +22,8 @@ public class ArticleReturnDTO {
 	Timestamp created_at;
 	@ApiParam(value = "게시글 수정시간", required = false, hidden = true)
 	Timestamp updated_at;
-	@ApiParam(value = "게시판 타입(영어로)", required = false, hidden = true)
-	String board_name;
 	
+	String board_name;
 	StudySimple study;
 	UserSimpleDTO user;
 	Like like;

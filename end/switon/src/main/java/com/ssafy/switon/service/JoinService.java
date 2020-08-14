@@ -23,5 +23,7 @@ public interface JoinService {
 	boolean isMember(int studyId, int userId);
 	// 소모임에 가입한 멤버들 리스트 반환
 	List<UserSimpleDTO> searchMembers(int studyId);
+	// 소모임에 인원수가 가득한지 검사
+	boolean isFull(int studyId);
 	
 }
