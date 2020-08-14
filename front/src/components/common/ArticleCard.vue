@@ -3,7 +3,7 @@
 		<div class="card-info">
 			<!-- <div class="card-img">
 				<slot name="logo">
-					<img src="@/assets/dd.png" alt="profile-image" />
+					<img :src="studyImg" alt="noImg" />
 					{{ article.study.name }}
 				</slot>
 			</div> -->
@@ -39,6 +39,14 @@ export default {
 
 	created() {
 		console.log(this.article);
+	},
+	baseURL() {
+		return process.env.VUE_APP_API_URL;
+	},
+	studyImg() {
+		return this.article.study.logo === null
+			? this.baseURL + 'upload/noStudy.jpg'
+			: this.baseURL + this.article.study.logo;
 	},
 };
 </script>

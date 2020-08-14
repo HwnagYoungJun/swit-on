@@ -5,6 +5,15 @@
 				<GroupCard :study="study" />
 			</div>
 		</div>
+		<article class="badgegold">
+			<div class="rounded"><i class="icon ion-md-medal"></i></div>
+		</article>
+		<article class="badgesiver">
+			<div class="rounded"><i class="icon ion-md-medal"></i></div>
+		</article>
+		<article class="badgebronze">
+			<div class="rounded"><i class="icon ion-md-medal"></i></div>
+		</article>
 	</div>
 </template>
 
@@ -38,14 +47,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.badgegold {
+	@include grade-badge('gold', 100px);
+}
+.badgesiver {
+	@include grade-badge('siver', 100px);
+}
+.badgebronze {
+	@include grade-badge('bronze', 100px);
+}
 .temp {
 	display: flex;
 	justify-content: center;
+	width: 100%;
+	height: 100%;
 }
 .group-container {
 	display: grid;
-	width: 100%;
-	height: 100%;
 	gap: 1.5rem;
 	grid-template-columns: repeat(4, 1fr);
 	grid-template-rows: 1fr;
