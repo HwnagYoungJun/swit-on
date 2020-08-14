@@ -35,6 +35,10 @@ export default {
 	p {
 		width: 100%;
 		height: 100%;
+		word-break: break-all;
+		.colour {
+			word-break: break-all;
+		}
 		img {
 			width: 100%;
 			height: 100%;
