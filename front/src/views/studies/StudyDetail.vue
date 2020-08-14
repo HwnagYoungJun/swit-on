@@ -28,8 +28,7 @@
 				<small>{{ study.users_current }}/{{ study.users_limit }}명</small>
 			</div>
 			<div class="study-logo">
-				<img v-if="study.logo" :src="`${BaseUrl}${study.logo}`" alt="" />
-				<img v-else src="@/assets/django.png" alt="" />
+				<img :src="studyImg" alt="study-logo" />
 			</div>
 		</div>
 		<div v-if="isJoined" class="study-category">
@@ -86,17 +85,19 @@ export default {
 		},
 	},
 	computed: {
-		BaseUrl() {
-			return process.env.VUE_APP_API_URL;
+		studyImg() {
+			if (this.study.logo) {
+				return `${process.env.VUE_APP_API_URL}${this.study.logo}`;
+			} else {
+				return '@/assets/django.png';
+			}
 		},
 	},
 	created() {
 		this.fetchData();
 	},
 	watch: {
-		id() {
-			this.fetchData();
-		},
+		$route: 'fetchData',
 	},
 };
 </script>
