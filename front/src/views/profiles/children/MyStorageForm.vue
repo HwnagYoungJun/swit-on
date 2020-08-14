@@ -9,15 +9,21 @@
 				</router-link>
 			</li>
 		</ul>
+		<!-- <InfiniteLoading
+			@infinite="infiniteHandler"
+			spinner="waveDots"
+		></InfiniteLoading> -->
 	</div>
 </template>
 
 <script>
+// import InfiniteLoading from 'vue-infinite-loading';
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import { fetchMyFav } from '@/api/auth';
 export default {
 	components: {
 		ArticleCard,
+		// InfiniteLoading,
 	},
 	props: {
 		userName: String,
@@ -25,6 +31,7 @@ export default {
 
 	data() {
 		return {
+			limit: 0,
 			ariticles: [],
 		};
 	},
