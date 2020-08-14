@@ -43,7 +43,6 @@
 			<router-link :to="{ name: 'qna' }">Q&A<span></span></router-link>
 			<router-link :to="{ name: 'notice' }">공지<span></span></router-link>
 			<router-link :to="{ name: 'meeting' }">회의<span></span></router-link>
-			<!-- <hr /> -->
 			<div class="study-sub-content">
 				<router-view :id="id" :isLeader="isLeader"></router-view>
 			</div>
@@ -124,7 +123,7 @@ export default {
 }
 .study-description {
 	width: 100%;
-	height: 14rem;
+	height: 18rem;
 	display: grid;
 	grid-template-areas: 'content logo';
 	grid-template-rows: 100%;

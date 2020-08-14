@@ -71,6 +71,23 @@
 		</div>
 		<aside>
 			<div class="schedule">
+				<span class="schedule-title">나의 출석</span>
+				<div class="attend-wrap">
+					<div class="attend">
+						<p>참여율</p>
+						<div class="progress-bar">
+							<span class="join-percent">35%</span>
+						</div>
+					</div>
+					<div class="attend">
+						<p>출석율</p>
+						<div class="progress-bar">
+							<span class="attend-percent">85%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="schedule">
 				<span class="schedule-title">소모임 일정</span>
 				<ul>
 					<li :key="s.id" v-for="s in schedules">
@@ -90,23 +107,6 @@
 			<div class="schedule">
 				<span class="schedule-title">나의 일정</span>
 				<ul></ul>
-			</div>
-			<div class="schedule">
-				<span class="schedule-title">나의 출석</span>
-				<div class="attend-wrap">
-					<div class="attend">
-						<p>참여율</p>
-						<div class="progress-bar">
-							<span class="join-percent">35%</span>
-						</div>
-					</div>
-					<div class="attend">
-						<p>출석율</p>
-						<div class="progress-bar">
-							<span class="attend-percent">85%</span>
-						</div>
-					</div>
-				</div>
 			</div>
 		</aside>
 	</div>

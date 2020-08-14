@@ -44,7 +44,7 @@
 				></a>
 				<router-link
 					v-if="name"
-					class="nav-router-item"
+					class="nav-router-img-item"
 					:to="`/profile/${name}`"
 					><img
 						v-if="profileImg"
@@ -115,7 +115,7 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 3rem;
+	margin-bottom: 0.75rem;
 	background-color: #fff;
 	@media screen and (max-width: 640px) {
 		justify-content: flex-start;

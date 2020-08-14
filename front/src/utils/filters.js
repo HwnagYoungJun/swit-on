@@ -8,7 +8,7 @@ export function formatDate(value) {
 
 	const timeString = day.toLocaleTimeString('ko-KR', {
 		hour: 'numeric',
-		minutes: 'numeric',
+		minute: 'numeric',
 	});
 	return `${dateString} ${timeString}`;
 }
