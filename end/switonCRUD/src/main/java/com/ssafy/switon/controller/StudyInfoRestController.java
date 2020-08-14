@@ -1,4 +1,4 @@
-﻿package com.ssafy.switon.controller;
+package com.ssafy.switon.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +20,7 @@ public class StudyInfoRestController {
 
 	@Autowired
 	StudyInfoDAO studyinfoDAO;
-	// 인기 스터디 추천 알고리즘
+	
 	@ApiOperation(value="추천 스터디목록 반환", response = List.class)
 	@GetMapping("/popularstudy")
 	public List<StudyInfo> searchStudyInfo() {
