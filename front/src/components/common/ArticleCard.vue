@@ -36,10 +36,6 @@ export default {
 			return `${process.env.VUE_APP_API_URL}${this.article.user.profile_image}`;
 		},
 	},
-
-	created() {
-		console.log(this.article);
-	},
 	baseURL() {
 		return process.env.VUE_APP_API_URL;
 	},

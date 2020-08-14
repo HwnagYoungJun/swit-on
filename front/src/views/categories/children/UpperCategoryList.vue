@@ -1,15 +1,11 @@
 <template>
-	<div>
+	<div v-if="loading">
+		<Loading />
+	</div>
+	<div v-else>
 		<div class="noStudy" v-if="!studies">
 			<img src="@/assets/kti_(var.doran).png" alt="bb" />
 		</div>
-		<!-- <ul v-else class="study-box">
-			<li :key="study.id" v-for="study in studies" class="study-li">
-				<router-link :to="`/study/${study.id}`">
-					<StudyCard :study="study" />
-				</router-link>
-			</li>
-		</ul> -->
 		<div v-else class="popular-wrap">
 			<router-link
 				:key="study.id"
@@ -26,13 +22,17 @@
 import axios from 'axios';
 import MainCard from '@/components/common/MainCard.vue';
 import { upperCategoryId } from '@/utils/category';
+import Loading from '@/components/common/Loading.vue';
+
 export default {
 	components: {
 		MainCard,
+		Loading,
 	},
 	data() {
 		return {
 			studies: null,
+			loading: false,
 		};
 	},
 	props: {
@@ -48,11 +48,13 @@ export default {
 	},
 	methods: {
 		async fetchUpperStudy() {
+			this.loading = true;
 			const { data } = await axios.get(`${this.baseURL}study`, {
 				params: {
 					uppercategory_id: this.categoryId,
 				},
 			});
+			this.loading = false;
 			this.studies = data.length ? data : null;
 		},
 	},

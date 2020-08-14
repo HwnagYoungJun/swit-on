@@ -1,5 +1,8 @@
 <template>
-	<div class="dashboard-wrap">
+	<div v-if="loading">
+		<Loading />
+	</div>
+	<div v-else class="dashboard-wrap">
 		<scheduleAddBtn v-if="isLeader" />
 
 		<div class="card-wrap">
@@ -80,7 +83,7 @@
 						</div>
 					</div>
 					<div class="attend">
-						<p>출석율</p>
+						<p>출석률</p>
 						<div class="progress-bar">
 							<span class="attend-percent">85%</span>
 						</div>
@@ -119,6 +122,7 @@ import { fetchStudySchedule } from '@/api/studies';
 // import { fetchMySchedule } from '@/api/auth';
 import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
+import Loading from '@/components/common/Loading.vue';
 export default {
 	props: {
 		id: Number,
@@ -130,6 +134,7 @@ export default {
 			repositoryArticles: null,
 			noticeArticles: null,
 			qnaArticles: null,
+			loading: false,
 		};
 	},
 	computed: {
@@ -141,13 +146,16 @@ export default {
 		ArticleCard,
 		scheduleAddBtn,
 		ArticleNotFound,
+		Loading,
 	},
 	methods: {
 		async fetchData() {
 			const studyId = this.id;
+			this.loading = true;
 			const {
 				data: { notice, repository, qna },
 			} = await fetchArticles(studyId, 'dashboard');
+			this.loading = false;
 			this.repositoryArticles = repository.length ? repository : null;
 			this.noticeArticles = notice.length ? notice : null;
 			this.qnaArticles = qna.length ? qna : null;
@@ -195,7 +203,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .dashboard-wrap {
 	display: flex;
 	position: relative;

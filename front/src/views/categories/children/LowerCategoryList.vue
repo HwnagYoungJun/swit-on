@@ -1,5 +1,8 @@
 <template>
-	<div>
+	<div v-if="loading">
+		<Loading />
+	</div>
+	<div v-else>
 		<div class="noStudy" v-if="!studies">
 			<img src="@/assets/kti_(var.doran).png" alt="bb" />
 		</div>
@@ -19,13 +22,17 @@
 import axios from 'axios';
 import MainCard from '@/components/common/MainCard.vue';
 import { lowerCategoryId } from '@/utils/category';
+import Loading from '@/components/common/Loading.vue';
+
 export default {
 	components: {
 		MainCard,
+		Loading,
 	},
 	data() {
 		return {
 			studies: null,
+			loading: false,
 		};
 	},
 	props: {
@@ -42,11 +49,13 @@ export default {
 	},
 	methods: {
 		async fetchLowerStudy() {
+			this.loading = true;
 			const { data } = await axios.get(`${this.baseURL}study`, {
 				params: {
 					lowercategory_id: this.categoryId,
 				},
 			});
+			this.loading = false;
 			this.studies = data.length ? data : null;
 		},
 	},

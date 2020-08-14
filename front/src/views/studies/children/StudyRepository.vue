@@ -1,5 +1,8 @@
 <template>
-	<div class="card-wrap">
+	<div v-if="loading">
+		<Loading />
+	</div>
+	<div v-else class="card-wrap">
 		<div v-if="!articles">
 			<ArticleNotFound />
 		</div>
@@ -33,7 +36,9 @@ import ArticleFeed from '@/components/common/ArticleFeed.vue';
 import ArticleRank from '@/components/common/ArticleRank.vue';
 import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
+import Loading from '@/components/common/Loading.vue';
 import { fetchArticles } from '@/api/articles';
+
 export default {
 	props: {
 		id: Number,
@@ -41,6 +46,7 @@ export default {
 	data() {
 		return {
 			articles: null,
+			loading: false,
 		};
 	},
 	components: {
@@ -48,11 +54,14 @@ export default {
 		ArticleRank,
 		ArticleAddBtn,
 		ArticleNotFound,
+		Loading,
 	},
 	methods: {
 		async fetchRepo() {
 			const studyId = this.id;
+			this.loading = true;
 			const { data } = await fetchArticles(studyId, 'repository');
+			this.loading = false;
 			this.articles = data.length ? data : null;
 		},
 	},

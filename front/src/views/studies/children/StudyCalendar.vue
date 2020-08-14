@@ -1,5 +1,8 @@
 <template>
-	<div class="calendar-wrap">
+	<div v-if="loading">
+		<Loading />
+	</div>
+	<div v-else class="calendar-wrap">
 		<scheduleAddBtn v-if="isLeader" />
 		<calendar
 			:calendars="calendarList"
@@ -23,6 +26,7 @@
 <script>
 import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
 import { baseAuth } from '@/api/index';
+import Loading from '@/components/common/Loading.vue';
 
 import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 import 'tui-calendar/dist/tui-calendar.css';
@@ -33,6 +37,7 @@ export default {
 	components: {
 		Calendar,
 		scheduleAddBtn,
+		Loading,
 	},
 	props: {
 		isLeader: Boolean,
@@ -43,8 +48,9 @@ export default {
 	},
 	methods: {
 		async fetchData() {
+			this.loading = true;
 			const { data } = await baseAuth.get(`study/${this.id}/schedule`);
-			console.log(data);
+			this.loading = false;
 			if (data.length) {
 				this.calendarList = data.reduce((acc, el) => {
 					if (acc.findIndex(i => i.name === el.study_name) === -1) {
@@ -77,6 +83,7 @@ export default {
 	},
 	data() {
 		return {
+			loading: false,
 			calendarList: [],
 			scheduleList: [],
 			view: 'month',

@@ -1,12 +1,7 @@
 <template>
 	<div class="popular-item">
 		<div class="popular-img">
-			<img
-				v-if="study.logo"
-				:src="`${BaseUrl}${study.logo}`"
-				alt="study-logo"
-			/>
-			<img v-else :src="`${BaseUrl}upload/noStudy.jpg`" alt="" />
+			<img :src="studyImg" alt="study-logo" />
 			<p class="temp">{{ study.users_current }} / {{ study.users_limit }}</p>
 		</div>
 		<div
@@ -29,8 +24,12 @@ export default {
 		colorPick: String,
 	},
 	computed: {
-		BaseUrl() {
-			return process.env.VUE_APP_API_URL;
+		studyImg() {
+			if (this.study.logo) {
+				return `${process.env.VUE_APP_API_URL}${this.study.logo}`;
+			} else {
+				return `${process.env.VUE_APP_API_URL}upload/noStudy.jpg`;
+			}
 		},
 	},
 };

@@ -19,11 +19,6 @@ const routes = [
 		component: () => import('@/views/Main.vue'),
 	},
 	{
-		path: '/study',
-		name: 'studies',
-		component: () => import('@/views/studies/StudyPage.vue'),
-	},
-	{
 		path: '/study/room/:room',
 		name: 'room',
 		props: route => ({

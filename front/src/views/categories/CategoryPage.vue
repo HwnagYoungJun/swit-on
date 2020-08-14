@@ -10,13 +10,7 @@
 			:upperCategoryName="upperCategoryName"
 		/>
 		<br />
-		<!-- <h2>{{ lowerCategory }} 스터디</h2>
-		<hr /> -->
 		<router-view :upperCategoryName="upperCategoryName"></router-view>
-		<!-- <CategoryForm
-			:lowerCategory="lowerCategory"
-			:upperCategory="upperCategory"
-		/> -->
 	</div>
 </template>
 
@@ -45,11 +39,11 @@ export default {
 			this.lowerCategory = '전체';
 		},
 	},
-	watch: {
-		$route() {
-			this.lowerCategory = '전체';
-		},
-	},
+	// watch: {
+	// 	$route() {
+	// 		this.lowerCategory = '전체';
+	// 	},
+	// },
 	computed: {
 		initName() {
 			return this.upperCategoryName;
