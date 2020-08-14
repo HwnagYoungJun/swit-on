@@ -38,24 +38,27 @@
 				</router-link>
 			</div>
 		</section>
-		<section v-else>
+		<section v-else class="main-wrap">
 			<AppHeader v-if="!isAccountsRoute"></AppHeader>
 			<main :class="[!isAccountsRoute ? 'main-container' : '']">
 				<router-view />
 			</main>
+			<footer><Footer /></footer>
 		</section>
 	</div>
 </template>
 
 <script>
 import AppHeader from '@/components/common/AppHeader.vue';
+import Footer from '@/components/common/Footer.vue';
 import Search from '@/components/common/Search.vue';
-import { fetchStudies } from '@/api/studies';
 import MainCard from '@/components/common/MainCard.vue';
+import { fetchStudies } from '@/api/studies';
 
 export default {
 	components: {
 		AppHeader,
+		Footer,
 		Search,
 		MainCard,
 	},
@@ -101,11 +104,16 @@ export default {
 @import './assets/css/reset.css';
 @import './assets/css/common.css';
 
+.main-wrap {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
 .main-container {
+	flex: 1;
 	width: 70%;
 	margin: 0 auto;
 }
-
 .main-page {
 	display: flex;
 	flex-direction: column;
