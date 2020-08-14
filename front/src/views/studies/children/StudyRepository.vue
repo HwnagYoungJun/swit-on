@@ -1,6 +1,6 @@
 <template>
 	<div class="card-wrap">
-		<div v-if="!articles">
+		<div v-if="articles === []">
 			<ArticleNotFound />
 		</div>
 		<div class="article-wrap" v-else>
@@ -22,6 +22,10 @@
 			<ArticleRank class="article-rank" />
 		</div>
 		<ArticleAddBtn boardName="repository" />
+		<InfiniteLoading
+			@infinite="infiniteHandler"
+			spinner="waveDots"
+		></InfiniteLoading>
 	</div>
 </template>
 
@@ -31,12 +35,15 @@ import ArticleRank from '@/components/common/ArticleRank.vue';
 import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import { fetchArticles } from '@/api/articles';
+import InfiniteLoading from 'vue-infinite-loading';
+
 export default {
 	props: {
 		id: Number,
 	},
 	data() {
 		return {
+			limit: 0,
 			articles: null,
 		};
 	},
@@ -45,12 +52,38 @@ export default {
 		ArticleRank,
 		ArticleAddBtn,
 		ArticleNotFound,
+		InfiniteLoading,
 	},
 	methods: {
 		async fetchRepo() {
 			const studyId = this.id;
-			const { data } = await fetchArticles(studyId, 'repository');
-			this.articles = data.length ? data : null;
+			const { data } = await fetchArticles(studyId, 'repository', this.limit);
+			console.log(data);
+			this.limit += 5;
+			this.articles === [] ? data : [...this.articles, data];
+		},
+		async infiniteHandler($state) {
+			try {
+				const studyId = this.id;
+				const { data } = await fetchArticles(
+					studyId,
+					'repository',
+					this.limit + 5,
+				);
+				console.log(data);
+				if (data.length) {
+					this.articles.concat(data);
+					$state.loaded();
+					this.limit += 5;
+					if (this.articles.length / 5 === 0) {
+						$state.complete();
+					}
+				} else {
+					$state.complete();
+				}
+			} catch (error) {
+				console.log(error);
+			}
 		},
 	},
 	created() {

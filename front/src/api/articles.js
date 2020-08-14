@@ -4,8 +4,9 @@ function fetchFeeds() {
 	return baseAuth.get('/feeds');
 }
 
-function fetchArticles(studyId, boardName) {
-	return boardArticles.get(`/${studyId}/${boardName}/?index=0`);
+function fetchArticles(studyId, boardName, index) {
+	console.log(studyId, boardName, index);
+	return boardArticles.get(`/${studyId}/${boardName}?index=${index}`);
 }
 
 function createArticle(studyId, boardName, articleData) {
