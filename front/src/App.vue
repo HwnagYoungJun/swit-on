@@ -10,30 +10,6 @@
 					v-for="study in studies"
 					:to="`/study/${study.id}`"
 				>
-					<!-- <div class="popular-item">
-						<div class="popular-img">
-							<img
-								v-if="study.logo"
-								:src="`${BaseUrl}${study.logo}`"
-								alt="study-logo"
-							/>
-							<img v-else src="@/assets/django.png" alt="" />
-							<p class="temp">
-								{{ study.users_current }} / {{ study.users_limit }}
-							</p>
-						</div>
-						<div class="popular-content">
-							<p class="content-title">{{ study.name }}</p>
-							<p class="content-week">
-								<span class="content-day">{{
-									study.week | formatWeekday
-								}}</span>
-							</p>
-							<p class="content-time">
-								{{ study.start_time }}-{{ study.end_time }}
-							</p>
-						</div>
-					</div> -->
 					<MainCard :study="study" colorPick="white" />
 				</router-link>
 			</div>

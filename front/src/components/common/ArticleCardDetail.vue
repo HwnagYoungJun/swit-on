@@ -25,9 +25,17 @@
 				</div>
 				<div class="card-detail-content">
 					<Viewer :initialValue="article.content" />
-					<a v-if="article.file" :href="`${BaseUrl}${article.file}`" download>{{
-						article.file | fileDownload
-					}}</a>
+					<div v-if="article.file">
+						<a
+							v-if="FileCheck"
+							:href="`${BaseUrl}${article.file}`"
+							target="_blank"
+							>{{ article.file | fileDownload }}</a
+						>
+						<a v-else :href="`${BaseUrl}${article.file}`" download>{{
+							article.file | fileDownload
+						}}</a>
+					</div>
 					<div class="logo" v-if="board_name !== 'notice'">
 						<div class="logo-likebox">
 							<i
@@ -170,8 +178,39 @@ export default {
 		BaseUrl() {
 			return process.env.VUE_APP_API_URL;
 		},
+		FileCheck() {
+			return this.FilenameCheck(this.article.file);
+		},
 	},
+
 	methods: {
+		FilenameCheck(filename) {
+			var _fileLen = filename.length;
+
+			var _lastDot = filename.lastIndexOf('.');
+
+			// 확장자 명만 추출한 후 소문자로 변경
+			var _fileExt = filename.substring(_lastDot, _fileLen).toLowerCase();
+
+			return this.checkExtension(_fileExt);
+		},
+		checkExtension(fileExt) {
+			var _fileExt = fileExt;
+			var _result;
+
+			// 미리보기 가능한 확장자는 배열에 넣기
+			var _arrExt = new Array('.bmp', '.gif', '.jpg', '.png', '.jpeg');
+
+			// 배열 요소를 검사하여 체크
+			for (var i = 0; i < _arrExt.length; i++) {
+				if (_arrExt[i] == _fileExt) {
+					_result = true;
+					break;
+				} else _result = false;
+			}
+
+			return _result;
+		},
 		async fetchData() {
 			try {
 				const studyId = this.id;

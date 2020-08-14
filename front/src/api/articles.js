@@ -5,7 +5,7 @@ function fetchFeeds() {
 }
 
 function fetchArticles(studyId, boardName) {
-	return boardArticles.get(`/${studyId}/${boardName}/`);
+	return boardArticles.get(`/${studyId}/${boardName}/?index=0`);
 }
 
 function createArticle(studyId, boardName, articleData) {
