@@ -38,29 +38,29 @@
 					{{ data.name }}
 				</li>
 			</ul>
-			<hr
+			<!-- <hr
 				v-if="searchedStudyData && (searchedUpperData || searchedLowerData)"
-			/>
+			/> -->
 			<p v-if="searchedUpperData">상위 카테고리</p>
 			<ul v-if="searchedUpperData">
 				<li
 					v-for="data in searchedUpperData"
 					:key="data.id"
-					@click="moveCategory(data.name)"
-					@keyup.enter="moveCategory(data.name)"
+					@click="moveUpperCategory(data.name)"
+					@keyup.enter="moveUpperCategory(data.name)"
 					tabindex="0"
 				>
 					{{ data.name }}
 				</li>
 			</ul>
-			<hr v-if="searchedUpperData && searchedLowerData" />
+			<!-- <hr v-if="searchedUpperData && searchedLowerData" /> -->
 			<p v-if="searchedLowerData">하위 카테고리</p>
 			<ul v-if="searchedLowerData">
 				<li
 					v-for="data in searchedLowerData"
 					:key="data.id"
-					@click="moveStudy(data.id)"
-					@keyup.enter="moveStudy(data.id)"
+					@click="moveLowerCategory(data)"
+					@keyup.enter="moveLowerCategory(data)"
 					tabindex="0"
 				>
 					{{ data.name }}
@@ -122,9 +122,13 @@ export default {
 			this.$router.push(`/study/${id}`);
 			index = -1;
 		},
-		moveCategory(name) {
+		moveUpperCategory(name) {
 			this.clearSearchedData();
 			this.$router.push(`/category/${name}`);
+		},
+		moveLowerCategory(data) {
+			this.clearSearchedData();
+			this.$router.push(`/category/${data.upper_name}/${data.name}`);
 		},
 		// 방향키
 		selectStudy(key) {
@@ -213,6 +217,9 @@ export default {
 			padding: 3px 10px;
 			font-size: $font-light;
 			font-weight: bold;
+		}
+		ul {
+			padding: 0 10px 20px;
 		}
 		li {
 			padding: 10px;
