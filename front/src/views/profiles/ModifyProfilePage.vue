@@ -125,7 +125,7 @@ export default {
 				this.setUserName(this.name);
 				this.$router.push(`profile/${this.name}`);
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 	},

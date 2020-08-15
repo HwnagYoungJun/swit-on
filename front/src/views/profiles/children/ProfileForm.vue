@@ -80,7 +80,7 @@ export default {
 				this.introduce = data.introduce === 'null' ? '' : data.introduce;
 				this.profileImg = data.profile_image;
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 	},

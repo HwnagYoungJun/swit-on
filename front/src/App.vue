@@ -17,7 +17,9 @@ import AppHeader from '@/components/common/AppHeader.vue';
 import Footer from '@/components/common/Footer.vue';
 import Main from '@/views/Main.vue';
 import ToastPopup from './components/common/ToastPopup.vue';
-
+import SockJS from 'sockjs-client';
+import Stomp from 'webstomp-client';
+import { mapGetters } from 'vuex';
 export default {
 	components: {
 		AppHeader,
@@ -26,12 +28,40 @@ export default {
 		Main,
 	},
 	computed: {
+		...mapGetters(['getUserId']),
 		isAccountsRoute() {
 			return this.$route.name === 'signUp' || this.$route.name === 'login';
 		},
 		isMainRoute() {
 			return this.$route.name === 'main';
 		},
+	},
+	data() {
+		return {
+			messages: [],
+		};
+	},
+	methods: {
+		connect() {
+			let ServerUrl = process.env.VUE_APP_API_URL;
+			let client = Stomp.over(new SockJS(`${ServerUrl}websocket`));
+
+			client.connect({}, function(frame) {
+				console.log(frame);
+				client.subscribe('/topic/notification/' + this.getUserId, function(
+					message,
+				) {
+					// var li = document.createElement('li');
+					// li.innerHTML = message.body;
+					// $messageList.appendChild(li);
+					console.log(message);
+					this.messages = JSON.parse(message.body);
+				});
+			});
+		},
+	},
+	created() {
+		// this.connect();
 	},
 };
 </script>

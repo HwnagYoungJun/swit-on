@@ -34,7 +34,7 @@ export default {
 				data.forEach(el => this.studies.push(el.study));
 				console.log(this.studies);
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 	},

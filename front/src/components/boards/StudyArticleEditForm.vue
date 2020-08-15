@@ -101,7 +101,7 @@ export default {
 				});
 				this.$router.push(`/study/${studyId}/${boardName}`);
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		onChangeTitle(val) {

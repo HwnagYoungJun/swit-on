@@ -38,7 +38,7 @@ export default {
 				const { data } = await fetchMyFav(this.userName);
 				this.ariticles = data;
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', error.response.data.msg);
 			}
 		},
 	},
