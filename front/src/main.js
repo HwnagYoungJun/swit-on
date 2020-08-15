@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import VueCookies from 'vue-cookies';
+import InfiniteLoading from 'vue-infinite-loading';
 import {
 	formatDate,
 	formatWeekday,
@@ -14,6 +15,7 @@ import {
 // Vue.use(WebRTC);
 
 Vue.use(VueCookies);
+Vue.use(InfiniteLoading);
 Vue.filter('formatDate', formatDate);
 Vue.filter('formatWeekday', formatWeekday);
 Vue.filter('truncate', truncate);
