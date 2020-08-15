@@ -57,7 +57,7 @@ export default {
 				);
 				this.$router.push({ name: 'sendemail' });
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		inputEmailChange(val) {

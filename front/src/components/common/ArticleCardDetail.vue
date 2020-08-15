@@ -221,7 +221,7 @@ export default {
 				console.log(data);
 				this.article = data;
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		isCommentLiked(flag) {
@@ -235,7 +235,7 @@ export default {
 				await createArticleBookmark(studyId, boardName, articleId);
 				this.fetchData();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async removeBookmark() {
@@ -246,7 +246,7 @@ export default {
 				await deleteArticleBookmark(studyId, boardName, articleId);
 				this.fetchData();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async AddComment() {
@@ -260,7 +260,7 @@ export default {
 				});
 				this.fetchData();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async removeComment(commentId) {
@@ -271,7 +271,7 @@ export default {
 				await deleteComment(studyId, boardName, articleId, commentId);
 				this.fetchData();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async articleLike() {
@@ -282,7 +282,7 @@ export default {
 				await createArticleLike(studyId, boardName, articleId);
 				this.fetchData();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async articleUnLike() {
@@ -293,7 +293,7 @@ export default {
 				await deleteArticleLike(studyId, boardName, articleId);
 				this.fetchData();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async commentLike(commentId) {
@@ -309,7 +309,7 @@ export default {
 				);
 				this.fetchData();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async commentUnLike(commentId) {
@@ -325,7 +325,7 @@ export default {
 				);
 				this.fetchData();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async removeArticle() {
@@ -336,7 +336,7 @@ export default {
 				await deleteArticle(studyId, boardName, articleId);
 				this.$router.push(`/study/${studyId}/${boardName}`);
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		resetContent() {

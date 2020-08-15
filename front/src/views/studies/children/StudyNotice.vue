@@ -67,7 +67,7 @@ export default {
 				this.loading = false;
 				this.limit += 5;
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async infiniteLoading() {
@@ -79,7 +79,7 @@ export default {
 					this.articles = [...this.articles, ...data];
 				}
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 	},

@@ -46,13 +46,12 @@ export default {
 		async submitSchedule() {
 			await this.makeSchedule();
 			const el = this.scheduleObject;
-			// console.log(el);
 			try {
 				await baseAuth.post(`study/${this.study_id}/schedule/`, el);
+				this.$router.push(`/study/${this.study_id}`);
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
-			this.$router.push(`/study/${this.study_id}`);
 		},
 
 		async makeSchedule() {
@@ -62,7 +61,7 @@ export default {
 				this.userId = data.id;
 				this.pushSchedule();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		pushSchedule() {

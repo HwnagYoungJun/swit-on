@@ -130,7 +130,7 @@ export default {
 				this.members = data.members;
 			} catch (error) {
 				console.log(error);
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async studyJoin() {
@@ -139,7 +139,7 @@ export default {
 				await JoinStudy(studyId);
 				this.fetchData();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 	},

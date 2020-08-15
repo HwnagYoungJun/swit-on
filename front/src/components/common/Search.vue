@@ -109,7 +109,7 @@ export default {
 					: null;
 				this.searchedStudyData = data.studies.length ? data.studies : null;
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		clearSearchedData() {

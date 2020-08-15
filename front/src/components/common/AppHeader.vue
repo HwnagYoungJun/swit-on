@@ -94,7 +94,7 @@ export default {
 				const { data } = await baseAuth.get('accounts/');
 				this.profileImg = data.profile_image;
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		logoutUser() {

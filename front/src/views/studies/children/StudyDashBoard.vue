@@ -217,7 +217,7 @@ export default {
 				this.noticeArticles = notice.length ? notice : null;
 				this.qnaArticles = qna.length ? qna : null;
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async checkIn(scheduleId) {
@@ -226,7 +226,7 @@ export default {
 				await checkInSchedule(studyId, scheduleId);
 				this.fetchSchedule();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async checkOut(scheduleId) {
@@ -235,7 +235,7 @@ export default {
 				await checkOutSchedule(studyId, scheduleId);
 				this.fetchSchedule();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async joinSchedule(scheduleId) {
@@ -244,7 +244,7 @@ export default {
 				await createScheduleParticipate(studyId, scheduleId);
 				this.fetchSchedule();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async removeSchedule(scheduleId) {
@@ -253,7 +253,7 @@ export default {
 				await deleteScheduleParticipate(studyId, scheduleId);
 				this.fetchSchedule();
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async fetchSchedule() {
@@ -317,7 +317,7 @@ export default {
 				this.schedules = [...scheduleList];
 				this.participantSchedules = [...participateList];
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 	},

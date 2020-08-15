@@ -59,7 +59,7 @@ export default {
 				this.loading = false;
 				this.studies = data.length ? data : null;
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 	},

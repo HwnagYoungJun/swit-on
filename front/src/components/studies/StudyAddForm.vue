@@ -266,7 +266,7 @@ export default {
 				await createStudy(this.studyData);
 				this.$router.push({ name: 'main' });
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		onChangeFile(e) {

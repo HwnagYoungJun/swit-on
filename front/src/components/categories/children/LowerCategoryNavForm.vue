@@ -34,7 +34,7 @@ export default {
 				const { data } = await axios.get(`${this.baseURL}category/up_low/${c}`);
 				data.forEach(el => this.names.push(el.name));
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		changeLower(categoryName) {
