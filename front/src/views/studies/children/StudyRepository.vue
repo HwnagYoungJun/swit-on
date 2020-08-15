@@ -28,10 +28,6 @@
 			</div>
 		</div>
 		<ArticleAddBtn boardName="repository" />
-		<InfiniteLoading
-			@infinite="infiniteHandler"
-			spinner="waveDots"
-		></InfiniteLoading>
 	</div>
 </template>
 
@@ -42,7 +38,6 @@ import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import Loading from '@/components/common/Loading.vue';
 import { fetchArticles } from '@/api/articles';
-import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
 	props: {
@@ -51,8 +46,9 @@ export default {
 	data() {
 		return {
 			limit: 0,
-			articles: null,
 			loading: false,
+			articles: [],
+			windowTop: 0,
 		};
 	},
 	components: {
@@ -61,42 +57,45 @@ export default {
 		ArticleAddBtn,
 		ArticleNotFound,
 		Loading,
-		InfiniteLoading,
 	},
 	methods: {
 		async fetchRepo() {
 			const studyId = this.id;
+			this.loading = true;
 			const { data } = await fetchArticles(studyId, 'repository', this.limit);
-			console.log(data);
+			this.loading = false;
 			this.limit += 5;
-			this.articles === [] ? data : [...this.articles, data];
+			this.articles = data;
 		},
-		async infiniteHandler($state) {
-			try {
-				const studyId = this.id;
-				const { data } = await fetchArticles(
-					studyId,
-					'repository',
-					this.limit + 5,
-				);
-				console.log(data);
-				if (data.length) {
-					this.articles.concat(data);
-					$state.loaded();
-					this.limit += 5;
-					if (this.articles.length / 5 === 0) {
-						$state.complete();
-					}
-				} else {
-					$state.complete();
-				}
-			} catch (error) {
-				console.log(error);
+		async infiniteLoading() {
+			const studyId = this.id;
+			const { data } = await fetchArticles(studyId, 'repository', this.limit);
+			this.limit += 5;
+			if (data.length) {
+				this.articles = [...this.articles, ...data];
+			}
+		},
+	},
+	computed: {
+		isInfinite() {
+			return (
+				document.querySelector('body').scrollHeight >
+				this.windowTop + screen.height
+			);
+		},
+	},
+	watch: {
+		isInfinite: function() {
+			if (!this.isInfinite) {
+				this.infiniteLoading();
 			}
 		},
 	},
 	created() {
 		this.fetchRepo();
+		window.addEventListener('scroll', () => {
+			this.windowTop = window.scrollY;
+		});
 	},
 };
 </script>
