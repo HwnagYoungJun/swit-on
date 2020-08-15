@@ -1,19 +1,12 @@
 <template>
 	<div class="container">
 		<div class="temp">
-			<div class="group-container" :key="study.id" v-for="study in studies">
-				<GroupCard :study="study" />
+			<div class="group-container">
+				<div :key="study.id" v-for="study in studies">
+					<GroupCard :study="study" />
+				</div>
 			</div>
 		</div>
-		<article class="badgegold">
-			<div class="rounded"><i class="icon ion-md-medal"></i></div>
-		</article>
-		<article class="badgesiver">
-			<div class="rounded"><i class="icon ion-md-medal"></i></div>
-		</article>
-		<article class="badgebronze">
-			<div class="rounded"><i class="icon ion-md-medal"></i></div>
-		</article>
 	</div>
 </template>
 
@@ -47,15 +40,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.badgegold {
-	@include grade-badge('gold', 100px);
-}
-.badgesiver {
-	@include grade-badge('siver', 100px);
-}
-.badgebronze {
-	@include grade-badge('bronze', 100px);
-}
 .temp {
 	display: flex;
 	justify-content: center;
@@ -64,16 +48,17 @@ export default {
 }
 .group-container {
 	display: grid;
+	width: 100%;
 	gap: 1.5rem;
 	grid-template-columns: repeat(4, 1fr);
 	grid-template-rows: 1fr;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
 	.group-container {
 		grid-template-columns: repeat(3, 1fr);
 	}
 }
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 768px) {
 	.group-container {
 		grid-template-columns: repeat(2, 1fr);
 	}
