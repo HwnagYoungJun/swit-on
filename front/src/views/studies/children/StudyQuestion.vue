@@ -28,17 +28,6 @@
 			</router-link>
 			<ArticleAddBtn boardName="qna" />
 		</div>
-		<p>dd</p>
-		<!-- <div> -->
-		<infinite-loading
-			@infinite="infiniteHandler"
-			spinner="waveDots"
-		></infinite-loading>
-		<!-- </div> -->
-
-		<!-- <p>dd</p> -->
-		<!-- {{ articles }} -->
-		<!-- <p>{{ $state }}</p> -->
 	</div>
 </template>
 
@@ -48,7 +37,7 @@ import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import { fetchArticles } from '@/api/articles';
 import Loading from '@/components/common/Loading.vue';
-import InfiniteLoading from 'vue-infinite-loading';
+// The checker
 
 export default {
 	props: {
@@ -59,6 +48,7 @@ export default {
 			loading: false,
 			limit: 0,
 			articles: [],
+			windowTop: 0,
 		};
 	},
 	components: {
@@ -66,20 +56,50 @@ export default {
 		ArticleAddBtn,
 		ArticleNotFound,
 		Loading,
-		InfiniteLoading,
+	},
+	computed: {
+		isInfinite() {
+			return (
+				document.querySelector('body').scrollHeight >
+				this.windowTop + screen.height
+			);
+		},
+	},
+	watch: {
+		isInfinite: function() {
+			if (!this.isInfinite) {
+				this.infiniteLoading();
+			}
+		},
 	},
 	methods: {
 		async fetchQna() {
 			const studyId = this.id;
-			const { data } = await fetchArticles(studyId, 'qna', this.limit);
+			this.loading = true;
+			const { data } = await fetchArticles(studyId, 'qna', 0);
 			this.articles = data;
+			this.loading = false;
 			this.limit += 5;
 		},
-		infiniteHandler() {},
+
+		async infiniteLoading() {
+			const studyId = this.id;
+			const { data } = await fetchArticles(studyId, 'qna', this.limit);
+			this.limit += 5;
+			if (data.length) {
+				this.articles = [...this.articles, ...data];
+			}
+		},
+	},
+	created() {
+		this.fetchQna();
+		window.addEventListener('scroll', () => {
+			this.windowTop = window.scrollY;
+		});
 	},
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .test {
 	height: 100%;
 }

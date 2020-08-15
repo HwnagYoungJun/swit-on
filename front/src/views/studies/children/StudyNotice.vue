@@ -43,8 +43,10 @@ export default {
 	},
 	data() {
 		return {
-			articles: null,
 			loading: false,
+			limit: 0,
+			articles: [],
+			windowTop: 0,
 		};
 	},
 	components: {
@@ -53,17 +55,45 @@ export default {
 		ArticleNotFound,
 		Loading,
 	},
+
 	methods: {
 		async fetchNotice() {
 			const studyId = this.id;
 			this.loading = true;
-			const { data } = await fetchArticles(studyId, 'notice');
+			const { data } = await fetchArticles(studyId, 'notice', 0);
+			this.articles = data;
 			this.loading = false;
-			this.articles = data.length ? data : null;
+			this.limit += 5;
+		},
+		async infiniteLoading() {
+			const studyId = this.id;
+			const { data } = await fetchArticles(studyId, 'notice', this.limit);
+			this.limit += 5;
+			if (data.length) {
+				this.articles = [...this.articles, ...data];
+			}
+		},
+	},
+	computed: {
+		isInfinite() {
+			return (
+				document.querySelector('body').scrollHeight >
+				this.windowTop + screen.height
+			);
+		},
+	},
+	watch: {
+		isInfinite: function() {
+			if (!this.isInfinite) {
+				this.infiniteLoading();
+			}
 		},
 	},
 	created() {
 		this.fetchNotice();
+		window.addEventListener('scroll', () => {
+			this.windowTop = window.scrollY;
+		});
 	},
 };
 </script>
