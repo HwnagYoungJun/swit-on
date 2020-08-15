@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<ul>
+		<ul class="myStorage-box">
 			<li :key="article.id" v-for="article in ariticles">
 				<router-link
 					:to="`/study/${article.study.id}/repository/${article.id}`"
@@ -9,10 +9,6 @@
 				</router-link>
 			</li>
 		</ul>
-		<!-- <InfiniteLoading
-			@infinite="infiniteHandler"
-			spinner="waveDots"
-		></InfiniteLoading> -->
 	</div>
 </template>
 
@@ -43,9 +39,24 @@ export default {
 		},
 	},
 	created() {
+		if (this.userName !== this.$cookies.get('name')) {
+			this.$router.push({ path: '/404/' });
+		}
 		this.fetchData();
 	},
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.myStorage-box {
+	display: grid;
+	gap: 1.5rem;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: 1fr;
+	@media screen and (max-width: 1024px) {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+}
+</style>

@@ -1,12 +1,12 @@
 <template>
-	<div class="group-box">
-		<router-link :to="`/study/${study.id}`">
+	<router-link :to="`/study/${study.id}`">
+		<div class="group-box">
 			<div class="img-box">
 				<img :src="imgLink" alt="imgLink" />
 			</div>
 			<p class="groupName">{{ study.name }}</p>
-		</router-link>
-	</div>
+		</div>
+	</router-link>
 </template>
 
 <script>
@@ -23,35 +23,43 @@ export default {
 		},
 		imgLink() {
 			return this.study.logo === null
-				? `@/assets/logo.png`
+				? `${this.baseUrl}upload/noStudy.jpg`
 				: `${this.baseUrl}${this.study.logo}`;
 		},
 	},
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .group-box {
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: 12rem 4rem;
+	grid-template-areas:
+		'image-part'
+		'text-part';
+	text-align: center;
+	font-size: $font-bold;
+
 	.img-box {
-		overflow: hidden;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-	img {
-		width: 100%;
-		height: 100%;
-		transform: scale(1);
-		transition: 0.3s ease-in-out;
+		// overflow: hidden;
+		border-radius: 5px;
+		grid-area: image-part;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: fill;
+			transform: scale(1);
+			transition: 0.3s ease-in-out;
+		}
+		p {
+			grid-area: text-part;
+			text-decoration: none;
+			color: rgb(70, 70, 70);
+		}
 	}
 	hr {
 		border-bottom: 1px;
-	}
-	p {
-		text-decoration: none;
-		color: black;
-		text-align: center;
-		font-size: $font-normal;
 	}
 	&:hover img {
 		transform: scale(1.1);

@@ -1,16 +1,20 @@
 <template>
-	<div>
-		<input type="radio" id="a" value="a" v-model="status" />
-		<label for="a">전체</label>
-		<input type="radio" id="qna" value="qna" v-model="status" />
-		<label for="qna">QNA</label>
-		<input type="radio" id="rep" value="rep" v-model="status" />
-		<label for="rep">저장소</label>
-		<ul>
+	<div class="container">
+		<div class="radio-box">
+			<input type="radio" id="a" value="a" v-model="status" />
+			<label for="a">전체</label>
+			<input type="radio" id="qna" value="qna" v-model="status" />
+			<label for="qna">QNA</label>
+			<input type="radio" id="rep" value="rep" v-model="status" />
+			<label for="rep">저장소</label>
+		</div>
+		<ul class="myArticle-box">
 			<li :key="article.id" v-for="article in WhatCheck">
-				<!-- <router-link :to="`study`"> -->
-				<ArticleCard :article="article" />
-				<!-- </router-link> -->
+				<router-link
+					:to="`/study/${article.study.id}/${article.boardName}/${article.id}/`"
+				>
+					<ArticleCard :article="article" />
+				</router-link>
 			</li>
 		</ul>
 	</div>
@@ -59,6 +63,9 @@ export default {
 		},
 	},
 	created() {
+		if (this.userName !== this.$cookies.get('name')) {
+			this.$router.push({ path: '/404/' });
+		}
 		Promise.all([
 			fetchMyQNA(this.userName),
 			fetchMyRepository(this.userName),
@@ -66,9 +73,29 @@ export default {
 			res.forEach(el => {
 				if (el.config.url === `accounts/${this.userName}/myqna`) {
 					var tempQNA = el.data;
+					tempQNA.map(el => {
+						el.boardName = 'qna';
+					});
+					tempQNA.sort((a, b) =>
+						a.created_at > b.created_at
+							? -1
+							: a.created_at < b.created_at
+							? 1
+							: 0,
+					);
 					this.qnaArticle = tempQNA;
 				} else {
 					var tempRepository = el.data;
+					tempRepository.map(el => {
+						el.boardName = 'repository';
+					});
+					tempRepository.sort((a, b) =>
+						a.created_at > b.created_at
+							? -1
+							: a.created_at < b.created_at
+							? 1
+							: 0,
+					);
 					this.repositoryArticle = tempRepository;
 				}
 			});
@@ -77,4 +104,25 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.myArticle-box {
+	display: grid;
+	gap: 1.5rem;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: 1fr;
+	@media screen and (max-width: 1024px) {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+}
+.radio-box {
+	margin-bottom: 1rem;
+	input {
+		margin-right: 0.5rem;
+	}
+	label {
+		margin-right: 1rem;
+	}
+}
+</style>

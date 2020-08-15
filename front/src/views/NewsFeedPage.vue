@@ -27,9 +27,6 @@
 							>더보기</router-link
 						>
 					</div>
-					<div class="group-body">
-						<GruopCardSmall></GruopCardSmall>
-					</div>
 				</div>
 				<div class="schedule-box">
 					<span>오늘 일정</span>
@@ -62,7 +59,6 @@
 </template>
 <script>
 import ArticleCard from '@/components/common/ArticleCard.vue';
-import GruopCardSmall from '@/components/common/GruopCardSmall.vue';
 // import { fetchFeeds } from '@/api/articles';
 import { baseAuth } from '@/api/index';
 // import { fetchStudy } from '@/api/studies';
@@ -76,7 +72,6 @@ export default {
 	components: {
 		InfiniteLoading,
 		ArticleCard,
-		GruopCardSmall,
 		Calendar,
 	},
 
@@ -233,8 +228,6 @@ export default {
 				position: absolute;
 				top: -10px;
 				background: #fff;
-			}
-			.calendar-box {
 			}
 		}
 		.group-box {

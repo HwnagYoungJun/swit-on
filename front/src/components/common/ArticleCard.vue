@@ -1,12 +1,6 @@
 <template>
 	<div class="card" v-if="article">
 		<div class="card-info">
-			<!-- <div class="card-img">
-				<slot name="logo">
-					<img :src="studyImg" alt="noImg" />
-					{{ article.study.name }}
-				</slot>
-			</div> -->
 			<div class="card-content">
 				<p class="card-info-title">
 					{{ article.title }}
@@ -15,7 +9,10 @@
 				<p class="card-info-all">
 					<img :src="BaseURL" class="card-info-image" />
 					<span>
-						<span class="card-info-user">{{ article.user.name }}</span>
+						<span v-if="article.user !== undefined" class="card-info-user">{{
+							article.user.name
+						}}</span>
+						<span v-else class="card-info-user">{{ article.study.name }}</span>
 					</span>
 					<span class="card-info-time">{{
 						article.created_at | formatDate
@@ -32,17 +29,14 @@ export default {
 		article: Object,
 	},
 	computed: {
-		BaseURL() {
-			return `${process.env.VUE_APP_API_URL}${this.article.user.profile_image}`;
+		baseURL() {
+			return process.env.VUE_APP_API_URL;
 		},
-	},
-	baseURL() {
-		return process.env.VUE_APP_API_URL;
-	},
-	studyImg() {
-		return this.article.study.logo === null
-			? this.baseURL + 'upload/noStudy.jpg'
-			: this.baseURL + this.article.study.logo;
+		BaseURL() {
+			return this.article.user === undefined
+				? `${this.baseURL}${this.article.study.logo}`
+				: `${this.baseURL}${this.article.user.profile_image}`;
+		},
 	},
 };
 </script>

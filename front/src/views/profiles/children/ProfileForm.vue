@@ -63,7 +63,7 @@ export default {
 				const name = this.userName;
 				const { data } = await fetchProfile(name);
 				this.profile = data;
-				this.introduce = data.introduce;
+				this.introduce = data.introduce === 'null' ? '' : data.introduce;
 				this.profileImg = data.profile_image;
 			} catch (err) {
 				console.log(err);
