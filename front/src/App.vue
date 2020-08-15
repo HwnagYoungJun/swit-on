@@ -21,6 +21,7 @@
 			</main>
 			<footer><Footer /></footer>
 		</section>
+		<ToastPopup></ToastPopup>
 	</div>
 </template>
 
@@ -29,6 +30,8 @@ import AppHeader from '@/components/common/AppHeader.vue';
 import Footer from '@/components/common/Footer.vue';
 import Search from '@/components/common/Search.vue';
 import MainCard from '@/components/common/MainCard.vue';
+import ToastPopup from './components/common/ToastPopup.vue';
+
 import { fetchStudies } from '@/api/studies';
 
 export default {
@@ -37,6 +40,7 @@ export default {
 		Footer,
 		Search,
 		MainCard,
+		ToastPopup,
 	},
 	data() {
 		return {

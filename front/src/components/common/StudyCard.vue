@@ -25,7 +25,6 @@ export default {
 	data() {
 		return {
 			studyData: {
-				// 난중에는 서버에서 받아올 데이터들
 				name: this.study.name,
 				startTime: this.$props.study.start_time,
 				endTime: this.$props.study.end_time,

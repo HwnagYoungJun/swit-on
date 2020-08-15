@@ -14,6 +14,7 @@
 
 <script>
 // import InfiniteLoading from 'vue-infinite-loading';
+import bus from '@/utils/bus.js';
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import { fetchMyFav } from '@/api/auth';
 export default {
@@ -33,9 +34,12 @@ export default {
 	},
 	methods: {
 		async fetchData() {
-			const { data } = await fetchMyFav(this.userName);
-			console.log(data);
-			this.ariticles = data;
+			try {
+				const { data } = await fetchMyFav(this.userName);
+				this.ariticles = data;
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 	},
 	created() {

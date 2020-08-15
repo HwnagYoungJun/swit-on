@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import 'tui-calendar/dist/tui-calendar.css';
 import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 import { baseAuth } from '@/api/index';
@@ -36,35 +37,39 @@ export default {
 	},
 	methods: {
 		async fetchData() {
-			const { data } = await baseAuth.get(
-				`/accounts/${this.userName}/myschedule/`,
-			);
-			this.calendarList = data.reduce((acc, el) => {
-				if (acc.findIndex(i => i.name === el.schedule.study_name) === -1) {
-					acc.push({
-						id: el.schedule.study_id,
-						name: el.schedule.study_name,
-					});
-				}
-				return acc;
-			}, []);
+			try {
+				const { data } = await baseAuth.get(
+					`/accounts/${this.userName}/myschedule/`,
+				);
+				this.calendarList = data.reduce((acc, el) => {
+					if (acc.findIndex(i => i.name === el.schedule.study_name) === -1) {
+						acc.push({
+							id: el.schedule.study_id,
+							name: el.schedule.study_name,
+						});
+					}
+					return acc;
+				}, []);
 
-			this.scheduleList = data.reduce((acc, el, idx) => {
-				acc.push({
-					id: idx,
-					calendarId: el.schedule.study_id,
-					title: el.schedule.title,
-					category: 'time',
-					dueDateClass: '',
-					start: el.schedule.start,
-					end: el.schedule.end,
-					color: el.schedule.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
-					bgColor: el.schedule.bg_color,
-					dragBgColor: el.schedule.bg_color,
-					borderColor: el.schedule.bg_color,
-				});
-				return acc;
-			}, []);
+				this.scheduleList = data.reduce((acc, el, idx) => {
+					acc.push({
+						id: idx,
+						calendarId: el.schedule.study_id,
+						title: el.schedule.title,
+						category: 'time',
+						dueDateClass: '',
+						start: el.schedule.start,
+						end: el.schedule.end,
+						color: el.schedule.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
+						bgColor: el.schedule.bg_color,
+						dragBgColor: el.schedule.bg_color,
+						borderColor: el.schedule.bg_color,
+					});
+					return acc;
+				}, []);
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 	},
 	data() {

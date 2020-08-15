@@ -52,6 +52,7 @@
 	</form>
 </template>
 <script>
+import bus from '@/utils/bus.js';
 import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/i18n/ko-kr.js';
@@ -100,7 +101,7 @@ export default {
 				});
 				this.$router.push(`/study/${studyId}/${boardName}`);
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		onChangeTitle(val) {

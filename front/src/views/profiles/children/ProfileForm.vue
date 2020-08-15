@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import { fetchProfile } from '@/api/auth';
 export default {
 	props: {
@@ -65,8 +66,8 @@ export default {
 				this.profile = data;
 				this.introduce = data.introduce === 'null' ? '' : data.introduce;
 				this.profileImg = data.profile_image;
-			} catch (err) {
-				console.log(err);
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 	},

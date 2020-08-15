@@ -102,6 +102,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import { JoinStudy, fetchStudy } from '@/api/studies';
 export default {
 	props: {
@@ -118,19 +119,28 @@ export default {
 	},
 	methods: {
 		async fetchData() {
-			const studyId = this.id;
-			const { data } = await fetchStudy(studyId);
-			console.log(data);
-			this.study = data.study;
-			this.isJoined = data.isJoined;
-			this.isLeader = data.isLeader;
-			this.leaderName = data.leaderName;
-			this.members = data.members;
+			try {
+				const studyId = this.id;
+				const { data } = await fetchStudy(studyId);
+				console.log(data);
+				this.study = data.study;
+				this.isJoined = data.isJoined;
+				this.isLeader = data.isLeader;
+				this.leaderName = data.leaderName;
+				this.members = data.members;
+			} catch (error) {
+				console.log(error);
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 		async studyJoin() {
-			const studyId = this.id;
-			await JoinStudy(studyId);
-			this.fetchData();
+			try {
+				const studyId = this.id;
+				await JoinStudy(studyId);
+				this.fetchData();
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 	},
 	computed: {

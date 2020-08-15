@@ -2,36 +2,35 @@
 	<div v-if="loading">
 		<Loading />
 	</div>
-	<div v-else class="test">
-		<div class="card-wrap">
-			<div v-if="articles === []">
-				<ArticleNotFound />
-			</div>
-			<router-link
-				v-else
-				v-for="article in articles"
-				:key="article.id"
-				:to="{
-					name: 'BoardArticleDetail',
-					params: {
-						id,
-						board_name: 'qna',
-						article_id: article.id,
-					},
-				}"
-			>
-				<ArticleCard :article="article">
-					<div slot="logo">
-						<img src="@/assets/color.png" alt="" />
-					</div>
-				</ArticleCard>
-			</router-link>
-			<ArticleAddBtn boardName="qna" />
+	<div v-else class="card-wrap">
+		<div v-if="articles === []">
+			<ArticleNotFound />
 		</div>
+		<router-link
+			v-else
+			v-for="article in articles"
+			:key="article.id"
+			:to="{
+				name: 'BoardArticleDetail',
+				params: {
+					id,
+					board_name: 'qna',
+					article_id: article.id,
+				},
+			}"
+		>
+			<ArticleCard :article="article">
+				<div slot="logo">
+					<img src="@/assets/color.png" alt="" />
+				</div>
+			</ArticleCard>
+		</router-link>
+		<ArticleAddBtn boardName="qna" />
 	</div>
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
@@ -74,20 +73,28 @@ export default {
 	},
 	methods: {
 		async fetchQna() {
-			const studyId = this.id;
-			this.loading = true;
-			const { data } = await fetchArticles(studyId, 'qna', 0);
-			this.articles = data;
-			this.loading = false;
-			this.limit += 5;
+			try {
+				const studyId = this.id;
+				this.loading = true;
+				const { data } = await fetchArticles(studyId, 'qna', 0);
+				this.articles = data;
+				this.loading = false;
+				this.limit += 5;
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 
 		async infiniteLoading() {
-			const studyId = this.id;
-			const { data } = await fetchArticles(studyId, 'qna', this.limit);
-			this.limit += 5;
-			if (data.length) {
-				this.articles = [...this.articles, ...data];
+			try {
+				const studyId = this.id;
+				const { data } = await fetchArticles(studyId, 'qna', this.limit);
+				this.limit += 5;
+				if (data.length) {
+					this.articles = [...this.articles, ...data];
+				}
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 	},
@@ -100,9 +107,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.test {
-	height: 100%;
-}
 .card-wrap {
 	height: 100%;
 	display: flex;

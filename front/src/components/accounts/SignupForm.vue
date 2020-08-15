@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import InputBox from '@/components/common/InputBox.vue';
 import { mapActions } from 'vuex';
 import { validateEmail, validatePassword } from '@/utils/validation';
@@ -168,7 +169,7 @@ export default {
 				await this.SIGNUP(this.signupData);
 				this.$router.push({ name: 'main' });
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		onChangePassword(val) {

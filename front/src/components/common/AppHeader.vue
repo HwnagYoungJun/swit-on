@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import { mapMutations, mapState } from 'vuex';
 import { baseAuth } from '@/api/index';
 import Search from '@/components/common/Search.vue';
@@ -89,8 +90,12 @@ export default {
 	methods: {
 		...mapMutations(['clearUserEmail', 'clearToken']),
 		async fetchImg() {
-			const { data } = await baseAuth.get('accounts/');
-			this.profileImg = data.profile_image;
+			try {
+				const { data } = await baseAuth.get('accounts/');
+				this.profileImg = data.profile_image;
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 		logoutUser() {
 			this.clearUserEmail();
@@ -192,6 +197,9 @@ header {
 		object-fit: cover;
 	}
 	@media screen and (max-width: 768px) {
+		.nav-router {
+			position: fixed;
+		}
 		.main-page {
 			position: relative;
 		}

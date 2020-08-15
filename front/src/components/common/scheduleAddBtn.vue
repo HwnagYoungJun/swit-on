@@ -1,5 +1,5 @@
 <template>
-	<button class="add-btn" @click="addSchedule">+ 일정</button>
+	<button class="schedule-add-btn" @click="addSchedule">+ 일정</button>
 </template>
 
 <script>
@@ -14,7 +14,7 @@ export default {
 </script>
 
 <style lang="scss">
-.add-btn {
+.schedule-add-btn {
 	@include common-btn();
 	position: absolute;
 	width: 70px;

@@ -133,6 +133,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import { mapGetters } from 'vuex';
 import {
 	fetchArticle,
@@ -220,25 +221,33 @@ export default {
 				console.log(data);
 				this.article = data;
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		isCommentLiked(flag) {
 			return flag;
 		},
 		async addBookmark() {
-			const studyId = this.id;
-			const boardName = this.board_name;
-			const articleId = this.article_id;
-			await createArticleBookmark(studyId, boardName, articleId);
-			this.fetchData();
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				await createArticleBookmark(studyId, boardName, articleId);
+				this.fetchData();
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 		async removeBookmark() {
-			const studyId = this.id;
-			const boardName = this.board_name;
-			const articleId = this.article_id;
-			await deleteArticleBookmark(studyId, boardName, articleId);
-			this.fetchData();
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				await deleteArticleBookmark(studyId, boardName, articleId);
+				this.fetchData();
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 		async AddComment() {
 			try {
@@ -251,7 +260,7 @@ export default {
 				});
 				this.fetchData();
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		async removeComment(commentId) {
@@ -262,7 +271,7 @@ export default {
 				await deleteComment(studyId, boardName, articleId, commentId);
 				this.fetchData();
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		async articleLike() {
@@ -273,7 +282,7 @@ export default {
 				await createArticleLike(studyId, boardName, articleId);
 				this.fetchData();
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		async articleUnLike() {
@@ -284,7 +293,7 @@ export default {
 				await deleteArticleLike(studyId, boardName, articleId);
 				this.fetchData();
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		async commentLike(commentId) {
@@ -300,7 +309,7 @@ export default {
 				);
 				this.fetchData();
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		async commentUnLike(commentId) {
@@ -316,7 +325,7 @@ export default {
 				);
 				this.fetchData();
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		async removeArticle() {
@@ -327,7 +336,7 @@ export default {
 				await deleteArticle(studyId, boardName, articleId);
 				this.$router.push(`/study/${studyId}/${boardName}`);
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		resetContent() {

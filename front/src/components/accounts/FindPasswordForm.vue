@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import { validateEmail } from '@/utils/validation';
 import emailjs from 'emailjs-com';
 
@@ -56,7 +57,7 @@ export default {
 				);
 				this.$router.push({ name: 'sendemail' });
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		inputEmailChange(val) {

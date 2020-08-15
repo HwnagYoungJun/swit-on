@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import { searchStudy } from '@/api/studies.js';
 // 방향키 index
 let index = -1;
@@ -108,7 +109,7 @@ export default {
 					: null;
 				this.searchedStudyData = data.studies.length ? data.studies : null;
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		clearSearchedData() {

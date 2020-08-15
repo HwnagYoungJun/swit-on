@@ -163,6 +163,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import { fetchArticles } from '@/api/articles';
 import {
@@ -205,96 +206,119 @@ export default {
 	},
 	methods: {
 		async fetchData() {
-			const studyId = this.id;
-			this.loading = true;
-			const {
-				data: { notice, repository, qna },
-			} = await fetchArticles(studyId, 'dashboard');
-			this.loading = false;
-			this.repositoryArticles = repository.length ? repository : null;
-			this.noticeArticles = notice.length ? notice : null;
-			this.qnaArticles = qna.length ? qna : null;
+			try {
+				const studyId = this.id;
+				this.loading = true;
+				const {
+					data: { notice, repository, qna },
+				} = await fetchArticles(studyId, 'dashboard');
+				this.loading = false;
+				this.repositoryArticles = repository.length ? repository : null;
+				this.noticeArticles = notice.length ? notice : null;
+				this.qnaArticles = qna.length ? qna : null;
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 		async checkIn(scheduleId) {
-			const studyId = this.id;
-			await checkInSchedule(studyId, scheduleId);
-			this.fetchSchedule();
+			try {
+				const studyId = this.id;
+				await checkInSchedule(studyId, scheduleId);
+				this.fetchSchedule();
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 		async checkOut(scheduleId) {
-			const studyId = this.id;
-			await checkOutSchedule(studyId, scheduleId);
-			this.fetchSchedule();
+			try {
+				const studyId = this.id;
+				await checkOutSchedule(studyId, scheduleId);
+				this.fetchSchedule();
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 		async joinSchedule(scheduleId) {
-			const studyId = this.id;
-			await createScheduleParticipate(studyId, scheduleId);
-			this.fetchSchedule();
+			try {
+				const studyId = this.id;
+				await createScheduleParticipate(studyId, scheduleId);
+				this.fetchSchedule();
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 		async removeSchedule(scheduleId) {
-			const studyId = this.id;
-			await deleteScheduleParticipate(studyId, scheduleId);
-			this.fetchSchedule();
+			try {
+				const studyId = this.id;
+				await deleteScheduleParticipate(studyId, scheduleId);
+				this.fetchSchedule();
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 		async fetchSchedule() {
-			const { data } = await fetchStudySchedule(this.id);
-			var days = ['일', '월', '화', '수', '목', '금', '토'];
-			const userName = this.getName;
-			let scheduleList = [];
-			let participateList = [];
-			data.forEach(el => {
-				// ISO -> date 객체
-				const nowTime = new Date();
-				const start = new Date(Date.parse(el.start));
-				const end = new Date(Date.parse(el.end));
-				const startMonth = ('00' + (start.getMonth() + 1)).slice(-2);
-				const startDate = ('00' + start.getDate()).slice(-2);
-				const startDay = days[start.getDay()];
-				const startHours = ('00' + start.getHours()).slice(-2);
-				const startMinutes = ('00' + start.getMinutes()).slice(-2);
-				// const endMonth = ('00' + (end.getMonth() + 1)).slice(-2);
-				// const endDate = ('00' + end.getDate()).slice(-2);
-				const endHours = ('00' + end.getHours()).slice(-2);
-				const endMinutes = ('00' + end.getMinutes()).slice(-2);
-				const scheduleId = el.id;
-				const isScheduleJoin = el.members.filter(
-					member => member.name === userName,
-				).length;
-				const isAbled =
-					new Date(el.start) - nowTime > 0 && !isScheduleJoin ? true : false;
-				const ScheduleData = {
-					startMonth,
-					startDate,
-					startDay,
-					startHours,
-					startMinutes,
-					// endMonth,
-					// endDate,
-					endHours,
-					endMinutes,
-					scheduleId,
-					isScheduleJoin,
-					isAbled,
-				};
-				scheduleList.push(ScheduleData);
-				ScheduleData.isScheduleJoin
-					? participateList.push({
-							...ScheduleData,
-							startTime:
-								new Date(el.start) - nowTime > 0 &&
-								new Date(el.start) - nowTime < 600000
-									? true
-									: false,
-							endTime:
-								nowTime - new Date(el.end) > 0 &&
-								nowTime - new Date(el.end) < 600000
-									? true
-									: false,
-					  })
-					: null;
-			});
-			this.schedules = [...scheduleList];
-			this.participantSchedules = [...participateList];
-			console.log(this.participantSchedules);
+			try {
+				const { data } = await fetchStudySchedule(this.id);
+				var days = ['일', '월', '화', '수', '목', '금', '토'];
+				const userName = this.getName;
+				let scheduleList = [];
+				let participateList = [];
+				data.forEach(el => {
+					// ISO -> date 객체
+					const nowTime = new Date();
+					const start = new Date(Date.parse(el.start));
+					const end = new Date(Date.parse(el.end));
+					const startMonth = ('00' + (start.getMonth() + 1)).slice(-2);
+					const startDate = ('00' + start.getDate()).slice(-2);
+					const startDay = days[start.getDay()];
+					const startHours = ('00' + start.getHours()).slice(-2);
+					const startMinutes = ('00' + start.getMinutes()).slice(-2);
+					// const endMonth = ('00' + (end.getMonth() + 1)).slice(-2);
+					// const endDate = ('00' + end.getDate()).slice(-2);
+					const endHours = ('00' + end.getHours()).slice(-2);
+					const endMinutes = ('00' + end.getMinutes()).slice(-2);
+					const scheduleId = el.id;
+					const isScheduleJoin = el.members.filter(
+						member => member.name === userName,
+					).length;
+					const isAbled =
+						new Date(el.start) - nowTime > 0 && !isScheduleJoin ? true : false;
+					const ScheduleData = {
+						startMonth,
+						startDate,
+						startDay,
+						startHours,
+						startMinutes,
+						// endMonth,
+						// endDate,
+						endHours,
+						endMinutes,
+						scheduleId,
+						isScheduleJoin,
+						isAbled,
+					};
+					scheduleList.push(ScheduleData);
+					ScheduleData.isScheduleJoin
+						? participateList.push({
+								...ScheduleData,
+								startTime:
+									new Date(el.start) - nowTime > 0 &&
+									new Date(el.start) - nowTime < 600000
+										? true
+										: false,
+								endTime:
+									nowTime - new Date(el.end) > 0 &&
+									nowTime - new Date(el.end) < 600000
+										? true
+										: false,
+						  })
+						: null;
+				});
+				this.schedules = [...scheduleList];
+				this.participantSchedules = [...participateList];
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 	},
 	created() {
@@ -306,6 +330,7 @@ export default {
 
 <style lang="scss">
 .dashboard-wrap {
+	height: 100%;
 	display: flex;
 	position: relative;
 	@media screen and (max-width: 1350px) {

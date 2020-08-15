@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import LowerCategoryCard from '../children/LowerCategoryCard.vue';
 import axios from 'axios';
 export default {
@@ -28,9 +29,13 @@ export default {
 	},
 	methods: {
 		async fetchLowerCategory(c) {
-			this.names = [];
-			const { data } = await axios.get(`${this.baseURL}category/up_low/${c}`);
-			data.forEach(el => this.names.push(el.name));
+			try {
+				this.names = [];
+				const { data } = await axios.get(`${this.baseURL}category/up_low/${c}`);
+				data.forEach(el => this.names.push(el.name));
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
+			}
 		},
 		changeLower(categoryName) {
 			this.$emit('changeLower', categoryName);

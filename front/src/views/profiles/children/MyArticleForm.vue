@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import { fetchMyRepository, fetchMyQNA } from '@/api/auth';
 export default {
@@ -66,40 +67,41 @@ export default {
 		if (this.userName !== this.$cookies.get('name')) {
 			this.$router.push({ path: '/404/' });
 		}
-		Promise.all([
-			fetchMyQNA(this.userName),
-			fetchMyRepository(this.userName),
-		]).then(res => {
-			res.forEach(el => {
-				if (el.config.url === `accounts/${this.userName}/myqna`) {
-					var tempQNA = el.data;
-					tempQNA.map(el => {
-						el.boardName = 'qna';
-					});
-					tempQNA.sort((a, b) =>
-						a.created_at > b.created_at
-							? -1
-							: a.created_at < b.created_at
-							? 1
-							: 0,
-					);
-					this.qnaArticle = tempQNA;
-				} else {
-					var tempRepository = el.data;
-					tempRepository.map(el => {
-						el.boardName = 'repository';
-					});
-					tempRepository.sort((a, b) =>
-						a.created_at > b.created_at
-							? -1
-							: a.created_at < b.created_at
-							? 1
-							: 0,
-					);
-					this.repositoryArticle = tempRepository;
-				}
+		Promise.all([fetchMyQNA(this.userName), fetchMyRepository(this.userName)])
+			.then(res => {
+				res.forEach(el => {
+					if (el.config.url === `accounts/${this.userName}/myqna`) {
+						var tempQNA = el.data;
+						tempQNA.map(el => {
+							el.boardName = 'qna';
+						});
+						tempQNA.sort((a, b) =>
+							a.created_at > b.created_at
+								? -1
+								: a.created_at < b.created_at
+								? 1
+								: 0,
+						);
+						this.qnaArticle = tempQNA;
+					} else {
+						var tempRepository = el.data;
+						tempRepository.map(el => {
+							el.boardName = 'repository';
+						});
+						tempRepository.sort((a, b) =>
+							a.created_at > b.created_at
+								? -1
+								: a.created_at < b.created_at
+								? 1
+								: 0,
+						);
+						this.repositoryArticle = tempRepository;
+					}
+				});
+			})
+			.catch(error => {
+				bus.$emit('show:toast', `${error}`);
 			});
-		});
 	},
 };
 </script>
