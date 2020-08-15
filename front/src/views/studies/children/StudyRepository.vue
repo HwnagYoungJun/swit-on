@@ -3,7 +3,7 @@
 		<Loading />
 	</div>
 	<div v-else class="card-wrap">
-		<div v-if="articles === []">
+		<div v-if="articles === ''">
 			<ArticleNotFound />
 		</div>
 		<div class="article-wrap" v-else>
@@ -132,9 +132,8 @@ export default {
 	}
 	.rank-wrap {
 		flex: 1;
-		height: 100%;
-		position: sticky;
-		top: 50px;
+		height: 100vh;
+		border: 1px solid black;
 		@media screen and (max-width: 992px) {
 			display: none;
 		}

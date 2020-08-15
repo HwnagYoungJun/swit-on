@@ -2,7 +2,9 @@
 	<div class="popular-item">
 		<div class="popular-img">
 			<img :src="studyImg" alt="study-logo" />
-			<p class="temp">{{ study.users_current }} / {{ study.users_limit }}</p>
+			<p class="popular-users-cnt">
+				<span>{{ study.users_current }} / {{ study.users_limit }}</span>
+			</p>
 		</div>
 		<div
 			class="popular-content"
@@ -60,7 +62,26 @@ export default {
 	.popular-img {
 		grid-area: image-part;
 		overflow: hidden;
+		position: relative;
 		cursor: pointer;
+		.popular-users-cnt {
+			width: 100%;
+			height: 40px;
+			display: flex;
+			align-items: flex-end;
+			justify-content: flex-end;
+			position: absolute;
+			bottom: 0;
+			padding: 0 10px 3px 0;
+			color: #fff;
+			background: linear-gradient(
+				to bottom,
+				transparent,
+				rgb(0, 0, 0, 0.2),
+				rgb(0, 0, 0, 0.5),
+				rgb(0, 0, 0, 0.8)
+			);
+		}
 	}
 	.popular-content {
 		grid-area: text-part;

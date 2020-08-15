@@ -26,9 +26,9 @@
 				</router-link>
 			</template>
 			<template v-else>
-				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
-					><span class="nav-router-full">알림</span
-					><i class="icon ion-md-notifications nav-router-medium"></i
+				<router-link class="nav-router-item" :to="'/category/웹'"
+					><span class="nav-router-full">카테고리</span
+					><i class="icon ion-md-menu nav-router-medium"></i
 				></router-link>
 				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
 					><span class="nav-router-full">뉴스피드</span
@@ -38,10 +38,16 @@
 					><span class="nav-router-full">만들기</span
 					><i class="icon ion-md-add-circle nav-router-medium"></i
 				></router-link>
-				<a class="nav-router-item" href="javascript:;" @click="logoutUser"
-					><span class="nav-router-full">로그아웃</span
-					><i class="icon ion-md-log-out nav-router-medium"></i
-				></a>
+				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
+					><span class="nav-router-full">알림</span
+					><i class="icon ion-md-notifications nav-router-medium"></i
+				></router-link>
+				<a
+					class="nav-router-item log-out"
+					href="javascript:;"
+					@click="logoutUser"
+					><span class="nav-router-full">로그아웃</span></a
+				>
 				<router-link
 					v-if="name"
 					class="nav-router-img-item"
@@ -178,7 +184,7 @@ header {
 	align-items: center;
 	font-weight: 600;
 	.nav-router-item {
-		margin-right: 0.5rem;
+		margin-right: 0.9rem;
 	}
 	.nav-router-img-item {
 		width: 24px;
@@ -211,6 +217,9 @@ header {
 		}
 		i {
 			font-size: 24px;
+		}
+		.log-out {
+			display: none;
 		}
 	}
 }

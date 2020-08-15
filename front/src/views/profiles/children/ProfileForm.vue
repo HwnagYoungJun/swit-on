@@ -23,6 +23,9 @@
 					>
 						<div class="modify-profile">프로필 수정하기</div>
 					</router-link>
+					<a class="mobile-log-out" href="javascript:;" @click="logoutUser"
+						><span>로그아웃</span></a
+					>
 				</div>
 				<div class="middle-box">
 					<div class="middle-element">
@@ -45,6 +48,8 @@
 <script>
 import bus from '@/utils/bus.js';
 import { fetchProfile } from '@/api/auth';
+import { mapMutations } from 'vuex';
+
 export default {
 	props: {
 		userName: String,
@@ -59,6 +64,14 @@ export default {
 		};
 	},
 	methods: {
+		...mapMutations(['clearUserEmail', 'clearToken']),
+		logoutUser() {
+			this.clearUserEmail();
+			this.clearToken();
+			this.$cookies.remove('auth-token');
+			this.$cookies.remove('name');
+			this.$router.push({ name: 'main' });
+		},
 		async fetchData() {
 			try {
 				const name = this.userName;
@@ -179,7 +192,17 @@ export default {
 		// object-fit: cover;
 	}
 }
-
+.mobile-log-out {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	margin-left: 1rem;
+	width: 5rem;
+	@include common-btn();
+	@media screen and (max-width: 768px) {
+		display: flex;
+	}
+}
 .icon-box {
 	display: flex;
 	width: 50px;

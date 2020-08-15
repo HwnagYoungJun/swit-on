@@ -3,7 +3,7 @@
 		<Loading />
 	</div>
 	<div v-else class="card-wrap">
-		<div v-if="articles === []">
+		<div v-if="articles === ''">
 			<ArticleNotFound />
 		</div>
 		<router-link
