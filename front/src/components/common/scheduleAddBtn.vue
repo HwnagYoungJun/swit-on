@@ -19,6 +19,6 @@ export default {
 	position: absolute;
 	width: 70px;
 	right: 0;
-	top: -60px;
+	top: -55px;
 }
 </style>

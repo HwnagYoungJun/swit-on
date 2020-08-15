@@ -3,6 +3,7 @@
 		<Loading />
 	</div>
 	<div v-else class="card-wrap">
+		<ArticleAddBtn boardName="repository" />
 		<div v-if="articles === ''">
 			<ArticleNotFound />
 		</div>
@@ -26,7 +27,6 @@
 			<div class="rank-wrap">
 				<ArticleRank />
 			</div>
-			<ArticleAddBtn boardName="repository" />
 		</div>
 	</div>
 </template>

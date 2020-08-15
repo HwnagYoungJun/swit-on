@@ -14,6 +14,7 @@ export default {};
 	height: 200px;
 	display: grid;
 	place-items: center;
+	position: relative;
 	p {
 		color: rgb(100, 100, 100);
 		font-weight: bold;

@@ -22,6 +22,10 @@ export default {
 	position: absolute;
 	width: 70px;
 	right: 0;
-	top: -60px;
+	top: -56px;
+	@media screen and (max-width: 768px) {
+		position: static;
+		width: 94%;
+	}
 }
 </style>

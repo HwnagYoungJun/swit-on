@@ -206,6 +206,10 @@ export default {
 	color: rgb(107, 107, 107);
 	box-shadow: 0 3px 6px rgb(214, 214, 214);
 	border-radius: 4px;
+	@include scale(font-size, '16');
+	@media screen and (max-width: 768px) {
+		grid-template-columns: repeat(1, 1fr);
+	}
 	.study-logo {
 		grid-area: logo;
 		width: 100%;
@@ -214,6 +218,9 @@ export default {
 			width: 100%;
 			height: 100%;
 			object-fit: fill;
+		}
+		@media screen and (max-width: 768px) {
+			display: none;
 		}
 	}
 	.study-content {
@@ -241,6 +248,9 @@ export default {
 		margin-right: 3px;
 		color: $main-color;
 		font-size: 18px;
+		@media screen and (max-width: 768px) {
+			font-size: 15.5px;
+		}
 	}
 }
 // .study-description {

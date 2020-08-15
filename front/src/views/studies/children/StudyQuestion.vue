@@ -3,6 +3,7 @@
 		<Loading />
 	</div>
 	<div v-else class="card-wrap">
+		<ArticleAddBtn boardName="qna" />
 		<div v-if="articles === ''">
 			<ArticleNotFound />
 		</div>
@@ -25,7 +26,6 @@
 				</div>
 			</ArticleCard>
 		</router-link>
-		<ArticleAddBtn boardName="qna" />
 	</div>
 </template>
 
