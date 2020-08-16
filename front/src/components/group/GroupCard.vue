@@ -45,6 +45,7 @@ export default {
 		// overflow: hidden;
 		border-radius: 5px;
 		grid-area: image-part;
+		overflow: hidden;
 		img {
 			width: 100%;
 			height: 100%;

@@ -5,7 +5,7 @@
 		@submit.prevent="modifyData"
 	>
 		<div class="modify-header">
-			<h2>프로필 변경하기</h2>
+			<h2>프로필 변경</h2>
 			<div class="study-btnbox">
 				<button @click.prevent="$router.go(-1)" class="studyform-btn-cancle">
 					취소
@@ -21,7 +21,6 @@
 			</div>
 		</div>
 		<div class="modify-main">
-			<p class="modify-text">{{ email }}</p>
 			<div class="imgimgimg">
 				<div class="img-container">
 					<img
@@ -35,22 +34,24 @@
 
 			<div class="upload-btn_wrap">
 				<input
-					v-model="profileImg"
 					ref="inputFile"
 					class="upload_text"
-					title="첨부"
 					readonly="readonly"
-					placeholder="첨부된 파일이 없습니다."
 					@change="onChangeFile"
 				/>
-				<button type="button" title="첨부">
-					<span>첨부</span>
-				</button>
+				<div class="btn-wrap">
+					<button class="deleteImg-btn" type="button" @click="emetyImg">
+						<span>삭제</span>
+					</button>
+					<button type="button">
+						<span>첨부</span>
+					</button>
+				</div>
+
 				<input
 					ref="inputFile"
 					type="file"
 					class="input_file"
-					title="첨부"
 					@change="onChangeFile"
 				/>
 			</div>
@@ -93,7 +94,9 @@ export default {
 	},
 	methods: {
 		...mapMutations(['setUserName']),
-
+		emetyImg() {
+			this.profileImg = null;
+		},
 		onChangeFile() {
 			this.profileImg = this.$refs.inputFile.files[0];
 			var tempImg = this.$refs.inputFile.files[0];
@@ -101,8 +104,8 @@ export default {
 			reader.readAsDataURL(tempImg);
 			reader.onload = function() {
 				document.querySelector('#img-box').src = reader.result;
+				this.swichFile = reader.result;
 			};
-			this.swichFile = true;
 		},
 		async fetchData() {
 			try {
@@ -135,7 +138,13 @@ export default {
 	},
 	computed: {
 		profileImgCom() {
-			return this.swichFile ? null : `${this.baseURL}${this.profileImg}`;
+			return this.swichFile !== false
+				? this.profileImg === null
+					? `${this.baseURL}upload/noProfile.png`
+					: this.swichFile
+				: this.profileImg !== null
+				? `${this.baseURL}${this.profileImg}`
+				: `${this.baseURL}upload/noProfile.png`;
 		},
 		baseURL() {
 			return process.env.VUE_APP_API_URL;
@@ -204,8 +213,6 @@ export default {
 	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
 	padding: 1rem;
 	border-radius: 4px;
-	div {
-	}
 	.modify-input {
 		width: 100%;
 		padding: 10px;
@@ -229,6 +236,7 @@ export default {
 	width: 15rem;
 	height: 15rem;
 	border-radius: 50%;
+	border: 1px solid black;
 }
 .img-box {
 	width: 15rem;
@@ -275,20 +283,29 @@ input.upload_text {
 	margin-top: 1rem;
 	// margin-bottom: 1rem;
 }
-div.upload-btn_wrap input.input_file {
-	position: absolute;
-	top: 0;
-	right: 0;
-	@include scale(width, 75px);
-	opacity: 0;
-	filter: alpha(opacity=0);
-	-ms-filter: 'alpha(opacity=0)';
-	-moz-opacity: 0;
-	margin-top: 0.6rem;
-	&:hover {
-		cursor: pointer;
+div.upload-btn_wrap {
+	@media screen and (max-width: 1024px) {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		margin-top: 0;
+	}
+	input.input_file {
+		position: absolute;
+		top: 0;
+		right: 0;
+		@include scale(width, 75px);
+		opacity: 0;
+		filter: alpha(opacity=0);
+		-ms-filter: 'alpha(opacity=0)';
+		-moz-opacity: 0;
+		margin-top: 0.6rem;
+		&:hover {
+			cursor: pointer;
+		}
 	}
 }
+
 div.upload-btn_wrap {
 	position: relative;
 	display: flex;
@@ -308,5 +325,8 @@ div.upload-btn_wrap button {
 	border-radius: 3px;
 	color: rgb(150, 149, 149);
 	margin-top: 1rem;
+}
+.deleteImg-btn {
+	margin-right: 1rem;
 }
 </style>
