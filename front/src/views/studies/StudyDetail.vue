@@ -63,8 +63,8 @@
 						{{ study.description }}
 					</p>
 					<p>
-						<span class="strong">{{ study.start_term | formdate }}</span
-						>부터 <span class="strong">{{ study.end_term | formdate }}</span
+						<span class="strong">{{ study.start_term | formatDate }}</span
+						>부터 <span class="strong">{{ study.end_term | formatDate }}</span
 						>까지 스터디원을 모집합니다!
 					</p>
 					<p>

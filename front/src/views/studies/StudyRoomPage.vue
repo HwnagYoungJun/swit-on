@@ -24,17 +24,15 @@
 						@click="onJoin"
 						class="main__controls__button main__video_button"
 					>
-						<i class="fas fa-video"></i>
-						<span>Join</span>
+						<span>참여</span>
 					</div>
 					<div @click="onShareScreen" class="main__controls__button">
-						<i class="fas fa-shield-alt"></i>
-						<span>ShareScreen</span>
+						<span>화면공유</span>
 					</div>
 				</div>
 				<div class="main__controls__block">
 					<div @click="onLeave" class="main__controls__button">
-						<span class="leave_meeting">Leave Meeting</span>
+						<span class="leave_meeting">떠나기</span>
 					</div>
 				</div>
 			</div>
@@ -46,6 +44,7 @@
 import WebRTC from '@/components/common/WebRTC.vue';
 export default {
 	props: {
+		id: Number,
 		room: String,
 	},
 	components: { WebRTC },
@@ -57,14 +56,12 @@ export default {
 		};
 	},
 	methods: {
-		onCapture() {
-			this.img = this.$refs.webrtc.capture();
-		},
 		onJoin() {
 			this.$refs.webrtc.join();
 		},
 		onLeave() {
 			this.$refs.webrtc.leave();
+			this.$router.push(`/study/${this.id}`);
 		},
 		onShareScreen() {
 			this.img = this.$refs.webrtc.shareScreen();
@@ -83,42 +80,45 @@ export default {
 		},
 	},
 	beforeDestroy() {
-		this.onLeave();
+		this.$refs.webrtc.leave();
 	},
 };
 </script>
 <style lang="scss">
 .main {
 	width: 100%;
-	min-height: 80vh;
+	height: 80vh;
 	display: flex;
 }
 
 .main__left {
+	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
 	flex: 1;
 	display: flex;
 	flex-direction: column;
 }
 
 .main__videos {
-	flex-grow: 1;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	flex: 1;
 	background-color: black;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	// padding: 40px;
+	overflow: hidden;
+	// overflow-y: scroll;
 }
 
 .main__controls {
 	background-color: #1c1e20;
-}
-
-.main__right {
-	background-color: #242324;
-	border-left: 1px solid #3d3d42;
+	// background: $btn-purple;
 }
 
 .main__controls {
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
 	color: #d2d2d2;
 	display: flex;
 	justify-content: space-between;
@@ -136,13 +136,25 @@ export default {
 	align-items: center;
 	padding: 8px 10px;
 	min-width: 80px;
+	font-weight: 600;
+	border: 2px solid #1c1e20;
+	border-radius: 4px;
 	cursor: pointer;
+	&:hover {
+		border: 2px solid rgb(229, 229, 229);
+		color: black;
+		background: white;
+		border-color: black;
+	}
 }
 
-.main__controls__button:hover {
-	background-color: #343434;
-	border-radius: 5px;
-}
+// .main__controls__button:hover {
+// 	// background-color: #343434;
+// 	background-color: white;
+// 	border: 1px solid grey;
+// 	border-radius: 5px;
+// 	color: black;
+// }
 
 .main__controls__button i {
 	font-size: 24px;

@@ -48,7 +48,7 @@ export default {
 	border-radius: 2px;
 	box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.2);
 	color: white;
-	bottom: -120px;
+	top: -120px;
 	margin-left: -200px;
 	left: 50%;
 	display: flex;
@@ -57,7 +57,7 @@ export default {
 	transition: transform 750ms ease-out;
 }
 .toast.show {
-	transform: translateY(-150px);
+	transform: translateY(150px);
 	transition: transform 500ms ease-in-out;
 }
 </style>
