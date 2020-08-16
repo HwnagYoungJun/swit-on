@@ -201,9 +201,9 @@ export default {
 		.switon-pos-block {
 			display: block;
 			position: absolute;
-			top: 6.5px;
-			left: 5px;
-			width: 40px;
+			top: 8.5px;
+			left: 7px;
+			width: 35px;
 			@media screen and (min-width: 769px) {
 				display: none;
 			}
