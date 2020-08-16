@@ -1,8 +1,10 @@
 <template>
 	<div class="container">
+		<UpperBtn></UpperBtn>
 		<main class="newsFeed-container">
 			<section v-if="newsFeedData.articles" class="article-box">
 				<router-link
+					class="feed-link"
 					v-for="article in newsFeedData.articles"
 					:key="article.id"
 					:to="{
@@ -14,7 +16,7 @@
 						},
 					}"
 				>
-					<ArticleCard :article="article" />
+					<ArticleFeed :article="article" />
 				</router-link>
 			</section>
 			<aside class="side-box">
@@ -45,7 +47,7 @@
 </template>
 <script>
 //Feeds
-import ArticleCard from '@/components/common/ArticleCard.vue';
+import ArticleFeed from '@/components/common/ArticleFeed.vue';
 import { fetchFeeds } from '@/api/articles';
 import { baseAuth } from '@/api/index';
 // Calendar
@@ -56,10 +58,12 @@ import 'tui-time-picker/dist/tui-time-picker.css';
 
 import cookies from 'vue-cookies';
 import bus from '@/utils/bus';
+import UpperBtn from '@/components/common/UpperBtn.vue';
 export default {
 	components: {
-		ArticleCard,
+		ArticleFeed,
 		Calendar,
+		UpperBtn,
 	},
 
 	data() {
@@ -196,7 +200,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 // Calendar
 .tui-full-calendar-timegrid-container {
 	height: 300px !important;
@@ -215,8 +219,8 @@ export default {
 	width: 100%;
 	height: 100%;
 	grid-template-rows: 100%;
-	grid-template-columns: repeat(3, 33.33%);
-	grid-template-areas: 'article article aside';
+	grid-template-columns: 66.6% 33.3%;
+	grid-template-areas: 'article aside';
 	overflow: hidden;
 	@media screen and (max-width: 768px) {
 		grid-template-columns: 1fr;
@@ -225,13 +229,12 @@ export default {
 	.article-box {
 		grid-area: article;
 		display: flex;
+		width: 100%;
 		flex-direction: column;
 		align-items: flex-start;
 		overflow: hidden;
-		@media screen and (max-width: 1150px) {
-			flex-direction: row;
-			flex-wrap: wrap;
-			align-items: flex-start;
+		.feed-link {
+			width: 100%;
 		}
 	}
 	.side-box {
@@ -248,6 +251,16 @@ export default {
 			}
 			.calendar-box {
 				padding-left: 1rem;
+				.tui-full-calendar-dayname-container {
+					border-top: none !important;
+					border-bottom: none !important;
+				}
+				.tui-full-calendar-timegrid-left {
+					width: 2.4rem;
+				}
+				.tui-full-calendar-timegrid-right {
+					margin-left: 2.4rem;
+				}
 			}
 		}
 		@media screen and (max-width: 768px) {

@@ -4,7 +4,6 @@
 	</div>
 	<div v-else class="dashboard-wrap">
 		<ScheduleAddBtn v-if="isLeader" />
-
 		<div class="card-wrap">
 			<div v-if="!isArticles">
 				<ArticleNotFound />
@@ -22,9 +21,6 @@
 						},
 					}"
 					><ArticleCard :article="article">
-						<div slot="logo">
-							<img src="@/assets/dd.png" alt="" />
-						</div>
 						<div slot="bread">
 							<span>Q&A</span>
 						</div>
@@ -42,9 +38,6 @@
 						},
 					}"
 					><ArticleCard :article="article">
-						<div slot="logo">
-							<img src="@/assets/color.png" alt="" />
-						</div>
 						<div slot="bread">
 							<span>저장소</span>
 						</div>
@@ -62,9 +55,6 @@
 						},
 					}"
 					><ArticleCard :article="article">
-						<div slot="logo">
-							<img src="@/assets/dd.png" alt="" />
-						</div>
 						<div slot="bread">
 							<span>공지</span>
 						</div>

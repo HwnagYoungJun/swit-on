@@ -126,6 +126,7 @@ export default {
 				formdata.append('img', this.profileImg);
 				await baseAuth.put(`accounts/${this.pastName}`, formdata);
 				this.setUserName(this.name);
+				this.$cookies.set('name', this.name);
 				this.$router.push(`profile/${this.name}`);
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
