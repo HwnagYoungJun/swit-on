@@ -166,7 +166,7 @@ export default {
 		width: 420px;
 		box-shadow: none;
 	}
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 992px) {
 		width: 200px;
 		&:focus {
 			width: 220px;

@@ -15,10 +15,10 @@
 		</div>
 		<div v-else class="main-page-description">
 			<div class="main-description-title">
-				<h1 class="animate__animated animate__zoomOut animate__delay-1s">
+				<h1 class="animate__animated animate__zoomOut animate__delay-1s hide">
 					Study with Online
 				</h1>
-				<h1 class="animate__animated animate__zoomIn animate__delay-2s">
+				<h1 class="animate__animated animate__zoomIn animate__delay-2s show">
 					SwitOn
 				</h1>
 				<p>온라인에서 함께하는 스터디</p>
@@ -187,30 +187,14 @@ export default {
 		.main-description-title {
 			display: grid;
 			place-items: center;
-			margin-bottom: 20px;
+			width: 100%;
+			margin-bottom: 40px;
+			position: relative;
 			h1 {
+				position: absolute;
+				top: -70px;
 				font-size: 40px;
 			}
-			// .hide-show {
-			// 	animation: change-title 0.5s;
-			// 	-webkit-animation: change-title 0.5s;
-			// 	animation-delay: 1s;
-			// 	animation-fill-mode: forwards;
-			// }
-			// @keyframes change-title {
-			// 	from {
-			// 	}
-			// 	to {
-			// 		height: 0;
-			// 	}
-			// }
-			// @-webkit-keyframes change-title {
-			// 	from {
-			// 	}
-			// 	to {
-			// 		height: 0;
-			// 	}
-			// }
 		}
 		.exclamation {
 			margin: 0 10px 0 5px;
@@ -219,10 +203,10 @@ export default {
 		}
 		.high-light {
 			margin: 0 5px;
-			font-size: 1.5rem;
+			font-size: 1.8rem;
 			animation: change-color 0.5s;
 			-webkit-animation: change-color 0.5s;
-			animation-delay: 3s;
+			animation-delay: 4s;
 			animation-fill-mode: forwards;
 		}
 		@keyframes change-color {
