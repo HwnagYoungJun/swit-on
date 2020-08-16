@@ -51,6 +51,8 @@ hr {
 .el-box {
 	display: flex;
 	margin-top: 2rem;
+	justify-content: center;
+	align-items: center;
 	@media screen and (max-width: 1024px) {
 		margin-top: 1rem;
 	}

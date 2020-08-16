@@ -5,12 +5,13 @@
 		@keyup.up="selectStudy('up')"
 	>
 		<div class="main-logo-wrap">
-			<!-- <img
+			<img
 				v-if="isMainRoute"
 				src="@/assets/white.png"
 				alt="logo"
+				id="main-logo"
 				:class="[isMainRoute ? 'switon-pos-block' : '']"
-			/> -->
+			/>
 			<label for="search" class="a11y-hidden">search: </label>
 			<input
 				autocomplete="off"
@@ -38,9 +39,6 @@
 					{{ data.name }}
 				</li>
 			</ul>
-			<!-- <hr
-				v-if="searchedStudyData && (searchedUpperData || searchedLowerData)"
-			/> -->
 			<p v-if="searchedUpperData">상위 카테고리</p>
 			<ul v-if="searchedUpperData">
 				<li
@@ -53,7 +51,6 @@
 					{{ data.name }}
 				</li>
 			</ul>
-			<!-- <hr v-if="searchedUpperData && searchedLowerData" /> -->
 			<p v-if="searchedLowerData">하위 카테고리</p>
 			<ul v-if="searchedLowerData">
 				<li
@@ -189,9 +186,11 @@ export default {
 		background: rgba(255, 255, 255, 1);
 	}
 	@media screen and (max-width: 768px) {
-		width: 200px;
+		width: 250px;
+		margin-bottom: 50px;
+		padding-left: 60px;
 		&:focus {
-			width: 220px;
+			width: 270px;
 		}
 	}
 }
@@ -202,9 +201,12 @@ export default {
 		.switon-pos-block {
 			display: block;
 			position: absolute;
-			top: 5px;
-			left: 5px;
-			@include scale(width, 50px);
+			top: 8.5px;
+			left: 7px;
+			width: 35px;
+			@media screen and (min-width: 769px) {
+				display: none;
+			}
 		}
 	}
 	.searched-datas {
@@ -239,12 +241,15 @@ export default {
 			border-bottom: 1px solid #d1d1d1;
 		}
 		@media screen and (max-width: 768px) {
-			width: 220px;
+			width: 270px;
 		}
 	}
 	.main-searched-datas {
 		width: 400px;
 		box-shadow: none;
+		@media screen and (max-width: 768px) {
+			width: 270px;
+		}
 	}
 }
 .a11y-hidden {

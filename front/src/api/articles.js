@@ -1,7 +1,7 @@
 import { boardArticles, baseAuth } from './index';
 
-function fetchFeeds() {
-	return baseAuth.get('/feeds');
+function fetchFeeds(index) {
+	return baseAuth.get(`/feeds/?index=${index}`);
 }
 
 function fetchArticles(studyId, boardName, index) {
