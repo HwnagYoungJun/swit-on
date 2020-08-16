@@ -1,6 +1,6 @@
 <template>
-	<div class="rtc">
-		<div class="video-list">
+	<section class="rtc">
+		<section class="video-list">
 			<div
 				v-for="item in videoList"
 				v-bind:video="item"
@@ -17,8 +17,8 @@
 					:id="item.id"
 				></video>
 			</div>
-		</div>
-		<div class="main__right">
+		</section>
+		<aside class="main__right">
 			<div class="main__header">
 				<h6>Chat</h6>
 			</div>
@@ -39,8 +39,8 @@
 					autofocus
 				/>
 			</div>
-		</div>
-	</div>
+		</aside>
+	</section>
 </template>
 <script>
 import RTCMultiConnection from 'rtcmulticonnection';

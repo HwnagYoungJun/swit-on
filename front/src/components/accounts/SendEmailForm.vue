@@ -1,7 +1,7 @@
 <template>
-	<div>
-		<h1>{{ msg }}</h1>
-	</div>
+	<article>
+		<p class="email-success">{{ msg }}</p>
+	</article>
 </template>
 
 <script>
@@ -14,8 +14,4 @@ export default {
 };
 </script>
 
-<style scoped>
-h1 {
-	justify-content: left;
-}
-</style>
+<style lang="scss" scoped></style>

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<section>
 		<label for="title">일정이름</label>
 		<input name="title" type="text" v-model="title" />
 		<hr />
@@ -15,7 +15,7 @@
 			<swatches class="swatchesMobile" v-model="bgColor" />
 		</div>
 		<button @click="submitSchedule">test</button>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -57,7 +57,6 @@ export default {
 		async makeSchedule() {
 			try {
 				const { data } = await baseAuth(`accounts/${cookies.get('name')}`);
-				// console.log(data);
 				this.userId = data.id;
 				this.pushSchedule();
 			} catch (error) {
@@ -72,12 +71,10 @@ export default {
 			let dateEnd = dateE;
 			var tempStart = this.startTime.split(':').map(Number);
 			var tempEnd = this.endTime.split(':').map(el => parseInt(el));
-			// console.log(tempStart, tempEnd);
 			dateStart.setHours(tempStart[0], tempStart[1]);
 			let start = dateStart;
 			dateEnd.setHours(tempEnd[0], tempEnd[1]);
 			let end = dateEnd;
-			// console.log(start, end);
 			start = start.toISOString();
 			end = end.toISOString();
 			this.scheduleObject = {
@@ -86,8 +83,6 @@ export default {
 				end: end,
 				study_id: this.study_id,
 				title: this.title,
-				// color: this.bgColor === '#dde6e8' ? '#000000' : '#ffffff',
-				// leader: '',
 				user_id: this.userId,
 			};
 		},

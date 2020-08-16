@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<section class="container">
 		<div class="radio-box">
 			<input type="radio" id="a" value="a" v-model="status" />
 			<label for="a">전체</label>
@@ -17,7 +17,7 @@
 				</router-link>
 			</li>
 		</ul>
-	</div>
+	</section>
 </template>
 
 <script>

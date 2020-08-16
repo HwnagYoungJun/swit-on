@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<section class="container">
 		<main class="newsFeed-container">
 			<section v-if="newsFeedData.articles" class="article-box">
 				<router-link
@@ -41,7 +41,7 @@
 				</div>
 			</aside>
 		</main>
-	</div>
+	</section>
 </template>
 <script>
 //Feeds

@@ -1,9 +1,9 @@
 <template>
-	<div class="container">
+	<section class="container">
 		<ProfileForm :userName="userName" />
 		<ProfileNavForm :userName="userName" />
 		<router-view :userName="userName" />
-	</div>
+	</section>
 </template>
 
 <script>

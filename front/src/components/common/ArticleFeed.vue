@@ -1,20 +1,20 @@
 <template>
-	<div class="feed-wrap">
-		<div class="feed-title">
+	<article class="feed-wrap">
+		<section class="feed-title">
 			<img src="@/assets/color.png" alt="profile-image" class="img" />
 			<div>
 				<p>{{ article.user.name }}</p>
-				<p class="feed-time">{{ article.created_at | formatDate }}</p>
+				<time class="feed-time">{{ article.created_at | formatDate }}</time>
 			</div>
-		</div>
-		<div class="feed-content">
+		</section>
+		<section class="feed-content">
 			<p class="feed-content-title">{{ article.title }}</p>
 			<Viewer :initialValue="article.content" />
-		</div>
-		<div class="feed-like">
+		</section>
+		<section class="feed-like">
 			<p class="feed-like-info">좋아요 {{ article.like.like_cnt }}개</p>
-		</div>
-	</div>
+		</section>
+	</article>
 </template>
 
 <script>

@@ -1,22 +1,24 @@
 <template>
-	<div class="popular-item">
+	<section class="popular-item">
 		<div class="popular-img">
 			<img :src="studyImg" alt="study-logo" />
 			<p class="popular-users-cnt">
 				<span>{{ study.users_current }} / {{ study.users_limit }}</span>
 			</p>
 		</div>
-		<div
+		<section
 			class="popular-content"
 			:style="{ color: colorPick === 'white' ? 'white' : 'black' }"
 		>
-			<p class="content-title">{{ study.name }}</p>
+			<h3 class="content-title">{{ study.name }}</h3>
 			<p class="content-week">
-				<span class="content-day">{{ study.week | formatWeekday }}</span>
+				<time class="content-day">{{ study.week | formatWeekday }}</time>
 			</p>
-			<p class="content-time">{{ study.start_time }}-{{ study.end_time }}</p>
-		</div>
-	</div>
+			<time class="content-time"
+				>{{ study.start_time }}-{{ study.end_time }}</time
+			>
+		</section>
+	</section>
 </template>
 
 <script>
@@ -51,7 +53,6 @@ export default {
 	height: 100%;
 	grid-template-columns: minmax(10rem, 1fr);
 	grid-template-rows: minmax(3.5rem, 1fr) minmax(6rem, 2fr);
-	// grid-template: 7rem 12rem / 17rem;
 	grid-template-areas:
 		'text-part'
 		'image-part';
@@ -60,7 +61,6 @@ export default {
 	margin-top: 1rem;
 	padding: 0.3rem 0.5rem 0.5rem;
 	color: #454545;
-	// background: rgba(255, 255, 255, 0.05);
 	box-shadow: 3px 2px 6px rgba(37, 37, 37, 0.5);
 	.popular-img {
 		grid-area: image-part;
@@ -100,7 +100,6 @@ export default {
 			padding-bottom: 0.3rem;
 		}
 		.content-week {
-			// padding-top: 0.3rem;
 			.content-day {
 				font-weight: 600;
 			}

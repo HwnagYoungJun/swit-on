@@ -1,8 +1,8 @@
 <template>
-	<div v-if="loading">
+	<section v-if="loading">
 		<Loading />
-	</div>
-	<div v-else class="calendar-wrap">
+	</section>
+	<section v-else class="calendar-wrap">
 		<ScheduleAddBtn v-if="isLeader" />
 		<calendar
 			:calendars="calendarList"
@@ -20,7 +20,7 @@
 			:useCreationPopup="useCreationPopup"
 			:useDetailPopup="useDetailPopup"
 		/>
-	</div>
+	</section>
 </template>
 
 <script>

@@ -1,23 +1,23 @@
 <template>
-	<div class="signup-container">
-		<div class="signup-box">
-			<div class="signup-header">
+	<section class="signup-container">
+		<section class="signup-box">
+			<header class="signup-header">
 				<router-link :to="{ name: 'main' }">
 					<img src="@/assets/black.png" alt="logo" class="switon" />
 				</router-link>
 				<router-link :to="{ name: 'login' }">
 					<i class="icon ion-md-arrow-round-back signup-backbtn"></i>
 				</router-link>
-			</div>
+			</header>
 			<h2>회원가입</h2>
 			<SignupForm></SignupForm>
-		</div>
+		</section>
 		<img
 			class="signup-img"
 			src="https://dimg.donga.com/wps/NEWS/IMAGE/2019/11/02/98183409.2.jpg"
 			alt="signupImage"
 		/>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -39,7 +39,6 @@ export default {
 .signup-container {
 	display: grid;
 	width: 100%;
-	// height: 100vh;
 	grid-template-rows: 100%;
 	grid-template-columns: repeat(2, 50vw);
 	grid-template-areas: 'box img';

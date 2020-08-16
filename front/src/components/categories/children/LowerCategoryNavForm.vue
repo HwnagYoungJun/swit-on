@@ -1,5 +1,5 @@
 <template>
-	<div class="category-nav">
+	<section class="category-nav">
 		<span :key="name" v-for="name in names">
 			<router-link :to="`/category/${upperCategoryName}/${name}`">
 				<LowerCategoryCard
@@ -9,7 +9,7 @@
 				/>
 			</router-link>
 		</span>
-	</div>
+	</section>
 </template>
 
 <script>

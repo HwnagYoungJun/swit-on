@@ -1,10 +1,10 @@
 <template>
-	<div>
+	<section>
 		<StudyArticleAddForm
 			:id="id"
 			:board_name="board_name"
 		></StudyArticleAddForm>
-	</div>
+	</section>
 </template>
 
 <script>

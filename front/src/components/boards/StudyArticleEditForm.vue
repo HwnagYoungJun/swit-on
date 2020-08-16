@@ -4,7 +4,7 @@
 		@submit.prevent="editArticle"
 		enctype="multipart/form-data"
 	>
-		<div class="articleform-header">
+		<header class="articleform-header">
 			<h2>{{ routeBoardName }} 수정</h2>
 			<div class="articleform-btnbox">
 				<button @click.prevent="$router.go(-1)" class="articleform-btn-cancle">
@@ -13,7 +13,7 @@
 				<button class="hide-btn">수정</button>
 				<button class="articleform-btn-submit" type="submit">수정</button>
 			</div>
-		</div>
+		</header>
 		<section class="articleform-main">
 			<input
 				type="text"
@@ -185,10 +185,7 @@ export default {
 input.upload_text {
 	flex: 1;
 	height: 2rem;
-	// padding: 0 0.5rem 1rem;
-	// border-top: 1px solid #bbb;
 	margin-top: 1rem;
-	// margin-bottom: 1rem;
 }
 div.upload-btn_wrap input.input_file {
 	/*파일찾기 폼 투명하게*/
@@ -220,7 +217,6 @@ div.upload-btn_wrap button {
 	height: 2rem;
 	font-weight: bold;
 	background: rgb(225, 225, 225);
-	// border: 1px solid #333;
 	border: none;
 	border-radius: 3px;
 	color: rgb(150, 149, 149);

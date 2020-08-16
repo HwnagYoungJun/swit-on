@@ -4,7 +4,7 @@
 		@submit.prevent="submitForm"
 		enctype="multipart/form-data"
 	>
-		<div class="studyform-header">
+		<section class="studyform-header">
 			<h2>스터디 생성</h2>
 			<div class="study-btnbox">
 				<button @click.prevent="$router.go(-1)" class="studyform-btn-cancle">
@@ -19,7 +19,7 @@
 					작성
 				</button>
 			</div>
-		</div>
+		</section>
 		<section class="studyform-main">
 			<div class="studyform-title">
 				<label class="head-label" for="name"
@@ -367,10 +367,7 @@ export default {
 input.upload_text {
 	flex: 1;
 	height: 2rem;
-	// padding: 0 0.5rem 1rem;
-	// border-top: 1px solid #bbb;
 	margin-top: 1rem;
-	// margin-bottom: 1rem;
 }
 div.upload-btn_wrap input.input_file {
 	/*파일찾기 폼 투명하게*/

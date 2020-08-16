@@ -1,12 +1,10 @@
 <template>
-	<div class="card">
+	<section class="card">
 		<div class="img-box">
 			<img :src="`${BaseUrl}${studyData.logo}`" alt="logo_img" />
 		</div>
-		<div class="etc-box">
-			<div>
-				<h3>{{ studyData.name }}</h3>
-			</div>
+		<article class="etc-box">
+			<h3>{{ studyData.name }}</h3>
 			<div>
 				<span>{{ studyData.posPeople }} / {{ studyData.maxPeople }}명</span>
 			</div>
@@ -15,8 +13,8 @@
 				<p>{{ studyData.startTime }} ~ {{ studyData.endTime }}</p>
 				<p class="expireDay">{{ studyData.expireDay }} 까지</p>
 			</div>
-		</div>
-	</div>
+		</article>
+	</section>
 </template>
 
 <script>

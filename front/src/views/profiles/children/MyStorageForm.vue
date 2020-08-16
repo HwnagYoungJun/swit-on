@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<section>
 		<ul class="myStorage-box">
 			<li :key="article.id" v-for="article in ariticles">
 				<router-link
@@ -9,11 +9,10 @@
 				</router-link>
 			</li>
 		</ul>
-	</div>
+	</section>
 </template>
 
 <script>
-// import InfiniteLoading from 'vue-infinite-loading';
 import bus from '@/utils/bus.js';
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import { fetchMyFav } from '@/api/auth';

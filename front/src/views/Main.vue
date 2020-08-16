@@ -2,8 +2,8 @@
 	<section class="main-page">
 		<AppHeader></AppHeader>
 		<Search />
-		<div v-if="studies && isUserLogin" class="popular-wrap">
-			<p class="popular-title">인기 소모임<span></span></p>
+		<section v-if="studies && isUserLogin" class="popular-wrap">
+			<h2 class="popular-title">인기 소모임<span></span></h2>
 			<router-link
 				class="popular-item-link"
 				:key="study.id"
@@ -12,9 +12,9 @@
 			>
 				<MainCard :study="study" colorPick="white" />
 			</router-link>
-		</div>
-		<div v-else class="main-page-description">
-			<div class="main-description-title">
+		</section>
+		<section v-else class="main-page-description">
+			<section class="main-description-title">
 				<h1 class="animate__animated animate__zoomOut animate__delay-1s hide">
 					Study with Online
 				</h1>
@@ -22,7 +22,7 @@
 					SwitOn
 				</h1>
 				<p>온라인에서 함께하는 스터디</p>
-			</div>
+			</section>
 			<p>
 				출석 버튼으로, 나도
 				<span>switch on</span><i class="icon ion-md-bulb high-light"></i>
@@ -34,7 +34,7 @@
 				이력 관리<i class="icon ion-md-information exclamation"></i>
 			</p>
 			<p>스윗온과 함께 해요 :)</p>
-		</div>
+		</section>
 	</section>
 </template>
 
@@ -99,6 +99,7 @@ export default {
 			top: -25px;
 			left: 10px;
 			color: white;
+			font-size: $font-normal;
 			font-weight: bold;
 			span {
 				width: 100%;
@@ -199,7 +200,6 @@ export default {
 		.exclamation {
 			margin: 0 10px 0 5px;
 			font-size: 1.5rem;
-			// transform: translateY(-15px) rotate(180deg);
 		}
 		.high-light {
 			margin: 0 5px;

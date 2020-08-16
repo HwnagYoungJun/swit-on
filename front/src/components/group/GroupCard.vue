@@ -1,11 +1,11 @@
 <template>
 	<router-link :to="`/study/${study.id}`">
-		<div class="group-box">
+		<section class="group-box">
 			<div class="img-box">
 				<img :src="imgLink" alt="imgLink" />
 			</div>
 			<p class="groupName">{{ study.name }}</p>
-		</div>
+		</section>
 	</router-link>
 </template>
 
@@ -42,7 +42,6 @@ export default {
 	font-size: $font-bold;
 
 	.img-box {
-		// overflow: hidden;
 		border-radius: 5px;
 		grid-area: image-part;
 		overflow: hidden;

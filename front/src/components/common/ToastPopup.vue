@@ -1,7 +1,7 @@
 <template>
-	<div class="toast" :class="toastAnimationClass">
+	<section class="toast" :class="toastAnimationClass">
 		{{ message }}
-	</div>
+	</section>
 </template>
 
 <script>

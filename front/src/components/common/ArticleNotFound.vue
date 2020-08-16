@@ -1,7 +1,7 @@
 <template>
-	<div class="article-not-found">
+	<section class="article-not-found">
 		<p>작성된 게시글이 없어요 :(</p>
-	</div>
+	</section>
 </template>
 
 <script>

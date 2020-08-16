@@ -1,8 +1,8 @@
 <template>
-	<div v-if="loading">
+	<section v-if="loading">
 		<Loading />
-	</div>
-	<div v-else class="card-wrap">
+	</section>
+	<section v-else class="card-wrap">
 		<ArticleAddBtn v-if="isLeader" boardName="notice" />
 		<div v-if="!articles.length">
 			<ArticleNotFound />
@@ -26,7 +26,7 @@
 				</div>
 			</ArticleCard>
 		</router-link>
-	</div>
+	</section>
 </template>
 
 <script>

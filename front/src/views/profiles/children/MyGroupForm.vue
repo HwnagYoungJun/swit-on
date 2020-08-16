@@ -1,13 +1,13 @@
 <template>
-	<div class="container">
-		<div class="temp">
-			<div class="group-container">
+	<section class="container">
+		<section class="temp">
+			<article class="group-container">
 				<div :key="study.id" v-for="study in studies">
 					<GroupCard :study="study" />
 				</div>
-			</div>
-		</div>
-	</div>
+			</article>
+		</section>
+	</section>
 </template>
 
 <script>
@@ -32,7 +32,6 @@ export default {
 			try {
 				const { data } = await fetchMyStudy(this.userName);
 				data.forEach(el => this.studies.push(el.study));
-				console.log(this.studies);
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
