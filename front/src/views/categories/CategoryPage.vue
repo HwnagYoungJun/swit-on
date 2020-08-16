@@ -1,15 +1,13 @@
 <template>
 	<div>
-		<CategoryNavForm />
-		<br />
-		<h1 @click="resetLowerCategory">{{ initName }}</h1>
-		<br />
+		<CategoryNavForm :upperCategoryName="upperCategoryName" />
+		<!-- <h1 @click="resetLowerCategory">{{ initName }}</h1> -->
 		<LowerCategoryNavForm
 			@changeLower="changeLower"
 			:upperCategory="upperCategory"
 			:upperCategoryName="upperCategoryName"
+			:lowerCategoryName="lowerCategoryName"
 		/>
-		<br />
 		<router-view :upperCategoryName="upperCategoryName"></router-view>
 	</div>
 </template>
@@ -25,6 +23,7 @@ export default {
 	},
 	props: {
 		upperCategoryName: String,
+		lowerCategoryName: String,
 	},
 	data() {
 		return {
@@ -39,11 +38,6 @@ export default {
 			this.lowerCategory = '전체';
 		},
 	},
-	// watch: {
-	// 	$route() {
-	// 		this.lowerCategory = '전체';
-	// 	},
-	// },
 	computed: {
 		initName() {
 			return this.upperCategoryName;

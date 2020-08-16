@@ -4,7 +4,7 @@
 	</div>
 	<div v-else class="card-wrap">
 		<ArticleAddBtn boardName="repository" />
-		<div v-if="articles === ''">
+		<div v-if="!articles.length">
 			<ArticleNotFound />
 		</div>
 		<div class="article-wrap" v-else>

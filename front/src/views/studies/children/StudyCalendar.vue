@@ -3,7 +3,7 @@
 		<Loading />
 	</div>
 	<div v-else class="calendar-wrap">
-		<scheduleAddBtn v-if="isLeader" />
+		<ScheduleAddBtn v-if="isLeader" />
 		<calendar
 			:calendars="calendarList"
 			:schedules="scheduleList"
@@ -25,7 +25,7 @@
 
 <script>
 import bus from '@/utils/bus.js';
-import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
+import ScheduleAddBtn from '@/components/common/ScheduleAddBtn.vue';
 import { baseAuth } from '@/api/index';
 import Loading from '@/components/common/Loading.vue';
 
@@ -37,7 +37,7 @@ import 'tui-time-picker/dist/tui-time-picker.css';
 export default {
 	components: {
 		Calendar,
-		scheduleAddBtn,
+		ScheduleAddBtn,
 		Loading,
 	},
 	props: {

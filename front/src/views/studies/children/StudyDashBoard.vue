@@ -3,7 +3,7 @@
 		<Loading />
 	</div>
 	<div v-else class="dashboard-wrap">
-		<scheduleAddBtn v-if="isLeader" />
+		<ScheduleAddBtn v-if="isLeader" />
 
 		<div class="card-wrap">
 			<div v-if="!isArticles">
@@ -173,7 +173,7 @@ import {
 	checkInSchedule,
 	checkOutSchedule,
 } from '@/api/studies';
-import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
+import ScheduleAddBtn from '@/components/common/ScheduleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import Loading from '@/components/common/Loading.vue';
 import { mapGetters } from 'vuex';
@@ -200,7 +200,7 @@ export default {
 	},
 	components: {
 		ArticleCard,
-		scheduleAddBtn,
+		ScheduleAddBtn,
 		ArticleNotFound,
 		Loading,
 	},
