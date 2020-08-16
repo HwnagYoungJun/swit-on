@@ -196,7 +196,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 // Calendar
 .tui-full-calendar-timegrid-container {
 	height: 300px !important;
@@ -252,6 +252,10 @@ export default {
 		}
 		@media screen and (max-width: 768px) {
 			display: none;
+		}
+		.tui-full-calendar-dayname-container {
+			border-top: none !important;
+			border-bottom: none !important;
 		}
 	}
 }
