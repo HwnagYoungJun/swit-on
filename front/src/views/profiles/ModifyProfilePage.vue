@@ -104,8 +104,8 @@ export default {
 			reader.readAsDataURL(tempImg);
 			reader.onload = function() {
 				document.querySelector('#img-box').src = reader.result;
+				this.swichFile = reader.result;
 			};
-			this.swichFile = reader.result;
 		},
 		async fetchData() {
 			try {
@@ -288,7 +288,6 @@ div.upload-btn_wrap {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		height: 1px;
 		margin-top: 0;
 	}
 	input.input_file {
