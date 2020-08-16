@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import { baseAuth } from '@/api/index';
 import Swatches from 'vue-swatches';
 import cookies from 'vue-cookies';
@@ -45,20 +46,23 @@ export default {
 		async submitSchedule() {
 			await this.makeSchedule();
 			const el = this.scheduleObject;
-			// console.log(el);
 			try {
 				await baseAuth.post(`study/${this.study_id}/schedule/`, el);
-			} catch (err) {
-				console.log(err);
+				this.$router.push(`/study/${this.study_id}`);
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
-			this.$router.push(`/study/${this.study_id}`);
 		},
 
 		async makeSchedule() {
-			const { data } = await baseAuth(`accounts/${cookies.get('name')}`);
-			// console.log(data);
-			this.userId = data.id;
-			this.pushSchedule();
+			try {
+				const { data } = await baseAuth(`accounts/${cookies.get('name')}`);
+				// console.log(data);
+				this.userId = data.id;
+				this.pushSchedule();
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
 		},
 		pushSchedule() {
 			var tempDate = this.date.split('-').map(Number);

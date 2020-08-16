@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import axios from 'axios';
 import MainCard from '@/components/common/MainCard.vue';
 import { lowerCategoryId } from '@/utils/category';
@@ -49,14 +50,18 @@ export default {
 	},
 	methods: {
 		async fetchLowerStudy() {
-			this.loading = true;
-			const { data } = await axios.get(`${this.baseURL}study`, {
-				params: {
-					lowercategory_id: this.categoryId,
-				},
-			});
-			this.loading = false;
-			this.studies = data.length ? data : null;
+			try {
+				this.loading = true;
+				const { data } = await axios.get(`${this.baseURL}study`, {
+					params: {
+						lowercategory_id: this.categoryId,
+					},
+				});
+				this.loading = false;
+				this.studies = data.length ? data : null;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
 		},
 	},
 	watch: {

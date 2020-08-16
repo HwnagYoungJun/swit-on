@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<div class="category-box">
-			<div class="category-element">
+			<!-- <div class="category-element">
 				<router-link
 					:to="{
 						name: 'main',
 					}"
 					>전체</router-link
 				>
-			</div>
+			</div> -->
 			<div :key="categoryElement" v-for="categoryElement in categoryElements">
 				<div class="category-element">
 					<router-link :to="`/category/${categoryElement}`">

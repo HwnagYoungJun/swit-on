@@ -94,35 +94,89 @@
 				<span class="schedule-title">소모임 일정</span>
 				<ul>
 					<li :key="s.id" v-for="s in schedules">
-						<span>
-							<span>{{ s.startMonth }}.{{ s.startDate }}</span>
-							<span>{{ s.startDay }}</span>
-							<span
-								>{{ s.startHours }}:{{ s.startMinutes }}-{{ s.endHours }}:{{
-									s.endMinutes
-								}}</span
-							>
-						</span>
-						<button class="active">참여중</button>
+						<div class="schedule-list" v-if="s.isAbled">
+							<span>
+								<span>{{ s.startMonth }}.{{ s.startDate }}</span>
+								<span>{{ s.startDay }}</span>
+								<span
+									>{{ s.startHours }}:{{ s.startMinutes }}-{{ s.endHours }}:{{
+										s.endMinutes
+									}}</span
+								>
+							</span>
+							<div class="schedule-btnbox">
+								<button
+									v-if="s.isScheduleJoin"
+									@click="removeSchedule(s.scheduleId)"
+									class="unactive"
+								>
+									참여중
+								</button>
+								<button
+									v-else
+									@click="joinSchedule(s.scheduleId)"
+									class="active"
+								>
+									참여
+								</button>
+							</div>
+						</div>
 					</li>
 				</ul>
 			</div>
 			<div class="schedule">
 				<span class="schedule-title">나의 일정</span>
-				<ul></ul>
+				<ul>
+					<li :key="s.id" v-for="s in participantSchedules">
+						<div class="schedule-list" v-if="s.isScheduleJoin">
+							<span>
+								<span>{{ s.startMonth }}.{{ s.startDate }}</span>
+								<span>{{ s.startDay }}</span>
+								<span
+									>{{ s.startHours }}:{{ s.startMinutes }}-{{ s.endHours }}:{{
+										s.endMinutes
+									}}</span
+								>
+							</span>
+							<div class="schedule-btnbox">
+								<button
+									:disabled="!s.startTime"
+									@click="checkIn(s.scheduleId)"
+									class="active"
+								>
+									입실
+								</button>
+								<button
+									:disabled="!s.endTime"
+									@click="checkOut(s.scheduleId)"
+									class="active"
+								>
+									퇴실
+								</button>
+							</div>
+						</div>
+					</li>
+				</ul>
 			</div>
 		</aside>
 	</div>
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import ArticleCard from '@/components/common/ArticleCard.vue';
 import { fetchArticles } from '@/api/articles';
-import { fetchStudySchedule } from '@/api/studies';
-// import { fetchMySchedule } from '@/api/auth';
+import {
+	fetchStudySchedule,
+	createScheduleParticipate,
+	deleteScheduleParticipate,
+	checkInSchedule,
+	checkOutSchedule,
+} from '@/api/studies';
 import scheduleAddBtn from '@/components/common/scheduleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import Loading from '@/components/common/Loading.vue';
+import { mapGetters } from 'vuex';
 export default {
 	props: {
 		id: Number,
@@ -131,6 +185,7 @@ export default {
 	data() {
 		return {
 			schedules: [],
+			participantSchedules: [],
 			repositoryArticles: null,
 			noticeArticles: null,
 			qnaArticles: null,
@@ -138,6 +193,7 @@ export default {
 		};
 	},
 	computed: {
+		...mapGetters(['getName']),
 		isArticles() {
 			return this.repositoryArticles || this.noticeArticles || this.qnaArticles;
 		},
@@ -150,50 +206,119 @@ export default {
 	},
 	methods: {
 		async fetchData() {
-			const studyId = this.id;
-			this.loading = true;
-			const {
-				data: { notice, repository, qna },
-			} = await fetchArticles(studyId, 'dashboard');
-			this.loading = false;
-			this.repositoryArticles = repository.length ? repository : null;
-			this.noticeArticles = notice.length ? notice : null;
-			this.qnaArticles = qna.length ? qna : null;
+			try {
+				const studyId = this.id;
+				this.loading = true;
+				const {
+					data: { notice, repository, qna },
+				} = await fetchArticles(studyId, 'dashboard');
+				this.loading = false;
+				this.repositoryArticles = repository.length ? repository : null;
+				this.noticeArticles = notice.length ? notice : null;
+				this.qnaArticles = qna.length ? qna : null;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
 		},
-		// async fetchMyScheduleStudy(){
-		// 	const {data} = await fetchMySchedule
-		// }
+		async checkIn(scheduleId) {
+			try {
+				const studyId = this.id;
+				await checkInSchedule(studyId, scheduleId);
+				this.fetchSchedule();
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
+		async checkOut(scheduleId) {
+			try {
+				const studyId = this.id;
+				await checkOutSchedule(studyId, scheduleId);
+				this.fetchSchedule();
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
+		async joinSchedule(scheduleId) {
+			try {
+				const studyId = this.id;
+				await createScheduleParticipate(studyId, scheduleId);
+				this.fetchSchedule();
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
+		async removeSchedule(scheduleId) {
+			try {
+				const studyId = this.id;
+				await deleteScheduleParticipate(studyId, scheduleId);
+				this.fetchSchedule();
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
 		async fetchSchedule() {
-			const { data } = await fetchStudySchedule(this.id);
-			var days = ['일', '월', '화', '수', '목', '금', '토'];
-			data.forEach(el => {
-				// ISO -> date 객체
-				const start = new Date(Date.parse(el.start));
-				const end = new Date(Date.parse(el.end));
-				const startMonth = ('00' + (start.getMonth() + 1)).slice(-2);
-				const startDate = ('00' + start.getDate()).slice(-2);
-				const startDay = days[start.getDay()];
-				const startHours = ('00' + start.getHours()).slice(-2);
-				const startMinutes = ('00' + start.getMinutes()).slice(-2);
-				// const endMonth = ('00' + (end.getMonth() + 1)).slice(-2);
-				// const endDate = ('00' + end.getDate()).slice(-2);
-				const endHours = ('00' + end.getHours()).slice(-2);
-				const endMinutes = ('00' + end.getMinutes()).slice(-2);
-				const scheduleId = el.id;
-				const ScheduleData = {
-					startMonth,
-					startDate,
-					startDay,
-					startHours,
-					startMinutes,
-					// endMonth,
-					// endDate,
-					endHours,
-					endMinutes,
-					scheduleId,
-				};
-				this.schedules.push(ScheduleData);
-			});
+			try {
+				const { data } = await fetchStudySchedule(this.id);
+				var days = ['일', '월', '화', '수', '목', '금', '토'];
+				const userName = this.getName;
+				let scheduleList = [];
+				let participateList = [];
+				data.forEach(el => {
+					// ISO -> date 객체
+					const nowTime = new Date();
+					const start = new Date(Date.parse(el.start));
+					const end = new Date(Date.parse(el.end));
+					const startMonth = ('00' + (start.getMonth() + 1)).slice(-2);
+					const startDate = ('00' + start.getDate()).slice(-2);
+					const startDay = days[start.getDay()];
+					const startHours = ('00' + start.getHours()).slice(-2);
+					const startMinutes = ('00' + start.getMinutes()).slice(-2);
+					// const endMonth = ('00' + (end.getMonth() + 1)).slice(-2);
+					// const endDate = ('00' + end.getDate()).slice(-2);
+					const endHours = ('00' + end.getHours()).slice(-2);
+					const endMinutes = ('00' + end.getMinutes()).slice(-2);
+					const scheduleId = el.id;
+					const isScheduleJoin = el.members.filter(
+						member => member.name === userName,
+					).length;
+					const isAbled =
+						new Date(el.start) - nowTime > 0 && !isScheduleJoin ? true : false;
+					const ScheduleData = {
+						startMonth,
+						startDate,
+						startDay,
+						startHours,
+						startMinutes,
+						// endMonth,
+						// endDate,
+						endHours,
+						endMinutes,
+						scheduleId,
+						isScheduleJoin,
+						isAbled,
+					};
+					scheduleList.push(ScheduleData);
+					ScheduleData.isScheduleJoin
+						? participateList.push({
+								...ScheduleData,
+								startTime:
+									new Date(el.start) - nowTime > 0 &&
+									new Date(el.start) - nowTime < 600000
+										? true
+										: false,
+								endTime:
+									nowTime - new Date(el.end) > 0 &&
+									nowTime - new Date(el.end) < 600000
+										? true
+										: false,
+						  })
+						: null;
+				});
+				this.schedules = [...scheduleList];
+				this.participantSchedules = [...participateList];
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
 		},
 	},
 	created() {
@@ -205,6 +330,7 @@ export default {
 
 <style lang="scss">
 .dashboard-wrap {
+	height: 100%;
 	display: flex;
 	position: relative;
 	@media screen and (max-width: 1350px) {
@@ -241,11 +367,13 @@ aside {
 		background: #fff;
 	}
 	li {
-		display: flex;
-		justify-content: space-between;
 		margin: 10px 0;
-		align-items: center;
 		color: rgb(90, 90, 90);
+		.schedule-list {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
 		@media screen and (max-width: 370px) {
 			display: inline;
 			margin: 10px 20px;
@@ -253,18 +381,31 @@ aside {
 		span {
 			margin-right: 10px;
 		}
-		button {
-			@include common-btn();
-			display: inline-block;
-			width: 5rem;
-			@media screen and (max-width: 370px) {
-				width: 100%;
-				margin: 8px 0;
+		.schedule-btnbox {
+			button {
+				@include common-btn();
+				display: inline-block;
+				width: 4rem;
+				margin-right: 5px;
+				@media screen and (max-width: 370px) {
+					width: 100%;
+					margin: 8px 0;
+				}
+				&:disabled {
+					cursor: default;
+					&:hover {
+						transition: none;
+					}
+				}
 			}
-		}
-		.active {
-			color: #fff;
-			background: $btn-purple;
+			.active {
+				color: #fff;
+				background: $btn-purple;
+			}
+			.unactive {
+				background: #fff;
+				color: $btn-purple;
+			}
 		}
 	}
 	.attend-wrap {

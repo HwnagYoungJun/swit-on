@@ -2,7 +2,7 @@
 	<header id="nav" :class="['container', isMainRoute ? 'nav-white' : '']">
 		<div class="nav-search">
 			<div class="nav-logo">
-				<router-link class="switon-logo" :to="{ name: 'main' }">
+				<router-link class="switon-logo" :to="`/`">
 					<img
 						v-if="isMainRoute"
 						src="@/assets/white.png"
@@ -26,9 +26,9 @@
 				</router-link>
 			</template>
 			<template v-else>
-				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
-					><span class="nav-router-full">알림</span
-					><i class="icon ion-md-notifications nav-router-medium"></i
+				<router-link class="nav-router-item" :to="'/category/웹'"
+					><span class="nav-router-full">카테고리</span
+					><i class="icon ion-md-menu nav-router-medium"></i
 				></router-link>
 				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
 					><span class="nav-router-full">뉴스피드</span
@@ -38,10 +38,16 @@
 					><span class="nav-router-full">만들기</span
 					><i class="icon ion-md-add-circle nav-router-medium"></i
 				></router-link>
-				<a class="nav-router-item" href="javascript:;" @click="logoutUser"
-					><span class="nav-router-full">로그아웃</span
-					><i class="icon ion-md-log-out nav-router-medium"></i
-				></a>
+				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
+					><span class="nav-router-full">알림</span
+					><i class="icon ion-md-notifications nav-router-medium"></i
+				></router-link>
+				<a
+					class="nav-router-item log-out"
+					href="javascript:;"
+					@click="logoutUser"
+					><span class="nav-router-full">로그아웃</span></a
+				>
 				<router-link
 					v-if="name"
 					class="nav-router-img-item"
@@ -60,7 +66,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations, mapState, mapGetters } from 'vuex';
 import { baseAuth } from '@/api/index';
 import Search from '@/components/common/Search.vue';
 
@@ -75,6 +81,7 @@ export default {
 		Search,
 	},
 	computed: {
+		...mapGetters(['isLogin']),
 		...mapState(['name']),
 		baseURL() {
 			return process.env.VUE_APP_API_URL;
@@ -97,6 +104,7 @@ export default {
 			this.clearToken();
 			this.$cookies.remove('auth-token');
 			this.$cookies.remove('name');
+			this.$cookies.remove('userid');
 			this.$router.push({ name: 'main' });
 		},
 		onChangeSearch(val) {
@@ -104,7 +112,9 @@ export default {
 		},
 	},
 	created() {
-		this.fetchImg();
+		if (this.isLogin) {
+			this.fetchImg();
+		}
 	},
 };
 </script>
@@ -173,7 +183,7 @@ header {
 	align-items: center;
 	font-weight: 600;
 	.nav-router-item {
-		margin-right: 0.5rem;
+		margin-right: 0.9rem;
 	}
 	.nav-router-img-item {
 		width: 24px;
@@ -192,6 +202,9 @@ header {
 		object-fit: cover;
 	}
 	@media screen and (max-width: 768px) {
+		.nav-router {
+			position: fixed;
+		}
 		.main-page {
 			position: relative;
 		}
@@ -203,6 +216,9 @@ header {
 		}
 		i {
 			font-size: 24px;
+		}
+		.log-out {
+			display: none;
 		}
 	}
 }

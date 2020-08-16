@@ -45,9 +45,22 @@ function JoinStudy(studyId) {
 function fetchStudySchedule(studyId) {
 	return study.get(`/${studyId}/schedule`);
 }
-function isJoin(studyId, scheduleId) {
+function fetchScheduleParticipate(studyId, scheduleId) {
+	return study.get(`${studyId}/schedule/${scheduleId}/participate`);
+}
+function createScheduleParticipate(studyId, scheduleId) {
 	return study.post(`${studyId}/schedule/${scheduleId}/participate`);
 }
+function deleteScheduleParticipate(studyId, scheduleId) {
+	return study.delete(`${studyId}/schedule/${scheduleId}/participate`);
+}
+function checkInSchedule(studyId, scheduleId) {
+	return study.put(`${studyId}/schedule/${scheduleId}/checkin`);
+}
+function checkOutSchedule(studyId, scheduleId) {
+	return study.put(`${studyId}/schedule/${scheduleId}/checkout`);
+}
+
 export {
 	fetchStudies,
 	createStudy,
@@ -57,5 +70,9 @@ export {
 	searchStudy,
 	JoinStudy,
 	fetchStudySchedule,
-	isJoin,
+	fetchScheduleParticipate,
+	createScheduleParticipate,
+	deleteScheduleParticipate,
+	checkInSchedule,
+	checkOutSchedule,
 };

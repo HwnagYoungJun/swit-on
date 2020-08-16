@@ -224,6 +224,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import { createStudy } from '@/api/studies';
 export default {
 	data() {
@@ -262,11 +263,10 @@ export default {
 				this.studyData.lowercategory_id = parseInt(
 					this.studyData.lowercategory_id,
 				);
-				console.log(this.studyData);
 				await createStudy(this.studyData);
 				this.$router.push({ name: 'main' });
-			} catch (e) {
-				console.log(e);
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		onChangeFile(e) {

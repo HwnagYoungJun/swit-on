@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import GroupCard from '@/components/group/GroupCard.vue';
 import { fetchMyStudy } from '@/api/auth';
 export default {
@@ -28,9 +29,13 @@ export default {
 	},
 	methods: {
 		async fetchMyStudy() {
-			const { data } = await fetchMyStudy(this.userName);
-			data.forEach(el => this.studies.push(el.study));
-			console.log(this.studies);
+			try {
+				const { data } = await fetchMyStudy(this.userName);
+				data.forEach(el => this.studies.push(el.study));
+				console.log(this.studies);
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
 		},
 	},
 	created() {

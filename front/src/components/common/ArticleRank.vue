@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="ranking-wrap">
 		<div class="ranking">
 			<span class="ranking-title">우리 랭킹</span>
 			<ul>
@@ -66,11 +66,17 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
+.ranking-wrap {
+	height: 80vh;
+	position: sticky;
+	top: 50px;
+}
 .ranking {
 	position: relative;
 	margin: 10px 0 30px;
 	padding: 20px 0;
 	color: rgb(138, 138, 138);
+
 	.ranking-title {
 		position: absolute;
 		top: -5px;

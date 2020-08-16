@@ -3,7 +3,8 @@
 		<Loading />
 	</div>
 	<div v-else class="card-wrap">
-		<div v-if="articles === []">
+		<ArticleAddBtn boardName="repository" />
+		<div v-if="articles === ''">
 			<ArticleNotFound />
 		</div>
 		<div class="article-wrap" v-else>
@@ -27,11 +28,11 @@
 				<ArticleRank />
 			</div>
 		</div>
-		<ArticleAddBtn boardName="repository" />
 	</div>
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import ArticleFeed from '@/components/common/ArticleFeed.vue';
 import ArticleRank from '@/components/common/ArticleRank.vue';
 import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
@@ -60,19 +61,27 @@ export default {
 	},
 	methods: {
 		async fetchRepo() {
-			const studyId = this.id;
-			this.loading = true;
-			const { data } = await fetchArticles(studyId, 'repository', this.limit);
-			this.loading = false;
-			this.limit += 5;
-			this.articles = data;
+			try {
+				const studyId = this.id;
+				this.loading = true;
+				const { data } = await fetchArticles(studyId, 'repository', this.limit);
+				this.loading = false;
+				this.limit += 5;
+				this.articles = data;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
 		},
 		async infiniteLoading() {
-			const studyId = this.id;
-			const { data } = await fetchArticles(studyId, 'repository', this.limit);
-			this.limit += 5;
-			if (data.length) {
-				this.articles = [...this.articles, ...data];
+			try {
+				const studyId = this.id;
+				const { data } = await fetchArticles(studyId, 'repository', this.limit);
+				this.limit += 5;
+				if (data.length) {
+					this.articles = [...this.articles, ...data];
+				}
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 	},
@@ -100,6 +109,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.card-wrap {
+	height: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+	@media screen and (max-width: 1500px) {
+		justify-content: center;
+	}
+}
 .article-wrap {
 	display: flex;
 	flex-wrap: wrap;
@@ -114,9 +132,8 @@ export default {
 	}
 	.rank-wrap {
 		flex: 1;
-		height: 100%;
-		position: sticky;
-		top: 50px;
+		height: 100vh;
+		border: 1px solid black;
 		@media screen and (max-width: 992px) {
 			display: none;
 		}

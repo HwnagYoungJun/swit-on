@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import { baseAuth } from '@/api/index';
 import { mapMutations } from 'vuex';
 export default {
@@ -110,8 +111,8 @@ export default {
 				this.introduce = data.introduce;
 				this.name = data.name;
 				this.profileImg = data.profile_image;
-			} catch (err) {
-				console.log(err);
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		async modifyData() {
@@ -123,8 +124,8 @@ export default {
 				await baseAuth.put(`accounts/${this.pastName}`, formdata);
 				this.setUserName(this.name);
 				this.$router.push(`profile/${this.name}`);
-			} catch (err) {
-				console.log(err);
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 	},
