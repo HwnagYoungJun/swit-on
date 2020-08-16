@@ -25,7 +25,6 @@
 			<Editor
 				ref="toastuiEditor"
 				initialEditType="wysiwyg"
-				:initialValue="editorText"
 				:options="editorOptions"
 				height="350px"
 			/>
@@ -57,7 +56,7 @@ import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/i18n/ko-kr.js';
 import { Editor } from '@toast-ui/vue-editor';
-import { updateArticle } from '@/api/articles';
+import { updateArticle, fetchArticle } from '@/api/articles';
 
 export default {
 	props: {
@@ -75,7 +74,7 @@ export default {
 				language: 'ko-KR',
 				hideModeSwitch: true,
 				minHeight: '350px',
-				placeholder: '내용을 입력해주세요',
+				// placeholder: '내용을 입력해주세요',
 			},
 		};
 	},
@@ -88,18 +87,40 @@ export default {
 		Editor,
 	},
 	methods: {
+		async fetchArticle() {
+			try {
+				const studyId = this.id;
+				const boardName = this.board_name;
+				const articleId = this.article_id;
+				const { data } = await fetchArticle(studyId, boardName, articleId);
+				this.inputFile = data.file;
+				this.title = data.title;
+				let editContent = document.querySelector('.tui-editor-contents div');
+				editContent.innerHTML = data.content;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
 		async editArticle() {
 			try {
 				const studyId = this.id;
 				const boardName = this.board_name;
 				const articleId = this.article_id;
-				let content = this.$refs.toastuiEditor.invoke('getMarkdown');
+				let content = this.$refs.toastuiEditor.invoke('getHtml');
+				if (!content.length) {
+					bus.$emit('show:toast', '내용을 입력해주세요');
+					return;
+				}
+				if (!this.title) {
+					bus.$emit('show:toast', '제목을 입력해주세요');
+					return;
+				}
 				await updateArticle(studyId, boardName, articleId, {
 					title: this.title,
 					content,
 					file: this.inputFile,
 				});
-				this.$router.push(`/study/${studyId}/${boardName}`);
+				this.$router.push(`/study/${studyId}/${boardName}/articleId`);
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
@@ -111,6 +132,9 @@ export default {
 			this.fileRoute = e.target.value;
 			this.inputFile = this.$refs.inputFile.files[0];
 		},
+	},
+	created() {
+		this.fetchArticle();
 	},
 };
 </script>

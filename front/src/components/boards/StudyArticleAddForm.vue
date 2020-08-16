@@ -91,7 +91,7 @@ export default {
 			try {
 				const studyId = this.id;
 				const boardName = this.board_name;
-				let content = this.$refs.toastuiEditor.invoke('getMarkdown');
+				let content = this.$refs.toastuiEditor.invoke('getHtml');
 				await createArticle(studyId, boardName, {
 					title: this.title,
 					content,

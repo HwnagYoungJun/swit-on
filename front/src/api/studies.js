@@ -1,7 +1,7 @@
 import { study } from './index';
 // 스터디 데이터 조회 API
 function fetchStudies() {
-	return study.get('/');
+	return study.get('');
 }
 
 // 스터디 생성 API
@@ -20,30 +20,30 @@ function createStudy(studyData) {
 	formdata.append('week', studyData.week);
 	formdata.append('users_limit', studyData.users_limit);
 
-	return study.post('/', formdata);
+	return study.post('', formdata);
 }
 
 function deleteStudy(studyId) {
-	return study.delete(`/${studyId}`);
+	return study.delete(`${studyId}`);
 }
 
 function updateStudy(studyId, studyData) {
-	return study.put(`/${studyId}`, studyData);
+	return study.put(`${studyId}`, studyData);
 }
 
 function fetchStudy(studyId) {
-	return study.get(`/${studyId}`);
+	return study.get(`${studyId}`);
 }
 
 function searchStudy(query) {
 	return study.get(`?keyword=${query}`);
 }
 function JoinStudy(studyId) {
-	return study.post(`/${studyId}/join`);
+	return study.post(`${studyId}/join`);
 }
 // 스터디 Schedule
 function fetchStudySchedule(studyId) {
-	return study.get(`/${studyId}/schedule`);
+	return study.get(`${studyId}/schedule`);
 }
 function fetchScheduleParticipate(studyId, scheduleId) {
 	return study.get(`${studyId}/schedule/${scheduleId}/participate`);

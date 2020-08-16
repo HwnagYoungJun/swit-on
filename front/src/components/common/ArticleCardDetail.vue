@@ -63,8 +63,18 @@
 									class="icon ion-md-bookmark unlike"
 								></i>
 							</div>
-							<span class="span-btn" @click="editRouter">수정</span>
-							<span class="span-btn" @click="removeArticle">삭제</span>
+							<span
+								v-if="getName === article.user.name"
+								class="span-btn"
+								@click="editRouter"
+								>수정</span
+							>
+							<span
+								v-if="getName === article.user.name"
+								class="span-btn"
+								@click="removeArticle"
+								>삭제</span
+							>
 						</div>
 					</div>
 					<div class="content-info">

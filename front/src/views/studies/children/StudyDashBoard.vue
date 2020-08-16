@@ -224,6 +224,7 @@ export default {
 			try {
 				const studyId = this.id;
 				await checkInSchedule(studyId, scheduleId);
+				console.log('checkin');
 				this.fetchSchedule();
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
@@ -233,6 +234,7 @@ export default {
 			try {
 				const studyId = this.id;
 				await checkOutSchedule(studyId, scheduleId);
+				console.log('checkout');
 				this.fetchSchedule();
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
