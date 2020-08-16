@@ -9,7 +9,9 @@
 							<i class="icon ion-md-medal"></i>
 						</div>
 					</div>
-					인태
+					<router-link :to="`/profile/${bestMember[0].user_name}`">
+						{{ bestMember[0].user_name }}
+					</router-link>
 				</li>
 				<li>
 					<div class="badgesilver">
@@ -17,7 +19,9 @@
 							<i class="icon ion-md-medal"></i>
 						</div>
 					</div>
-					카우
+					<router-link :to="`/profile/${bestMember[1].user_name}`">
+						{{ bestMember[1].user_name }}
+					</router-link>
 				</li>
 				<li>
 					<div class="badgebronze">
@@ -25,7 +29,9 @@
 							<i class="icon ion-md-medal"></i>
 						</div>
 					</div>
-					아지
+					<router-link :to="`/profile/${bestMember[2].user_name}`">
+						{{ bestMember[2].user_name }}
+					</router-link>
 				</li>
 			</ul>
 		</div>
@@ -62,7 +68,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+	props: {
+		bestMember: Array,
+	},
+};
 </script>
 
 <style lang="scss" scoped>

@@ -13,7 +13,14 @@
 				<router-link
 					:to="`/study/${article.study.id}/${article.boardName}/${article.id}/`"
 				>
-					<ArticleCard :article="article" />
+					<ArticleCard :article="article">
+						<div slot="bread" v-if="article.boardName === 'qna'">
+							<span>Q&A</span>
+						</div>
+						<div slot="bread" v-else>
+							<span>저장소</span>
+						</div>
+					</ArticleCard>
 				</router-link>
 			</li>
 		</ul>

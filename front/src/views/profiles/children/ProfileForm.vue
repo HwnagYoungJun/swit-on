@@ -21,7 +21,7 @@
 					<router-link
 						:to="{ name: 'modifyprofile', props: { userName: userName } }"
 					>
-						<div class="modify-profile">프로필 수정</div>
+						<div class="modify-profile" v-if="isMe">프로필 수정</div>
 					</router-link>
 					<a class="mobile-log-out" href="javascript:;" @click="logoutUser"
 						><span>로그아웃</span></a
@@ -87,6 +87,9 @@ export default {
 	computed: {
 		baseURL() {
 			return process.env.VUE_APP_API_URL;
+		},
+		isMe() {
+			return this.$cookies.get('name') === this.userName;
 		},
 	},
 	created() {

@@ -143,9 +143,10 @@ const routes = [
 			userName: String(route.params.userName),
 		}),
 		component: () => import('@/views/profiles/ProfilePage.vue'),
+
 		children: [
 			{
-				path: 'myschedule',
+				path: '',
 				name: 'myschedule',
 				component: () => import('@/views/profiles/children/MyScheduleForm.vue'),
 			},

@@ -3,6 +3,7 @@
 		<Loading />
 	</div>
 	<div v-else class="card-wrap">
+		<UpperBtn></UpperBtn>
 		<ArticleAddBtn boardName="repository" />
 		<div v-if="!articles.length">
 			<ArticleNotFound />
@@ -25,7 +26,7 @@
 				</router-link>
 			</div>
 			<div class="rank-wrap">
-				<ArticleRank />
+				<ArticleRank :bestMember="bestMember" />
 			</div>
 		</div>
 	</div>
@@ -38,7 +39,9 @@ import ArticleRank from '@/components/common/ArticleRank.vue';
 import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import Loading from '@/components/common/Loading.vue';
+import UpperBtn from '@/components/common/UpperBtn.vue';
 import { fetchArticles } from '@/api/articles';
+import { bestMember } from '@/api/studies';
 
 export default {
 	props: {
@@ -50,6 +53,7 @@ export default {
 			loading: false,
 			articles: [],
 			windowTop: 0,
+			bestMember: ['1등이없어요', '2등이없어요', '3등이없어요'],
 		};
 	},
 	components: {
@@ -58,8 +62,19 @@ export default {
 		ArticleAddBtn,
 		ArticleNotFound,
 		Loading,
+		UpperBtn,
 	},
 	methods: {
+		async fetchBest() {
+			try {
+				const studyId = this.id;
+				const { data } = await bestMember(studyId);
+				console.log(data);
+				this.bestMember = data.rankers;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
 		async fetchRepo() {
 			try {
 				const studyId = this.id;
@@ -102,6 +117,7 @@ export default {
 	},
 	created() {
 		this.fetchRepo();
+		this.fetchBest();
 		window.addEventListener('scroll', () => {
 			this.windowTop = window.scrollY;
 		});
@@ -121,6 +137,7 @@ export default {
 .article-wrap {
 	display: flex;
 	flex-wrap: wrap;
+	width: 100%;
 	.article-feed-wrap {
 		flex: 2;
 		display: flex;
@@ -133,7 +150,6 @@ export default {
 	.rank-wrap {
 		flex: 1;
 		height: 100vh;
-		border: 1px solid black;
 		@media screen and (max-width: 992px) {
 			display: none;
 		}
