@@ -1,6 +1,6 @@
 <template>
-	<div class="article-not-found">
-		<p>작성된 게시글이 없어요 :(</p>
+	<div class="study-not-found">
+		<p>생성된 스터디가 없어요 :(</p>
 	</div>
 </template>
 
@@ -9,7 +9,7 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-.article-not-found {
+.study-not-found {
 	width: 100%;
 	height: 200px;
 	display: grid;

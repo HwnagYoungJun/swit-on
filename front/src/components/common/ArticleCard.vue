@@ -4,7 +4,10 @@
 			<div class="card-content">
 				<p class="card-info-title">
 					{{ article.title }}
-					<span class="bread-span"><slot name="bread"> </slot></span>
+					<span class="bread-span"></span>
+				</p>
+				<p class="card-info-board">
+					<slot name="bread"> </slot>
 				</p>
 				<p class="card-info-all">
 					<img :src="BaseURL" class="card-info-image" />
@@ -69,6 +72,13 @@ export default {
 		font-size: $font-light;
 		position: relative;
 		overflow: hidden;
+		.card-info-board {
+			position: absolute;
+			font-weight: 600;
+			left: 15px;
+			bottom: 0px;
+			color: white;
+		}
 		// .card-img {
 		// 	flex: 1;
 		// 	display: grid;
@@ -80,9 +90,10 @@ export default {
 		// }
 		.card-content {
 			flex: 1;
-			padding: 1rem;
+			padding: 0.4rem 1rem;
 			position: relative;
 			.card-info-title {
+				display: inline-block;
 				margin-top: 0;
 				margin-bottom: 8px;
 				font-size: $font-bold;
@@ -91,11 +102,12 @@ export default {
 				left: 50px;
 				.bread-span {
 					background-color: rgba(86, 0, 199, 0.1);
-					width: 40%;
 					height: 6px;
 					left: 0;
+					right: 0;
 					position: absolute;
 					bottom: 3px;
+					border-radius: 1px;
 					font-size: $font-light;
 				}
 			}
@@ -103,13 +115,16 @@ export default {
 				display: flex;
 				align-items: center;
 				position: absolute;
-				bottom: 5px;
+				bottom: 0px;
 				right: 5px;
 				.card-info-image {
 					width: 20px;
 					height: 20px;
 					margin-right: 2px;
 					border-radius: 5px;
+				}
+				span {
+					margin-right: 8px;
 				}
 			}
 			.card-info-time {
@@ -123,9 +138,6 @@ export default {
 			p {
 				margin-top: 10px;
 				margin-bottom: 10px;
-			}
-			span {
-				margin-right: 8px;
 			}
 		}
 	}

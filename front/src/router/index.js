@@ -176,6 +176,7 @@ const routes = [
 		name: 'categorydetail',
 		props: route => ({
 			upperCategoryName: String(route.params.upperCategoryName),
+			lowerCategoryName: String(route.params.lowerCategoryName),
 		}),
 		component: () => import('@/views/categories/CategoryPage.vue'),
 		children: [

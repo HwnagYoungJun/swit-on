@@ -2,7 +2,7 @@
 	<div @click="lowerCategory" class="category-box">
 		<p class="categoryname">
 			{{ fetchName }}
-			<span></span>
+			<span :class="[isSelected ? 'category-seletecd' : '']"></span>
 		</p>
 	</div>
 </template>
@@ -26,6 +26,9 @@ export default {
 		fetchName() {
 			return `#${this.$props.name}`;
 		},
+		isSelected() {
+			return this.name === this.$route.params.lowerCategoryName;
+		},
 	},
 };
 </script>
@@ -35,7 +38,7 @@ export default {
 	display: inline-block;
 	margin-right: 1rem;
 	border: 1px solid transparent;
-	.selected {
+	.category-seletecd {
 		color: purple;
 		width: 100%;
 		height: 8px;
@@ -46,6 +49,8 @@ export default {
 		background: $btn-purple;
 		opacity: 0.5;
 	}
+	// .selected {
+	// }
 	:hover {
 		cursor: pointer;
 	}

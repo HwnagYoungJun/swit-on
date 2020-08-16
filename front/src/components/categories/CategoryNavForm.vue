@@ -1,16 +1,13 @@
 <template>
 	<div>
 		<div class="category-box">
-			<!-- <div class="category-element">
-				<router-link
-					:to="{
-						name: 'main',
-					}"
-					>전체</router-link
-				>
-			</div> -->
 			<div :key="categoryElement" v-for="categoryElement in categoryElements">
-				<div class="category-element">
+				<div
+					:class="[
+						upperCategoryName === categoryElement ? 'category-weight' : '',
+						'category-element',
+					]"
+				>
 					<router-link :to="`/category/${categoryElement}`">
 						{{ categoryElement }}
 					</router-link>
@@ -23,6 +20,9 @@
 
 <script>
 export default {
+	props: {
+		upperCategoryName: String,
+	},
 	data() {
 		return {
 			categoryElements: {
@@ -44,6 +44,9 @@ hr {
 	margin-left: calc(-50vw + 50%);
 	border-top: 1px solid rgba(0, 0, 0, 0.1);
 	border-bottom: 0px;
+}
+.category-weight {
+	font-weight: 600;
 }
 .category-box {
 	display: flex;
