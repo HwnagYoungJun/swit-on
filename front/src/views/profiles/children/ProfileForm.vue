@@ -8,7 +8,12 @@
 					:src="`${baseURL}${profileImg}`"
 					alt="profile_img"
 				/>
-				<img v-else class="profile-logo" src="@/assets/color.png" alt="" />
+				<img
+					v-else
+					class="profile-logo"
+					src="https://blog.tofte-it.dk/wp-content/uploads/2018/12/profile-picture.png"
+					alt=""
+				/>
 			</div>
 			<div class="info-box">
 				<div class="name-box">
@@ -102,6 +107,7 @@ export default {
 }
 .info-box {
 	flex: 2;
+	margin-top: 1rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

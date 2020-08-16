@@ -1,9 +1,9 @@
 <template>
 	<div class="container">
 		<main class="newsFeed-container">
-			<section v-if="articles" class="article-box">
+			<section v-if="newsFeedData.articles" class="article-box">
 				<router-link
-					v-for="article in articles"
+					v-for="article in newsFeedData.articles"
 					:key="article.id"
 					:to="{
 						name: 'BoardArticleDetail',
@@ -55,7 +55,7 @@ import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 
 import cookies from 'vue-cookies';
-
+import bus from '@/utils/bus';
 export default {
 	components: {
 		ArticleCard,
@@ -114,56 +114,68 @@ export default {
 	},
 	methods: {
 		async infiniteLoading() {
-			const { data } = await fetchFeeds(this.limit);
-			this.limit += 5;
-			if (data.length) {
-				this.newsFeedData.articles = [...this.articles, ...data];
+			try {
+				const { data } = await fetchFeeds(this.newsFeedData.limit);
+				this.newsFeedData.limit += 5;
+				if (data.length) {
+					this.newsFeedData.articles = [...this.newsFeedData.articles, ...data];
+				}
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async fetchFeedData() {
-			this.loading = true;
-			const { data } = await fetchFeeds(this.limit);
-			this.loading = false;
-			this.limit += 5;
-			this.newsFeedData.articles = data;
+			try {
+				this.loading = true;
+				const { data } = await fetchFeeds(this.newsFeedData.limit);
+				this.loading = false;
+				this.newsFeedData.limit += 5;
+				this.newsFeedData.articles = data;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
 		},
 		async fetchScheduleData() {
-			const { data } = await baseAuth.get(
-				`/accounts/${this.userName}/myschedule/`,
-			);
-			this.calendarList = data.reduce((acc, el) => {
-				acc.push({
-					id: el.schedule.study_id,
-					name: el.schedule.study_name,
-				});
-				return acc;
-			}, []);
+			try {
+				const { data } = await baseAuth.get(
+					`/accounts/${this.userName}/myschedule/`,
+				);
+				this.calendarList = data.reduce((acc, el) => {
+					acc.push({
+						id: el.schedule.study_id,
+						name: el.schedule.study_name,
+					});
+					return acc;
+				}, []);
 
-			this.scheduleList = data.reduce((acc, el, idx) => {
-				acc.push({
-					id: idx,
-					calendarId: this.calendarList.findIndex(
-						i => i.id === el.schedule.study_id,
-					),
-					title: el.schedule.title,
-					category: 'time',
-					dueDateClass: '',
-					start: el.schedule.start,
-					end: el.schedule.end,
-					color: el.schedule.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
-					bgColor: el.schedule.bg_color,
-					dragBgColor: el.schedule.bg_color,
-					borderColor: el.schedule.bg_color,
-				});
-				return acc;
-			}, []);
+				this.scheduleList = data.reduce((acc, el, idx) => {
+					acc.push({
+						id: idx,
+						calendarId: this.calendarList.findIndex(
+							i => i.id === el.schedule.study_id,
+						),
+						title: el.schedule.title,
+						category: 'time',
+						dueDateClass: '',
+						start: el.schedule.start,
+						end: el.schedule.end,
+						color: el.schedule.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
+						bgColor: el.schedule.bg_color,
+						dragBgColor: el.schedule.bg_color,
+						borderColor: el.schedule.bg_color,
+					});
+					return acc;
+				}, []);
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
 		},
 	},
 	computed: {
 		isInfinite() {
 			return (
 				document.querySelector('body').scrollHeight >
-				this.windowTop + screen.height
+				this.newsFeedData.windowTop + screen.height
 			);
 		},
 	},
@@ -178,7 +190,7 @@ export default {
 		this.fetchFeedData();
 		this.fetchScheduleData();
 		window.addEventListener('scroll', () => {
-			this.windowTop = window.scrollY;
+			this.newsFeedData.windowTop = window.scrollY;
 		});
 	},
 };
