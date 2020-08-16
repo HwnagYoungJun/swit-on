@@ -5,53 +5,14 @@ Vue.use(VueRouter);
 
 const routes = [
 	{
-		path: '/study/:study_id/schedule',
-		name: 'makeschedule',
-		props: route => ({
-			study_id: Number(route.params.study_id),
-		}),
-		component: () => import('@/views/calendar/makeScheduleForm.vue'),
-	},
-	{
 		path: '/',
 		name: 'main',
 		component: () => import('@/views/Main.vue'),
 	},
 	{
-		path: '/study/:id/room/:room',
-		name: 'room',
-		props: route => ({
-			id: Number(route.params.id),
-			room: String(route.params.room),
-		}),
-		component: () => import('@/views/studies/StudyRoomPage.vue'),
-		beforeEnter,
-	},
-	{
 		path: '/study/new',
 		name: 'addstudy',
 		component: () => import('@/views/studies/StudyAddPage.vue'),
-		beforeEnter,
-	},
-	{
-		path: '/study/:id/:board_name/new',
-		name: 'newArticle',
-		component: () => import('@/views/boards/StudyArticleAddPage.vue'),
-		props: route => ({
-			id: Number(route.params.id),
-			board_name: String(route.params.board_name),
-		}),
-		beforeEnter,
-	},
-	{
-		path: '/study/:id/:board_name/:article_id/edit',
-		name: 'editArticle',
-		component: () => import('@/views/boards/StudyArticleEditPage.vue'),
-		props: route => ({
-			id: Number(route.params.id),
-			board_name: String(route.params.board_name),
-			article_id: Number(route.params.article_id),
-		}),
 		beforeEnter,
 	},
 	{
@@ -93,6 +54,45 @@ const routes = [
 				component: () => import('@/views/studies/children/StudyMeeting.vue'),
 			},
 		],
+	},
+	{
+		path: '/study/:id/:board_name/new',
+		name: 'newArticle',
+		component: () => import('@/views/boards/StudyArticleAddPage.vue'),
+		props: route => ({
+			id: Number(route.params.id),
+			board_name: String(route.params.board_name),
+		}),
+		beforeEnter,
+	},
+	{
+		path: '/study/:id/room/:room',
+		name: 'room',
+		props: route => ({
+			id: Number(route.params.id),
+			room: String(route.params.room),
+		}),
+		component: () => import('@/views/studies/StudyRoomPage.vue'),
+		beforeEnter,
+	},
+	{
+		path: '/study/:study_id/schedule',
+		name: 'makeschedule',
+		props: route => ({
+			study_id: Number(route.params.study_id),
+		}),
+		component: () => import('@/views/calendar/makeScheduleForm.vue'),
+	},
+	{
+		path: '/study/:id/:board_name/:article_id/edit',
+		name: 'editArticle',
+		component: () => import('@/views/boards/StudyArticleEditPage.vue'),
+		props: route => ({
+			id: Number(route.params.id),
+			board_name: String(route.params.board_name),
+			article_id: Number(route.params.article_id),
+		}),
+		beforeEnter,
 	},
 	{
 		path: '/study/:id/:board_name/:article_id',

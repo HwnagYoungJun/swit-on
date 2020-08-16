@@ -1,5 +1,5 @@
 <template>
-	<div v-if="article">
+	<section v-if="article">
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
 				<li>
@@ -18,12 +18,12 @@
 				</li>
 			</ol>
 		</nav>
-		<div class="card-detail-wrap">
-			<div class="card-detail">
-				<div class="card-detail-title">
+		<section class="card-detail-wrap">
+			<article class="card-detail">
+				<header class="card-detail-title">
 					<p>{{ article.title }}</p>
-				</div>
-				<div class="card-detail-content">
+				</header>
+				<section class="card-detail-content">
 					<Viewer :initialValue="article.content" />
 					<div v-if="article.file">
 						<a
@@ -138,10 +138,10 @@
 							게시
 						</button>
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+				</section>
+			</article>
+		</section>
+	</section>
 </template>
 
 <script>

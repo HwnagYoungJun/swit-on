@@ -1,6 +1,6 @@
 <template>
-	<div class="ranking-wrap">
-		<div class="ranking">
+	<aside class="ranking-wrap">
+		<section class="ranking">
 			<span class="ranking-title">우리 랭킹</span>
 			<ul>
 				<li>
@@ -34,8 +34,8 @@
 					</router-link>
 				</li>
 			</ul>
-		</div>
-		<div class="ranking">
+		</section>
+		<section class="ranking">
 			<span class="ranking-title">인기 글</span>
 			<ul>
 				<li>
@@ -63,8 +63,8 @@
 					<p>게시글 제목</p>
 				</li>
 			</ul>
-		</div>
-	</div>
+		</section>
+	</aside>
 </template>
 
 <script>

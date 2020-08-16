@@ -1,7 +1,6 @@
 <template>
-	<div>
+	<section>
 		<CategoryNavForm :upperCategoryName="upperCategoryName" />
-		<!-- <h1 @click="resetLowerCategory">{{ initName }}</h1> -->
 		<LowerCategoryNavForm
 			@changeLower="changeLower"
 			:upperCategory="upperCategory"
@@ -9,7 +8,7 @@
 			:lowerCategoryName="lowerCategoryName"
 		/>
 		<router-view :upperCategoryName="upperCategoryName"></router-view>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -49,8 +48,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-h1 {
-	display: inline;
-}
-</style>
+<style lang="scss" scoped></style>

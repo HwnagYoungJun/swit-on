@@ -1,5 +1,5 @@
 <template>
-	<div id="app">
+	<section id="app">
 		<Main v-if="isMainRoute" />
 		<section v-else class="main-wrap">
 			<AppHeader v-if="!isAccountsRoute"></AppHeader>
@@ -9,7 +9,7 @@
 			<footer v-if="!isAccountsRoute"><Footer /></footer>
 		</section>
 		<ToastPopup></ToastPopup>
-	</div>
+	</section>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<section class="container">
 		<UpperBtn></UpperBtn>
 		<main class="newsFeed-container">
 			<section v-if="newsFeedData.articles" class="article-box">
@@ -43,7 +43,7 @@
 				</div>
 			</aside>
 		</main>
-	</div>
+	</section>
 </template>
 <script>
 //Feeds

@@ -1,6 +1,6 @@
 <template>
 	<form class="meetingform" @submit.prevent="createRoom">
-		<div class="meeting-header">
+		<section class="meeting-header">
 			<h2>Meeting</h2>
 			<div class="meeting-btnbox">
 				<button @click.prevent="$router.go(-1)" class="meeting-btn-cancle">
@@ -9,7 +9,7 @@
 				<button class="hide-btn">참가</button>
 				<button class="meeting-btn-submit" type="submit">참가</button>
 			</div>
-		</div>
+		</section>
 		<section class="meeting-main">
 			<input type="text" class="meeting-input" v-model="room" />
 		</section>
@@ -40,9 +40,7 @@ export default {
 	height: 100%;
 }
 .meeting-main {
-	// box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
 	padding: 1rem;
-	// padding: 1rem 1rem 0;
 	border-radius: 4px;
 	.meeting-input {
 		width: 100%;

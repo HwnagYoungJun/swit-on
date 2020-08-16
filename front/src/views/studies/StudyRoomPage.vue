@@ -1,7 +1,7 @@
 <template>
-	<div class="main">
+	<section class="main">
 		<div class="main__left">
-			<div class="main__videos">
+			<article class="main__videos">
 				<WebRTC
 					ref="webrtc"
 					width="100%"
@@ -17,7 +17,7 @@
 					v-on:clear-message="clearMessage"
 					@error="onError"
 				/>
-			</div>
+			</article>
 			<div class="main__controls">
 				<div class="main__controls__block">
 					<div
@@ -37,7 +37,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -106,14 +106,11 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	// padding: 40px;
 	overflow: hidden;
-	// overflow-y: scroll;
 }
 
 .main__controls {
 	background-color: #1c1e20;
-	// background: $btn-purple;
 }
 
 .main__controls {
@@ -148,14 +145,6 @@ export default {
 	}
 }
 
-// .main__controls__button:hover {
-// 	// background-color: #343434;
-// 	background-color: white;
-// 	border: 1px solid grey;
-// 	border-radius: 5px;
-// 	color: black;
-// }
-
 .main__controls__button i {
 	font-size: 24px;
 }
@@ -173,19 +162,6 @@ export default {
 .stop {
 	color: #cc3b33;
 }
-// .video-list {
-// 	display: grid;
-// 	justify-content: center;
-// 	flex-wrap: wrap;
-
-// }
-// video {
-// 	background: black;
-// 	height: 300px;
-// 	width: 400px;
-// 	object-fit: cover;
-// 	padding: 8px;
-// }
 .video-list {
 	background: none !important;
 	display: grid;

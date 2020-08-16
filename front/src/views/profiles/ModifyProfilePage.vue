@@ -4,7 +4,7 @@
 		autocomplete="off"
 		@submit.prevent="modifyData"
 	>
-		<div class="modify-header">
+		<section class="modify-header">
 			<h2>프로필 변경</h2>
 			<div class="study-btnbox">
 				<button @click.prevent="$router.go(-1)" class="studyform-btn-cancle">
@@ -19,8 +19,8 @@
 					작성
 				</button>
 			</div>
-		</div>
-		<div class="modify-main">
+		</section>
+		<article class="modify-main">
 			<div class="imgimgimg">
 				<div class="img-container">
 					<img
@@ -70,7 +70,7 @@
 				(※ 소개는 20자 이하입니다.)
 			</div>
 			<div class="hiddenMsg" v-else></div>
-		</div>
+		</article>
 	</form>
 </template>
 
@@ -279,10 +279,7 @@ export default {
 input.upload_text {
 	flex: 1;
 	height: 2rem;
-	// padding: 0 0.5rem 1rem;
-	// border-top: 1px solid #bbb;
 	margin-top: 1rem;
-	// margin-bottom: 1rem;
 }
 div.upload-btn_wrap {
 	@media screen and (max-width: 1024px) {

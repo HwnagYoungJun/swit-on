@@ -1,7 +1,7 @@
 <template>
-	<div class="study-not-found">
+	<section class="study-not-found">
 		<p>생성된 스터디가 없어요 :(</p>
-	</div>
+	</section>
 </template>
 
 <script>

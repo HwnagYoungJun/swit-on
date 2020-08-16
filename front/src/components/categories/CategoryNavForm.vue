@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<div class="category-box">
+	<section>
+		<section class="category-box">
 			<div :key="categoryElement" v-for="categoryElement in categoryElements">
 				<div
 					:class="[
@@ -13,9 +13,9 @@
 					</router-link>
 				</div>
 			</div>
-		</div>
+		</section>
 		<hr />
-	</div>
+	</section>
 </template>
 
 <script>

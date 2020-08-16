@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<section>
 		<div class="el-box">
 			<router-link :to="{ name: 'myschedule' }" class="element"
 				>{{ el.el1 }}<span></span
@@ -15,7 +15,7 @@
 			></router-link>
 		</div>
 		<hr />
-	</div>
+	</section>
 </template>
 
 <script>

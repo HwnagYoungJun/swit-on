@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<section>
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
 				<li>
@@ -16,17 +16,17 @@
 				</li>
 			</ol>
 		</nav>
-		<div class="study-description">
+		<section class="study-description">
 			<div class="study-content">
-				<p class="study-title">{{ study.name }}</p>
+				<h3 class="study-title">{{ study.name }}</h3>
 				<div class="leader-comment">
 					<span>{{ leaderName }}</span>
 					<p>
 						우리 {{ study.name }}은 매주
 						<span class="strong">{{ study.week | formatWeekday }}요일</span>
 					</p>
-					<span class="strong">{{ study.start_time }}</span> 부터
-					<span class="strong">{{ study.end_time }}</span> 까지 활동합니다<i
+					<time class="strong">{{ study.start_time }}</time> 부터
+					<time class="strong">{{ study.end_time }}</time> 까지 활동합니다<i
 						class="icon ion-md-quote"
 					></i>
 				</div>
@@ -39,8 +39,8 @@
 			<div class="study-logo">
 				<img :src="studyImg" alt="study-logo" />
 			</div>
-		</div>
-		<div v-if="isJoined" class="study-category">
+		</section>
+		<section v-if="isJoined" class="study-category">
 			<router-link :to="`/study/${study.id}`"
 				>대시보드<span></span
 			></router-link>
@@ -54,10 +54,10 @@
 			<div class="study-sub-content">
 				<router-view :id="id" :isLeader="isLeader"></router-view>
 			</div>
-		</div>
-		<div v-else class="study-sub-content">
-			<p class="title">{{ study.name }} 소개</p>
-			<div class="study-des-wrap">
+		</section>
+		<section v-else class="study-sub-content">
+			<h3 class="title">모임 소개</h3>
+			<article class="study-des-wrap">
 				<div class="study-des">
 					<p>
 						{{ study.description }}
@@ -68,12 +68,9 @@
 						>까지 스터디원을 모집합니다!
 					</p>
 					<p>
-						<span class="strong">{{ study.week }}</span
-						>일 동안 함께 해요 :)
+						<span class="strong">{{ study.name }}</span
+						>과 함께 해요 :)
 					</p>
-					<!-- <p class="is-private">{{ isPublicStudy }}</p>
-					<p v-if="study.isPrivate">스터디원만</p>
-					<p v-else></p> -->
 				</div>
 				<div class="study-members">
 					<p class="diff-user">{{ diffUser }}자리가 비어있어요 :(</p>
@@ -95,10 +92,10 @@
 						</li>
 					</ul>
 				</div>
-			</div>
+			</article>
 			<button @click="studyJoin" class="join-btn">가입하기</button>
-		</div>
-	</div>
+		</section>
+	</section>
 </template>
 
 <script>
@@ -157,13 +154,6 @@ export default {
 		baseURL() {
 			return process.env.VUE_APP_API_URL;
 		},
-		// isPublicStudy() {
-		// 	let isPublic = '공개';
-		// 	if (this.study.isPrivate) {
-		// 		isPublic = '비공개';
-		// 	}
-		// 	return isPublic;
-		// },
 	},
 	created() {
 		this.fetchData();
@@ -233,10 +223,10 @@ export default {
 		.study-title {
 			margin-bottom: 10px;
 			font-size: $font-bold;
+			font-weight: normal;
 		}
 		i {
 			margin-left: 5px;
-			// transform: translateY(-50px) rotate(10deg);
 		}
 		.study-member-cnt {
 			position: absolute;
@@ -253,31 +243,6 @@ export default {
 		}
 	}
 }
-// .study-description {
-// 	display: flex;
-// 	margin-bottom: 30px;
-// 	padding: 2%;
-// 	color: rgb(107, 107, 107);
-// 	box-shadow: 0 3px 6px rgb(214, 214, 214);
-// 	border-radius: 4px;
-// 	.study-logo {
-// 		flex: 1.5;
-// 		img {
-// 			width: 100%;
-// 		}
-// 	}
-// 	.study-content {
-// 		flex: 2;
-// 		margin: 0 30px;
-// 		p {
-// 			margin: 5px 0;
-// 		}
-// 		.study-title {
-// 			margin-bottom: 10px;
-// 			font-size: $font-bold;
-// 		}
-// 	}
-// }
 .study-category {
 	a {
 		display: inline-block;
@@ -310,6 +275,7 @@ export default {
 	.title {
 		margin: 10px 0 30px;
 		font-size: $font-bold;
+		font-weight: normal;
 	}
 	.study-des-wrap {
 		display: flex;

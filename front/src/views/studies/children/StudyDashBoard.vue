@@ -1,10 +1,10 @@
 <template>
-	<div v-if="loading">
+	<section v-if="loading">
 		<Loading />
-	</div>
-	<div v-else class="dashboard-wrap">
+	</section>
+	<section v-else class="dashboard-wrap">
 		<ScheduleAddBtn v-if="isLeader" />
-		<div class="card-wrap">
+		<article class="card-wrap">
 			<div v-if="!isArticles">
 				<ArticleNotFound />
 			</div>
@@ -61,7 +61,7 @@
 					</ArticleCard>
 				</router-link>
 			</div>
-		</div>
+		</article>
 		<aside>
 			<div class="schedule">
 				<span class="schedule-title">나의 출석</span>
@@ -149,7 +149,7 @@
 				</ul>
 			</div>
 		</aside>
-	</div>
+	</section>
 </template>
 
 <script>

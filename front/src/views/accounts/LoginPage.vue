@@ -1,20 +1,20 @@
 <template>
-	<div class="login-container">
-		<div class="login-box">
-			<div class="login-header">
+	<section class="login-container">
+		<section class="login-box">
+			<header class="login-header">
 				<router-link :to="{ name: 'main' }">
 					<img src="@/assets/black.png" alt="logo" class="switon" />
 				</router-link>
-			</div>
+			</header>
 			<h2>로그인</h2>
 			<LoginForm></LoginForm>
-		</div>
+		</section>
 		<img
 			class="login-img"
 			src="https://dimg.donga.com/wps/NEWS/IMAGE/2019/11/02/98183409.2.jpg"
 			alt="loginImage"
 		/>
-	</div>
+	</section>
 </template>
 
 <script>

@@ -1,12 +1,12 @@
 <template>
-	<div class="loading-flex">
+	<section class="loading-flex">
 		<div class="lds-ellipsis">
 			<div></div>
 			<div></div>
 			<div></div>
 			<div></div>
 		</div>
-	</div>
+	</section>
 </template>
 
 <script>

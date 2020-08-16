@@ -1,10 +1,10 @@
 <template>
-	<div @click="lowerCategory" class="category-box">
+	<section @click="lowerCategory" class="category-box">
 		<p class="categoryname">
 			{{ fetchName }}
 			<span :class="[isSelected ? 'category-seletecd' : '']"></span>
 		</p>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -49,8 +49,6 @@ export default {
 		background: $btn-purple;
 		opacity: 0.5;
 	}
-	// .selected {
-	// }
 	:hover {
 		cursor: pointer;
 	}

@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<div class="profile-box">
+	<section>
+		<article class="profile-box">
 			<div class="profile-wrap">
 				<img
 					v-if="profileImg"
@@ -37,12 +37,12 @@
 						<p>완료함</p>
 					</div>
 				</div>
-				<h4>
+				<p class="introduce">
 					{{ introduce }}
-				</h4>
+				</p>
 			</div>
-		</div>
-	</div>
+		</article>
+	</section>
 </template>
 
 <script>
@@ -115,6 +115,9 @@ export default {
 	flex-direction: column;
 	justify-content: center;
 	width: 100%;
+	.introduce {
+		font-weight: 600;
+	}
 	.modify-profile {
 		@include common-btn();
 		display: flex;
@@ -195,7 +198,6 @@ export default {
 		width: 150px;
 		height: 150px;
 		border-radius: 50%;
-		// object-fit: cover;
 	}
 }
 .mobile-log-out {

@@ -1,12 +1,12 @@
 <template>
-	<div v-if="loading">
+	<section v-if="loading">
 		<Loading />
-	</div>
-	<div class="category-container" v-else>
+	</section>
+	<section class="category-container" v-else>
 		<div v-if="!studies.length">
 			<StudyNotFound />
 		</div>
-		<div v-else class="popular-wrap">
+		<article v-else class="popular-wrap">
 			<router-link
 				:key="study.id"
 				v-for="study in studies"
@@ -14,8 +14,8 @@
 			>
 				<MainCard :study="study" colorPick="black" />
 			</router-link>
-		</div>
-	</div>
+		</article>
+	</section>
 </template>
 
 <script>

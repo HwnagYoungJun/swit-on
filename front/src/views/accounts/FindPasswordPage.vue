@@ -1,9 +1,11 @@
 <template>
-	<div class="container">
+	<section class="container">
 		<h1>비밀번호 찾기</h1>
-		<h4>이메일 주소를 입력하면 비밀번호를 이메일로 보내드릴게요.</h4>
+		<p class="pw-comment">
+			이메일 주소를 입력하면 비밀번호를 이메일로 보내드릴게요.
+		</p>
 		<FindPasswordForm></FindPasswordForm>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -20,14 +22,15 @@ export default {
 h1 {
 	font-style: Arial;
 }
-h4 {
+.pw-comment {
+	font-weight: bold;
 	font-style: Arial;
 }
 @media screen and (max-width: 768px) {
 	h1 {
 		text-align: left;
 	}
-	h4 {
+	.pw-comment {
 		text-align: left;
 	}
 }

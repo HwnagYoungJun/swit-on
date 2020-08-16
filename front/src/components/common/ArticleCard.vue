@@ -1,11 +1,11 @@
 <template>
-	<div class="card" v-if="article">
+	<section class="card" v-if="article">
 		<div class="card-info">
 			<div class="card-content">
-				<p class="card-info-title">
+				<h3 class="card-info-title">
 					{{ article.title }}
 					<span class="bread-span"></span>
-				</p>
+				</h3>
 				<p class="card-info-board">
 					<slot name="bread"> </slot>
 				</p>
@@ -17,13 +17,13 @@
 						}}</span>
 						<span v-else class="card-info-user">{{ article.study.name }}</span>
 					</span>
-					<span class="card-info-time">{{
+					<time class="card-info-time">{{
 						article.created_at | formatDate
-					}}</span>
+					}}</time>
 				</p>
 			</div>
 		</div>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -50,12 +50,9 @@ export default {
 
 <style lang="scss">
 .card {
-	// min-width: 22rem;
-	// max-width: 50rem;
 	width: 30rem;
 	height: 7rem;
 	margin: 10px 5px 10px;
-	// padding: 20px 10px;
 	border-radius: 5px;
 	background: #fff;
 	box-shadow: 0px 5px 4px rgba(175, 175, 175, 0.2);
@@ -74,7 +71,6 @@ export default {
 	.card-info {
 		display: flex;
 		height: 100%;
-		//align-items: center;
 		font-size: $font-light;
 		position: relative;
 		overflow: hidden;
@@ -85,15 +81,6 @@ export default {
 			bottom: 0px;
 			color: white;
 		}
-		// .card-img {
-		// 	flex: 1;
-		// 	display: grid;
-		// 	place-items: center;
-		// 	img {
-		// 		width: 80%;
-		// 		// border-radius: 50%;
-		// 	}
-		// }
 		.card-content {
 			flex: 1;
 			padding: 0.4rem 1rem;

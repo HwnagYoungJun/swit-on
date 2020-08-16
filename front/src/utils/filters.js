@@ -1,7 +1,6 @@
 export function formatDate(value) {
 	const day = new Date(value);
 	const dateString = day.toLocaleDateString('ko-KR', {
-		// year: 'numeric',
 		month: 'long',
 		day: 'numeric',
 	});

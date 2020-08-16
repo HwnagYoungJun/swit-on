@@ -1,14 +1,14 @@
 <template>
-	<div v-if="loading">
+	<section v-if="loading">
 		<Loading />
-	</div>
-	<div v-else class="card-wrap">
+	</section>
+	<section v-else class="card-wrap">
 		<UpperBtn></UpperBtn>
 		<ArticleAddBtn boardName="repository" />
 		<div v-if="!articles.length">
 			<ArticleNotFound />
 		</div>
-		<div class="article-wrap" v-else>
+		<article class="article-wrap" v-else>
 			<div class="article-feed-wrap">
 				<router-link
 					v-for="article in articles"
@@ -25,11 +25,11 @@
 					<ArticleFeed :article="article" />
 				</router-link>
 			</div>
-			<div class="rank-wrap">
+			<aside class="rank-wrap">
 				<ArticleRank :bestMember="bestMember" />
-			</div>
-		</div>
-	</div>
+			</aside>
+		</article>
+	</section>
 </template>
 
 <script>
