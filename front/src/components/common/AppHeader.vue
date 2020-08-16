@@ -104,6 +104,7 @@ export default {
 			this.clearToken();
 			this.$cookies.remove('auth-token');
 			this.$cookies.remove('name');
+			this.$cookies.remove('userid');
 			this.$router.push({ name: 'main' });
 		},
 		onChangeSearch(val) {
