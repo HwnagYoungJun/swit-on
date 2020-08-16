@@ -51,7 +51,7 @@
 				<router-link
 					v-if="name"
 					class="nav-router-item"
-					:to="`/profile/${name}/myschedule`"
+					:to="`/profile/${name}/`"
 					><img
 						v-if="profileImg"
 						class="nav-router-img"
@@ -201,7 +201,7 @@ header {
 		border-radius: 50%;
 		object-fit: cover;
 	}
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 1024px) {
 		.nav-router {
 			position: fixed;
 		}
@@ -229,8 +229,11 @@ header {
 	}
 }
 .nav-router-color {
-	@media screen and (max-width: 768px) {
-		background: $btn-purple;
+	@media screen and (max-width: 1024px) {
+		background: none;
+		@media screen and (max-width: 768px) {
+			background: $btn-purple;
+		}
 	}
 }
 .switon-pos {

@@ -37,7 +37,11 @@ export default {
 		},
 		BaseURL() {
 			return this.article.user === undefined
-				? `${this.baseURL}${this.article.study.logo}`
+				? this.article.study.logo === null
+					? `${this.baseURL}upload/noStudy.jpg`
+					: `${this.baseURL}${this.article.study.logo}`
+				: this.article.user.profile_image === null
+				? `${this.baseURL}upload/noProfile.png`
 				: `${this.baseURL}${this.article.user.profile_image}`;
 		},
 	},

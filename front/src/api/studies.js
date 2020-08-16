@@ -60,7 +60,9 @@ function checkInSchedule(studyId, scheduleId) {
 function checkOutSchedule(studyId, scheduleId) {
 	return study.put(`${studyId}/schedule/${scheduleId}/checkout`);
 }
-
+function bestMember(studyId) {
+	return study.get(`${studyId}/best`);
+}
 export {
 	fetchStudies,
 	createStudy,
@@ -75,4 +77,5 @@ export {
 	deleteScheduleParticipate,
 	checkInSchedule,
 	checkOutSchedule,
+	bestMember,
 };

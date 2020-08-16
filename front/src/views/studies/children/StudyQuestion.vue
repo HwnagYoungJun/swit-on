@@ -3,39 +3,45 @@
 		<Loading />
 	</div>
 	<div v-else class="card-wrap">
+		<UpperBtn></UpperBtn>
 		<ArticleAddBtn boardName="qna" />
 		<div v-if="!articles.length">
 			<ArticleNotFound />
 		</div>
-		<router-link
-			v-else
-			v-for="article in articles"
-			:key="article.id"
-			:to="{
-				name: 'BoardArticleDetail',
-				params: {
-					id,
-					board_name: 'qna',
-					article_id: article.id,
-				},
-			}"
-		>
-			<ArticleCard :article="article">
-				<div slot="logo">
-					<img src="@/assets/color.png" alt="" />
-				</div>
-			</ArticleCard>
-		</router-link>
+		<div class="article-wrap" v-else>
+			<div class="article-feed-wrap">
+				<router-link
+					v-for="article in articles"
+					:key="article.id"
+					:to="{
+						name: 'BoardArticleDetail',
+						params: {
+							id,
+							board_name: 'qna',
+							article_id: article.id,
+						},
+					}"
+				>
+					<ArticleFeed :article="article"> </ArticleFeed>
+				</router-link>
+			</div>
+			<div class="rank-wrap">
+				<ArticleRank :bestMember="bestMember" />
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
 import bus from '@/utils/bus.js';
-import ArticleCard from '@/components/common/ArticleCard.vue';
+import ArticleFeed from '@/components/common/ArticleFeed.vue';
 import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
+import ArticleRank from '@/components/common/ArticleRank.vue';
 import { fetchArticles } from '@/api/articles';
+import { bestMember } from '@/api/studies';
 import Loading from '@/components/common/Loading.vue';
+import UpperBtn from '@/components/common/UpperBtn.vue';
 // The checker
 
 export default {
@@ -48,13 +54,16 @@ export default {
 			limit: 0,
 			articles: [],
 			windowTop: 0,
+			bestMember: ['1등이없어요', '2등이없어요', '3등이없어요'],
 		};
 	},
 	components: {
-		ArticleCard,
+		ArticleRank,
+		ArticleFeed,
 		ArticleAddBtn,
 		ArticleNotFound,
 		Loading,
+		UpperBtn,
 	},
 	computed: {
 		isInfinite() {
@@ -72,6 +81,16 @@ export default {
 		},
 	},
 	methods: {
+		async fetchBest() {
+			try {
+				const studyId = this.id;
+				const { data } = await bestMember(studyId);
+				console.log(data);
+				this.bestMember = data.rankers;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
 		async fetchQna() {
 			try {
 				const studyId = this.id;
@@ -100,6 +119,7 @@ export default {
 	},
 	created() {
 		this.fetchQna();
+		this.fetchBest();
 		window.addEventListener('scroll', () => {
 			this.windowTop = window.scrollY;
 		});
@@ -114,6 +134,27 @@ export default {
 	position: relative;
 	@media screen and (max-width: 1500px) {
 		justify-content: center;
+	}
+}
+.article-wrap {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	.article-feed-wrap {
+		flex: 2;
+		display: flex;
+		flex-direction: column;
+		margin-right: 100px;
+		@media screen and (max-width: 992px) {
+			margin-right: 0;
+		}
+	}
+	.rank-wrap {
+		flex: 1;
+		height: 100vh;
+		@media screen and (max-width: 992px) {
+			display: none;
+		}
 	}
 }
 </style>

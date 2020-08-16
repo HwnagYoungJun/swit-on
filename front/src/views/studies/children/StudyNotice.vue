@@ -3,6 +3,7 @@
 		<Loading />
 	</div>
 	<div v-else class="card-wrap">
+		<UpperBtn></UpperBtn>
 		<ArticleAddBtn v-if="isLeader" boardName="notice" />
 		<div v-if="!articles.length">
 			<ArticleNotFound />
@@ -36,7 +37,7 @@ import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import { fetchArticles } from '@/api/articles';
 import Loading from '@/components/common/Loading.vue';
-
+import UpperBtn from '@/components/common/UpperBtn.vue';
 export default {
 	props: {
 		id: Number,
@@ -55,6 +56,7 @@ export default {
 		ArticleAddBtn,
 		ArticleNotFound,
 		Loading,
+		UpperBtn,
 	},
 
 	methods: {
