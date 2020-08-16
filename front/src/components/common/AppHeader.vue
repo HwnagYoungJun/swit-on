@@ -143,7 +143,7 @@ header {
 	#search {
 		display: none;
 	}
-	.switon-pos-block {
+	#main-logo {
 		display: none;
 	}
 	.nav-router-item {
