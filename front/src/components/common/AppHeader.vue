@@ -2,7 +2,7 @@
 	<header id="nav" :class="['container', isMainRoute ? 'nav-white' : '']">
 		<div class="nav-search">
 			<div class="nav-logo">
-				<router-link class="switon-logo" :to="{ name: 'main' }">
+				<router-link class="switon-logo" :to="`/`">
 					<img
 						v-if="isMainRoute"
 						src="@/assets/white.png"
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations, mapState, mapGetters } from 'vuex';
 import { baseAuth } from '@/api/index';
 import Search from '@/components/common/Search.vue';
 
@@ -81,6 +81,7 @@ export default {
 		Search,
 	},
 	computed: {
+		...mapGetters(['isLogin']),
 		...mapState(['name']),
 		baseURL() {
 			return process.env.VUE_APP_API_URL;
@@ -110,7 +111,9 @@ export default {
 		},
 	},
 	created() {
-		this.fetchImg();
+		if (this.isLogin) {
+			this.fetchImg();
+		}
 	},
 };
 </script>

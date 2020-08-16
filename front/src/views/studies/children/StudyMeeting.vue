@@ -29,7 +29,7 @@ export default {
 	},
 	methods: {
 		createRoom() {
-			this.$router.push(`/study/room/${this.room}`);
+			this.$router.push(`/study/${this.id}/room/${this.room}`);
 		},
 	},
 };

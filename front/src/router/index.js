@@ -18,9 +18,10 @@ const routes = [
 		component: () => import('@/views/Main.vue'),
 	},
 	{
-		path: '/study/room/:room',
+		path: '/study/:id/room/:room',
 		name: 'room',
 		props: route => ({
+			id: Number(route.params.id),
 			room: String(route.params.room),
 		}),
 		component: () => import('@/views/studies/StudyRoomPage.vue'),

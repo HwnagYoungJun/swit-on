@@ -10,7 +10,7 @@ export default new Vuex.Store({
 		email: cookies.isKey('email') ? cookies.get('email') : null,
 		name: cookies.isKey('name') ? cookies.get('name') : null,
 		token: cookies.isKey('auth-token') ? cookies.get('auth-token') : null,
-		id: cookies.isKey('id') ? cookies.get('id') : null,
+		id: cookies.isKey('userid') ? cookies.get('userid') : null,
 	},
 	getters: {
 		isLogin(state) {
@@ -22,7 +22,7 @@ export default new Vuex.Store({
 		getName(state) {
 			return state.name;
 		},
-		getId(state) {
+		getUserId(state) {
 			return state.id;
 		},
 	},
@@ -50,7 +50,7 @@ export default new Vuex.Store({
 			commit('setToken', responseData.token);
 			cookies.set('auth-token', responseData.token);
 			cookies.set('name', responseData.user.name);
-			cookies.set('id', responseData.user.id);
+			cookies.set('userid', responseData.user.id);
 		},
 		async SIGNUP({ dispatch }, userData) {
 			const { data } = await registerUser(userData);
@@ -59,6 +59,7 @@ export default new Vuex.Store({
 		},
 		async LOGIN({ dispatch }, userData) {
 			const { data } = await loginUser(userData);
+			console.log(data);
 			dispatch('SETUP_USER', data);
 			return data;
 		},

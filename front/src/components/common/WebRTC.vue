@@ -30,25 +30,18 @@
 				</div>
 			</div>
 			<div class="main__message_container">
-				<!-- <input
-					id="input-text-chat"
-					type="text"
-					@keypress.enter="pushMessage"
-					placeholder="Type message here..."
-				/> -->
 				<input
 					@keypress.enter="sendMessage()"
 					v-model="message"
 					type="text"
 					name="message"
 					value=""
+					autofocus
 				/>
 			</div>
 		</div>
 	</div>
 </template>
-<script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
-<script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
 <script>
 import RTCMultiConnection from 'rtcmulticonnection';
 require('adapterjs');
@@ -201,6 +194,8 @@ export default {
 				this.rtcmConnection.send(message);
 				this.$emit('sent-message', message);
 				this.message = null;
+				let chatroom = document.querySelector('.main__chat_window');
+				chatroom.scrollTop = chatroom.scrollHeight;
 			}
 		},
 		join() {
@@ -281,20 +276,61 @@ export default {
 	},
 };
 </script>
-<style>
+<style lang="scss">
 .rtc {
 	width: 100%;
 	height: 100%;
-	display: flex;
+	display: grid;
+	grid-template-columns: 80% 20%;
+	grid-template-rows: 1fr;
+	grid-template-areas: 'video-list chat-list';
+	// overflow: hidden;
 	/* position: relative; */
 }
 .video-list {
-	flex: 0.85;
+	grid-area: video-list;
+	/* flex: 0.85; */
 	height: auto;
+	background: white !important;
 }
 
 .main__right {
-	flex: 0.15;
+	background-color: #212529;
+	grid-area: chat-list;
+	overflow-x: hidden;
+	position: relative;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+	.main__header {
+		position: sticky;
+		top: 0;
+		left: 0;
+		right: 0;
+		margin-bottom: 5px;
+		color: white;
+		text-align: center;
+	}
+	.main__chat_window {
+		padding-left: 0.25rem;
+		padding-right: 0.25rem;
+		width: 100%;
+		height: 100%;
+		flex: 1;
+		overflow-y: scroll;
+	}
+	.main__message_container {
+		width: 100%;
+		padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+		input {
+			width: 100%;
+			border-bottom: 1px solid white;
+			color: white;
+		}
+	}
 }
 
 .video-list div {
@@ -304,36 +340,13 @@ export default {
 .video-item {
 	display: inline-block;
 }
-.main__header {
-	padding-top: 5px;
-	color: #f5f5f5;
-	text-align: center;
-}
-.main__chat_window {
-	flex-grow: 1;
-	overflow-y: auto;
-}
 
 .messages {
 	color: white;
 	list-style: none;
 }
 
-.main__message_container {
-	padding: 22px 12px;
-	display: flex;
-}
-
-.main__message_container input {
-	flex-grow: 1;
-	background-color: transparent;
-	border: none;
-	color: #f5f5f5;
-}
 .msg-color {
 	color: white;
 }
-/* .chat-list {
-	overflow: scroll;
-} */
 </style>

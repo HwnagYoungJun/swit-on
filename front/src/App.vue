@@ -6,7 +6,7 @@
 			<main :class="[!isAccountsRoute ? 'main-container' : '']">
 				<router-view />
 			</main>
-			<footer><Footer /></footer>
+			<footer v-if="!isAccountsRoute"><Footer /></footer>
 		</section>
 		<ToastPopup></ToastPopup>
 	</div>
@@ -28,7 +28,7 @@ export default {
 		Main,
 	},
 	computed: {
-		...mapGetters(['getUserId']),
+		...mapGetters(['getUserId', 'isLogin']),
 		isAccountsRoute() {
 			return this.$route.name === 'signUp' || this.$route.name === 'login';
 		},
@@ -43,25 +43,24 @@ export default {
 	},
 	methods: {
 		connect() {
+			const Id = this.getUserId;
+			console.log(Id);
 			let ServerUrl = process.env.VUE_APP_API_URL;
 			let client = Stomp.over(new SockJS(`${ServerUrl}websocket`));
 
 			client.connect({}, function(frame) {
 				console.log(frame);
-				client.subscribe('/topic/notification/' + this.getUserId, function(
-					message,
-				) {
-					// var li = document.createElement('li');
-					// li.innerHTML = message.body;
-					// $messageList.appendChild(li);
-					console.log(message);
-					this.messages = JSON.parse(message.body);
+				client.subscribe(`/topic/notification/${Id}`, function(message) {
+					this.messages.push(JSON.parse(message.body));
+					console.log(this.messages);
 				});
 			});
 		},
 	},
-	created() {
-		// this.connect();
+	mounted() {
+		if (this.isLogin) {
+			// this.connect();
+		}
 	},
 };
 </script>
