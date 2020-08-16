@@ -18,18 +18,8 @@
 				</router-link>
 			</section>
 			<aside class="side-box">
-				<div class="group-box">
-					<span>
-						나의스터디
-					</span>
-					<div class="group-nav">
-						<router-link :to="{ name: 'mygroup' }" class="moreGroup"
-							>더보기</router-link
-						>
-					</div>
-				</div>
 				<div class="schedule-box">
-					<span>오늘 일정</span>
+					<p>오늘 일정</p>
 					<div class="calendar-box">
 						<calendar
 							:calendars="calendarList"
@@ -51,35 +41,36 @@
 				</div>
 			</aside>
 		</main>
-		<InfiniteLoading
-			@infinite="infiniteHandler"
-			spinner="waveDots"
-		></InfiniteLoading>
 	</div>
 </template>
 <script>
+//Feeds
 import ArticleCard from '@/components/common/ArticleCard.vue';
-// import { fetchFeeds } from '@/api/articles';
+import { fetchFeeds } from '@/api/articles';
 import { baseAuth } from '@/api/index';
-// import { fetchStudy } from '@/api/studies';
-import 'tui-calendar/dist/tui-calendar.css';
+// Calendar
 import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
+import 'tui-calendar/dist/tui-calendar.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
+
 import cookies from 'vue-cookies';
-import InfiniteLoading from 'vue-infinite-loading';
+
 export default {
 	components: {
-		InfiniteLoading,
 		ArticleCard,
 		Calendar,
 	},
 
 	data() {
 		return {
-			limit: 0,
+			loading: false,
+			newsFeedData: {
+				limit: 0,
+				articles: [],
+				windowTop: 0,
+			},
 			userName: cookies.get('name') ? cookies.get('name') : null,
-			articles: null,
 			calendarList: [],
 			scheduleList: [],
 			view: 'day',
@@ -122,23 +113,20 @@ export default {
 		};
 	},
 	methods: {
-		infiniteHandler() {
-			console.log('!!');
-			// const { data } = await fetchFeeds();
-			// setTimeout(() => {
-			// 	if (data.length) {
-			// 		this.articles = [...this.articles, data];
-			// 		$state.loaded();
-			// 		this.limit += 5;
-			// 		if (this.articles.length / 5 === 0) {
-			// 			$state.complete();
-			// 		}
-			// 	} else {
-			// 		$state.complete();
-			// 	}
-			// }, 500);
+		async infiniteLoading() {
+			const { data } = await fetchFeeds(this.limit);
+			this.limit += 5;
+			if (data.length) {
+				this.newsFeedData.articles = [...this.articles, ...data];
+			}
 		},
-
+		async fetchFeedData() {
+			this.loading = true;
+			const { data } = await fetchFeeds(this.limit);
+			this.loading = false;
+			this.limit += 5;
+			this.newsFeedData.articles = data;
+		},
 		async fetchScheduleData() {
 			const { data } = await baseAuth.get(
 				`/accounts/${this.userName}/myschedule/`,
@@ -171,8 +159,27 @@ export default {
 			}, []);
 		},
 	},
+	computed: {
+		isInfinite() {
+			return (
+				document.querySelector('body').scrollHeight >
+				this.windowTop + screen.height
+			);
+		},
+	},
+	watch: {
+		isInfinite: function() {
+			if (!this.isInfinite) {
+				this.infiniteLoading();
+			}
+		},
+	},
 	created() {
+		this.fetchFeedData();
 		this.fetchScheduleData();
+		window.addEventListener('scroll', () => {
+			this.windowTop = window.scrollY;
+		});
 	},
 };
 </script>
@@ -219,42 +226,16 @@ export default {
 		grid-area: aside;
 		width: 100%;
 		.schedule-box {
+			padding-left: 5%;
 			width: 90%;
 			margin: 5%;
-			position: relative;
 			padding-top: 2rem;
-			span {
-				padding: 0 15px;
-				position: absolute;
-				top: -10px;
-				background: #fff;
+			p {
+				font-weight: bold;
+				margin-bottom: 1rem;
 			}
-		}
-		.group-box {
-			// display: flex;
-			width: 90%;
-			margin: 5%;
-			position: relative;
-			span {
-				padding: 0 15px;
-				position: absolute;
-				top: -10px;
-				background: #fff;
-			}
-			.group-nav {
-				width: 100%;
-				height: $font-normal;
-				position: relative;
-
-				.moreGroup {
-					position: absolute;
-					right: 10px;
-					text-decoration: none;
-					color: black;
-				}
-			}
-			.group-body {
-				display: flex;
+			.calendar-box {
+				padding-left: 1rem;
 			}
 		}
 		@media screen and (max-width: 768px) {

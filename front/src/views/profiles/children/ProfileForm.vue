@@ -12,16 +12,11 @@
 			</div>
 			<div class="info-box">
 				<div class="name-box">
-					<img
-						class="icon-box"
-						src="https://www.shareicon.net/data/128x128/2015/09/27/108202_game_512x512.png"
-						alt="icon_img"
-					/>
 					<h2>{{ userName }}</h2>
 					<router-link
 						:to="{ name: 'modifyprofile', props: { userName: userName } }"
 					>
-						<div class="modify-profile">프로필 수정하기</div>
+						<div class="modify-profile">프로필 수정</div>
 					</router-link>
 				</div>
 				<div class="middle-box">
@@ -95,6 +90,7 @@ export default {
 	flex: 2;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	width: 100%;
 	.modify-profile {
 		@include common-btn();
@@ -102,7 +98,7 @@ export default {
 		justify-content: center;
 		align-items: center;
 		margin-left: 3rem;
-		width: 8rem;
+		width: 6rem;
 	}
 	.middle-box {
 		display: flex;
@@ -115,7 +111,7 @@ export default {
 			align-items: center;
 			margin: 0 3rem;
 			@media screen and (max-width: 1024px) {
-				margin: 1.5rem 2rem;
+				margin: 1.5rem 1rem;
 			}
 		}
 		p {
@@ -129,7 +125,7 @@ export default {
 	}
 	.name-box {
 		display: flex;
-		margin: 0;
+		margin-left: 3rem;
 		align-items: center;
 		@media screen and (max-width: 1024px) {
 			margin: 0 auto;
@@ -140,14 +136,14 @@ export default {
 		margin-left: 1rem;
 		@media screen and (max-width: 1024px) {
 			text-align: center;
-			margin-bottom: 1.5rem;
 		}
 	}
 }
 .profile-wrap {
 	width: 170px;
 	height: 170px;
-	margin-right: 100px;
+	margin-left: 3rem;
+	margin-right: 7rem;
 	position: relative;
 	border: 4px solid transparent;
 	border-radius: 50%;
@@ -169,7 +165,8 @@ export default {
 		border-radius: 50%;
 	}
 	@media screen and (max-width: 1024px) {
-		margin-right: 0;
+		margin: 0;
+		margin-bottom: 1rem;
 	}
 	.profile-logo {
 		width: 150px;
@@ -178,17 +175,9 @@ export default {
 		// object-fit: cover;
 	}
 }
-
-.icon-box {
-	display: flex;
-	width: 50px;
-	height: 50px;
-	overflow: hidden;
-}
 h2 {
 	height: 30px;
 	display: flex;
 	align-items: center;
-	border-bottom: 2px solid black;
 }
 </style>
