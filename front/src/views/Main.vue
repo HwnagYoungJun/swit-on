@@ -3,8 +3,9 @@
 		<AppHeader></AppHeader>
 		<Search />
 		<div v-if="studies" class="popular-wrap">
-			<p class="popular-title">인기 소모임</p>
+			<p class="popular-title">인기 소모임<span></span></p>
 			<router-link
+				class="popular-item-link"
 				:key="study.id"
 				v-for="study in studies"
 				:to="`/study/${study.id}`"
@@ -65,11 +66,29 @@ export default {
 		flex-wrap: wrap;
 		position: relative;
 		.popular-title {
-			color: white;
-			font-size: $font-normal;
 			position: absolute;
-			top: -20px;
-			left: 40px;
+			top: -25px;
+			left: 10px;
+			color: white;
+			font-weight: bold;
+			span {
+				width: 100%;
+				height: 8px;
+				position: absolute;
+				bottom: -4px;
+				left: 0;
+				border-radius: 2px;
+				background: $btn-purple;
+				opacity: 0.5;
+			}
+			@media screen and (max-width: 484px) {
+				top: -15px;
+				left: 50px;
+			}
+			@media screen and (max-width: 350px) {
+				top: -15px;
+				left: 20px;
+			}
 		}
 		.popular-item {
 			display: grid;
@@ -83,7 +102,6 @@ export default {
 			margin-top: 1rem;
 			padding: 0.3rem 0.5rem 0.5rem;
 			color: #454545;
-			// background: rgba(255, 255, 255, 0.05);
 			box-shadow: 3px 2px 6px rgba(37, 37, 37, 0.5);
 			.popular-img {
 				grid-area: image-part;
@@ -104,7 +122,6 @@ export default {
 					padding-bottom: 0.3rem;
 				}
 				.content-week {
-					// padding-top: 0.3rem;
 					.content-day {
 						font-weight: 600;
 					}
@@ -125,9 +142,9 @@ export default {
 					transform: scale(1.1);
 				}
 			}
-			p {
-				// margin-top: -3px;
-			}
+		}
+		@media screen and (max-width: 1024px) and (min-width: 950px) {
+			width: 70%;
 		}
 	}
 }
