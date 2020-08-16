@@ -47,8 +47,11 @@ export default {
 }
 .popular-item {
 	display: grid;
-	grid-template-columns: 15rem;
-	grid-template-rows: 7rem 12rem;
+	width: 100%;
+	height: 100%;
+	grid-template-columns: minmax(10rem, 1fr);
+	grid-template-rows: minmax(3.5rem, 1fr) minmax(6rem, 2fr);
+	// grid-template: 7rem 12rem / 17rem;
 	grid-template-areas:
 		'text-part'
 		'image-part';

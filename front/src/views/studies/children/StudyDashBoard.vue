@@ -9,7 +9,7 @@
 			<div v-if="!isArticles">
 				<ArticleNotFound />
 			</div>
-			<div v-else>
+			<div class="card-item" v-else>
 				<router-link
 					:key="article.id"
 					v-for="article in qnaArticles"
@@ -338,10 +338,10 @@ export default {
 	}
 }
 .card-wrap {
+	flex: 2;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	flex: 2;
 	margin-top: 20px;
 	@media screen and (max-width: 768px) {
 		// row + wrap => 자동으로 길이 조절해줌

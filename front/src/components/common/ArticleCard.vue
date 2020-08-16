@@ -46,7 +46,9 @@ export default {
 
 <style lang="scss">
 .card {
-	width: 480px;
+	// min-width: 22rem;
+	// max-width: 50rem;
+	width: 30rem;
 	height: 7rem;
 	margin: 10px 5px 10px;
 	// padding: 20px 10px;

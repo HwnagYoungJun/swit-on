@@ -50,7 +50,7 @@
 				>
 				<router-link
 					v-if="name"
-					class="nav-router-img-item"
+					class="nav-router-item"
 					:to="`/profile/${name}/myschedule`"
 					><img
 						v-if="profileImg"

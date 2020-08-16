@@ -2,7 +2,7 @@
 	<div v-if="loading">
 		<Loading />
 	</div>
-	<div v-else>
+	<div class="category-container" v-else>
 		<div v-if="!studies.length">
 			<StudyNotFound />
 		</div>
@@ -75,17 +75,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.category-container {
+	height: 100%;
+	margin-bottom: 3rem;
+}
 .noStudy {
 	img {
 		width: 100%;
 	}
 }
 .popular-wrap {
-	width: 80%;
-	margin: 0 auto;
-	display: flex;
-	justify-content: space-evenly;
-	flex-wrap: wrap;
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-auto-rows: 20rem;
+	grid-gap: 1rem;
+	@media screen and (max-width: 1024px) {
+		grid-template-columns: repeat(3, 1fr);
+		grid-auto-rows: 19rem;
+	}
+	@media screen and (max-width: 768px) {
+		grid-template-columns: repeat(2, 1fr);
+		grid-auto-rows: 21rem;
+	}
+	@media screen and (max-width: 400px) {
+		grid-template-columns: repeat(2, 1fr);
+		grid-auto-rows: 18.5rem;
+	}
 }
 .study-box {
 	display: flex;
