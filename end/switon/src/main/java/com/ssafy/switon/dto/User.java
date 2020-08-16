@@ -2,6 +2,7 @@ package com.ssafy.switon.dto;
 
 public class User {
 	
+	int id;
 	String email;
 	String name;
 	public String getEmail() {
@@ -16,14 +17,26 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public User(String email, String name) {
-		super();
+	public User(int id, String email, String name) {
+		this.id = id;
 		this.email = email;
 		this.name = name;
 	}
+	public User(UserInfoDTO user) {
+		this.id = user.getId();
+		this.email = user.getEmail();
+		this.name = user.getName();
+	}
+	
 	@Override
 	public String toString() {
-		return "UserDTO [email=" + email + ", name=" + name + "]";
+		return "User [id=" + id + ", email=" + email + ", name=" + name + "]";
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	

@@ -2,6 +2,7 @@ package com.ssafy.switon.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -21,8 +22,14 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	GetRequestInterceptor getInterceptor;
 	@Autowired
 	OtherRequestInterceptor otherInterceptor;
+
 	
-	
+//	@Override
+//	public void addCorsMappings(CorsRegistry registry) {
+//		registry.addMapping("/**")
+////		registry.addMapping("/websocket/**")
+//		.allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
+//	}
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

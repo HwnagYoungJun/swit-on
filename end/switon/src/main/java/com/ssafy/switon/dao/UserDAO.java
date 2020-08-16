@@ -25,5 +25,7 @@ public interface UserDAO {
 	int updateUser(UserInfoDTO userInfoDTO);
 	// 유저 탈퇴 처리 (legacy 유저로 만들기)
 	int updateUserLegacy(UserInfoDTO userInfoDTO);
+	// 유저 패스워드 변경
+	int updateUserPwd(UserDTO userDTO);
 
 }

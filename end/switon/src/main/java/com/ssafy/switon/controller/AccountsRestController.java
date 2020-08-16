@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.switon.dto.PwFindDTO;
 import com.ssafy.switon.dto.ReturnMsg;
+import com.ssafy.switon.dto.Token;
 import com.ssafy.switon.dto.User;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserLoginDTO;
@@ -40,23 +43,28 @@ public class AccountsRestController {
 		System.out.println("로그인 시도");
 		System.out.println(loginDTO);
 		try {
+			if(!userService.emailAlreadyExists(loginDTO.getEmail())){
+				return new ResponseEntity<>(new ReturnMsg("등록되지 않은 유저입니다. 회원가입을 해주세요."), HttpStatus.UNAUTHORIZED);
+			}
 			UserInfoDTO uservo = userService.login(loginDTO);
 			if(uservo != null) {
 				System.out.println("로그인 성공!");
 				System.out.println(uservo);
 				
-				User user = new User(uservo.getEmail(), uservo.getName());
+				User user = new User(userService.findUserIdByEmail(uservo.getEmail()),
+						uservo.getEmail(), uservo.getName());
 				String token = jwtUtil.createToken(uservo);
 				UserReturnDTO returnDTO = new UserReturnDTO(user, token);
 				System.out.println(returnDTO);
 				
 				return new ResponseEntity<>(returnDTO, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new ReturnMsg("비밀번호가 일치하지 않습니다. 다시 한번 확인해주세요."), HttpStatus.UNAUTHORIZED);
 			}
 		} catch (Exception e) {
 			System.out.println("** 로그인 실패!!");
-			e.printStackTrace();
 		}
-		return new ResponseEntity<>(new ReturnMsg("일치하는 계정이 없습니다."), HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(new ReturnMsg("입력하신 정보를 다시 한번                                          확확인해주세요."), HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ApiOperation(value = "(테스트용) 헤더의 토큰을 읽어서 해당하는 유저 정보를 반환한다.", response = UserInfoDTO.class)
@@ -76,6 +84,12 @@ public class AccountsRestController {
 		UserLoginDTO loginDTO = new UserLoginDTO(registerDTO.getEmail(), registerDTO.getPassword());
 		System.out.println(registerDTO);
 		try {
+			if(userService.nameAlreadyExists(registerDTO.getName())) {
+				return new ResponseEntity<>(new ReturnMsg("중복된 이름입니다. 다른 이름을 입력해주세요."), HttpStatus.UNAUTHORIZED);
+			}
+			if(userService.emailAlreadyExists(registerDTO.getEmail())) {
+				return new ResponseEntity<>(new ReturnMsg("중복된 이메일입니다. 다른 이메일을 입력해주세요."), HttpStatus.UNAUTHORIZED);
+			}
 			if(userService.register(registerDTO)) {
 				System.out.println("회원가입 성공!!");
 				UserInfoDTO uservo = userService.login(loginDTO);
@@ -83,7 +97,8 @@ public class AccountsRestController {
 					System.out.println("로그인 성공");
 					String token = jwtUtil.createToken(uservo);
 					if(token != null) System.out.println("토큰 발행 성공");
-					UserReturnDTO dto = new UserReturnDTO(new User(uservo.getEmail(), uservo.getName()), token);
+					UserReturnDTO dto = new UserReturnDTO(new User(userService.findUserIdByEmail(uservo.getEmail())
+																			,uservo.getEmail(), uservo.getName()), token);
 					return new ResponseEntity<>(dto, HttpStatus.OK);
 				} else {
 					System.out.println("** 로그인 실패");
@@ -99,4 +114,52 @@ public class AccountsRestController {
 			return new ResponseEntity<>(new ReturnMsg("회원가입에 실패했습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@ApiOperation(value = "비밀번호 찾기를 시작하여 유저 이메일로 토큰을 발행한다.")
+	@GetMapping("/pwfind")
+	public Object giveTokenByEmail(@RequestParam(required = false) String email, @RequestParam(required = false) String token) {
+		if(email != null) {
+			// 존재하지 않는 메일인 경우 오류
+			if(!userService.emailAlreadyExists(email)) {
+				return new ResponseEntity<>(new ReturnMsg("입력하신 이메일로 가입한 계정이 존재하지 않습니다."), HttpStatus.UNAUTHORIZED);
+			}
+			String newToken = jwtUtil.createEmailToken(email);
+			return newToken;
+		}
+		if(token != null) {
+			try {
+				String validEmail = jwtUtil.getFindPwEmail(token);
+				User user = userService.findUserByEmail(validEmail);
+				return user;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(new ReturnMsg("변경 가능 시간이 만료되었습니다. 다시 비밀번호 찾기를 시도해주세요."), HttpStatus.UNAUTHORIZED);
+			}
+		}
+		return new ResponseEntity<>(new ReturnMsg("잘못된 요청입니다."), HttpStatus.BAD_REQUEST);
+	}
+	
+	@ApiOperation(value = "비밀번호 찾기를 시작하여 유저 이메일로 토큰을 발행한다.")
+	@PostMapping("/pwfind")
+	public Object pwChange(@RequestBody PwFindDTO pwFindDTO) {
+		String password = pwFindDTO.getPassword();
+		if(password == null) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 요청입니다."), HttpStatus.BAD_REQUEST);
+		}
+		if(!password.equals(pwFindDTO.getPassword2())) {
+			return new ResponseEntity<>(new ReturnMsg("비밀번호가 일치하지 않습니다."), HttpStatus.I_AM_A_TEAPOT);
+		}
+		try {
+			String validEmail = jwtUtil.getFindPwEmail(pwFindDTO.getToken());
+			int userId = userService.findUserIdByEmail(validEmail);
+			if(userService.pwChange(userId, password)) {
+				return new ResponseEntity<>(new ReturnMsg("비밀번호를 성공적으로 변경하였습니다."), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new ReturnMsg("변경 가능 시간이 만료되었습니다. 다시 비밀번호 찾기를 시도해주세요."), HttpStatus.UNAUTHORIZED);
+		}
+		return new ResponseEntity<>(new ReturnMsg("비밀번호 변경하지 못했습니다. 서버 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 }

@@ -10,6 +10,7 @@ import com.ssafy.switon.dao.JoinDAO;
 import com.ssafy.switon.dao.StudyDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Join;
+import com.ssafy.switon.dto.JoinGiveDTO;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
@@ -92,6 +93,13 @@ public class JoinServiceImpl implements JoinService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean givePoint(int userId, int studyId, int point) {
+		JoinGiveDTO dto = new JoinGiveDTO(userId, studyId);
+		dto.setPoint(point);
+		return joinDAO.addScore(dto) == 1;
 	}
 
 }

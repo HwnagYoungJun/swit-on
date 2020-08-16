@@ -5,7 +5,7 @@ import java.util.List;
 public class SearchReturnDTO {
 	
 	List<StudySimple> Studies;
-	List<LowerCategorySimpleDTO> lowercategories;
+	List<LowerCategoryWithUpperName> lowercategories;
 	List<UpperCategory> uppercategories;
 	
 	public List<StudySimple> getStudies() {
@@ -14,10 +14,10 @@ public class SearchReturnDTO {
 	public void setStudies(List<StudySimple> studies) {
 		Studies = studies;
 	}
-	public List<LowerCategorySimpleDTO> getLowercategories() {
+	public List<LowerCategoryWithUpperName> getLowercategories() {
 		return lowercategories;
 	}
-	public void setLowercategories(List<LowerCategorySimpleDTO> lowercategories) {
+	public void setLowercategories(List<LowerCategoryWithUpperName> lowercategories) {
 		this.lowercategories = lowercategories;
 	}
 	public List<UpperCategory> getUppercategories() {
@@ -26,7 +26,7 @@ public class SearchReturnDTO {
 	public void setUppercategories(List<UpperCategory> uppercategories) {
 		this.uppercategories = uppercategories;
 	}
-	public SearchReturnDTO(List<StudySimple> studies, List<LowerCategorySimpleDTO> lowercategories,
+	public SearchReturnDTO(List<StudySimple> studies, List<LowerCategoryWithUpperName> lowercategories,
 			List<UpperCategory> uppercategories) {
 		Studies = studies;
 		this.lowercategories = lowercategories;

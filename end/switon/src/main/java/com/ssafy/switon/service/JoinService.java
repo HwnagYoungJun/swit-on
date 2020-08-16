@@ -25,5 +25,7 @@ public interface JoinService {
 	List<UserSimpleDTO> searchMembers(int studyId);
 	// 소모임에 인원수가 가득한지 검사
 	boolean isFull(int studyId);
+	// 특정 행동을 하면 이 메소드를 사용해 점수를 부여한다.
+	boolean givePoint(int userId, int studyId, int point);
 	
 }

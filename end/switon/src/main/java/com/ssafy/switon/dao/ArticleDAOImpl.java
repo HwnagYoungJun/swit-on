@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.BoardIndexDTO;
 import com.ssafy.switon.dto.FeedsIndexDTO;
+import com.ssafy.switon.dto.UserStudyDTO;
 
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
@@ -75,6 +76,20 @@ public class ArticleDAOImpl implements ArticleDAO {
 	@Override
 	public List<Article> selectFeeds(FeedsIndexDTO feedsIndexDTO) {
 		return sqlSession.selectList("article.selectFeeds", feedsIndexDTO);
+	}
+
+	@Override
+	public int cntUserArticlesByStudyId(int user_id, int study_id) {
+		UserStudyDTO dto = new UserStudyDTO(user_id, study_id);
+		Integer cnt = sqlSession.selectOne("article.cntUserArticlesByStudyId", dto);
+		return cnt = cnt == null ? 0 : cnt;
+	}
+
+	@Override
+	public int selectRecentUserArticleId(int user_id, int study_id) {
+		UserStudyDTO dto = new UserStudyDTO(user_id, study_id);
+		Integer id = sqlSession.selectOne("article.selectRecentUserArticleId", dto);
+		return id = id == null? 0 : id;
 	}
 
 }

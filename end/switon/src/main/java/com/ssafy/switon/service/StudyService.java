@@ -3,6 +3,7 @@ package com.ssafy.switon.service;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.ssafy.switon.dto.BestUsersReturnDTO;
 import com.ssafy.switon.dto.SearchReturnDTO;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyCardDTO;
@@ -39,6 +40,7 @@ public interface StudyService {
 	SearchReturnDTO searchStudyByKeyword(String keyword);
 	// 스터디를 종료해주기, join에서도 isFinish 처리해줘야함
 	String finishStudies(Timestamp timestamp);
-	
+	// 베스트 유저 3명 (글쓴 수, 좋아요 수) 찾기
+	BestUsersReturnDTO findBestUsers(int studyId);
 
 }

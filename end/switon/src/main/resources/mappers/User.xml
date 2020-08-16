@@ -15,7 +15,7 @@
 			profile_image,
 			interests,
 			name_legacy
-		from user
+		from user and deleted = false
 	</select>
 	
 	<!-- 유저 상세 정보 반환 -->
@@ -45,7 +45,8 @@
 			password = '',
 			introduce = '',
 			profile_image = '',
-			name_legacy = #{name}
+			name_legacy = #{name},
+			deleted = true
 		where id = #{id}
 	</update>
 	<!-- 유저 정보 수정 -->
@@ -56,7 +57,7 @@
 			introduce = #{introduce},
 			profile_image = #{profile_image},
 			name_legacy = #{name_legacy}
-		where id = #{id}
+		where id = #{id} and deleted = false
 	</update>
 	
 	<!-- 이메일로 유저 패스워드를 찾아서 반환 (로그인을 위해 유저의 저장된 pwd를 반환) -->
@@ -79,5 +80,12 @@
 		from user
 		where name = #{name}
 	</select>
+	
+	<!-- id로 패스워드 변경 -->
+	<update id="updateUserPwd" parameterType="UserDTO">
+		update user
+		set password = #{password}
+		where id = #{id} and deleted = false
+	</update>
 
 </mapper>

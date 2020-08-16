@@ -13,9 +13,7 @@ import com.ssafy.switon.dao.UserScheduleDAO;
 import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.ScheduleReturnDTO;
 import com.ssafy.switon.dto.Study;
-import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserSchedule;
-import com.ssafy.switon.dto.UserSimpleDTO;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -34,6 +32,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 	
 	@Autowired
 	StudyDAO studyDAO;
+	
+	@Autowired
+	JoinService joinService;
 
 	
 	@Override
@@ -126,6 +127,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 					userSchedule.setStatus(status);
 					if(status == 7) {
 						userSchedule.setSuccess(true);
+						Schedule schedule = scheduleDAO.selectScheduleById(id);
+						// 출석체크 완벽하게 완료시 30점 부여
+						joinService.givePoint(userSchedule.getUser_id(), schedule.getStudy_id(), 30);
 					}
 					userScheduleDAO.updateSchedule(userSchedule);
 					result += userSchedule.getUser_id() + "번 유저 작업완료 |";

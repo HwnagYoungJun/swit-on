@@ -1,6 +1,5 @@
 package com.ssafy.switon.dto;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Join {
@@ -10,14 +9,9 @@ public class Join {
 	int isComplete;
 	Timestamp reg_date;
 	int isLeader;
+	int score;
+	int medal;
 	
-	
-	public int getIsLeader() {
-		return isLeader;
-	}
-	public void setIsLeader(int isLeader) {
-		this.isLeader = isLeader;
-	}
 	public int getId() {
 		return id;
 	}
@@ -48,9 +42,29 @@ public class Join {
 	public void setReg_date(Timestamp reg_date) {
 		this.reg_date = reg_date;
 	}
+	public int getIsLeader() {
+		return isLeader;
+	}
+	public void setIsLeader(int isLeader) {
+		this.isLeader = isLeader;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+	public int getMedal() {
+		return medal;
+	}
+	public void setMedal(int medal) {
+		this.medal = medal;
+	}
 	@Override
 	public String toString() {
 		return "Join [id=" + id + ", user_id=" + user_id + ", study_id=" + study_id + ", isComplete=" + isComplete
-				+ ", reg_date=" + reg_date + ", isLeader=" + isLeader + "]";
+				+ ", reg_date=" + reg_date + ", isLeader=" + isLeader + ", score=" + score + ", medal=" + medal + "]";
 	}
+	
+	
 }

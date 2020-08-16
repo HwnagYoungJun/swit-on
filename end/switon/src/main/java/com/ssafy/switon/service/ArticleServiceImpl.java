@@ -214,8 +214,8 @@ public class ArticleServiceImpl implements ArticleService {
 
 
 	@Override
-	public List<ArticleReturnDTO> searchFeeds(int userId, int startIdx, int endIdx) {
-		FeedsIndexDTO dto = new FeedsIndexDTO(userId, startIdx, endIdx);
+	public List<ArticleReturnDTO> searchFeeds(int userId, int startIdx, int amount) {
+		FeedsIndexDTO dto = new FeedsIndexDTO(userId, startIdx, amount);
 		List<Article> originalArticles = articleDao.selectFeeds(dto);
 		List<ArticleReturnDTO> articles = new LinkedList<ArticleReturnDTO>();
 		if(originalArticles.size() != 0) {
@@ -249,7 +249,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public List<ArticleReturnDTO> searchArticlesWithIndex(int boardId, int userId, int index) {
-		List<Article> originalArticles = articleDao.selectArticlesByBoardIdLimit5(new BoardIndexDTO(boardId, index, index + 5));
+		List<Article> originalArticles = articleDao.selectArticlesByBoardIdLimit5(new BoardIndexDTO(boardId, index, 5));
 		List<ArticleReturnDTO> articles = new ArrayList<ArticleReturnDTO>();
 		if(originalArticles.size() != 0) {
 			for(Article originalArticle : originalArticles) {

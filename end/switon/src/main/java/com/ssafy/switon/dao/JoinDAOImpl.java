@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.switon.dto.Join;
+import com.ssafy.switon.dto.JoinGiveDTO;
+import com.ssafy.switon.dto.Medals;
+import com.ssafy.switon.dto.Ranker;
 
 @Repository
 public class JoinDAOImpl implements JoinDAO {
@@ -75,5 +78,27 @@ public class JoinDAOImpl implements JoinDAO {
 	public int updateJoinComplete(int studyId) {
 		return sqlsession.update("join.updateJoinComplete", studyId);
 	}
+
+	@Override
+	public List<Ranker> selectRankers(int studyId) {
+		return sqlsession.selectList("join.selectRankers", studyId);
+	}
+
+	@Override
+	public int giveMedal(JoinGiveDTO dto) {
+		return sqlsession.update("join.giveMedal", dto);
+	}
+
+	@Override
+	public Medals selectMedalsByUserId(int userId) {
+		return sqlsession.selectOne("join.selectMedalsByUserId", userId);
+	}
+
+	@Override
+	public int addScore(JoinGiveDTO dto) {
+		return sqlsession.update("join.addScore", dto);
+	}
+	
+	
 
 }

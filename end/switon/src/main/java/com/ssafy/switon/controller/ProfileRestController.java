@@ -26,6 +26,7 @@ import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
+import com.ssafy.switon.dto.UserInfoWithMedals;
 import com.ssafy.switon.dto.UserScheduleReturnDTO;
 import com.ssafy.switon.dto.UserScheduleSimpleDTO;
 import com.ssafy.switon.dto.UserStudyInfoDTO;
@@ -78,8 +79,14 @@ public class ProfileRestController {
 		if(userId == 0) {
 			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
 		}
-		UserInfoDTO user = userService.search(userId);
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		try {
+			UserInfoDTO originalUser = userService.search(userId);
+			UserInfoWithMedals user = userService.addMedalsToUserInfo(originalUser);
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(new ReturnMsg("유저 정보를 받아올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "유저 정보를 수정한다.", response = UserInfoDTO.class)
@@ -90,7 +97,13 @@ public class ProfileRestController {
 		if(userId == 0) {
 			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
 		}
-		int userIdFromToken = getUserPK(request);
+		int userIdFromToken;
+		try {
+			userIdFromToken = getUserPK(request);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(userIdFromToken != userId) {
 			System.out.println("** 유저 정보 수정 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("유저 정보 수정에 실패했습니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);			
@@ -101,15 +114,23 @@ public class ProfileRestController {
 			try {
 				img.transferTo(new File(RealPath));
 				userInfoDTO.setProfile_image(path);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+				return new ResponseEntity<>(new ReturnMsg("파일 업로드 중 에러가 발생했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
+		
 		UserInfoDTO originalUserDTO = userService.search(userIdFromToken);
+		if(originalUserDTO == null) {
+			return new ResponseEntity<>(new ReturnMsg("유저 정보 수정에 실패했습니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		userInfoDTO.setId(userIdFromToken);
 		userInfoDTO.setEmail(originalUserDTO.getEmail());
+		if(userInfoDTO.getName() != null) {
+			if(userService.nameAlreadyExist(userInfoDTO.getId(), userInfoDTO.getName())){
+				return new ResponseEntity<>(new ReturnMsg("다른 사용자가 사용하고 있는 이름입니다. 다른 이름을 입력해주세요."), HttpStatus.UNAUTHORIZED);
+			};
+		}
 		if(userInfoDTO.getName() == null) {
 			userInfoDTO.setName(originalUserDTO.getName());
 		}
@@ -124,11 +145,15 @@ public class ProfileRestController {
 				userInfoDTO.setName_legacy(originalUserDTO.getName_legacy());				
 			}
 		}
-		if(userService.modify(userInfoDTO)) {
-			System.out.println("유저 정보 수정");
-			return new ResponseEntity<>(new ReturnMsg("유저 정보를 수정하였습니다."), HttpStatus.OK);			
+		try {
+			if(userService.modify(userInfoDTO)) {
+				System.out.println("유저 정보 수정");
+				return new ResponseEntity<>(new ReturnMsg("유저 정보를 수정하였습니다."), HttpStatus.OK);			
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("** 유저 정보 수정 실패 - 서버 에러");			
 		}
-		System.out.println("** 유저 정보 수정 실패 - 서버 에러");
 		return new ResponseEntity<>(new ReturnMsg("서버 에러로 유저 정보 수정에 실패했습니다. 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);			
 	}
 	
@@ -143,9 +168,14 @@ public class ProfileRestController {
 		if(userId == 0) {
 			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
 		}
-		List<UserStudyInfoDTO> dtos = studyService.searchUserStudies(userId);
-		System.out.println("유저 스터디 리스트 반환");
-		return new ResponseEntity<>(dtos, HttpStatus.OK);
+		try {
+			List<UserStudyInfoDTO> dtos = studyService.searchUserStudies(userId);
+			System.out.println("유저 스터디 리스트 반환");			
+			return new ResponseEntity<>(dtos, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(new ReturnMsg("유저 정보를 가져올 수 없었습니다."), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "유저가 작성한 QnA 글 목록을 반환한다. (로그인 필요)")
@@ -155,14 +185,24 @@ public class ProfileRestController {
 		if(userId == 0) {
 			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
 		}
-		int userIdFromToken = getUserPK(request);
+		int userIdFromToken;
+		try {
+			userIdFromToken = getUserPK(request);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(userId != userIdFromToken) {
 			System.out.println("유저 QnA글 리스트 반환 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		List<ArticleWithStudyDTO> qnas = articleService.searchUserQnAs(userId);
-		System.out.println("유저 QnA글 리스트 반환");
-		return new ResponseEntity<>(qnas, HttpStatus.OK);
+		try {
+			List<ArticleWithStudyDTO> qnas = articleService.searchUserQnAs(userId);
+			System.out.println("유저 QnA글 리스트 반환");
+			return new ResponseEntity<>(qnas, HttpStatus.OK);			
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("글을 불러올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@ApiOperation(value = "유저가 작성한 자료실 글 목록을 반환한다. (로그인 필요)")
@@ -172,14 +212,24 @@ public class ProfileRestController {
 		if(userId == 0) {
 			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
 		}
-		int userIdFromToken = getUserPK(request);
+		int userIdFromToken;
+		try {
+			userIdFromToken = getUserPK(request);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(userId != userIdFromToken) {
 			System.out.println("유저 자료실 글 리스트 반환 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		List<ArticleWithStudyDTO> repos = articleService.searchUserRepositories(userId);
-		System.out.println("유저 자료실 글 리스트 반환");
-		return new ResponseEntity<>(repos, HttpStatus.OK);		
+		try {
+			List<ArticleWithStudyDTO> repos = articleService.searchUserRepositories(userId);
+			System.out.println("유저 자료실 글 리스트 반환");
+			return new ResponseEntity<>(repos, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("글을 불러올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		
 	}
 	
@@ -190,16 +240,26 @@ public class ProfileRestController {
 		if(userId == 0) {
 			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
 		}
-		int userIdFromToken = getUserPK(request);
+		int userIdFromToken;
+		try {
+			userIdFromToken = getUserPK(request);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(userIdFromToken != userId) {
 			System.out.println("** 회원 탈퇴 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		if(userService.signOut(userIdFromToken)) {
-			System.out.println("유저 탈퇴 성공!");
-			return new ResponseEntity<>(new ReturnMsg("정상적으로 탈퇴되었습니다. 이용해주셔서 감사합니다."), HttpStatus.OK);
+		try {
+			if(userService.signOut(userIdFromToken)) {
+				System.out.println("유저 탈퇴 성공!");
+				return new ResponseEntity<>(new ReturnMsg("정상적으로 탈퇴되었습니다. 이용해주셔서 감사합니다."), HttpStatus.OK);
+			}			
+		} catch(Exception e) {
+			System.out.println("** 회원 탈퇴 실패 - 서버 문제");
+			e.printStackTrace();
 		}
-		System.out.println("** 회원 탈퇴 실패 - 서버 문제");
 		return new ResponseEntity<>(new ReturnMsg("탈퇴 중 문제가 발생했습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.OK);
 	}
 	
@@ -210,13 +270,24 @@ public class ProfileRestController {
 		if(userId == 0) {
 			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
 		}
-		int userIdFromToken = getUserPK(request);
+		int userIdFromToken;
+		try {
+			userIdFromToken = getUserPK(request);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(userIdFromToken != userId) {
 			System.out.println("** 스케줄 조회 실패 - 권한이 없습니다.");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		List<UserScheduleReturnDTO> schedules = userScheduleService.getUserSchedules(userId);
-		return new ResponseEntity<>(schedules, HttpStatus.OK);
+		try {
+			List<UserScheduleReturnDTO> schedules = userScheduleService.getUserSchedules(userId);
+			return new ResponseEntity<>(schedules, HttpStatus.OK);			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new ReturnMsg("스케줄 정보를 불러올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 //	@ApiOperation(value = "유저가 즐겨찾기한 글 목록 반환", response = List.class)
@@ -242,13 +313,24 @@ public class ProfileRestController {
 		if(userId == 0) {
 			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
 		}
-		int userIdFromToken = getUserPK(request);
+		int userIdFromToken;
+		try {
+			userIdFromToken = getUserPK(request);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(userIdFromToken != userId) {
 			System.out.println("** 즐겨찾기 조회 실패 - 권한이 없습니다.");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
-		List<ArticleWithStudyDTO> list = articleFavService.searchFavArticles(userId);
-		return new ResponseEntity<>(list, HttpStatus.OK);
+		try {
+			List<ArticleWithStudyDTO> list = articleFavService.searchFavArticles(userId);
+			return new ResponseEntity<>(list, HttpStatus.OK);			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new ReturnMsg("즐겨찾기 정보를 불러올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img) {

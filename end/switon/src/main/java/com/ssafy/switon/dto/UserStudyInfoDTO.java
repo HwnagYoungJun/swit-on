@@ -11,6 +11,15 @@ public class UserStudyInfoDTO {
 	Study study;
 	UserInfoDTO leaderInfo;
 	int userCntCurrent;
+	int medal;
+	
+	
+	public int getMedal() {
+		return medal;
+	}
+	public void setMedal(int medal) {
+		this.medal = medal;
+	}
 	public Study getStudy() {
 		return study;
 	}
@@ -32,6 +41,7 @@ public class UserStudyInfoDTO {
 	@Override
 	public String toString() {
 		return "UserStudyInfoDTO [study=" + study + ", leaderInfo=" + leaderInfo + ", userCntCurrent=" + userCntCurrent
-				+ "]";
+				+ ", medal=" + medal + "]";
 	}
+	
 }

@@ -4,7 +4,8 @@ public class BoardIndexDTO {
 	
 	int board_id;
 	int start_idx;
-	int end_idx;
+	int amount;
+	
 	public int getBoard_id() {
 		return board_id;
 	}
@@ -17,19 +18,19 @@ public class BoardIndexDTO {
 	public void setStart_idx(int start_idx) {
 		this.start_idx = start_idx;
 	}
-	public int getEnd_idx() {
-		return end_idx;
+	public int getamount() {
+		return amount;
 	}
-	public void setEnd_idx(int end_idx) {
-		this.end_idx = end_idx;
+	public void setamount(int amount) {
+		this.amount = amount;
 	}
 	@Override
 	public String toString() {
-		return "BoardIndexDTO [board_id=" + board_id + ", start_idx=" + start_idx + ", end_idx=" + end_idx + "]";
+		return "BoardIndexDTO [board_id=" + board_id + ", start_idx=" + start_idx + ", amount=" + amount + "]";
 	}
-	public BoardIndexDTO(int board_id, int start_idx, int end_idx) {
+	public BoardIndexDTO(int board_id, int start_idx, int amount) {
 		this.board_id = board_id;
 		this.start_idx = start_idx;
-		this.end_idx = end_idx;
+		this.amount = amount;
 	}
 }

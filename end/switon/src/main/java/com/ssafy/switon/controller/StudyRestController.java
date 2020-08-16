@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleDetailReturnDTO;
 import com.ssafy.switon.dto.ArticleReturnDTO;
+import com.ssafy.switon.dto.BestUsersReturnDTO;
 import com.ssafy.switon.dto.Board;
 import com.ssafy.switon.dto.Comment;
 import com.ssafy.switon.dto.CommentReturnDTO;
@@ -125,23 +126,25 @@ public class StudyRestController {
 				isLeader = true;
 			}
 		}
-		StudyReturnDTO dto = studyService.search(studyId, isJoined, isLeader, userId);
-		System.out.println(dto);
-		int leaderId = dto.getStudy().getUser_id();
-		System.out.println(leaderId);
-		String leaderName = userService.search(leaderId).getName();
-		System.out.println(leaderName);
-		dto.setLeaderName(leaderName);
-		List<UserSimpleDTO> members = joinService.searchMembers(studyId);
-		dto.setMembers(members);
-		return new ResponseEntity<>(dto, HttpStatus.OK);
+		try {
+			StudyReturnDTO dto = studyService.search(studyId, isJoined, isLeader, userId);	
+			return new ResponseEntity<>(dto, HttpStatus.OK);
+			
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("스터디를 찾을 수 없습니다."), HttpStatus.UNAUTHORIZED);
+		}
+		
 	}
 	
 	@ApiOperation(value = "새로운 스터디를 생성한다. 로그인한 사용자가 모임장이 된다. (로그인 필요)")
 	@PostMapping("/")
 	public Object createStudy(@RequestParam(value = "img", required = false) MultipartFile img, Study study, HttpServletRequest request) {
-		System.out.println("****** study.users_limit : " + study.getUsers_limit());
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 //		String baseDirectory = "src"+ File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "upload";
 //		String baseDirectory = request.getSession().getServletContext().getRealPath("upload");
 		int startTime = Integer.parseInt((study.getStart_time().replace(":", "")));
@@ -161,28 +164,30 @@ public class StudyRestController {
 			try {
 				img.transferTo(new File(RealPath));
 				study.setLogo(path);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
-				e.printStackTrace();
+				return new ResponseEntity<>(new ReturnMsg("파일 업로드 중 에러가 발생했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 		// 토큰에서 유저 ID 읽어와서 스터디의 모임장 id로 등록
 		study.setUser_id(userId);
-		int studyId = studyService.create(study, userId);
-		if(studyId > 0) {
-			boardService.create(new Board(studyId, 1));
-			boardService.create(new Board(studyId, 2));
-			boardService.create(new Board(studyId, 3));
-			System.out.println("스터디 게시판(공지, QnA, 자료실) 생성 성공!");
-			
-			joinService.join(studyId, userId);
-			System.out.println("모임장의 스터디 가입 성공!");
-			
-			return new ResponseEntity<>(new ReturnMsg("스터디가 정상적으로 생성되었습니다."), HttpStatus.OK);
+		try {
+			int studyId = studyService.create(study, userId);
+			if(studyId > 0) {
+				boardService.create(new Board(studyId, 1));
+				boardService.create(new Board(studyId, 2));
+				boardService.create(new Board(studyId, 3));
+				System.out.println("스터디 게시판(공지, QnA, 자료실) 생성 성공!");
+				
+				joinService.join(studyId, userId);
+				System.out.println("모임장의 스터디 가입 성공!");
+				
+				return new ResponseEntity<>(new ReturnMsg("스터디가 정상적으로 생성되었습니다."), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			System.out.println("** 스터디 생성 실패 - 서버 에러");
+			e.printStackTrace();
 		}
-		System.out.println("** 스터디 생성 실패 - 서버 에러");
-		return new ResponseEntity<>(new ReturnMsg("소모임 생성을 실패했습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("소모임 생성을 실패했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	
@@ -199,17 +204,21 @@ public class StudyRestController {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 기간을 입력했습니다."), HttpStatus.I_AM_A_TEAPOT);
 		}
 		
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(img != null) {
 			String RealPath = getUploadRealPath(request, userId, img);
 			String path = getUploadPath(userId, img);
 			try {
 				img.transferTo(new File(RealPath));
 				study.setLogo(path);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+				return new ResponseEntity<>(new ReturnMsg("파일 업로드 중 에러가 발생했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 		Study originalStudy = studyService.search(studyId);
@@ -240,41 +249,55 @@ public class StudyRestController {
 		
 		study.setId(studyId);
 		study.setUser_id(userId);
-		studyService.modify(study);
-		return new ResponseEntity<>(new ReturnMsg("스터디를 성공적으로 수정하였습니다."), HttpStatus.OK);
+		try {
+			studyService.modify(study);
+			return new ResponseEntity<>(new ReturnMsg("스터디를 성공적으로 수정하였습니다."), HttpStatus.OK);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(new ReturnMsg("스터디 수정에 실패했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		
 	}
 	
 	@ApiOperation(value = "스터디를 삭제한다. 해당 소모임의 모임장이 아닌 사람이 시도할 경우 실패한다. (로그인 필요)")
 	@DeleteMapping("/{studyId}")
 	public Object deleteStudy(@PathVariable("studyId") int studyId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		Study study = studyService.search(studyId);
 		// 순서: 
-		if(study.getUser_id() != userId) {
-			System.out.println("** 스터디 삭제 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("삭제 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+		if(study == null) {
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 스터디입니다."), HttpStatus.UNAUTHORIZED);
 		}
-		if(studyService.delete(studyId)) {
-			System.out.println("스터디 삭제 성공");
-			return new ResponseEntity<>(new ReturnMsg("스터디를 성공적으로 삭제하였습니다."), HttpStatus.OK);
+		try {
+			if(study.getUser_id() != userId) {
+				System.out.println("** 스터디 삭제 실패 - 권한 없음");
+				return new ResponseEntity<>(new ReturnMsg("삭제 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			}
+			if(studyService.delete(studyId)) {
+				System.out.println("스터디 삭제 성공");
+				return new ResponseEntity<>(new ReturnMsg("스터디를 성공적으로 삭제하였습니다."), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			System.out.println("** 스터디 삭제 실패 - 서버 에러");
+			e.printStackTrace();
 		}
-		System.out.println("** 스터디 삭제 실패 - 서버 에러");
 		return new ResponseEntity<>(new ReturnMsg("스터디 삭제에 실패했습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
-//	@ApiOperation(value = "소모임을 종료한다. (소모임 기간이 지났을 때 모임장이 종료 가능, 정상적으로 끝낸다)")
-//	@PutMapping("/{studyId}/finish")
-//	public Object finishStudy(@PathVariable("studyId") int studyId, HttpServletRequest request) {
-//		int userId = getUserPK(request);
-//		return new ResponseEntity<>(new ReturnMsg);
-//	}
-	
 	
 	@ApiOperation(value = "스터디의 대쉬보드를 반환한다. (최신글순)(공지5, qna5, 자료실5)", response = List.class)
 	@GetMapping("/{studyId}/dashboard")
 	public Object showDashboard(@PathVariable("studyId") int studyId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 대쉬보드 반환 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("가입하지 않은 소모임입니다."), HttpStatus.UNAUTHORIZED);
@@ -282,19 +305,23 @@ public class StudyRestController {
 		int noticeBoardId = boardService.findNoticeBoardId(studyId);
 		int qnaBoardId = boardService.findQnABoardId(studyId);
 		int repoBoardId = boardService.findRepoBoardId(studyId);
-		if(noticeBoardId != 0) {
-			List<ArticleReturnDTO> notice = articleService.searchArticlesByBoardIdLimit5(studyId, noticeBoardId, 1, userId);
-			List<ArticleReturnDTO> qna = articleService.searchArticlesByBoardIdLimit5(studyId, qnaBoardId, 2, userId);
-			List<ArticleReturnDTO> repository = articleService.searchArticlesByBoardIdLimit5(studyId, repoBoardId, 3, userId);
-			System.out.println("대쉬보드에 필요한 글들 읽어오기 성공!");
-//			if(notice != null && qna != null && repository != null && notice.size() == 0 && qna.size() == 0 && repository.size() == 0) {
-//				return new ResponseEntity<>(new ReturnMsg("아직 올라온 글이 없습니다."), HttpStatus.OK);
-//			}
-			DashBoardReturnDTO dto = new DashBoardReturnDTO(notice, qna, repository);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
+		try {
+			if(noticeBoardId != 0) {
+				List<ArticleReturnDTO> notice = articleService.searchArticlesByBoardIdLimit5(studyId, noticeBoardId, 1, userId);
+				List<ArticleReturnDTO> qna = articleService.searchArticlesByBoardIdLimit5(studyId, qnaBoardId, 2, userId);
+				List<ArticleReturnDTO> repository = articleService.searchArticlesByBoardIdLimit5(studyId, repoBoardId, 3, userId);
+				System.out.println("대쉬보드에 필요한 글들 읽어오기 성공!");
+//				if(notice != null && qna != null && repository != null && notice.size() == 0 && qna.size() == 0 && repository.size() == 0) {
+//					return new ResponseEntity<>(new ReturnMsg("아직 올라온 글이 없습니다."), HttpStatus.OK);
+//				}
+				DashBoardReturnDTO dto = new DashBoardReturnDTO(notice, qna, repository);
+				return new ResponseEntity<>(dto, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			System.out.println("** " + studyId + "번 스터디의 대쉬보드 반환 실패");			
+			e.printStackTrace();
 		}
-		System.out.println("** " + studyId + "번 스터디의 대쉬보드 반환 실패");
-		return new ResponseEntity<>(new ReturnMsg("대쉬보드 글들을 받아올 수 없었습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("대쉬보드 글들을 받아올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 공지사항 글 리스트를 반환한다.", response = List.class)
@@ -307,54 +334,81 @@ public class StudyRestController {
 		}
 		int noticeBoardId = boardService.findNoticeBoardId(studyId);
 		if(noticeBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesWithIndex(noticeBoardId, userId, index);
-			System.out.println(studyId + "번 스터디의 공지사항 글 리스트 반환");
-			return new ResponseEntity<>(articles, HttpStatus.OK);
+			try {
+				List<ArticleReturnDTO> articles = articleService.searchArticlesWithIndex(noticeBoardId, userId, index);
+				System.out.println(studyId + "번 스터디의 공지사항 글 리스트 반환");
+				return new ResponseEntity<>(articles, HttpStatus.OK);				
+			} catch (Exception e) {
+				System.out.println("** " + studyId + "번 스터디의 공지사항 글 리스트 반환 실패");				
+				e.printStackTrace();
+			}
 		}
-		System.out.println("** " + studyId + "번 스터디의 공지사항 글 리스트 반환 실패");
 		return new ResponseEntity<>(new ReturnMsg("공지사항을 받아올 수 없었습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 qna 게시판 글 리스트를 반환한다.", response = List.class)
 	@GetMapping("/{studyId}/qna")
 	public Object showQnas(@PathVariable("studyId") int studyId, @RequestParam int index, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** qna 게시판 글리스트 조회 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		int qnaBoardId = boardService.findQnABoardId(studyId);
 		if(qnaBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesWithIndex(qnaBoardId, userId, index);
-			System.out.println(studyId + "번 스터디의 QnA 게시판 글 리스트 반환");
-			return new ResponseEntity<>(articles, HttpStatus.OK);
+			try {
+				List<ArticleReturnDTO> articles = articleService.searchArticlesWithIndex(qnaBoardId, userId, index);
+				System.out.println(studyId + "번 스터디의 QnA 게시판 글 리스트 반환");
+				return new ResponseEntity<>(articles, HttpStatus.OK);				
+			} catch (Exception e) {
+				System.out.println("** " + studyId + "번 스터디의 QnA 게시판 글 리스트 반환 실패");				
+				e.printStackTrace();
+			}
 		}
-		System.out.println("** " + studyId + "번 스터디의 QnA 게시판 글 리스트 반환 실패");
 		return new ResponseEntity<>(new ReturnMsg("QnA를 받아올 수 없었습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "스터디의 자료실 게시판 글 리스트를 반환한다.", response = List.class)
 	@GetMapping("/{studyId}/repository")
 	public Object showRepositories(@PathVariable("studyId") int studyId, @RequestParam int index, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 자료실 게시판 글 조회 실패 - 권한 없음");
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		int repoBoardId = boardService.findRepoBoardId(studyId);
 		if(repoBoardId != 0) {
-			List<ArticleReturnDTO> articles = articleService.searchArticlesWithIndex(repoBoardId, userId, index);
-			System.out.println(studyId + "번 스터디의 자료실 글 리스트 반환");
-			return new ResponseEntity<>(articles, HttpStatus.OK);
+			try {
+				List<ArticleReturnDTO> articles = articleService.searchArticlesWithIndex(repoBoardId, userId, index);
+				System.out.println(studyId + "번 스터디의 자료실 글 리스트 반환");
+				return new ResponseEntity<>(articles, HttpStatus.OK);				
+			} catch (Exception e) {
+				System.out.println("** " + studyId + "번 스터디의 자료실 글 리스트 반환 실패");
+				e.printStackTrace();
+			}
 		}
-		System.out.println("** " + studyId + "번 스터디의 자료실 글 리스트 반환 실패");
 		return new ResponseEntity<>(new ReturnMsg("자료실 글을 받아올 수 없었습니다. 시스템 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "공지글 작성 (모임장 로그인 필요)")
 	@PostMapping("/{studyId}/notice")
 	public Object showNotice(Article article, @PathVariable("studyId") int studyId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		Study study = studyService.search(studyId);
 		
 		if(userId != study.getUser_id()) {
@@ -365,19 +419,26 @@ public class StudyRestController {
 		int noticeBoardId = boardService.findNoticeBoardId(studyId);
 		article.setBoard_id(noticeBoardId);
 		article.setUser_id(userId);
-		
-		if(articleService.create(article)) {
-			System.out.println("공지글 작성 성공!");
-			return new ResponseEntity<>(new ReturnMsg("공지글을 성공적으로 작성하였습니다."), HttpStatus.OK);
+		try {
+			if(articleService.create(article)) {
+				System.out.println("공지글 작성 성공!");
+				return new ResponseEntity<>(new ReturnMsg("공지글을 성공적으로 작성하였습니다."), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			System.out.println("** 공지글 작성 실패 - 서버 오류...");			
 		}
-		System.out.println("** 공지글 작성 실패 - 서버 오류...");
 		return new ResponseEntity<>(new ReturnMsg("공지글 작성을 실패했습니다. 서버 관리자에게 문의 바랍니다."), HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ApiOperation(value = "스터디의 qna 게시판에 글을 작성한다. (로그인 필요)")
 	@PostMapping("/{studyId}/qna")
 	public Object writeQna(@RequestParam(value = "upload", required = false) MultipartFile img, Article article, @PathVariable("studyId") int studyId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** qna 글 작성 실패 - 가입하지 않은 멤버입니다.");
 			return new ResponseEntity<>(new ReturnMsg("작성 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
@@ -388,17 +449,18 @@ public class StudyRestController {
 			try {
 				img.transferTo(new File(RealPath));
 				article.setFile(path);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+				return new ResponseEntity<>(new ReturnMsg("파일 업로드 중 에러가 발생했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 		if(joinService.isMember(studyId, userId)) {
 			article.setBoard_id(boardService.findQnABoardId(studyId));
 			article.setUser_id(userId);
 			articleService.create(article);
-			System.out.println(studyId + "번 스터디의 qna 게시판에 글 작성 성공!");
+			System.out.print(studyId + "번 스터디의 qna 게시판에 글 작성 성공!");
+			joinService.givePoint(userId, studyId, 1);
+			System.out.println(" - 포인트 1점 부여");
 			return new ResponseEntity<>(new ReturnMsg("글을 성공적으로 작성하였습니다."), HttpStatus.OK);
 		}
 		System.out.println("** " + studyId + "번 스터디의 qna 게시판에 글 작성 실패...");
@@ -408,7 +470,12 @@ public class StudyRestController {
 	@ApiOperation(value = "스터디의 자료실 게시판에 글을 작성한다. (로그인 필요)")
 	@PostMapping("/{studyId}/repository")
 	public Object writeRepo(@RequestParam(value = "upload", required = false) MultipartFile img, Article article, @PathVariable("studyId") int studyId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 자료실 글 작성 실패 - 가입하지 않은 멤버입니다.");
 			return new ResponseEntity<>(new ReturnMsg("작성 권한이 없습니다."), HttpStatus.UNAUTHORIZED);
@@ -419,17 +486,18 @@ public class StudyRestController {
 			try {
 				img.transferTo(new File(RealPath));
 				article.setFile(path);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+				return new ResponseEntity<>(new ReturnMsg("파일 업로드 중 에러가 발생했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 		if(joinService.isMember(studyId, userId)) {
 			article.setBoard_id(boardService.findRepoBoardId(studyId));
 			article.setUser_id(userId);
 			articleService.create(article);
-			System.out.println(studyId + "번 스터디의 자료실 게시판에 글 작성 성공!");
+			System.out.print(studyId + "번 스터디의 자료실 게시판에 글 작성 성공!");
+			joinService.givePoint(userId, studyId, 5);
+			System.out.println(" - 포인트 5점 부여");
 			return new ResponseEntity<>(new ReturnMsg("글을 성공적으로 작성하였습니다."), HttpStatus.OK);
 		}
 		System.out.println("** " + studyId + "번 스터디의 자료실 게시판에 글 작성 실패...");
@@ -556,12 +624,17 @@ public class StudyRestController {
 		
 		Article originalArticle = articleService.search(articleId);
 		
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
+		
 		if(originalArticle == null) {
 			System.out.println("** " + articleId + "번 글 수정 실패 - 찾을 수 없는 게시글");
 			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 글입니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		int userId = getUserPK(request);
 		if(originalArticle.getUser_id() != userId) { // 내가 쓴 글이 아니면 실패
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
@@ -578,17 +651,21 @@ public class StudyRestController {
 	@PutMapping("/{studyId}/qna/{articleId}")
 	public Object modifyQna(@RequestParam(value = "upload", required = false) MultipartFile img, 
 						Article article, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(img != null) {
 			String RealPath = getUploadRealPath(request, userId, img);
 			String path = getUploadPath(userId, img);
 			try {
 				img.transferTo(new File(RealPath));
 				article.setFile(path);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+				return new ResponseEntity<>(new ReturnMsg("파일 업로드 중 에러가 발생했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 		
@@ -615,17 +692,21 @@ public class StudyRestController {
 	@PutMapping("/{studyId}/repository/{articleId}")
 	public Object modifyRepo(@RequestParam(value = "upload", required = false) MultipartFile img, 
 							Article article, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(img != null) {
 			String RealPath = getUploadRealPath(request, userId, img);
 			String path = getUploadPath(userId, img);
 			try {
 				img.transferTo(new File(RealPath));
 				article.setFile(path);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+				return new ResponseEntity<>(new ReturnMsg("파일 업로드 중 에러가 발생했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 		
@@ -653,7 +734,12 @@ public class StudyRestController {
 	@DeleteMapping("/{studyId}/notice/{articleId}")
 	public Object deleteNotice(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		Article article = articleService.search(articleId);
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		
 		if(article == null) {
 			System.out.println("** " + articleId + "번 글 삭제 실패 - 찾을 수 없는 게시글");
@@ -675,7 +761,12 @@ public class StudyRestController {
 	@DeleteMapping("/{studyId}/qna/{articleId}")
 	public Object deleteQna(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		Article article = articleService.search(articleId);
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		
 		if(article == null) {
 			System.out.println("** " + articleId + "번 글 삭제 실패 - 찾을 수 없는 게시글");
@@ -697,7 +788,12 @@ public class StudyRestController {
 	@DeleteMapping("/{studyId}/repository/{articleId}")
 	public Object deleteRepo(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
 		Article article = articleService.search(articleId);
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		
 		if(article == null) {
 			System.out.println("** " + articleId + "번 글 삭제 실패 - 찾을 수 없는 게시글");
@@ -742,7 +838,12 @@ public class StudyRestController {
 	@ApiOperation(value = "notice 게시글의 댓글 작성")
 	@PostMapping("/{studyId}/notice/{articleId}/comments")
 	public Object createNoticeComment(@RequestBody Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		comment.setArticle_id(articleId);
 		comment.setUser_id(userId);
 		
@@ -757,12 +858,19 @@ public class StudyRestController {
 	@ApiOperation(value = "qna 게시글의 댓글 작성")
 	@PostMapping("/{studyId}/qna/{articleId}/comments")
 	public Object createQnaComment(@RequestBody Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		comment.setArticle_id(articleId);
 		comment.setUser_id(userId);
 		
 		if(commentService.create(comment)) {
-			System.out.println("댓글 작성 성공!");
+			System.out.print("댓글 작성 성공!");
+			joinService.givePoint(userId, studyId, 5);
+			System.out.println(" - 포인트 5정 부여");
 			return new ResponseEntity<>(new ReturnMsg("댓글을 성공적으로 작성했습니다."), HttpStatus.OK);			
 		}
 		System.out.println("** 댓글 작성 실패 - 서버 오류...");
@@ -772,12 +880,19 @@ public class StudyRestController {
 	@ApiOperation(value = "자료실 게시글의 댓글 작성")
 	@PostMapping("/{studyId}/repository/{articleId}/comments")
 	public Object createRepoComment(@RequestBody Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		comment.setArticle_id(articleId);
 		comment.setUser_id(userId);
 		
 		if(commentService.create(comment)) {
-			System.out.println("댓글 작성 성공!");
+			System.out.print("댓글 작성 성공!");
+			joinService.givePoint(userId, studyId, 1);
+			System.out.println(" - 포인트 1점 부여");
 			return new ResponseEntity<>(new ReturnMsg("댓글을 성공적으로 작성했습니다."), HttpStatus.OK);			
 		}
 		System.out.println("** 댓글 작성 실패 - 서버 오류...");
@@ -787,7 +902,12 @@ public class StudyRestController {
 	@ApiOperation(value = "notice 게시글의 댓글 수정")
 	@PutMapping("/{studyId}/notice/{articleId}/comments/{commentId}")
 	public Object modifyNoticeComment(Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		Comment originalComment = commentService.search(commentId);
 		if(originalComment == null) {
 			System.out.println("** 댓글 수정 실패 - 댓글이 존재하지 않음...");
@@ -810,7 +930,12 @@ public class StudyRestController {
 	@ApiOperation(value = "qna 게시글의 댓글 수정")
 	@PutMapping("/{studyId}/qna/{articleId}/comments/{commentId}")
 	public Object modifyQnaComment(Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		Comment originalComment = commentService.search(commentId);
 		if(originalComment == null) {
 			System.out.println("** 댓글 수정 실패 - 댓글이 존재하지 않음...");
@@ -833,7 +958,12 @@ public class StudyRestController {
 	@ApiOperation(value = "자료실 게시글의 댓글 수정")
 	@PutMapping("/{studyId}/repository/{articleId}/comments/{commentId}")
 	public Object modifyRepoComment(Comment comment, @PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		Comment originalComment = commentService.search(commentId);
 		if(originalComment == null) {
 			System.out.println("** 댓글 수정 실패 - 댓글이 존재하지 않음...");
@@ -856,7 +986,12 @@ public class StudyRestController {
 	@ApiOperation(value = "notice 게시글의 댓글 삭제")
 	@DeleteMapping("/{studyId}/notice/{articleId}/comments/{commentId}")
 	public Object deleteNoticeComment(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		Comment originalComment = commentService.search(commentId);
 		if(originalComment == null) {
 			System.out.println("** 댓글 삭제 실패 - 댓글이 존재하지 않음...");
@@ -877,7 +1012,12 @@ public class StudyRestController {
 	@ApiOperation(value = "QnA 게시글의 댓글 삭제")
 	@DeleteMapping("/{studyId}/qna/{articleId}/comments/{commentId}")
 	public Object deleteQnaComment(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		Comment originalComment = commentService.search(commentId);
 		if(originalComment == null) {
 			System.out.println("** 댓글 삭제 실패 - 댓글이 존재하지 않음...");
@@ -898,7 +1038,12 @@ public class StudyRestController {
 	@ApiOperation(value = "자료실 게시글의 댓글 삭제")
 	@DeleteMapping("/{studyId}/repository/{articleId}/comments/{commentId}")
 	public Object deleteRepoComment(@PathVariable("studyId") int studyId, @PathVariable("articleId") int articleId, @PathVariable("commentId") int commentId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		Comment originalComment = commentService.search(commentId);
 		if(originalComment == null) {
 			System.out.println("** 댓글 삭제 실패 - 댓글이 존재하지 않음...");
@@ -919,38 +1064,67 @@ public class StudyRestController {
 	@ApiOperation(value = "소모임에 가입한다.")
 	@PostMapping("/{studyId}/join")
 	public Object joinStudy(@PathVariable("studyId") int studyId, HttpServletRequest request) {
-		int userId = getUserPK(request);
-		if(joinService.isMember(studyId, userId)) {
-			System.out.println("** 소모임 가입 실패 - 이미 가입한 회원...");
-			return new ResponseEntity<>(new ReturnMsg("이미 가입한 소모임입니다."), HttpStatus.UNAUTHORIZED);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
-		if(joinService.isFull(studyId)) {
-			System.out.println("** 소모임 가입 실패 - 인원 제한이 가득참!...");
-			return new ResponseEntity<>(new ReturnMsg("최대 인원수에 도달하여 더 이상 가입할 수 없습니다."), HttpStatus.UNAUTHORIZED);
+		try {
+			if(joinService.isMember(studyId, userId)) {
+				System.out.println("** 소모임 가입 실패 - 이미 가입한 회원...");
+				return new ResponseEntity<>(new ReturnMsg("이미 가입한 소모임입니다."), HttpStatus.UNAUTHORIZED);
+			}
+			if(joinService.isFull(studyId)) {
+				System.out.println("** 소모임 가입 실패 - 인원 제한이 가득참!...");
+				return new ResponseEntity<>(new ReturnMsg("최대 인원수에 도달하여 더 이상 가입할 수 없습니다."), HttpStatus.UNAUTHORIZED);
+			}
+			
+			if(joinService.join(studyId, userId)) {
+				System.out.println("소모임 가입 성공!");
+				return new ResponseEntity<>(new ReturnMsg("소모임에 성공적으로 가입했습니다."), HttpStatus.OK);
+			}
+		} catch(Exception e) {
+			System.out.println("** 스터디 가입 실패 - 서버 에러");
 		}
-		
-		if(joinService.join(studyId, userId)) {
-			System.out.println("소모임 가입 성공!");
-			return new ResponseEntity<>(new ReturnMsg("소모임에 성공적으로 가입했습니다."), HttpStatus.OK);
-		}
-		System.out.println("** 스터디 가입 실패 - 서버 에러");
-		return new ResponseEntity<>(new ReturnMsg("가입에 실패했습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(new ReturnMsg("소모임 가입에 실패했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);			
 	}
 	
 	@ApiOperation(value = "소모임을 탈퇴한다.")
 	@DeleteMapping("/{studyId}/leave")
 	public Object leaveStudy(@PathVariable("studyId") int studyId, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
+		try {
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 소모임 탈퇴 실패 - 이미 탈퇴했거나 가입하지 않은 소모임...");
 			return new ResponseEntity<>(new ReturnMsg("이미 탈퇴한 소모임입니다."), HttpStatus.UNAUTHORIZED);
 		}
-		if(joinService.leave(studyId, userId)) {
-			System.out.println("소모임 탈퇴 성공!");
-			return new ResponseEntity<>(new ReturnMsg("소모임을 탈퇴했습니다."), HttpStatus.OK);
+		try {
+			if(joinService.leave(studyId, userId)) {
+				System.out.println("소모임 탈퇴 성공!");
+				return new ResponseEntity<>(new ReturnMsg("소모임을 탈퇴했습니다."), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			System.out.println("** 소모임 탈퇴 실패 - 서버 에러");
 		}
 		System.out.println("** 소모임 탈퇴 실패 - 서버 에러");
 		return new ResponseEntity<>(new ReturnMsg("탈퇴에 실패했습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ApiOperation(value = "베스트 유저들을 반환한다.")
+	@GetMapping("/{studyId}/best")
+	public Object getBestUsers(@PathVariable("studyId") int studyId) {
+		try {
+			BestUsersReturnDTO dto = studyService.findBestUsers(studyId);
+			System.out.println("베스트 유저들을 반환");
+			return new ResponseEntity<>(dto, HttpStatus.OK);			
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("베스트 유저 정보를 받아올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img) {
@@ -964,7 +1138,6 @@ public class StudyRestController {
 		System.out.println("저장이 어디에 될거냐면: " + result);
 		return result;
 	}
-	
 	private String getUploadPath(int userId, MultipartFile img) {
 		String fileName = img.getOriginalFilename();
 		int pos = fileName.lastIndexOf(".");

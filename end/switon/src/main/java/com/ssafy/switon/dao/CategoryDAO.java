@@ -22,5 +22,6 @@ public interface CategoryDAO {
 	List<UpperCategory> selectUpByKeyword(String keyword);
 	// 키워드로 소분류 조회
 	List<LowerCategorySimpleDTO> selectLowByKeyword(String keyword);
-	
+	// 소분류로 대분류 이름 가져오기
+	String selectUpperNameByLowerCategoryId(int id);
 }

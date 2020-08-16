@@ -1,5 +1,6 @@
    package com.ssafy.switon.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,9 +70,14 @@ public class SwitonRestController {
 	@ApiOperation(value = "유저가 가입한 스터디의 게시물들을 반환한다. ")
 	@GetMapping("/feeds")
 	public Object showFeeds(@RequestParam int index, HttpServletRequest request) {
-		int userId = getUserPK(request);
+		int userId = 0;
 		try {
-			List<ArticleReturnDTO> articles = articleService.searchFeeds(userId, index, index + 5);
+			userId = getUserPK(request);
+		} catch(Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
+		}
+		try {
+			List<ArticleReturnDTO> articles = articleService.searchFeeds(userId, index, 5);
 			System.out.println("뉴스피드 생성 성공");
 			return new ResponseEntity<>(articles, HttpStatus.OK);
 		} catch (Exception e) {
@@ -82,20 +88,31 @@ public class SwitonRestController {
 	
 	@ApiOperation(value = "스터디 카드 리스트를 반환한다.", response = List.class)
 	@GetMapping("/studyCard")
-	public List<StudyCardDTO> showAllStudyCards(@RequestParam(value="lowercategory_id", required = false) String lowercategory_id){
+	public Object showAllStudyCards(@RequestParam(value="lowercategory_id", required = false) String lowercategory_id){
 		System.out.println(lowercategory_id);
+		List<StudyCardDTO> list = new ArrayList<>();
 		if(lowercategory_id != null) {
-			return studyService.searchStudyCardsByLowercategoryId(Integer.parseInt(lowercategory_id));
+			try {
+				list = studyService.searchStudyCardsByLowercategoryId(Integer.parseInt(lowercategory_id));
+				return new ResponseEntity<>(list, HttpStatus.OK);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return new ResponseEntity<>("스터디를 불러올 수 없었습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 		}
-		System.out.println("스터디 리스트 출력");
-		return studyService.searchStudyCards();
+		try {
+			list = studyService.searchStudyCards();
+			System.out.println("스터디 리스트 출력");		
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("스터디를 불러올 수 없었습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 // Token(Authentication)에서 유저 id 정보를 뽑아내는 메소드
 	private int getUserPK(HttpServletRequest request) {
 		return jwtUtil.getUserPK(request.getHeader("Authentication").substring("Bearer ".length()));
 	}
-
-	
 
 }

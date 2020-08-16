@@ -24,7 +24,16 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public UserInfoDTO selectUserById(int id) {
-		return sqlSession.selectOne("user.selectUserById", id);
+		UserInfoDTO user = sqlSession.selectOne("user.selectUserById", id);
+		if(user == null) {
+			return user;
+		}
+		if(user.getName_legacy() != null) {
+			user.setName(user.getName_legacy());
+			user.setEmail("탈퇴한 회원입니다.");
+			user.setIntroduce("탈퇴한 회원입니다.");
+		}
+		return user;
 	}
 
 	@Override
@@ -57,6 +66,11 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public int updateUserLegacy(UserInfoDTO userInfoDTO) {
 		return sqlSession.update("user.updateUserLegacy", userInfoDTO);
+	}
+
+	@Override
+	public int updateUserPwd(UserDTO userDTO) {
+		return sqlSession.update("user.updateUserPwd", userDTO);
 	}
 
 

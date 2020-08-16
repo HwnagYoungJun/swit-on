@@ -4,7 +4,7 @@ public class FeedsIndexDTO {
 	
 	int user_id;
 	int start_idx;
-	int end_idx;
+	int amount;
 	
 	
 	public int getUserId() {
@@ -19,19 +19,19 @@ public class FeedsIndexDTO {
 	public void setStartIdx(int startIdx) {
 		this.start_idx = startIdx;
 	}
-	public int getEndIdx() {
-		return end_idx;
+	public int getamount() {
+		return amount;
 	}
-	public void setEndIdx(int endIdx) {
-		this.end_idx = endIdx;
+	public void setamount(int amount) {
+		this.amount = amount;
 	}
-	public FeedsIndexDTO(int userId, int startIdx, int endIdx) {
+	public FeedsIndexDTO(int userId, int startIdx, int amount) {
 		this.user_id = userId;
 		this.start_idx = startIdx;
-		this.end_idx = endIdx;
+		this.amount = amount;
 	}
 	@Override
 	public String toString() {
-		return "FeedsIndexDTO [userId=" + user_id + ", startIdx=" + start_idx + ", endIdx=" + end_idx + "]";
+		return "FeedsIndexDTO [userId=" + user_id + ", startIdx=" + start_idx + ", amount=" + amount + "]";
 	}
 }

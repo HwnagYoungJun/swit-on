@@ -32,5 +32,8 @@ public interface ArticleDAO {
 	List<Article> selectRepositoriesByUserId(int userId);
 	// 유저 피드 반환 (최신순으로 startIdx ~ endIdx 까지)
 	List<Article> selectFeeds(FeedsIndexDTO feedsIndexDTO);
+	
+	int cntUserArticlesByStudyId(int user_id, int study_id);
+	int selectRecentUserArticleId(int user_id, int study_id);
 
 }

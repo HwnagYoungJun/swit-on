@@ -53,4 +53,9 @@ public class CategoryDAOImpl implements CategoryDAO {
 		return sqlsession.selectList("category.selectLowerCategoryByKeyword", keyword);
 	}
 
+	@Override
+	public String selectUpperNameByLowerCategoryId(int id) {
+		return sqlsession.selectOne("category.selectUpperNameByLowerCategoryId", id);
+	}
+
 }
