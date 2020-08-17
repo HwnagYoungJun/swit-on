@@ -1,8 +1,8 @@
 <template>
 	<section class="main-page">
-		<AppHeader></AppHeader>
+		<AppHeader :messages="messages"></AppHeader>
 		<Search />
-		<section v-if="studies && isUserLogin" class="popular-wrap">
+		<section v-if="isUserLogin" class="popular-wrap">
 			<h2 class="popular-title">인기 소모임<span></span></h2>
 			<router-link
 				class="popular-item-link"
@@ -44,30 +44,31 @@ import Search from '@/components/common/Search.vue';
 import MainCard from '@/components/common/MainCard.vue';
 import { fetchStudies } from '@/api/studies';
 import { mapGetters } from 'vuex';
+// import Loading from '@/components/common/Loading.vue';
 
 export default {
 	components: {
 		Search,
 		MainCard,
 		AppHeader,
+		// Loading,
 	},
 	data() {
 		return {
-			studies: null,
+			studies: [],
 			isLoading: false,
 		};
 	},
 	computed: {
 		...mapGetters(['isLogin']),
 		isUserLogin() {
-			return this.isLogin;
+			return this.isLogin && this.studies.length;
 		},
 	},
 	methods: {
 		async fetchData() {
 			this.isLoading = true;
 			const { data } = await fetchStudies();
-			console.log(data);
 			this.isLoading = false;
 			this.studies = data.reverse().splice(0, 4);
 		},

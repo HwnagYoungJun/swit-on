@@ -38,10 +38,12 @@
 					><span class="nav-router-full">만들기</span
 					><i class="icon ion-md-add-circle nav-router-medium"></i
 				></router-link>
-				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
-					><span class="nav-router-full">알림</span
-					><i class="icon ion-md-notifications nav-router-medium"></i
-				></router-link>
+				<!-- <router-link class="nav-router-item" :to="{ name: 'newsfeed' }"> -->
+				<!-- <span class="nav-router-full">알림</span> -->
+				<div class="nav-router-item">
+					<Notification />
+				</div>
+				<!-- </router-link> -->
 				<a
 					class="nav-router-item log-out"
 					href="javascript:;"
@@ -69,6 +71,7 @@
 import { mapMutations, mapState, mapGetters } from 'vuex';
 import { baseAuth } from '@/api/index';
 import Search from '@/components/common/Search.vue';
+import Notification from '@/components/common/Notification.vue';
 
 export default {
 	data() {
@@ -79,6 +82,7 @@ export default {
 	},
 	components: {
 		Search,
+		Notification,
 	},
 	computed: {
 		...mapGetters(['isLogin']),
