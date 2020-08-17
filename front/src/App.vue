@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus';
 import AppHeader from '@/components/common/AppHeader.vue';
 import Footer from '@/components/common/Footer.vue';
 import Main from '@/views/Main.vue';
@@ -20,6 +21,7 @@ import ToastPopup from './components/common/ToastPopup.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import { mapGetters } from 'vuex';
+import { fetchAlarms } from '@/api/auth';
 export default {
 	components: {
 		AppHeader,
@@ -44,7 +46,6 @@ export default {
 	methods: {
 		connect() {
 			const Id = this.getUserId;
-			console.log(Id);
 			let ServerUrl = process.env.VUE_APP_API_URL;
 			let client = Stomp.over(new SockJS(`${ServerUrl}websocket`));
 
@@ -56,11 +57,25 @@ export default {
 				});
 			});
 		},
+		async fetchData() {
+			try {
+				const Id = this.getUserId;
+				const { data } = await fetchAlarms(Id);
+				this.messages = data;
+				console.log(this.messages);
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
 	},
 	mounted() {
 		if (this.isLogin) {
 			// this.connect();
+			this.fetchData();
 		}
+	},
+	watch: {
+		$route: 'fetchData',
 	},
 };
 </script>

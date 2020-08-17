@@ -93,7 +93,10 @@
 							>
 								<div class="comment-contentbox">
 									<p>
-										<router-link :to="`/profile/${article.user.name}`">
+										<router-link
+											class="comment-userbox"
+											:to="`/profile/${article.user.name}`"
+										>
 											<span class="comment-user"
 												><img
 													v-if="comment.user.profile_image !== null"
@@ -108,7 +111,9 @@
 												{{ comment.user.name }}</span
 											>
 										</router-link>
-										{{ comment.content }}
+										<span class="comment-content-item">{{
+											comment.content
+										}}</span>
 									</p>
 								</div>
 								<div class="comment-btnbox">
@@ -394,9 +399,10 @@ export default {
 .comment-list {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
+	// align-items: flex-start;
 }
 .comment-btnbox {
+	align-self: flex-start;
 	font-size: $font-normal;
 	i {
 		margin-right: 5px;
@@ -410,7 +416,7 @@ export default {
 		height: 20px;
 		width: 20px;
 		border-radius: 50%;
-		margin-right: 0.66rem;
+		margin-right: 5px;
 	}
 	a {
 		display: flex;
@@ -529,12 +535,20 @@ export default {
 	}
 	.comment-contentbox {
 		width: 90%;
-		word-break: break-all;
+		// word-break: break-all;
+		p {
+			display: flex;
+		}
+		.comment-content-item {
+			word-break: break-all;
+		}
 	}
 	.comment-form {
+		display: flex;
+		align-items: center;
 		position: relative;
 		.comment {
-			width: 100%;
+			width: 90%;
 			height: 45px;
 			padding: 0.8rem;
 			border: none;
@@ -558,17 +572,22 @@ export default {
 			}
 		}
 	}
+	.comment-userbox {
+		display: flex;
+		align-items: flex-start;
+	}
 	.comment-user {
 		margin-right: 8px;
 		font-weight: bold;
 		cursor: pointer;
 		display: flex;
+		word-break: keep-all;
 		align-items: center;
 		img {
 			height: 20px;
 			width: 20px;
 			border-radius: 50%;
-			margin-right: 0.66rem;
+			margin-right: 5px;
 		}
 	}
 }
