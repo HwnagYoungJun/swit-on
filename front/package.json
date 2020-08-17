@@ -12,6 +12,7 @@
     "@lkmadushan/vue-tuicalendar": "^0.1.6",
     "@toast-ui/vue-calendar": "^1.1.1",
     "@toast-ui/vue-editor": "^2.3.0",
+    "adapterjs": "^0.15.5",
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "emailjs-com": "^2.6.3",

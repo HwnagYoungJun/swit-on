@@ -28,24 +28,36 @@
 			<template v-else>
 				<router-link class="nav-router-item" :to="'/category/웹'"
 					><span class="nav-router-full">카테고리</span
-					><i class="icon ion-md-menu nav-router-medium"></i
+					><i class="icon ion-md-apps nav-router-medium"></i
 				></router-link>
 				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
 					><span class="nav-router-full">뉴스피드</span
 					><i class="icon ion-md-list-box nav-router-medium"></i
 				></router-link>
-				<router-link class="nav-router-item" :to="{ name: 'addstudy' }"
-					><span class="nav-router-full">만들기</span
-					><i class="icon ion-md-add-circle nav-router-medium"></i
-				></router-link>
-				<!-- <router-link class="nav-router-item" :to="{ name: 'newsfeed' }"> -->
-				<!-- <span class="nav-router-full">알림</span> -->
+				<router-link
+					class="nav-router-item app-header-mobile-none"
+					:to="{ name: 'addstudy' }"
+					><span class="nav-router-full">만들기</span></router-link
+				>
+				<img
+					v-if="isMainRoute"
+					src="@/assets/white.png"
+					alt="switon-logo"
+					class="go-to-top-logo"
+					@click="goToTop"
+				/>
+				<img
+					v-else
+					src="@/assets/black.png"
+					alt="switon-logo"
+					class="go-to-top-logo"
+					@click="goToTop"
+				/>
 				<div class="nav-router-item">
 					<Notification />
 				</div>
-				<!-- </router-link> -->
 				<a
-					class="nav-router-item log-out"
+					class="nav-router-item app-header-mobile-none"
 					href="javascript:;"
 					@click="logoutUser"
 					><span class="nav-router-full">로그아웃</span></a
@@ -113,6 +125,9 @@ export default {
 		},
 		onChangeSearch(val) {
 			this.searchData = val;
+		},
+		goToTop() {
+			document.documentElement.scrollTop = 0;
 		},
 	},
 	created() {
@@ -205,7 +220,17 @@ header {
 		border-radius: 50%;
 		object-fit: cover;
 	}
-	@media screen and (max-width: 1024px) {
+	.go-to-top-logo {
+		width: 24px;
+		height: 24px;
+		border-radius: 5px;
+		object-fit: cover;
+		display: none;
+	}
+	.app-header-mobile {
+		display: none;
+	}
+	@media screen and (max-width: 768px) {
 		.nav-router {
 			position: fixed;
 		}
@@ -221,8 +246,17 @@ header {
 		i {
 			font-size: 24px;
 		}
-		.log-out {
+		.app-header-mobile-none {
 			display: none;
+		}
+		.app-header-mobile {
+			display: inline;
+		}
+		.go-to-top-logo {
+			display: inline;
+			&:hover {
+				cursor: pointer;
+			}
 		}
 	}
 }

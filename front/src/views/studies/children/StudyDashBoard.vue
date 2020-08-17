@@ -9,6 +9,7 @@
 				<ArticleNotFound />
 			</div>
 			<div class="card-item" v-else>
+				<span class="card-item-title">게시글</span>
 				<router-link
 					:key="article.id"
 					v-for="article in qnaArticles"
@@ -147,6 +148,7 @@
 						</div>
 					</li>
 				</ul>
+				<hr />
 			</div>
 		</aside>
 	</section>
@@ -214,7 +216,6 @@ export default {
 			try {
 				const studyId = this.id;
 				await checkInSchedule(studyId, scheduleId);
-				console.log('checkin');
 				this.fetchSchedule();
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
@@ -224,7 +225,6 @@ export default {
 			try {
 				const studyId = this.id;
 				await checkOutSchedule(studyId, scheduleId);
-				console.log('checkout');
 				this.fetchSchedule();
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
@@ -265,8 +265,6 @@ export default {
 					const startDay = days[start.getDay()];
 					const startHours = ('00' + start.getHours()).slice(-2);
 					const startMinutes = ('00' + start.getMinutes()).slice(-2);
-					// const endMonth = ('00' + (end.getMonth() + 1)).slice(-2);
-					// const endDate = ('00' + end.getDate()).slice(-2);
 					const endHours = ('00' + end.getHours()).slice(-2);
 					const endMinutes = ('00' + end.getMinutes()).slice(-2);
 					const scheduleId = el.id;
@@ -281,8 +279,6 @@ export default {
 						startDay,
 						startHours,
 						startMinutes,
-						// endMonth,
-						// endDate,
 						endHours,
 						endMinutes,
 						scheduleId,
@@ -341,6 +337,17 @@ export default {
 		flex-wrap: wrap;
 		justify-content: center;
 	}
+	// .card-item {
+	// 	position: relative;
+	// 	.card-item-title {
+	// 		position: absolute;
+	// 		top: -5px;
+	// 		left: -100px;
+	// 		color: rgb(90, 90, 90);
+	// 		font-weight: bold;
+	// 		background: #fff;
+	// 	}
+	// }
 }
 aside {
 	flex: 1.5;

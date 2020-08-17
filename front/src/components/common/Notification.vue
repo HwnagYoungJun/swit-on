@@ -55,7 +55,7 @@ export default {
 	width: 300px;
 	position: absolute;
 	top: 30px;
-	left: 0;
+	right: 0;
 	@media screen and (max-width: 768px) {
 		// background: $btn-purple;
 		top: -37px;

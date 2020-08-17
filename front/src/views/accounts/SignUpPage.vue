@@ -12,7 +12,14 @@
 			<h2>회원가입</h2>
 			<SignupForm></SignupForm>
 		</section>
+<<<<<<< HEAD
 		<img class="signup-img" src="@/assets/1.jpg" alt="signupImage" />
+=======
+		<div class="rel">
+			<img class="signup-img" src="@/assets/login.png" alt="signupImage" />
+			<div class="opacity"></div>
+		</div>
+>>>>>>> 20a208af8e0a30ab7dd55bc7d44b72f53546cfe4
 	</section>
 </template>
 
@@ -26,6 +33,18 @@ export default {
 </script>
 
 <style lang="scss">
+.rel {
+	position: relative;
+}
+.opacity {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border: 1rem solid rgba(50, 49, 48, 0.2);
+}
 .signup-header {
 	display: flex;
 	justify-content: space-between;
@@ -35,6 +54,7 @@ export default {
 .signup-container {
 	display: grid;
 	width: 100%;
+	height: 100%;
 	grid-template-rows: 100%;
 	grid-template-columns: repeat(2, 50vw);
 	grid-template-areas: 'box img';
@@ -60,6 +80,7 @@ export default {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+	box-sizing: content-box;
 }
 h2 {
 	font-size: $font-bold;

@@ -9,7 +9,14 @@
 			<h2>로그인</h2>
 			<LoginForm></LoginForm>
 		</section>
+<<<<<<< HEAD
 		<img class="login-img" src="@/assets/6.jpg" alt="loginImage" />
+=======
+		<div class="rel">
+			<img class="login-img" src="@/assets/login.png" alt="signupImage" />
+			<div class="opacity"></div>
+		</div>
+>>>>>>> 20a208af8e0a30ab7dd55bc7d44b72f53546cfe4
 	</section>
 </template>
 
@@ -23,6 +30,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.rel {
+	position: relative;
+}
+.opacity {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border: 1.5rem solid rgba(50, 49, 48, 0.3);
+}
 .login-header {
 	margin-bottom: 2rem;
 }

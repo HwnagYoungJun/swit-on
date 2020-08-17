@@ -1,10 +1,10 @@
 <template>
-	<div class="upperKing" @click="goToTop">
+	<section class="upperKing" @click="goToTop">
 		<div class="upper-container">
 			<div class="upper-wraper"></div>
 			<i class="icon ion-md-arrow-round-up"></i>
 		</div>
-	</div>
+	</section>
 </template>
 
 <script>
