@@ -12,14 +12,10 @@
 			<h2>회원가입</h2>
 			<SignupForm></SignupForm>
 		</section>
-<<<<<<< HEAD
-		<img class="signup-img" src="@/assets/1.jpg" alt="signupImage" />
-=======
 		<div class="rel">
 			<img class="signup-img" src="@/assets/login.png" alt="signupImage" />
 			<div class="opacity"></div>
 		</div>
->>>>>>> 20a208af8e0a30ab7dd55bc7d44b72f53546cfe4
 	</section>
 </template>
 
