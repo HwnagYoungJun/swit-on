@@ -1,7 +1,7 @@
 <template>
 	<article class="feed-wrap">
 		<section class="feed-title">
-			<img src="@/assets/color.png" alt="profile-image" class="img" />
+			<img :src="BaseURL" alt="profile-image" class="img" />
 			<div>
 				<p>{{ article.user.name }}</p>
 				<time class="feed-time">{{ article.created_at | formatDate }}</time>
@@ -32,11 +32,7 @@ export default {
 			return process.env.VUE_APP_API_URL;
 		},
 		BaseURL() {
-			return this.article.user === undefined
-				? this.article.study.logo === null
-					? `${this.baseURL}upload/noStudy.jpg`
-					: `${this.baseURL}${this.article.study.logo}`
-				: this.article.user.profile_image === null
+			return this.article.user.profile_image === null
 				? `${this.baseURL}upload/noProfile.png`
 				: `${this.baseURL}${this.article.user.profile_image}`;
 		},
@@ -75,6 +71,7 @@ export default {
 	.img {
 		width: 40px;
 		height: 40px;
+		border-radius: 20%;
 		margin-right: 20px;
 	}
 	.feed-time {

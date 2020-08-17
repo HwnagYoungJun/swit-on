@@ -92,7 +92,7 @@ export default {
 				const { data } = await bestMember(studyId);
 				const res = await bestArticle(studyId);
 				this.bestMember = data.rankers;
-				this.bestArticle = res.data;
+				this.bestArticle = res.data.bestQnas;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
