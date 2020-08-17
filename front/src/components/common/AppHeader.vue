@@ -209,6 +209,7 @@ header {
 		height: 24px;
 	}
 	.nav-router-full {
+		color: #495057;
 		display: inline;
 	}
 	.nav-router-medium {

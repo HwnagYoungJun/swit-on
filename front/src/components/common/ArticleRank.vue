@@ -11,7 +11,8 @@
 					</div>
 					<router-link :to="`/profile/${bestMember[0].user_name}`">
 						{{ bestMember[0].user_name }}
-						<i class="icon ion-md-create"></i>{{ bestMember[0].score }}
+						<i class="icon ion-md-podium podium-icon"></i
+						>{{ bestMember[0].score }}
 					</router-link>
 				</li>
 				<li>
@@ -22,7 +23,8 @@
 					</div>
 					<router-link :to="`/profile/${bestMember[1].user_name}`">
 						{{ bestMember[1].user_name }}
-						<i class="icon ion-md-create"></i>{{ bestMember[1].score }}
+						<i class="icon ion-md-podium podium-icon"></i
+						>{{ bestMember[1].score }}
 					</router-link>
 				</li>
 				<li>
@@ -33,7 +35,8 @@
 					</div>
 					<router-link :to="`/profile/${bestMember[2].user_name}`">
 						{{ bestMember[2].user_name }}
-						<i class="icon ion-md-create"></i>{{ bestMember[2].score }}
+						<i class="icon ion-md-podium podium-icon"></i
+						>{{ bestMember[2].score }}
 					</router-link>
 				</li>
 			</ul>
@@ -109,6 +112,11 @@ export default {
 	height: 80vh;
 	position: sticky;
 	top: 50px;
+}
+.podium-icon {
+	color: rgb(138, 138, 138);
+	margin-left: 0.5rem;
+	margin-right: 0.2rem;
 }
 .heart-icon {
 	color: rgb(138, 138, 138);
