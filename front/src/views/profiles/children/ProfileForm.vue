@@ -121,7 +121,6 @@ export default {
 		@media screen and (max-width: 1024px) {
 			text-align: center;
 			margin-left: 0;
-			margin-top: 0;
 		}
 	}
 	.modify-profile {

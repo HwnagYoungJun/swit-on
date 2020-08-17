@@ -84,7 +84,23 @@
 				<span class="schedule-title">소모임 일정</span>
 				<ul>
 					<li :key="s.id" v-for="s in schedules">
-						<div class="schedule-list" v-if="s.isAbled">
+						<div
+							class="schedule-list"
+							v-if="s.isAbled"
+							@click="s.modal = !s.modal"
+						>
+							<div
+								v-if="!s.modal"
+								@click="s.modal = false"
+								class="schedule-modal"
+							>
+								<p class="scheduleTitle">{{ s.title }}</p>
+								<p>
+									<span :key="member.id" v-for="member in s.joinMembers">
+										"{{ member.name }}"
+									</span>
+								</p>
+							</div>
 							<span>
 								<span>{{ s.startMonth }}.{{ s.startDate }}</span>
 								<span>{{ s.startDay }}</span>
@@ -118,7 +134,23 @@
 				<span class="schedule-title">나의 일정</span>
 				<ul>
 					<li :key="s.id" v-for="s in participantSchedules">
-						<div class="schedule-list" v-if="s.isScheduleJoin">
+						<div
+							class="schedule-list"
+							v-if="s.isScheduleJoin"
+							@click="s.modal = !s.modal"
+						>
+							<div
+								v-if="!s.modal"
+								@click="s.modal = false"
+								class="schedule-modal"
+							>
+								<p class="scheduleTitle">{{ s.title }}</p>
+								<p>
+									<span :key="member.id" v-for="member in s.joinMembers">
+										"{{ member.name }}"
+									</span>
+								</p>
+							</div>
 							<span>
 								<span>{{ s.startMonth }}.{{ s.startDate }}</span>
 								<span>{{ s.startDay }}</span>
@@ -269,6 +301,9 @@ export default {
 					const isScheduleJoin = el.members.filter(
 						member => member.name === userName,
 					).length;
+					const title = el.title;
+					let joinMembers = el.members;
+					const modal = false;
 					const isAbled =
 						new Date(el.start) - nowTime > 0 && !isScheduleJoin ? true : false;
 					const ScheduleData = {
@@ -282,6 +317,9 @@ export default {
 						scheduleId,
 						isScheduleJoin,
 						isAbled,
+						title,
+						joinMembers,
+						modal,
 					};
 					scheduleList.push(ScheduleData);
 					ScheduleData.isScheduleJoin
@@ -359,6 +397,22 @@ aside {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
+			position: relative;
+			.schedule-modal {
+				position: absolute;
+				z-index: 1000000;
+				background: white;
+				border-top: 2px solid purple;
+				border-bottom: 2px solid purple;
+				top: 2rem;
+				left: 0;
+				display: flex;
+				flex-direction: column;
+				.scheduleTitle {
+					font-size: $font-normal;
+					font-weight: bold;
+				}
+			}
 		}
 		@media screen and (max-width: 370px) {
 			display: inline;
