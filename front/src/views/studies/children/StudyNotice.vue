@@ -8,31 +8,34 @@
 		<div v-if="!articles.length">
 			<ArticleNotFound />
 		</div>
-		<router-link
-			v-else
-			v-for="article in articles"
-			:key="article.id"
-			:to="{
-				name: 'BoardArticleDetail',
-				params: {
-					id,
-					board_name: 'notice',
-					article_id: article.id,
-				},
-			}"
-		>
-			<ArticleCard :article="article">
-				<div slot="logo">
-					<img src="@/assets/dd.png" alt="" />
-				</div>
-			</ArticleCard>
-		</router-link>
+		<article class="article-wrap" v-else>
+			<div class="article-feed-wrap">
+				<router-link
+					v-for="article in articles"
+					:key="article.id"
+					:to="{
+						name: 'BoardArticleDetail',
+						params: {
+							id,
+							board_name: 'notice',
+							article_id: article.id,
+						},
+					}"
+				>
+					<ArticleFeed :article="article">
+						<div slot="logo">
+							<img src="@/assets/dd.png" alt="" />
+						</div>
+					</ArticleFeed>
+				</router-link>
+			</div>
+		</article>
 	</section>
 </template>
 
 <script>
 import bus from '@/utils/bus.js';
-import ArticleCard from '@/components/common/ArticleCard.vue';
+import ArticleFeed from '@/components/common/ArticleFeed.vue';
 import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import { fetchArticles } from '@/api/articles';
@@ -52,7 +55,7 @@ export default {
 		};
 	},
 	components: {
-		ArticleCard,
+		ArticleFeed,
 		ArticleAddBtn,
 		ArticleNotFound,
 		Loading,
@@ -110,11 +113,26 @@ export default {
 </script>
 <style lang="scss" scoped>
 .card-wrap {
+	height: 100%;
 	display: flex;
 	flex-wrap: wrap;
 	position: relative;
 	@media screen and (max-width: 1500px) {
 		justify-content: center;
+	}
+}
+.article-wrap {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	.article-feed-wrap {
+		flex: 2;
+		display: flex;
+		flex-direction: column;
+		margin-right: 100px;
+		@media screen and (max-width: 992px) {
+			margin-right: 0;
+		}
 	}
 }
 </style>

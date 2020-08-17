@@ -27,19 +27,17 @@
 						><span>로그아웃</span></a
 					>
 				</div>
-				<div class="middle-box">
-					<div class="middle-element">
-						<p>{{ studying }}</p>
-						<p>진행중</p>
-					</div>
-					<div class="middle-element">
-						<p>{{ studyed }}</p>
-						<p>완료함</p>
-					</div>
-				</div>
 				<p class="introduce">
 					{{ introduce }}
 				</p>
+				<div class="middle-box">
+					<div class="middle-element">
+						<p>진행스터디 {{ studying }}</p>
+					</div>
+					<div class="middle-element">
+						<p>종료스터디 {{ studyed }}</p>
+					</div>
+				</div>
 			</div>
 		</article>
 	</section>
@@ -116,7 +114,15 @@ export default {
 	justify-content: center;
 	width: 100%;
 	.introduce {
-		font-weight: 600;
+		font-weight: 400;
+		margin-top: 1.5rem;
+		margin-left: 3rem;
+		font-size: $font-normal * 1.1;
+		@media screen and (max-width: 1024px) {
+			text-align: center;
+			margin-left: 0;
+			margin-top: 0;
+		}
 	}
 	.modify-profile {
 		@include common-btn();
@@ -131,17 +137,17 @@ export default {
 		align-items: center;
 		height: 40%;
 		margin: 1.5rem 0;
+		margin-left: 3rem;
+		font-size: $font-normal;
 		.middle-element {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			margin: 0 3rem;
+			font-size: $font-normal * 1.2;
+			margin-right: 2rem;
 			@media screen and (max-width: 1024px) {
 				margin: 1.5rem 1rem;
 			}
-		}
-		p {
-			font-size: $font-bold * 0.9;
 		}
 		@media screen and (max-width: 1024px) {
 			height: auto;

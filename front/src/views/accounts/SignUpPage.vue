@@ -12,11 +12,7 @@
 			<h2>회원가입</h2>
 			<SignupForm></SignupForm>
 		</section>
-		<img
-			class="signup-img"
-			src="https://dimg.donga.com/wps/NEWS/IMAGE/2019/11/02/98183409.2.jpg"
-			alt="signupImage"
-		/>
+		<img class="signup-img" src="@/assets/1.jpg" alt="signupImage" />
 	</section>
 </template>
 

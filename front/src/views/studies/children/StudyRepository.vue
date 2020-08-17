@@ -26,7 +26,11 @@
 				</router-link>
 			</div>
 			<aside class="rank-wrap">
-				<ArticleRank :bestMember="bestMember" />
+				<ArticleRank
+					:bestMember="bestMember"
+					:bestArticle="bestArticle"
+					:studyId="id"
+				/>
 			</aside>
 		</article>
 	</section>
@@ -41,7 +45,7 @@ import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import Loading from '@/components/common/Loading.vue';
 import UpperBtn from '@/components/common/UpperBtn.vue';
 import { fetchArticles } from '@/api/articles';
-import { bestMember } from '@/api/studies';
+import { bestMember, bestArticle } from '@/api/studies';
 
 export default {
 	props: {
@@ -54,6 +58,7 @@ export default {
 			articles: [],
 			windowTop: 0,
 			bestMember: ['1등이없어요', '2등이없어요', '3등이없어요'],
+			bestArticle: ['1등이없어요', '2등이없어요', '3등이없어요'],
 		};
 	},
 	components: {
@@ -69,8 +74,9 @@ export default {
 			try {
 				const studyId = this.id;
 				const { data } = await bestMember(studyId);
-				console.log(data);
+				const res = await bestArticle(studyId);
 				this.bestMember = data.rankers;
+				this.bestArticle = res.data;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}

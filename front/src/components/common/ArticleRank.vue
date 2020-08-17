@@ -11,6 +11,7 @@
 					</div>
 					<router-link :to="`/profile/${bestMember[0].user_name}`">
 						{{ bestMember[0].user_name }}
+						<i class="icon ion-md-create"></i>{{ bestMember[0].score }}
 					</router-link>
 				</li>
 				<li>
@@ -21,6 +22,7 @@
 					</div>
 					<router-link :to="`/profile/${bestMember[1].user_name}`">
 						{{ bestMember[1].user_name }}
+						<i class="icon ion-md-create"></i>{{ bestMember[1].score }}
 					</router-link>
 				</li>
 				<li>
@@ -31,6 +33,7 @@
 					</div>
 					<router-link :to="`/profile/${bestMember[2].user_name}`">
 						{{ bestMember[2].user_name }}
+						<i class="icon ion-md-create"></i>{{ bestMember[2].score }}
 					</router-link>
 				</li>
 			</ul>
@@ -44,7 +47,15 @@
 							<i class="icon ion-md-heart"></i>
 						</div>
 					</div>
-					<p>게시글 제목</p>
+					<router-link
+						:to="
+							`/study/${studyId}/${bestArticle[0].board_name}/${bestArticle[0].id}`
+						"
+					>
+						{{ bestArticle[0].title }}
+						<i class="icon ion-md-heart  heart-icon"></i
+						>{{ bestArticle[0].likes }}
+					</router-link>
 				</li>
 				<li>
 					<div class="second-article">
@@ -52,7 +63,15 @@
 							<i class="icon ion-md-heart"></i>
 						</div>
 					</div>
-					<p>게시글 제목</p>
+					<router-link
+						:to="
+							`/study/${studyId}/${bestArticle[1].board_name}/${bestArticle[1].id}`
+						"
+					>
+						{{ bestArticle[1].title }}
+						<i class="icon ion-md-heart heart-icon"></i
+						>{{ bestArticle[1].likes }}
+					</router-link>
 				</li>
 				<li>
 					<div class="third-article">
@@ -60,7 +79,15 @@
 							<i class="icon ion-md-heart"></i>
 						</div>
 					</div>
-					<p>게시글 제목</p>
+					<router-link
+						:to="
+							`/study/${studyId}/${bestArticle[2].board_name}/${bestArticle[2].id}`
+						"
+					>
+						{{ bestArticle[2].title }}
+						<i class="icon ion-md-heart heart-icon"></i>
+						{{ bestArticle[2].likes }}
+					</router-link>
 				</li>
 			</ul>
 		</section>
@@ -70,7 +97,9 @@
 <script>
 export default {
 	props: {
+		studyId: Number,
 		bestMember: Array,
+		bestArticle: Array,
 	},
 };
 </script>
@@ -80,6 +109,16 @@ export default {
 	height: 80vh;
 	position: sticky;
 	top: 50px;
+}
+.heart-icon {
+	color: rgb(138, 138, 138);
+	margin-left: 0.5rem;
+	margin-right: 0.2rem;
+}
+.ion-md-create {
+	color: rgb(138, 138, 138);
+	margin-left: 0.5rem;
+	margin-right: 0.2rem;
 }
 .ranking {
 	position: relative;

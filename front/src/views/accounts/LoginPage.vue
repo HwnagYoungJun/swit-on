@@ -9,11 +9,7 @@
 			<h2>로그인</h2>
 			<LoginForm></LoginForm>
 		</section>
-		<img
-			class="login-img"
-			src="https://dimg.donga.com/wps/NEWS/IMAGE/2019/11/02/98183409.2.jpg"
-			alt="loginImage"
-		/>
+		<img class="login-img" src="@/assets/6.jpg" alt="loginImage" />
 	</section>
 </template>
 
