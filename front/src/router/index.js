@@ -81,7 +81,7 @@ const routes = [
 		props: route => ({
 			study_id: Number(route.params.study_id),
 		}),
-		component: () => import('@/views/calendar/makeScheduleForm.vue'),
+		component: () => import('@/views/calendar/MakeScheduleForm.vue'),
 	},
 	{
 		path: '/study/:id/:board_name/:article_id/edit',
