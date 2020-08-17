@@ -1,21 +1,41 @@
 <template>
-	<section>
-		<label for="title">일정이름</label>
-		<input name="title" type="text" v-model="title" />
-		<hr />
-		<label for="startend">시작시간 끝시간</label>
-		<input name="startend" type="time" v-model="startTime" />
-		<input name="startend" type="time" v-model="endTime" />
-		<hr />
-		<label for="date">날짜</label>
-		<input name="date" type="date" v-model="date" />
-		<hr />
-		<div class="selectColor">
-			<swatches class="swatchesPC" v-model="bgColor" inline />
-			<swatches class="swatchesMobile" v-model="bgColor" />
-		</div>
-		<button @click="submitSchedule">test</button>
-	</section>
+	<form class="scheduleform" @submit.prevent="submitSchedule">
+		<header class="scheduleform-header">
+			<h2>스터디 일정 생성</h2>
+			<div class="scheduleform-btnbox">
+				<button @click.prevent="$router.go(-1)" class="scheduleform-btn-cancle">
+					취소
+				</button>
+				<button class="hide-btn">생성</button>
+				<button class="scheduleform-btn-submit" type="submit">생성</button>
+			</div>
+		</header>
+		<section class="scheduleform-main">
+			<div class="schedule-margin">
+				<label class="head-label" for="title">일정이름</label>
+				<input
+					class="scheduleform-input"
+					id="title"
+					type="text"
+					v-model="title"
+				/>
+			</div>
+			<div class="schedule-margin">
+				<label class="head-label" for="startend">시간</label>
+				<input type="time" v-model="startTime" /> 부터
+				<input type="time" v-model="endTime" /> 까지
+			</div>
+			<div class="schedule-margin">
+				<label class="head-label" for="date">날짜</label>
+				<input id="date" type="date" v-model="date" />
+			</div>
+			<div class="selectColor">
+				<label class="head-label" for="color">색상</label>
+				<swatches class="swatchesPC" v-model="bgColor" inline />
+				<swatches class="swatchesMobile" v-model="bgColor" />
+			</div>
+		</section>
+	</form>
 </template>
 
 <script>
@@ -91,8 +111,66 @@ export default {
 </script>
 
 <style lang="scss">
-input {
-	border: 1px solid black;
+.scheduleform {
+	width: 100%;
+	height: 100%;
+}
+.scheduleform-main {
+	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
+	padding: 1rem;
+	border-radius: 4px;
+	.scheduleform-input {
+		width: 100%;
+		padding: 10px;
+		border: none;
+		border-radius: 0;
+		border-bottom: 1px solid black;
+		&:focus {
+			outline: none;
+			border-bottom: 1px solid black;
+		}
+	}
+	.head-label {
+		display: block;
+		font-weight: 600;
+	}
+}
+.scheduleform-btnbox {
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+
+.scheduleform-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+	.scheduleform-btn-cancle {
+		@include form-btn('white');
+		margin-right: 5px;
+	}
+	.scheduleform-btn-submit {
+		@include form-btn('purple');
+		position: relative;
+		right: 0;
+	}
+	.hide-btn {
+		border: none;
+		border-radius: 3px;
+		height: 40px;
+		padding: 0 1.125rem;
+		font-size: 1rem;
+		font-weight: 700;
+		text-decoration: none solid #000;
+		background: #000;
+		color: #fff;
+		position: absolute;
+		right: 0;
+	}
+}
+.schedule-margin {
+	margin-bottom: 2rem;
 }
 .selectColor {
 	.swatchesPC {
@@ -110,6 +188,12 @@ input {
 		display: flex;
 		flex-wrap: wrap;
 		width: 100% !important;
+	}
+	.vue-swatches__swatch {
+		margin-bottom: 0;
+	}
+	.color-bottom {
+		// margin-bottom: 4px;
 	}
 }
 </style>
