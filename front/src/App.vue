@@ -2,7 +2,7 @@
 	<section id="app">
 		<Main v-if="isMainRoute" />
 		<section v-else class="main-wrap">
-			<AppHeader v-if="!isAccountsRoute"></AppHeader>
+			<AppHeader :messages="messages" v-if="!isAccountsRoute"></AppHeader>
 			<main :class="[!isAccountsRoute ? 'main-container' : '']">
 				<router-view />
 			</main>
