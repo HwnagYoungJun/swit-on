@@ -28,7 +28,7 @@
 			<template v-else>
 				<router-link class="nav-router-item" :to="'/category/웹'"
 					><span class="nav-router-full">카테고리</span
-					><i class="icon ion-md-menu nav-router-medium"></i
+					><i class="icon ion-md-apps nav-router-medium"></i
 				></router-link>
 				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
 					><span class="nav-router-full">뉴스피드</span
@@ -201,7 +201,7 @@ header {
 		border-radius: 50%;
 		object-fit: cover;
 	}
-	@media screen and (max-width: 1024px) {
+	@media screen and (max-width: 768px) {
 		.nav-router {
 			position: fixed;
 		}
