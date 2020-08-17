@@ -209,7 +209,6 @@ header {
 		height: 24px;
 	}
 	.nav-router-full {
-		color: #495057;
 		display: inline;
 	}
 	.nav-router-medium {
@@ -265,6 +264,9 @@ header {
 	background: #fff;
 	i {
 		color: rgb(97, 97, 97);
+	}
+	.nav-router-full {
+		color: #495057;
 	}
 }
 .nav-router-color {
