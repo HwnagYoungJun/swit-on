@@ -144,6 +144,14 @@ export default {
 			}
 			list[index].focus();
 		},
+		searchBlur() {},
+	},
+	mounted() {
+		window.addEventListener('click', function(e) {
+			if (e.target.nodeName !== 'LI') {
+				document.querySelector('.searched-datas').style.display = 'none';
+			}
+		});
 	},
 };
 </script>
