@@ -112,8 +112,8 @@ export default {
 					return 'MILESTONE';
 				},
 			},
-			useCreationPopup: true,
-			useDetailPopup: true,
+			useCreationPopup: false,
+			useDetailPopup: false,
 		};
 	},
 	methods: {

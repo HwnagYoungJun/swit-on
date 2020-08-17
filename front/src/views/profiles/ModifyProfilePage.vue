@@ -145,9 +145,13 @@ export default {
 			return this.swichFile !== false
 				? this.profileImg === null
 					? `${this.baseURL}upload/noProfile.png`
+					: this.profileImg === undefined
+					? `${this.baseURL}upload/noProfile.png`
 					: this.swichFile
 				: this.profileImg !== null
-				? `${this.baseURL}${this.profileImg}`
+				? this.profileImg === undefined
+					? `${this.baseURL}upload/noProfile.png`
+					: this.swichFile
 				: `${this.baseURL}upload/noProfile.png`;
 		},
 		baseURL() {

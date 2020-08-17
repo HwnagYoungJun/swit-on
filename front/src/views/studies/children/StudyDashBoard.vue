@@ -90,7 +90,7 @@
 							@click="s.modal = !s.modal"
 						>
 							<div
-								v-if="!s.modal"
+								v-if="s.modal"
 								@click="s.modal = false"
 								class="schedule-modal"
 							>
@@ -140,7 +140,7 @@
 							@click="s.modal = !s.modal"
 						>
 							<div
-								v-if="!s.modal"
+								v-if="s.modal"
 								@click="s.modal = false"
 								class="schedule-modal"
 							>
