@@ -18,11 +18,14 @@
 		</nav>
 		<section class="study-description">
 			<div class="study-content">
-				<h3 class="study-title">{{ study.name }}</h3>
+				<h3 class="study-title">
+					{{ study.name }}
+				</h3>
 				<div class="leader-comment">
 					<span>{{ leaderName }}</span>
+					<p>우리 {{ study.name }}은</p>
 					<p>
-						우리 {{ study.name }}은 매주
+						매주
 						<span class="strong">{{ study.week | formatWeekday }}요일</span>
 					</p>
 					<time class="strong">{{ study.start_time }}</time> 부터
