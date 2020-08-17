@@ -9,14 +9,10 @@
 			<h2>로그인</h2>
 			<LoginForm></LoginForm>
 		</section>
-<<<<<<< HEAD
-		<img class="login-img" src="@/assets/6.jpg" alt="loginImage" />
-=======
 		<div class="rel">
 			<img class="login-img" src="@/assets/login.png" alt="signupImage" />
 			<div class="opacity"></div>
 		</div>
->>>>>>> 20a208af8e0a30ab7dd55bc7d44b72f53546cfe4
 	</section>
 </template>
 
