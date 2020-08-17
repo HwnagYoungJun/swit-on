@@ -8,7 +8,7 @@
 			<img
 				v-if="isMainRoute"
 				src="@/assets/white.png"
-				alt="logo"
+				alt="switon-logo"
 				id="main-logo"
 				:class="[isMainRoute ? 'switon-pos-block' : '']"
 			/>

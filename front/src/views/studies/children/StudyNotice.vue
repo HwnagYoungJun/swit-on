@@ -24,7 +24,7 @@
 				>
 					<ArticleFeed :article="article">
 						<div slot="logo">
-							<img src="@/assets/dd.png" alt="" />
+							<img src="@/assets/dd.png" :alt="`${article.name}의 대체 사진`" />
 						</div>
 					</ArticleFeed>
 				</router-link>

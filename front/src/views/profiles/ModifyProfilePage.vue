@@ -27,7 +27,7 @@
 						class="img-box"
 						id="img-box"
 						:src="profileImgCom"
-						alt="profile_img"
+						:alt="`${pastName}의 프로필 사진`"
 					/>
 				</div>
 			</div>

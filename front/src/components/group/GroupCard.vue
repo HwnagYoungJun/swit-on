@@ -2,7 +2,7 @@
 	<router-link :to="`/study/${study.id}`">
 		<section class="group-box">
 			<div class="img-box">
-				<img :src="imgLink" alt="imgLink" />
+				<img :src="imgLink" :alt="`${study.name} 스터디 사진`" />
 			</div>
 			<p class="groupName">{{ study.name }}</p>
 		</section>

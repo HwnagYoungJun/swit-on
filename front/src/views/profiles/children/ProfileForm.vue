@@ -6,13 +6,13 @@
 					v-if="profileImg"
 					class="profile-logo"
 					:src="`${baseURL}${profileImg}`"
-					alt="profile_img"
+					:alt="`${userName}의 프로필 사진`"
 				/>
 				<img
 					v-else
 					class="profile-logo"
 					src="https://blog.tofte-it.dk/wp-content/uploads/2018/12/profile-picture.png"
-					alt=""
+					:alt="`${userName}의 프로필 대체 사진`"
 				/>
 			</div>
 			<div class="info-box">

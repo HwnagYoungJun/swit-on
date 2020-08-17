@@ -1,7 +1,7 @@
 <template>
 	<section class="popular-item">
 		<div class="popular-img">
-			<img :src="studyImg" alt="study-logo" />
+			<img :src="studyImg" :alt="`${study.name} 스터디 사진`" />
 			<p class="popular-users-cnt">
 				<span>{{ study.users_current }} / {{ study.users_limit }}</span>
 			</p>
