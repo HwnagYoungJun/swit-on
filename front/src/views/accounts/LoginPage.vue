@@ -9,11 +9,10 @@
 			<h2>로그인</h2>
 			<LoginForm></LoginForm>
 		</section>
-		<img
-			class="login-img"
-			src="https://dimg.donga.com/wps/NEWS/IMAGE/2019/11/02/98183409.2.jpg"
-			alt="loginImage"
-		/>
+		<div class="rel">
+			<img class="login-img" src="@/assets/login.png" alt="signupImage" />
+			<div class="opacity"></div>
+		</div>
 	</section>
 </template>
 
@@ -27,6 +26,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.rel {
+	position: relative;
+}
+.opacity {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border: 1.5rem solid rgba(50, 49, 48, 0.3);
+}
 .login-header {
 	margin-bottom: 2rem;
 }
