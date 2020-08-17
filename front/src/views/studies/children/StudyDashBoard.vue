@@ -8,8 +8,7 @@
 			<div v-if="!isArticles">
 				<ArticleNotFound />
 			</div>
-			<div class="card-item" v-else>
-				<span class="card-item-title">게시글</span>
+			<div v-else>
 				<router-link
 					:key="article.id"
 					v-for="article in qnaArticles"
@@ -115,7 +114,7 @@
 					</li>
 				</ul>
 			</div>
-			<div class="schedule">
+			<div class="schedule schedule-bottom">
 				<span class="schedule-title">나의 일정</span>
 				<ul>
 					<li :key="s.id" v-for="s in participantSchedules">
@@ -148,7 +147,6 @@
 						</div>
 					</li>
 				</ul>
-				<hr />
 			</div>
 		</aside>
 	</section>
@@ -337,17 +335,6 @@ export default {
 		flex-wrap: wrap;
 		justify-content: center;
 	}
-	// .card-item {
-	// 	position: relative;
-	// 	.card-item-title {
-	// 		position: absolute;
-	// 		top: -5px;
-	// 		left: -100px;
-	// 		color: rgb(90, 90, 90);
-	// 		font-weight: bold;
-	// 		background: #fff;
-	// 	}
-	// }
 }
 aside {
 	flex: 1.5;
@@ -437,6 +424,13 @@ aside {
 				}
 			}
 		}
+	}
+}
+.schedule-bottom {
+	border-bottom: none;
+	@media screen and (max-width: 1350px) {
+		padding-bottom: 50px;
+		border-bottom: 1px solid #dbdbdb;
 	}
 }
 </style>

@@ -1,10 +1,9 @@
 <template>
 	<section>
-		<button class="schedule-add-btn" @click="addSchedule">+ 일정</button>
-		<button
-			class="schedule-add-btn schedule-add-btn-mobile"
-			@click="addSchedule"
-		>
+		<button class="schedule-add-btn" @click="addSchedule">
+			<i class="icon ion-md-add"></i> 일정
+		</button>
+		<button class="schedule-add-btn-mobile" @click="addSchedule">
 			일정추가
 		</button>
 	</section>
@@ -30,12 +29,15 @@ export default {
 	top: -55px;
 }
 .schedule-add-btn-mobile {
+	@include common-btn();
+	position: absolute;
+	width: 100%;
+	top: 0px;
 	display: none;
 }
 @media screen and (max-width: 768px) {
 	.schedule-add-btn {
-		position: static;
-		width: 94%;
+		display: none;
 	}
 	.schedule-add-btn-mobile {
 		display: inline;
