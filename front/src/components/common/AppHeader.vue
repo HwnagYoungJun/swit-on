@@ -54,7 +54,7 @@
 					@click="goToTop"
 				/>
 				<div class="nav-router-item">
-					<Notification />
+					<Notification :messages="messages" />
 				</div>
 				<a
 					class="nav-router-item app-header-mobile-none"
@@ -86,6 +86,9 @@ import Search from '@/components/common/Search.vue';
 import Notification from '@/components/common/Notification.vue';
 
 export default {
+	props: {
+		messages: Array,
+	},
 	data() {
 		return {
 			userName: this.name ? this.name : null,
