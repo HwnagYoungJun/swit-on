@@ -9,6 +9,7 @@
 				<ArticleNotFound />
 			</div>
 			<div class="card-item" v-else>
+				<span class="card-item-title">게시글</span>
 				<router-link
 					:key="article.id"
 					v-for="article in qnaArticles"
@@ -147,6 +148,7 @@
 						</div>
 					</li>
 				</ul>
+				<hr />
 			</div>
 		</aside>
 	</section>
@@ -335,6 +337,17 @@ export default {
 		flex-wrap: wrap;
 		justify-content: center;
 	}
+	// .card-item {
+	// 	position: relative;
+	// 	.card-item-title {
+	// 		position: absolute;
+	// 		top: -5px;
+	// 		left: -100px;
+	// 		color: rgb(90, 90, 90);
+	// 		font-weight: bold;
+	// 		background: #fff;
+	// 	}
+	// }
 }
 aside {
 	flex: 1.5;
