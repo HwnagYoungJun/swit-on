@@ -8,9 +8,9 @@
 			class="icon ion-md-notifications nav-router-medium router-cursor"
 		></i>
 		<section :class="[isOpen ? '' : 'messages-close', 'messages-wrap']">
-			<ul v-if="notifications.length">
-				<li :key="notification.id" v-for="notification in notifications">
-					{{ notification }}
+			<ul v-if="messages.length">
+				<li :key="message.id" v-for="message in messages">
+					{{ message }}
 				</li>
 			</ul>
 			<div class="messages-not" v-else>
@@ -22,6 +22,9 @@
 
 <script>
 export default {
+	props: {
+		messages: Array,
+	},
 	data() {
 		return {
 			isOpen: false,

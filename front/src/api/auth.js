@@ -1,9 +1,13 @@
 // 로그인, 회원가입, 회원탈퇴
-import { auth, baseAuth } from './index';
+import { auth, baseAuth, alarm } from './index';
 
 // 회원가입 API
 function registerUser(userData) {
 	return auth.post('accounts/register', userData);
+}
+
+function fetchAlarms(userId) {
+	return alarm.get(`user/${userId}`);
 }
 
 // 로그인 API
@@ -46,4 +50,5 @@ export {
 	fetchMyRepository,
 	fetchMyQNA,
 	fetchMySchedule,
+	fetchAlarms,
 };
