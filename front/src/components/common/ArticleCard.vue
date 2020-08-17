@@ -10,7 +10,7 @@
 					<slot name="bread"> </slot>
 				</p>
 				<p class="card-info-all">
-					<img :src="BaseURL" class="card-info-image" />
+					<img :src="BaseURL" class="card-info-image" alt="카드로고" />
 					<span>
 						<span v-if="article.user !== undefined" class="card-info-user">{{
 							article.user.name

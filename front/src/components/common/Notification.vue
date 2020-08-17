@@ -1,17 +1,13 @@
 <template>
 	<section class="notification-wrap">
-		<span class="nav-router-full" @click="isOpen = !isOpen">알림</span>
+		<span class="nav-router-full router-cursor" @click="isOpen = !isOpen"
+			>알림</span
+		>
 		<i
 			@click="isOpen = !isOpen"
-			class="icon ion-md-notifications nav-router-medium"
+			class="icon ion-md-notifications nav-router-medium router-cursor"
 		></i>
-		<section
-			:class="[
-				isOpen ? '' : 'messages-close',
-				'messages-wrap',
-				isMainRoute ? '' : '',
-			]"
-		>
+		<section :class="[isOpen ? '' : 'messages-close', 'messages-wrap']">
 			<ul v-if="notifications.length">
 				<li :key="notification.id" v-for="notification in notifications">
 					{{ notification }}
@@ -31,11 +27,6 @@ export default {
 			isOpen: false,
 			notifications: [],
 		};
-	},
-	computed: {
-		isMainRoute() {
-			return this.$route.name === 'main';
-		},
 	},
 };
 </script>
@@ -70,5 +61,8 @@ export default {
 }
 .messages-close {
 	display: none;
+}
+.router-cursor {
+	cursor: pointer;
 }
 </style>

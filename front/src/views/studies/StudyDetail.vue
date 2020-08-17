@@ -37,7 +37,7 @@
 				</p>
 			</div>
 			<div class="study-logo">
-				<img :src="studyImg" alt="study-logo" />
+				<img :src="studyImg" :alt="`${study.name} 스터디 사진`" />
 			</div>
 		</section>
 		<section v-if="isJoined" class="study-category">
@@ -79,13 +79,13 @@
 							<img
 								v-if="member.profile_image"
 								:src="`${baseURL}${member.profile_image}`"
-								alt="profileImage"
+								:alt="`${member.name}의 프로필 사진`"
 								class="member-image"
 							/>
 							<img
 								v-else
 								src="@/assets/dd.png"
-								alt="profileImage"
+								:alt="`${member.name}의 프로필 대체 사진`"
 								class="member-image"
 							/>
 							{{ member.name }}

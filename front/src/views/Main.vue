@@ -42,7 +42,7 @@
 import AppHeader from '@/components/common/AppHeader.vue';
 import Search from '@/components/common/Search.vue';
 import MainCard from '@/components/common/MainCard.vue';
-import { fetchStudies } from '@/api/studies';
+import { popularStudy } from '@/api/studies';
 import { mapGetters } from 'vuex';
 // import Loading from '@/components/common/Loading.vue';
 
@@ -68,9 +68,9 @@ export default {
 	methods: {
 		async fetchData() {
 			this.isLoading = true;
-			const { data } = await fetchStudies();
+			const { data } = await popularStudy();
 			this.isLoading = false;
-			this.studies = data.reverse().splice(0, 4);
+			this.studies = data;
 		},
 	},
 	created() {

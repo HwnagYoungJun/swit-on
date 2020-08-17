@@ -13,7 +13,11 @@
 			<SignupForm></SignupForm>
 		</section>
 		<div class="rel">
-			<img class="signup-img" src="@/assets/login.png" alt="signupImage" />
+			<img
+				class="signup-img"
+				src="@/assets/login.png"
+				alt="회원가입 디자인 사진"
+			/>
 			<div class="opacity"></div>
 		</div>
 	</section>

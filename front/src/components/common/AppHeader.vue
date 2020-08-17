@@ -6,9 +6,9 @@
 					<img
 						v-if="isMainRoute"
 						src="@/assets/white.png"
-						alt="logo"
+						alt="switon-logo"
 						:class="['switon', isMainRoute ? 'switon-pos' : '']"/>
-					<img v-else src="@/assets/color.png" alt="logo" class="switon"
+					<img v-else src="@/assets/color.png" alt="switon-logo" class="switon"
 				/></router-link>
 			</div>
 			<Search />
@@ -70,7 +70,7 @@
 						v-if="profileImg"
 						class="nav-router-img"
 						:src="`${baseURL}${profileImg}`"
-						alt="프로필"
+						:alt="`${name}의 프로필사진`"
 					/>
 					<i v-else class="icon ion-md-contact"></i>
 				</router-link>

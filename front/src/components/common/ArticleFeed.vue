@@ -1,7 +1,11 @@
 <template>
 	<article class="feed-wrap">
 		<section class="feed-title">
-			<img src="@/assets/color.png" alt="profile-image" class="img" />
+			<img
+				src="@/assets/color.png"
+				:alt="`${article.user.name}의 프로필사진`"
+				class="img"
+			/>
 			<div>
 				<p>{{ article.user.name }}</p>
 				<time class="feed-time">{{ article.created_at | formatDate }}</time>

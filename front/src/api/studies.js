@@ -1,4 +1,4 @@
-import { study } from './index';
+import { study, auth } from './index';
 // 스터디 데이터 조회 API
 function fetchStudies() {
 	return study.get('');
@@ -63,6 +63,12 @@ function checkOutSchedule(studyId, scheduleId) {
 function bestMember(studyId) {
 	return study.get(`${studyId}/best`);
 }
+function bestArticle(studyId) {
+	return study.get(`${studyId}/bestArticles`);
+}
+function popularStudy() {
+	return auth.get('popularstudy');
+}
 export {
 	fetchStudies,
 	createStudy,
@@ -78,4 +84,6 @@ export {
 	checkInSchedule,
 	checkOutSchedule,
 	bestMember,
+	popularStudy,
+	bestArticle,
 };

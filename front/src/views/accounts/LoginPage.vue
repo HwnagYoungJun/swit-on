@@ -3,14 +3,18 @@
 		<section class="login-box">
 			<header class="login-header">
 				<router-link :to="{ name: 'main' }">
-					<img src="@/assets/black.png" alt="logo" class="switon" />
+					<img src="@/assets/black.png" alt="switon-logo" class="switon" />
 				</router-link>
 			</header>
 			<h2>로그인</h2>
 			<LoginForm></LoginForm>
 		</section>
 		<div class="rel">
-			<img class="login-img" src="@/assets/login.png" alt="signupImage" />
+			<img
+				class="login-img"
+				src="@/assets/login.png"
+				alt="회원가입 디자인 사진"
+			/>
 			<div class="opacity"></div>
 		</div>
 	</section>
