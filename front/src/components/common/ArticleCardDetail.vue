@@ -23,6 +23,13 @@
 				<header class="card-detail-title">
 					<p>{{ article.title }}</p>
 				</header>
+				<div class="content-info">
+					<router-link :to="`/profile/${article.user.name}`">
+						<img :src="writerImg" alt="작성자이미지" />{{
+							article.user.name
+						}}</router-link
+					>
+				</div>
 				<section class="card-detail-content">
 					<Viewer :initialValue="article.content" />
 					<div v-if="article.file">
@@ -77,11 +84,6 @@
 							>
 						</div>
 					</div>
-					<div class="content-info">
-						<router-link :to="`/profile/${article.user.name}`">{{
-							article.user.name
-						}}</router-link>
-					</div>
 					<div class="comment-body">
 						<ul>
 							<li
@@ -91,11 +93,31 @@
 							>
 								<div class="comment-contentbox">
 									<p>
-										<span class="comment-user">{{ comment.user.name }}</span>
+										<router-link :to="`/profile/${article.user.name}`">
+											<span class="comment-user"
+												><img
+													v-if="comment.user.profile_image !== null"
+													:src="`${BaseUrl}${comment.user.profile_image}`"
+													alt="유저댓글이미지"
+												/>
+												<img
+													v-else
+													:src="`${BaseUrl}upload/noProfile.png`"
+													alt="유저댓글이미지"
+												/>
+												{{ comment.user.name }}</span
+											>
+										</router-link>
 										{{ comment.content }}
 									</p>
 								</div>
 								<div class="comment-btnbox">
+									<i
+										v-if="getName === comment.user.name"
+										@click="removeComment(comment.id)"
+										class="icon ion-md-close unlike"
+									>
+									</i>
 									<i
 										v-if="comment.like.liked"
 										@click="commentUnLike(comment.id)"
@@ -106,12 +128,6 @@
 										@click="commentLike(comment.id)"
 										class="icon ion-md-heart unlike"
 									></i>
-									<i
-										v-if="getName === comment.user.name"
-										@click="removeComment(comment.id)"
-										class="icon ion-md-trash unlike"
-									>
-									</i>
 								</div>
 							</li>
 						</ul>
@@ -193,6 +209,11 @@ export default {
 		},
 		FileCheck() {
 			return this.FilenameCheck(this.article.file);
+		},
+		writerImg() {
+			return this.article.user.profile_image !== null
+				? `${this.BaseUrl}${this.article.user.profile_image}`
+				: `${this.BaseUrl}upload/noProfile.png`;
 		},
 	},
 
@@ -381,6 +402,37 @@ export default {
 		margin-right: 5px;
 	}
 }
+.content-info {
+	margin: 10px 0 15px;
+	padding-left: 10px;
+
+	img {
+		height: 20px;
+		width: 20px;
+		border-radius: 50%;
+		margin-right: 0.66rem;
+	}
+	a {
+		display: flex;
+		align-items: center;
+		margin-right: 15px;
+		font-size: $font-bold * 0.65;
+		font-weight: 600;
+		color: #4b4b4b;
+	}
+	span {
+		display: inline-block;
+		width: 80px;
+		margin: 0 3px;
+		padding: 10px 0;
+		border: 1px solid #6c23c0;
+		border-radius: 20px;
+		color: #6c23c0;
+		font-size: $font-light;
+		background: none;
+		text-align: center;
+	}
+}
 .breadcrumb {
 	ol {
 		padding: 0;
@@ -406,8 +458,8 @@ export default {
 .card-detail-title {
 	display: flex;
 	margin: 10px;
+	height: 2.5rem;
 	p {
-		// margin: 5px 15px;
 		font-size: $font-bold;
 	}
 }
@@ -467,26 +519,7 @@ export default {
 			color: #ffe066;
 		}
 	}
-	.content-info {
-		margin: 10px 0 15px;
-		a {
-			margin-right: 15px;
-			font-weight: bold;
-			color: #636363;
-		}
-		span {
-			display: inline-block;
-			width: 80px;
-			margin: 0 3px;
-			padding: 3px 0;
-			border: 1px solid #6c23c0;
-			border-radius: 20px;
-			color: #6c23c0;
-			font-size: $font-light;
-			background: none;
-			text-align: center;
-		}
-	}
+
 	.comment-body {
 		li {
 			display: flex;
@@ -529,6 +562,14 @@ export default {
 		margin-right: 8px;
 		font-weight: bold;
 		cursor: pointer;
+		display: flex;
+		align-items: center;
+		img {
+			height: 20px;
+			width: 20px;
+			border-radius: 50%;
+			margin-right: 0.66rem;
+		}
 	}
 }
 .like {
