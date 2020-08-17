@@ -40,20 +40,23 @@
 					@change="onChangeFile"
 				/>
 				<div class="btn-wrap">
-					<button class="deleteImg-btn" type="button" @click="emetyImg">
-						<span>삭제</span>
+					<button
+						type="button"
+						@click="emetyImg"
+						class="profile-update-deleteBtn"
+					>
+						<span>기본 이미지</span>
 					</button>
-					<button type="button">
+					<button type="button" class="profile-update-addBtn">
 						<span>첨부</span>
 					</button>
+					<input
+						ref="inputFile"
+						type="file"
+						class="input_file"
+						@change="onChangeFile"
+					/>
 				</div>
-
-				<input
-					ref="inputFile"
-					type="file"
-					class="input_file"
-					@change="onChangeFile"
-				/>
 			</div>
 
 			<div class="input-container">
@@ -288,20 +291,6 @@ div.upload-btn_wrap {
 		justify-content: center;
 		margin-top: 0;
 	}
-	input.input_file {
-		position: absolute;
-		top: 0;
-		right: 0;
-		@include scale(width, 75px);
-		opacity: 0;
-		filter: alpha(opacity=0);
-		-ms-filter: 'alpha(opacity=0)';
-		-moz-opacity: 0;
-		margin-top: 0.6rem;
-		&:hover {
-			cursor: pointer;
-		}
-	}
 }
 
 div.upload-btn_wrap {
@@ -324,7 +313,34 @@ div.upload-btn_wrap button {
 	color: rgb(150, 149, 149);
 	margin-top: 1rem;
 }
-.deleteImg-btn {
-	margin-right: 1rem;
+.btn-wrap {
+	width: 100%;
+	min-height: 30px;
+	position: relative;
+	.profile-update-deleteBtn {
+		position: absolute;
+		top: -10px;
+		@include scale(right, 90px);
+		@include scale(width, 90px);
+	}
+	.profile-update-addBtn {
+		position: absolute;
+		top: -10px;
+		right: 10px;
+	}
+	.input_file {
+		position: absolute;
+		top: 0;
+		right: 10px;
+		@include scale(width, 75px);
+		opacity: 0;
+		filter: alpha(opacity=0);
+		-ms-filter: 'alpha(opacity=0)';
+		-moz-opacity: 0;
+		margin-top: 0.6rem;
+		&:hover {
+			cursor: pointer;
+		}
+	}
 }
 </style>
