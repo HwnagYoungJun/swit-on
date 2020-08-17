@@ -120,7 +120,7 @@ export default {
 					content,
 					file: this.inputFile,
 				});
-				this.$router.push(`/study/${studyId}/${boardName}/articleId`);
+				this.$router.push(`/study/${studyId}/${boardName}/${articleId}`);
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
