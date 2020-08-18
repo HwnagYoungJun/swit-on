@@ -1,5 +1,6 @@
 package com.ssafy.switon.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -12,13 +13,65 @@ import com.ssafy.switon.dto.Study;
 public class StudyDAOImpl implements StudyDAO {
 
 	@Autowired
-	SqlSession sqlsession;
+	SqlSession sqlSession;
+	
+	@Override
+	public List<Study> selectStudies() {
+		return sqlSession.selectList("study.selectStudies");
+	}
+
+	@Override
+	public Study selectStudyById(int id) {
+		return sqlSession.selectOne("study.selectStudyById", id);
+	}
+
+	@Override
+	public int insertStudy(Study study) {
+		return sqlSession.insert("study.insertStudy", study);
+	}
+
+	@Override
+	public int updateStudy(Study study) {
+		return sqlSession.update("study.updateStudy", study);
+	}
+
+	@Override
+	public int deleteStudy(int id) {
+		return sqlSession.delete("study.deleteStudy", id);
+	}
+
+	@Override
+	public int getRecentStudyIdByUserId(int userId) {
+		Integer studyId = sqlSession.selectOne("study.getRecentStudyIdByUserId", userId);
+		return studyId = studyId == null ? 0 : studyId;
+	}
+
+	@Override
+	public List<Study> selectLeaderStudiesByUserId(int userId) {
+		return sqlSession.selectList("study.selectLeaderStudiesByUserId", userId);
+	}
+
+	@Override
+	public List<Study> selectStudiesByLowercategoryId(int lowercategory_id) {
+		List<Study> list = sqlSession.selectList("study.selectStudiesByLowercategoryId", lowercategory_id);
+		return list;
+	}
 	
 	@Override
 	public List<Study> selectStudyByKeyword(String keyword) {
+		System.out.println("검색어: " + keyword);
 		keyword = "%" + keyword + "%";
-		System.out.println(keyword);
-		return sqlsession.selectList("study.selectStudyByKeyword", keyword);
+		return sqlSession.selectList("study.selectStudyByKeyword", keyword);
+	}
+
+	@Override
+	public List<Integer> selectNotFinishedStudyIds(Timestamp time) {
+		return sqlSession.selectList("study.selectNotFinishedStudyIds", time);
+	}
+
+	@Override
+	public int updateStudyFinish(int id) {
+		return sqlSession.update("study.updateStudyFinish", id);
 	}
 
 }
