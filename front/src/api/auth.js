@@ -6,13 +6,23 @@ function registerUser(userData) {
 	return auth.post('accounts/register', userData);
 }
 
-function fetchAlarms(userId) {
-	return alarm.get(`user/${userId}`);
-}
-
 // 로그인 API
 function loginUser(userData) {
 	return auth.post('accounts/login', userData);
+}
+
+// 검증 API
+function ValidEmail(email) {
+	return auth.get(`check/?email=${email}`);
+}
+
+function ValidName(name) {
+	return auth.get(`check/?name=${name}`);
+}
+
+// 유저 API
+function fetchAlarms(userId) {
+	return alarm.get(`user/${userId}`);
 }
 
 function fetchProfile(userName) {
@@ -51,4 +61,6 @@ export {
 	fetchMyQNA,
 	fetchMySchedule,
 	fetchAlarms,
+	ValidEmail,
+	ValidName,
 };
