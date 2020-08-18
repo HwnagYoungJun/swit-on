@@ -61,12 +61,17 @@
 
 			<div class="input-container">
 				<div class="modify-input">
-					<label for="name">이름</label>
-					<input to="name" type="text" class="head-label" v-model="name" />
+					<label class="head-label" for="name">이름</label>
+					<input id="name" type="text" v-model="name" />
 				</div>
 				<div class="modify-input">
-					<label to="intro" class="head-label">소개</label>
-					<textarea name="intro" id="" rows="2" v-model="introduce"></textarea>
+					<label for="intro" class="head-label">소개</label>
+					<textarea
+						name="intro"
+						id="intro"
+						rows="2"
+						v-model="introduce"
+					></textarea>
 				</div>
 			</div>
 			<div class="hiddenMsg" v-if="!isVaildIntro">
@@ -221,20 +226,20 @@ export default {
 	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
 	padding: 1rem;
 	border-radius: 4px;
-	.modify-input {
-		width: 100%;
-		padding: 10px;
-		border: none;
-		border-radius: 0;
-		border-bottom: 1px solid black;
-		&:focus {
-			outline: none;
-			border-bottom: 1px solid black;
-		}
-	}
-	textarea {
-		height: 5rem;
-	}
+	// .modify-input {
+	// 	width: 100%;
+	// 	padding: 10px;
+	// 	border: none;
+	// 	border-radius: 0;
+	// 	border-bottom: 1px solid black;
+	// 	&:focus {
+	// 		outline: none;
+	// 		border-bottom: 1px solid black;
+	// 	}
+	// }
+	// textarea {
+	// 	height: 5rem;
+	// }
 }
 .imgimgimg {
 	display: flex;
@@ -253,9 +258,7 @@ export default {
 	object-fit: cover;
 }
 .input-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	width: 100%;
 	.input-box {
 		display: flex;
 		flex-direction: column;
@@ -267,10 +270,20 @@ export default {
 			margin-right: 1rem;
 			margin-bottom: 0.5rem;
 		}
-		input {
-			border: 1px solid black;
+	}
+	.modify-input {
+		margin-top: 0.5rem;
+		input,
+		textarea {
 			width: 100%;
-			height: 2rem;
+			padding: 10px;
+			border: none;
+			border-radius: 0;
+			border-bottom: 1px solid black;
+			&:focus {
+				outline: none;
+				border-bottom: 1px solid black;
+			}
 		}
 	}
 }
