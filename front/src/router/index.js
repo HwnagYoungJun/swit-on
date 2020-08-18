@@ -16,6 +16,15 @@ const routes = [
 		beforeEnter,
 	},
 	{
+		path: '/study/search/:studyname',
+		name: 'searchedstudy',
+		props: route => ({
+			name: String(route.params.studyname),
+		}),
+		component: () => import('@/views/studies/StudyPage.vue'),
+		beforeEnter,
+	},
+	{
 		path: '/study/:id',
 		name: 'studydetail',
 		props: route => ({

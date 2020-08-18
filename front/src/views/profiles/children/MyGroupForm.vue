@@ -3,7 +3,14 @@
 		<section class="temp">
 			<article class="group-container">
 				<div :key="study.id" v-for="study in studies">
-					<GroupCard :study="study" />
+					<GroupCard :study="study" :isEnd="false" />
+				</div>
+			</article>
+		</section>
+		<section class="temp">
+			<article class="group-container">
+				<div :key="study.id" v-for="study in studies">
+					<GroupCard :study="study" :isEnd="true" />
 				</div>
 			</article>
 		</section>

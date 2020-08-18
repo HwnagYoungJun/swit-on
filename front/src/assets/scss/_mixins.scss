@@ -77,6 +77,16 @@ $mobile-contents-width: 640px; // 쪼그라들기 시작할 시점
   } @else if $color == 'bronze' {
     background: #B08D57;
     color: #B08D57
+  } @else if $color == 'forEnd' {
+    background: $main-color;
+    color: $main-color;
+    span{
+      position: absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      font-size: 20px;
+    }
   }
 
 }

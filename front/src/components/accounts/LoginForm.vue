@@ -39,18 +39,12 @@
 			</button>
 		</div>
 		<hr />
-		<KakaoLogin
-			:api-key="apiKey"
-			image="kakao_account_login_btn_medium_wide"
-			:on-success="onSuccess"
-			:on-failure="onFailure"
-		/>
 	</form>
 </template>
 
 <script>
 import bus from '@/utils/bus.js';
-import KakaoLogin from 'vue-kakao-login';
+// import KakaoLogin from 'vue-kakao-login';
 import InputBox from '@/components/common/InputBox.vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { validateEmail } from '@/utils/validation';
@@ -59,7 +53,7 @@ import cookies from 'vue-cookies';
 export default {
 	components: {
 		InputBox,
-		KakaoLogin,
+		// KakaoLogin,
 	},
 	data() {
 		return {

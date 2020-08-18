@@ -93,6 +93,16 @@ export default {
 				const res = await bestArticle(studyId);
 				this.bestMember = data.rankers;
 				this.bestArticle = res.data.bestQnas;
+				if (this.bestMember.length < 3) {
+					for (let i = this.bestMember.length; i < 3; i++) {
+						this.bestMember.push(i);
+					}
+				}
+				if (this.bestArticle.length < 3) {
+					for (let i = this.bestArticle.length; i < 3; i++) {
+						this.bestArticle.push(i);
+					}
+				}
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
