@@ -21,10 +21,15 @@
 				id="search"
 				:class="[isMainRoute ? 'main-input' : 'search']"
 				placeholder="소모임을 검색하세요"
+				@keyup.enter="moveOnlyStudy"
 			/>
 		</section>
 		<section
-			v-if="searchedStudyData || searchedUpperData || searchedLowerData"
+			v-if="
+				searchedStudyData.length ||
+					searchedUpperData.length ||
+					searchedLowerData.length
+			"
 			:class="['searched-datas', isMainRoute ? 'main-searched-datas' : '']"
 		>
 			<p v-if="searchedStudyData">스터디</p>
@@ -77,9 +82,9 @@ export default {
 	data() {
 		return {
 			searchData: '',
-			searchedUpperData: null,
-			searchedLowerData: null,
-			searchedStudyData: null,
+			searchedUpperData: [],
+			searchedLowerData: [],
+			searchedStudyData: [],
 		};
 	},
 	computed: {
@@ -91,29 +96,35 @@ export default {
 		async fetchAutoComplete(e) {
 			try {
 				if (!e.target.value) {
-					this.searchedUpperData = null;
-					this.searchedLowerData = null;
-					this.searchedStudyData = null;
+					this.searchedUpperData = [];
+					this.searchedLowerData = [];
+					this.searchedStudyData = [];
 					return;
 				}
 				const { data } = await searchStudy(e.target.value);
 
-				this.searchedUpperData = data.uppercategories.length
-					? data.uppercategories
-					: null;
-				this.searchedLowerData = data.lowercategories.length
-					? data.lowercategories
-					: null;
-				this.searchedStudyData = data.studies.length ? data.studies : null;
+				this.searchedUpperData = data.uppercategories;
+				this.searchedLowerData = data.lowercategories;
+				this.searchedStudyData = data.studies;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		clearSearchedData() {
 			this.searchData = '';
-			this.searchedUpperData = null;
-			this.searchedLowerData = null;
-			this.searchedStudyData = null;
+			this.searchedUpperData = [];
+			this.searchedLowerData = [];
+			this.searchedStudyData = [];
+		},
+		moveOnlyStudy(e) {
+			if (!e.target.value) {
+				return;
+			}
+			this.searchData = '';
+			if (document.querySelector('.searched-datas')) {
+				document.querySelector('.searched-datas').style.display = 'none';
+			}
+			this.$router.push(`/study/search/${e.target.value}`);
 		},
 		moveStudy(id) {
 			this.clearSearchedData();
@@ -148,8 +159,15 @@ export default {
 	},
 	mounted() {
 		window.addEventListener('click', function(e) {
-			if (e.target.nodeName !== 'LI') {
-				document.querySelector('.searched-datas').style.display = 'none';
+			if (document.querySelector('.searched-datas')) {
+				const searchDatas = document.querySelector('.searched-datas');
+				if (
+					e.target.nodeName !== 'INPUT' &&
+					e.target.nodeName !== 'LI' &&
+					searchDatas
+				) {
+					searchDatas.style.display = 'none';
+				}
 			}
 		});
 	},
