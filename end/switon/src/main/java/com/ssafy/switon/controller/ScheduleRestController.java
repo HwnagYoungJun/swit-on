@@ -67,7 +67,7 @@ public class ScheduleRestController {
 			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
 		}
 		try {
-			List<ScheduleReturnDTO> schedules = scheduleService.selectSchedulesByStudyId(studyId);
+			List<ScheduleReturnDTO> schedules = scheduleService.selectSchedulesByStudyId(studyId, userId);
 			System.out.println(studyId + "번 스터디의 스케줄 리스트 반환 성공");			
 			return new ResponseEntity<>(schedules, HttpStatus.OK);
 		} catch (Exception e) {

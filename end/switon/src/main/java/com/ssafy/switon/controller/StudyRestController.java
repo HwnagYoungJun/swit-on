@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.switon.dao.ArticleDAO;
+import com.ssafy.switon.dto.Alarm;
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleDetailReturnDTO;
 import com.ssafy.switon.dto.ArticleReturnDTO;
@@ -31,12 +34,14 @@ import com.ssafy.switon.dto.CommentReturnDTO;
 import com.ssafy.switon.dto.Like;
 import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.Study;
+import com.ssafy.switon.dto.StudyCardDTO;
+import com.ssafy.switon.dto.StudyProfileDTO;
 import com.ssafy.switon.dto.StudyReturnDTO;
 import com.ssafy.switon.dto.StudySimple;
-import com.ssafy.switon.dto.User;
-import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
+import com.ssafy.switon.dto.UserRate;
 import com.ssafy.switon.dto.UserSimpleDTO;
+import com.ssafy.switon.service.AlarmService;
 import com.ssafy.switon.service.ArticleFavService;
 import com.ssafy.switon.service.ArticleLikeService;
 import com.ssafy.switon.service.ArticleService;
@@ -46,6 +51,7 @@ import com.ssafy.switon.service.CommentService;
 import com.ssafy.switon.service.DashBoardReturnDTO;
 import com.ssafy.switon.service.JoinService;
 import com.ssafy.switon.service.StudyService;
+import com.ssafy.switon.service.UserScheduleService;
 import com.ssafy.switon.service.UserService;
 import com.ssafy.switon.util.JWTUtil;
 
@@ -58,6 +64,12 @@ import io.swagger.annotations.ApiOperation;
 public class StudyRestController {
 	
 	String baseDirectory = "C:\\SSAFY\\spring_workspace\\switon\\img";
+	
+	@Autowired
+	private AlarmService alarmService;
+	
+	@Autowired
+	private UserScheduleService userScheduleService;
 	
 	@Autowired
 	private ArticleLikeService articleLikeService;
@@ -88,6 +100,23 @@ public class StudyRestController {
 	
 	@Autowired
 	private ArticleFavService articleFavService;
+	
+	@Autowired
+	ArticleDAO articleDAO;
+	
+	@Autowired
+	SimpMessagingTemplate template;
+	
+	@ApiOperation(value = "스터디 검색 결과를 반환한다.", response = List.class)
+	@GetMapping("/search")
+	public Object searchStudy(@RequestParam(value="keyword", required = false) String keyword){
+		List<StudyCardDTO> dto = new ArrayList<StudyCardDTO>();
+//		if(keyword == "" || keyword == null) {
+//			
+//		}
+		dto = studyService.searchStudiesByKeywordEnter(keyword);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
 	
 	@ApiOperation(value = "스터디 리스트를 반환한다.", response = List.class)
 	@GetMapping("")
@@ -849,6 +878,11 @@ public class StudyRestController {
 		
 		if(commentService.create(comment)) {
 			System.out.println("댓글 작성 성공!");
+			
+			String studyName = studyService.search(studyId).getName();
+			Article article = articleService.search(articleId);
+			Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 스터디의 공지글에 댓글이 달렸습니다.", studyId, articleId, 1);
+			alarmService.createAlarm(alarm);
 			return new ResponseEntity<>(new ReturnMsg("댓글을 성공적으로 작성했습니다."), HttpStatus.OK);			
 		}
 		System.out.println("** 댓글 작성 실패 - 서버 오류...");
@@ -869,6 +903,14 @@ public class StudyRestController {
 		
 		if(commentService.create(comment)) {
 			System.out.print("댓글 작성 성공!");
+			
+			//객체를 생성하고 필요한 값을 다넣고 그객체를 보내준다
+			String studyName = studyService.search(studyId).getName();
+			Article article = articleService.search(articleId);
+			Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 스터디의 qna 글에 댓글이 달렸습니다.", studyId, articleId, 2);
+			//template.convertAndSend("/topic/notification/" + articleDAO.selectArticleById(articleId).getUser_id(), alarm);
+			alarmService.createAlarm(alarm);
+			
 			joinService.givePoint(userId, studyId, 5);
 			System.out.println(" - 포인트 5정 부여");
 			return new ResponseEntity<>(new ReturnMsg("댓글을 성공적으로 작성했습니다."), HttpStatus.OK);			
@@ -891,6 +933,14 @@ public class StudyRestController {
 		
 		if(commentService.create(comment)) {
 			System.out.print("댓글 작성 성공!");
+			
+			//객체를 생성하고 필요한 값을 다넣고 그객체를 보내준다
+			String studyName = studyService.search(studyId).getName();
+			Article article = articleService.search(articleId);
+			Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 스터디의 자료실 글에 댓글이 달렸습니다.", studyId, articleId, 3);
+			//template.convertAndSend("/topic/notification/" + articleDAO.selectArticleById(articleId).getUser_id(), alarm);
+			alarmService.createAlarm(alarm);
+			
 			joinService.givePoint(userId, studyId, 1);
 			System.out.println(" - 포인트 1점 부여");
 			return new ResponseEntity<>(new ReturnMsg("댓글을 성공적으로 작성했습니다."), HttpStatus.OK);			
@@ -1082,6 +1132,9 @@ public class StudyRestController {
 			
 			if(joinService.join(studyId, userId)) {
 				System.out.println("소모임 가입 성공!");
+				Study study = studyService.search(studyId);
+				Alarm alarm = new Alarm(study.getUser_id(), 4, study.getName() +" 스터디에 새로운 멤버가 가입했습니다!", studyId, 0, 1);
+				alarmService.createAlarm(alarm);
 				return new ResponseEntity<>(new ReturnMsg("소모임에 성공적으로 가입했습니다."), HttpStatus.OK);
 			}
 		} catch(Exception e) {
@@ -1127,6 +1180,36 @@ public class StudyRestController {
 		}
 	}
 	
+	@ApiOperation(value = "베스트 글들을 반환한다.")
+	@GetMapping("/{studyId}/bestArticles")
+	public Object getBestArticles(@PathVariable("studyId") int studyId) {
+		try {
+			return new ResponseEntity<>(articleService.searchTopArticles(studyId), HttpStatus.OK);			
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ReturnMsg("베스트 글 정보를 받아올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation(value = "참석율과 출석률을 반환한다.", response = UserRate.class)
+	@GetMapping("/{studyId}/attend")
+	public Object getUserRate(@PathVariable("studyId") int studyId, HttpServletRequest request) {
+		int userId = 0;
+		String token = request.getHeader("Authentication");
+		if(token != null) {
+			userId = getUserPK(request);
+		}
+		if(userId != 0) {
+			try {
+				UserRate rate = userScheduleService.getUserParticipateRate(userId, studyId);
+				return new ResponseEntity<>(rate, HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity<>(new ReturnMsg("출석률을 가져올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	
 	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img) {
 		System.out.println("img가 있나요?: " + img != null);
 		String fileName = img.getOriginalFilename();
@@ -1145,6 +1228,22 @@ public class StudyRestController {
 		return "upload/" + userId + "_" + System.currentTimeMillis() + ext;
 	}
 	
+	@ApiOperation(value = "유저아이디로 종료된 스터디를 조회한다", response = List.class)
+	@GetMapping("/accounts/{user_id}/endstudy")
+	public Object searchEndStudyByUserId(@PathVariable("user_id") int user_id, HttpServletRequest request){
+		System.out.println("유저아이디로 종료된 스터디 조회");
+		try {
+			List<Study> list1 = studyService.searchEndStudyByUserId(user_id);
+			List<Study> list2 = studyService.searchNotEndStudyByUserId(user_id);
+			
+			StudyProfileDTO list = new StudyProfileDTO(list1, list2);
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(new ReturnMsg("유저의 스터디를 불러오는데 실패했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		
+	}
 	
 	// Token(Authentication)에서 유저 id 정보를 뽑아내는 메소드
 	private int getUserPK(HttpServletRequest request) {

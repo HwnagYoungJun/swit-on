@@ -17,7 +17,9 @@ import com.ssafy.switon.dao.StudyDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleReturnDTO;
+import com.ssafy.switon.dto.ArticleWithLikesDTO;
 import com.ssafy.switon.dto.ArticleWithStudyDTO;
+import com.ssafy.switon.dto.BestArticles;
 import com.ssafy.switon.dto.Board;
 import com.ssafy.switon.dto.BoardIndexDTO;
 import com.ssafy.switon.dto.FeedsIndexDTO;
@@ -269,6 +271,28 @@ public class ArticleServiceImpl implements ArticleService {
 		return null;
 	}
 	
+	@Override
+	public BestArticles searchTopArticles(int studyId) {
+		int qnaId = boardDao.findQnABoardId(studyId);
+		int repoId = boardDao.findRepoBoardId(studyId);
+		List<ArticleWithLikesDTO> qnaOriginalList = articleDao.selectTopThreeArticles(qnaId);
+		List<ArticleWithLikesDTO> repoOriginalList = articleDao.selectTopThreeArticles(repoId);
+		List<ArticleWithLikesDTO> bestQnas = new ArrayList<ArticleWithLikesDTO>();
+		List<ArticleWithLikesDTO> bestRepos = new ArrayList<ArticleWithLikesDTO>();
+		
+		for(ArticleWithLikesDTO original : qnaOriginalList) {
+			original.setBoard_name(findBoardName(original.getBoard_type()));
+			original.setUser_name(userDao.selectUserById(original.getUser_id()).getName());
+			bestQnas.add(original);
+		}
+		for(ArticleWithLikesDTO original : repoOriginalList) {
+			original.setBoard_name(findBoardName(original.getBoard_type()));
+			original.setUser_name(userDao.selectUserById(original.getUser_id()).getName());
+			bestRepos.add(original);
+		}
+		return new BestArticles(bestQnas, bestRepos);
+	}
+	
 	private String findBoardName(int type) {
 		switch(type) {
 		case 1: 
@@ -280,4 +304,6 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		return "repository";
 	}
+
+	
 }

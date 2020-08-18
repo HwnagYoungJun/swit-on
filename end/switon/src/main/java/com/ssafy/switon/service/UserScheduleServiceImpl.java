@@ -12,14 +12,14 @@ import com.ssafy.switon.dao.StudyDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dao.UserScheduleDAO;
 import com.ssafy.switon.dto.ParticipateInfo;
+import com.ssafy.switon.dto.RateDTO;
 import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.ScheduleReturnDTO;
 import com.ssafy.switon.dto.Study;
-import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
+import com.ssafy.switon.dto.UserRate;
 import com.ssafy.switon.dto.UserSchedule;
 import com.ssafy.switon.dto.UserScheduleReturnDTO;
-import com.ssafy.switon.dto.UserScheduleSimpleDTO;
 import com.ssafy.switon.dto.UserSimpleDTO;
 
 @Service
@@ -151,6 +151,22 @@ public class UserScheduleServiceImpl implements UserScheduleService {
 			members.add(member);
 		}
 		return members;
+	}
+
+	@Override
+	public UserRate getUserParticipateRate(int userId, int studyId) {
+		RateDTO dto = new RateDTO(userId, studyId);
+		RateDTO part = userscheduleDAO.selectParticipationRate(dto);
+		RateDTO attend = userscheduleDAO.selectAttendanceRate(dto);
+		double participation = 1.0;
+		double attendance = 1.0;
+		if(part.getTotal() != 0) {
+			participation = part.getMine() / part.getTotal();			
+		}
+		if(attend.getTotal() != 0) {
+			attendance = attend.getMine() / attend.getTotal();
+		}
+		return new UserRate(participation, attendance);
 	}
 
 }

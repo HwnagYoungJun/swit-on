@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.switon.dto.Alarm;
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleFav;
 import com.ssafy.switon.dto.ArticleLike;
@@ -24,6 +25,7 @@ import com.ssafy.switon.dto.LowerCategory;
 import com.ssafy.switon.dto.ResultStrObject;
 import com.ssafy.switon.dto.StudyLike;
 import com.ssafy.switon.dto.UpperCategory;
+import com.ssafy.switon.service.AlarmService;
 import com.ssafy.switon.service.ArticleFavService;
 import com.ssafy.switon.service.ArticleLikeService;
 import com.ssafy.switon.service.ArticleService;
@@ -273,4 +275,58 @@ public class TestRestController {
 			return "fail";
 		}
 	}
+	
+	@Autowired
+	AlarmService alarmService;
+	
+	@ApiOperation(value = "(테스트용) 알람 전체 목록을 반환한다", response = List.class)
+	@GetMapping("/test/alarm/all")
+	public List<Alarm> searchAll(){
+		System.out.println("알람 목록 전체 반환");
+		return alarmService.searchAll();
+	}
+	
+	// id로 상세 조회  
+//	@ApiOperation(value = "id로 알람 목록을 상세 반환한다", response = Alarm.class)
+//	@GetMapping("/alarm/{id}")
+//	public Alarm searchAlarmById(@PathVariable("id") int id) {
+//		System.out.println(id + "번 알람 목록을 상세 조회");
+//		return alarmService.searchAlarmById(id);
+//	}
+	
+	// 알림 생성 
+//	@ApiOperation(value = "알람을 등록한다", response = String.class)
+//	@PostMapping("/alarm/write")
+//	public String createAlarm(Alarm alarm) {
+//		System.out.println("알람을 등록");
+//		if(alarmService.createAlarm(alarm)) {
+//			System.out.println("알람 등록 성공!!!");
+//			return "success";
+//		} else {
+//			System.out.println("알람 등록 실패...");
+//			return "fail";
+//		}
+//	}
+//	
+//	// id로 삭제  
+//	@ApiOperation(value = "알람을 삭제한다", response = String.class)
+//	@DeleteMapping("/alarm/delete/{id}")
+//	public String deleteAlarm(@PathVariable("id") int id) {
+//		System.out.println(id + "번 알람을 삭제");
+//		if(alarmService.deleteAlarmById(id)) {
+//			System.out.println("알람 삭제 성공!!!");
+//			return "success";
+//		} else {
+//			System.out.println("알람 삭제 실패...");
+//			return "fail";
+//		}
+//	}
+//	
+//	// userId로 그 유저가 읽지않은 알림 갯수 조회
+//	@ApiOperation(value = "userId로 읽지 않은 알람 갯수 조회한다", response = Integer.class)
+//	@GetMapping("/alarm/cnt/{userId}")
+//	public int countNotReadByUserId(@PathVariable("userId") int userId) {
+//		System.out.println("읽지않은 알람 갯수 조회");
+//		return alarmService.searchCountNotReadByUserId(userId);
+//	}
 }

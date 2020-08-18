@@ -25,6 +25,23 @@
 		order by created_at desc
 		limit #{start_idx}, #{amount}
 	</select>
+	
+	<!-- 스터디 인기글 3개 반환 -->
+	<select id="selectTopThreeArticles" resultType="ArticleWithLikesDTO">
+		select id,
+			title,
+			content,
+			user_id,
+			file,
+			(select type from board where id = board_id) as board_type,
+			created_at,
+			updated_at,
+			(select count(*) from articlelike where article_id = article.id) as likes
+			from article
+			where board_id = #{board_id}
+			order by likes desc, created_at desc
+			limit 3;
+	</select>
 
 	<!-- 게시판 리스트 반환 -->
 	<select id="selectArticles" resultType="Article">

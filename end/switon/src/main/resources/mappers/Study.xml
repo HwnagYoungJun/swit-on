@@ -213,5 +213,73 @@
 			   (select count(id) from article where board_id in (select id from board where study_id = study.id)) as articles
 		from study
 	</select>
+	
+	<!-- 스터디 검색어 엔터 쳤을 때 스터디 정보들 카드DTO로 반환 -->
+	<select id="selectStudyByKeywordEnter" resultType="Study">
+		select id,
+			name,
+			user_id,
+			description,
+			code,
+			isPrivate,
+			isRecruit,
+			start_term,
+			end_term,
+			created_at,
+			week,
+			start_time,
+			end_time,
+			lowercategory_id,
+			logo,
+			users_limit,
+			(select count(*) from `join` where study_id = study.id) as users_current
+		from study
+		where name like #{keyword}
+	</select>
+	
+	<!-- 유저의 종료된 스터디 반환 -->
+	<select id="selectEndStudiesByUserId" resultType="Study">
+		select id,
+			name,
+			user_id,
+			description,
+			code,
+			isPrivate,
+			isRecruit,
+			start_term,
+			end_term,
+			created_at,
+			week,
+			start_time,
+			end_time,
+			lowercategory_id,
+			logo,
+			users_limit
+		from study
+		where user_id = #{user_Id} 
+		and isFinish = 1
+	</select>
 
+	<!-- 유저의 종료되지않은 스터디 반환 -->
+	<select id="selectNotEndStudiesByUserId" resultType="Study">
+		select id,
+			name,
+			user_id,
+			description,
+			code,
+			isPrivate,
+			isRecruit,
+			start_term,
+			end_term,
+			created_at,
+			week,
+			start_time,
+			end_time,
+			lowercategory_id,
+			logo,
+			users_limit
+		from study
+		where user_id = #{user_Id} 
+		and isFinish = 0
+	</select>
 </mapper>

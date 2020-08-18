@@ -3,6 +3,7 @@ package com.ssafy.switon.dao;
 import java.util.List;
 
 import com.ssafy.switon.dto.Article;
+import com.ssafy.switon.dto.ArticleWithLikesDTO;
 import com.ssafy.switon.dto.BoardIndexDTO;
 import com.ssafy.switon.dto.FeedsIndexDTO;
 
@@ -32,8 +33,11 @@ public interface ArticleDAO {
 	List<Article> selectRepositoriesByUserId(int userId);
 	// 유저 피드 반환 (최신순으로 startIdx ~ endIdx 까지)
 	List<Article> selectFeeds(FeedsIndexDTO feedsIndexDTO);
-	
+	// 유저가 한 스터디에서 작성한 글 수 반환
 	int cntUserArticlesByStudyId(int user_id, int study_id);
+	
 	int selectRecentUserArticleId(int user_id, int study_id);
+	// 한 게시판의 인기글 반환
+	List<ArticleWithLikesDTO> selectTopThreeArticles(int boardId);
 
 }

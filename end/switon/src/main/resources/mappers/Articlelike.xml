@@ -51,7 +51,7 @@
    		where user_id = #{user_id} and article_id = #{article_id}
 	</delete>
 	
-	<!-- 한 스터디에서 한 유저가 작성한 좋아요 수를 반환한다. -->
+	<!-- 한 스터디에서 한 유저가 받은 좋아요 수를 반환한다. -->
 	<select id="cntLikesUserGot" parameterType="UserStudyDTO" resultType="Integer">
 		select count(*) as cnt
 		from articlelike

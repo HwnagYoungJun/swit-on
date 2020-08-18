@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
 	public boolean nameAlreadyExist(int userId, String newName) {
 		int newNameUserId = userDao.getUserIdByName(newName);
 		// 내가 쓰던 이름이 아닌 동시에 다른 사람이 쓰고 있는 이름이라면 true 반환
-		return newNameUserId != userId || newNameUserId > 0;
+		return newNameUserId != userId && newNameUserId > 0;
 	}
 
 	@Override

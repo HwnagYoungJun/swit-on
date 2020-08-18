@@ -6,6 +6,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ssafy.switon.dto.RateDTO;
+import com.ssafy.switon.dto.ScheduleAlarmReturnDTO;
+import com.ssafy.switon.dto.TimeBetweenDTO;
 import com.ssafy.switon.dto.UserSchedule;
 
 @Repository
@@ -67,6 +70,25 @@ public class UserScheduleDAOImpl implements UserScheduleDAO {
 	@Override
 	public List<UserSchedule> selectUserSchedulesByScheduleId(int scheduleId) {
 		return sqlsession.selectList("userschedule.selectUserSchedulesByScheduleId", scheduleId);
+	}
+
+	@Override
+	public List<ScheduleAlarmReturnDTO> searchUsersToAlarm(TimeBetweenDTO dto) {
+		return sqlsession.selectList("userschedule.selectUsersToAlarm", dto);
+	}
+	@Override
+	public List<ScheduleAlarmReturnDTO> searchUsersToAlarm2(TimeBetweenDTO dto) {
+		return sqlsession.selectList("userschedule.selectUsersToAlarm2", dto);
+	}
+
+	@Override
+	public RateDTO selectParticipationRate(RateDTO dto) {
+		return sqlsession.selectOne("userschedule.selectParticipationRate", dto);
+	}
+
+	@Override
+	public RateDTO selectAttendanceRate(RateDTO dto) {
+		return sqlsession.selectOne("userschedule.selectAttendanceRate", dto);
 	}
 
 }

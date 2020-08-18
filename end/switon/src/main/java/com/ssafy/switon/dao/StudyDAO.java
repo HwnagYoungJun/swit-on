@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import com.ssafy.switon.dto.Study;
+import com.ssafy.switon.dto.StudyCardDTO;
 
 public interface StudyDAO {
 	
@@ -29,4 +30,10 @@ public interface StudyDAO {
 	List<Integer> selectNotFinishedStudyIds(Timestamp time);
 	// id로 스터디 종료시키기
 	int updateStudyFinish(int id);
+	// 검색어 입력하고 엔터를 쳤을 때 검색 결과 반환
+	List<Study> selectStudyByKeywordEnter(String keyword);
+	// userId로 종료된 스터디 전체 조회
+	List<Study> selectEndStudyByUserId(int user_id);
+	// userId로 종료되지않은 스터디 전체 조회
+	List<Study> selectNotEndStudyByUserId(int user_id);
 }

@@ -30,7 +30,30 @@ public class ScheduleReturnDTO {
 	@ApiParam(value = "스케줄 생성한 사람 id (FK)", required = false, hidden = true)
 	int user_id;
 	List<UserSimpleDTO> members;
+	boolean checkIn;
+	boolean checkOut;
+	boolean complete;
 	
+	
+	
+	public boolean isCheckIn() {
+		return checkIn;
+	}
+	public void setCheckIn(boolean checkIn) {
+		this.checkIn = checkIn;
+	}
+	public boolean isCheckOut() {
+		return checkOut;
+	}
+	public void setCheckOut(boolean checkOut) {
+		this.checkOut = checkOut;
+	}
+	public boolean isComplete() {
+		return complete;
+	}
+	public void setComplete(boolean complete) {
+		this.complete = complete;
+	}
 	public int getId() {
 		return id;
 	}
@@ -79,10 +102,14 @@ public class ScheduleReturnDTO {
 	public void setUser_id(int user_id) {
 		this.user_id = user_id;
 	}
+	
+	
 	@Override
 	public String toString() {
 		return "ScheduleReturnDTO [id=" + id + ", study_id=" + study_id + ", study_name=" + study_name + ", title="
-				+ title + ", start=" + start + ", end=" + end + ", bg_color=" + bg_color + ", user_id=" + user_id + "]";
+				+ title + ", start=" + start + ", end=" + end + ", bg_color=" + bg_color + ", user_id=" + user_id
+				+ ", members=" + members + ", checkIn=" + checkIn + ", checkOut=" + checkOut + ", complete=" + complete
+				+ "]";
 	}
 	public ScheduleReturnDTO(Schedule schedule) {
 		this.id = schedule.getId();

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ssafy.switon.dto.ParticipateInfo;
 import com.ssafy.switon.dto.Schedule;
+import com.ssafy.switon.dto.UserRate;
 import com.ssafy.switon.dto.UserSchedule;
 import com.ssafy.switon.dto.UserScheduleReturnDTO;
 import com.ssafy.switon.dto.UserScheduleSimpleDTO;
@@ -33,4 +34,6 @@ public interface UserScheduleService {
 	ParticipateInfo getParticipateInfo(int userId, int scheduleId);
 	// 참가자 정보들 반환
 	List<UserSimpleDTO> searchParticipants(int scheduleId);
+	// 유저의 참여율과 출석률을 반환한다.
+	UserRate getUserParticipateRate(int userId, int studyId);
 }

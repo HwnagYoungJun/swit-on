@@ -5,18 +5,23 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.switon.dao.ArticleDAO;
+import com.ssafy.switon.dto.Alarm;
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleFav;
 import com.ssafy.switon.dto.ArticleLike;
 import com.ssafy.switon.dto.Comment;
 import com.ssafy.switon.dto.CommentLike;
 import com.ssafy.switon.dto.ReturnMsg;
+import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyLike;
+import com.ssafy.switon.service.AlarmService;
 import com.ssafy.switon.service.ArticleFavService;
 import com.ssafy.switon.service.ArticleLikeService;
 import com.ssafy.switon.service.ArticleService;
@@ -24,6 +29,7 @@ import com.ssafy.switon.service.CommentLikeService;
 import com.ssafy.switon.service.CommentService;
 import com.ssafy.switon.service.JoinService;
 import com.ssafy.switon.service.StudyLikeService;
+import com.ssafy.switon.service.StudyService;
 import com.ssafy.switon.util.JWTUtil;
 
 import io.swagger.annotations.ApiOperation;
@@ -54,6 +60,18 @@ public class LikeRestController {
 	
 	@Autowired
 	JoinService joinService;
+	
+	@Autowired
+	SimpMessagingTemplate template;
+	
+	@Autowired
+	ArticleDAO articleDAO;
+	
+	@Autowired
+	StudyService studyService;
+	
+	@Autowired
+	AlarmService alarmService;
 	
 	@ApiOperation(value = "소모임에 좋아요 누른다.")
 	@PostMapping("/study/{studyId}/like")
@@ -141,6 +159,14 @@ public class LikeRestController {
 				articlelike.setArticle_id(articleId);
 				articlelike.setUser_id(userId);
 				if(articlelikeService.createArticleLike(articlelike)) {
+					
+					//객체를 생성하고 필요한 값을 다넣고 그객체를 보내준다
+					String studyName = studyService.search(studyId).getName();
+					Article article = articleService.search(articleId);
+					Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 스터디의 qna 게시판 글에 좋아요가 달렸습니다.", studyId, articleId, 2);
+					//template.convertAndSend("/topic/notification/" + articleDAO.selectArticleById(articleId).getUser_id(), alarm);
+					alarmService.createAlarm(alarm);
+					
 					return new ResponseEntity<>("success", HttpStatus.OK);
 				}				
 			} catch (Exception e) {
@@ -202,7 +228,13 @@ public class LikeRestController {
 				articlelike.setArticle_id(articleId);
 				articlelike.setUser_id(userId);
 				if(articlelikeService.createArticleLike(articlelike)) {
+					
+					//객체를 생성하고 필요한 값을 다넣고 그객체를 보내준다
+					String studyName = studyService.search(studyId).getName();
 					Article article = articleService.search(articleId);
+					Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 스터디의 자료실 게시판 글에 좋아요가 달렸습니다.", studyId, articleId, 3);
+					//template.convertAndSend("/topic/notification/" + articleDAO.selectArticleById(articleId).getUser_id(), alarm);
+					alarmService.createAlarm(alarm);
 					// 글쓴이에게 2점 부여
 					joinService.givePoint(article.getUser_id(), studyId, 2);
 					return new ResponseEntity<>("success", HttpStatus.OK);
@@ -275,6 +307,10 @@ public class LikeRestController {
 				// qna 답글쓴 사람에게 2점 부여
 				joinService.givePoint(comment.getUser_id(), studyId, 2);
 				System.out.println(comment.getUser_id() + " " + studyId + " " + 2);
+				
+				String studyName = studyService.search(studyId).getName();
+				Alarm alarm = new Alarm(comment.getUser_id(), 3, studyName +" 스터디의 qna 답글에 좋아요가 달렸습니다.", studyId, articleId, 2);
+				alarmService.createAlarm(alarm);
 				return new ResponseEntity<>("success", HttpStatus.OK);
 			}			
 		} catch (Exception e) {
@@ -343,6 +379,9 @@ public class LikeRestController {
 			commentlike.setComment_id(commentId);
 			commentlike.setUser_id(userId);
 			if(commentlikeService.create(commentlike)) {
+				String studyName = studyService.search(studyId).getName();
+				Alarm alarm = new Alarm(comment.getUser_id(), 3, studyName +" 스터디의 자료실 게시글의 댓글에 좋아요가 달렸습니다.", studyId, articleId, 3);
+				alarmService.createAlarm(alarm);
 				return new ResponseEntity<>("success", HttpStatus.OK);
 			}			
 		} catch (Exception e) {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.switon.dto.Article;
+import com.ssafy.switon.dto.ArticleWithLikesDTO;
 import com.ssafy.switon.dto.BoardIndexDTO;
 import com.ssafy.switon.dto.FeedsIndexDTO;
 import com.ssafy.switon.dto.UserStudyDTO;
@@ -90,6 +91,11 @@ public class ArticleDAOImpl implements ArticleDAO {
 		UserStudyDTO dto = new UserStudyDTO(user_id, study_id);
 		Integer id = sqlSession.selectOne("article.selectRecentUserArticleId", dto);
 		return id = id == null? 0 : id;
+	}
+
+	@Override
+	public List<ArticleWithLikesDTO> selectTopThreeArticles(int boardId) {
+		return sqlSession.selectList("article.selectTopThreeArticles", boardId);
 	}
 
 }

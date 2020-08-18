@@ -301,6 +301,25 @@ public class StudyServiceImpl implements StudyService {
 		return new BestUsersReturnDTO(bestWriters, bestLikers, rankers);
 	}
 
+	@Override
+	public List<StudyCardDTO> searchStudiesByKeywordEnter(String keyword) {
+		keyword = "%" + keyword + "%";
+		List<Study> studies = studyDao.selectStudyByKeywordEnter(keyword);
+		List<StudyCardDTO> studyCards = new ArrayList<StudyCardDTO>();
+		for(Study study : studies) {
+			studyCards.add(new StudyCardDTO(study.getId(), study.getName(), 
+					study.getStart_time(), study.getEnd_time(), study.getWeek(), 
+					study.getEnd_term(), study.getUsers_current(), study.getUsers_limit()));
+		}
+		return studyCards;
+	}
 	
-
+	@Override
+	public List<Study> searchEndStudyByUserId(int user_id) {
+		return studyDao.selectEndStudyByUserId(user_id);
+	}
+	@Override
+	public List<Study> searchNotEndStudyByUserId(int user_id) {
+		return studyDao.selectNotEndStudyByUserId(user_id);
+	}
 }

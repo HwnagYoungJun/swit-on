@@ -76,6 +76,31 @@ public class AccountsRestController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "이메일, 이름 중복 검사", response = boolean.class)
+	@GetMapping("/check")
+	public boolean checkDuplicate(@RequestParam(value="name", required = false) String name,
+								@RequestParam(value="email", required = false) String email) {
+		if(name != null) { // 이름에 뭔가 입력해서 날아올 경우...
+			// true false만 반환해주기
+			// if ~~~ return true; 이런 식
+			if(userService.nameAlreadyExists(name)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		if(email != null) { // 이메일에 뭔가 입력해서 날아올 경우...
+			if(userService.emailAlreadyExists(email)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
+		
+	}
+	
+	
 	@ApiOperation(value = "회원 가입을 한다. 가입 성공시 로그인을 자동으로 수행하여 토큰을 반환한다.", response = UserReturnDTO.class)
 	@PostMapping("/register")
 	public Object register(@RequestBody UserRegisterDTO registerDTO) {

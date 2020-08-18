@@ -12,7 +12,7 @@ public class ArticleReturnDTO {
 	String title;
 	@ApiParam(value = "게시글 내용", required = true)
 	String content;
-	@ApiParam(value = "작성자 (토큰에서 긁어옴)", required = false, hidden = true)
+	@ApiParam(value = "작성자", required = false, hidden = true)
 	int user_id;
 	@ApiParam(value = "첨부파일")
 	String file;

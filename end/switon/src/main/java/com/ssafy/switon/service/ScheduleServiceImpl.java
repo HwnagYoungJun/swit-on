@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.ScheduleDAO;
 import com.ssafy.switon.dao.StudyDAO;
+import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dao.UserScheduleDAO;
 import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.ScheduleReturnDTO;
 import com.ssafy.switon.dto.Study;
+import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserSchedule;
 
 @Service
@@ -35,6 +37,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 	
 	@Autowired
 	JoinService joinService;
+	
+	@Autowired
+	UserDAO userDAO;
 
 	
 	@Override
@@ -43,19 +48,41 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public List<ScheduleReturnDTO> selectSchedulesByStudyId(int studyId) {
+	public List<ScheduleReturnDTO> selectSchedulesByStudyId(int studyId, int userId) {
 		List<Schedule> schedules = scheduleDAO.selectSchedulesByStudyId(studyId);
 		List<ScheduleReturnDTO> dtos = new ArrayList<ScheduleReturnDTO>();
+		UserInfoDTO user = userDAO.selectUserById(userId);
+		boolean checkIn;
+		boolean checkOut;
+		boolean complete;
 		for(Schedule schedule : schedules) {
 			ScheduleReturnDTO dto = new ScheduleReturnDTO(schedule);
+			int scheduleId = schedule.getId();
 			Study study = studyService.search(schedule.getStudy_id());
 			dto.setStudy_name(study.getName());
-			dto.setMembers(userScheduleService.searchParticipants(schedule.getId()));
+			dto.setMembers(userScheduleService.searchParticipants(scheduleId));
+			UserSchedule userSchedule = userScheduleDAO.selectParticipate(new UserSchedule(userId, scheduleId));
+			if(userSchedule != null) {
+				checkIn = checkOut = complete = false;
+				int status = userSchedule.getStatus();
+				if ((status & (1)) > 0) {
+					checkIn = true;
+				}
+				if ((status & (1 << 1)) > 0) {
+					checkOut = true;
+				}
+				if (status == 7) {
+					complete = true;
+				}
+				dto.setCheckIn(checkIn);
+				dto.setCheckOut(checkOut);
+				dto.setComplete(complete);
+			}
 			dtos.add(dto);
 		}
 		return dtos;
 	}
-
+	
 	@Override
 	public Schedule selectScheduleById(int id) {
 		return scheduleDAO.selectScheduleById(id);

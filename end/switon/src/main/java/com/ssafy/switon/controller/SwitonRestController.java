@@ -11,10 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.switon.dto.Alarm;
 import com.ssafy.switon.dto.ArticleReturnDTO;
 import com.ssafy.switon.dto.FeedsIndexDTO;
 import com.ssafy.switon.dto.LowerCategory;
@@ -22,6 +24,7 @@ import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyCardDTO;
 import com.ssafy.switon.dto.UserReturnDTO;
+import com.ssafy.switon.service.AlarmService;
 import com.ssafy.switon.service.ArticleService;
 import com.ssafy.switon.service.CategoryService;
 import com.ssafy.switon.service.StudyService;
@@ -45,6 +48,9 @@ public class SwitonRestController {
 	
 	@Autowired
 	private StudyService studyService;
+	
+	@Autowired
+	private AlarmService alarmService;
 	
 	@ApiOperation(value = "상위카테고리 id 아래에 있는 하위 카테고리 id, 이름을 반환한다.")
 	@GetMapping("/category/{id}")
@@ -97,7 +103,7 @@ public class SwitonRestController {
 				return new ResponseEntity<>(list, HttpStatus.OK);
 			} catch (Exception e) {
 				e.printStackTrace();
-				return new ResponseEntity<>("스터디를 불러올 수 없었습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>(new ReturnMsg("스터디를 불러올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 		try {
@@ -106,7 +112,42 @@ public class SwitonRestController {
 			return new ResponseEntity<>(list, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>("스터디를 불러올 수 없었습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new ReturnMsg("스터디를 불러올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	// userId로 알림 리스트 조회 
+	@ApiOperation(value = "유저id로 알람 목록을 상세 반환한다", response = List.class)
+	@GetMapping("/alarm")
+	public Object searchAlarmByUserId(HttpServletRequest request) {
+		int userId = 0;
+		String token = request.getHeader("Authentication");
+		if(token != null) {
+			userId = getUserPK(request);
+		}
+		if(userId != 0) {
+			try {
+				List<Alarm> alarms = alarmService.searchAlarmByUserId(userId);			
+				System.out.println("알람 목록을 상세 조회");
+				return new ResponseEntity<>(alarms, HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity<>(new ReturnMsg("알림을 받아올 수 없습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	// id로 알림 읽음으로 등록 
+	@ApiOperation(value = "알람의 id로 알람을 읽음 처리한다", response = String.class)
+	@PutMapping("/alarm/{id}")
+	public String setReadById(@PathVariable("id") int id) {
+		System.out.println("알람을 읽음 처리");
+		if(alarmService.updateAlarmById(id)) {
+			System.out.println("읽음 처리 성공!!!");
+			return "success";
+		} else {
+			System.out.println("읽음 처리 실패...");
+			return "fail";
 		}
 	}
 	

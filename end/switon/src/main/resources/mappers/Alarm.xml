@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/User.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="alarm">
+	
+	<!-- 전체 리스트 조회  -->
+	<select id="selectAlarms" resultType="Alarm">
+		select id, user_id, type, msg, study_id, article_id, board_type, created_at, `read`
+		from alarm
+	</select>	
+	
+	<!-- id로 상세 조회  -->
+	<select id="selectAlarmById" resultType="Alarm">
+		select id, user_id, type, msg, study_id, article_id, board_type, created_at, `read`
+		from alarm
+		where id = #{id}
+	</select>
+	
+	<!-- 알림 생성  -->
+	<insert id="insertAlarm" parameterType="Alarm">
+		insert into alarm(user_id, type, msg, study_id, article_id, board_type)
+		values (#{user_id}, #{type}, #{msg}, #{study_id}, #{article_id}, #{board_type})
+	</insert>
+	
+	<!-- id로 삭제  -->
+	<delete id="deleteArticleFav">
+		delete from alarm
+		where id = #{id}
+	</delete>
+	
+	<!-- userId로 알림 리스트 조회 -->
+	<select id="selectAlarmByUserId" resultType="Alarm">
+		select id, user_id, type, msg, study_id, article_id, board_type, created_at, `read`
+		from alarm
+		where user_id = #{user_id}
+	</select>
+	
+	<!-- id로 알림 읽음으로 등록 -->
+	<update id="updateReadTrueById">
+		update alarm 
+		set `read` = true 
+		where id = #{id}
+	</update>
+	
+	<!-- userId로 그 유저가 읽지않은 알림 갯수 조회 -->
+	<select id="selectAlarmCountByUserId" resultType="Integer">
+		select count(*)
+		from alarm
+		where user_id = #{user_id}
+		and `read` = false
+	</select>
+	
+</mapper>

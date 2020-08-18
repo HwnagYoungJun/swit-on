@@ -2,6 +2,9 @@ package com.ssafy.switon.dao;
 
 import java.util.List;
 
+import com.ssafy.switon.dto.RateDTO;
+import com.ssafy.switon.dto.ScheduleAlarmReturnDTO;
+import com.ssafy.switon.dto.TimeBetweenDTO;
 import com.ssafy.switon.dto.UserSchedule;
 
 public interface UserScheduleDAO {
@@ -28,4 +31,12 @@ public interface UserScheduleDAO {
 	UserSchedule selectParticipate(UserSchedule userSchedule);
 	// 스케줄의 상태와 성공여부 동시에 변경... (나머지는 안 변경)
 	int updateSchedule(UserSchedule userSchedule);
+	// 입실 알람 보내줘야하는 유저 목록 가져오기
+	List<ScheduleAlarmReturnDTO> searchUsersToAlarm(TimeBetweenDTO dto);
+	// 퇴실 알람 보내줘야하는 유저 목록 가져오기
+	List<ScheduleAlarmReturnDTO> searchUsersToAlarm2(TimeBetweenDTO dto);
+	// 유저 id, 스터디 id로 참여율을 반환한다.
+	RateDTO selectParticipationRate(RateDTO dto);
+	// 유저 id, 스터디 id로 출석률을 반환한다.
+	RateDTO selectAttendanceRate(RateDTO dto);
 }

@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.switon.dao.StudyDAO;
 import com.ssafy.switon.dao.StudyInfoDAO;
+import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyInfo;
 
 import io.swagger.annotations.ApiOperation;
@@ -23,10 +25,14 @@ public class StudyInfoRestController {
 	@Autowired
 	StudyInfoDAO studyinfoDAO;
 	
+	@Autowired
+	StudyDAO studyDAO;
+	
 	@ApiOperation(value="추천 스터디목록 반환", response = List.class)
 	@GetMapping("/popularstudy")
 	public Object searchStudyInfo() {
-		List<StudyInfo> lastList = new ArrayList<>();
+		List<Study> lastList = new ArrayList<>();
+		
 		try {
 			List<StudyInfo> list = studyinfoDAO.selectStudyInfo();
 			System.out.println("추천 스터디목록 반환");
@@ -55,10 +61,10 @@ public class StudyInfoRestController {
 				}
 			}
 			
-			lastList = new ArrayList<StudyInfo>();
+			lastList = new ArrayList<Study>();
 			
 			for(int i = 0; i< 4; i++) {
-				lastList.add(list.get(a[i]));
+				lastList.add(studyDAO.selectStudyById(list.get(a[i]).getId()));
 			}
 			
 			return new ResponseEntity<>(lastList, HttpStatus.OK);

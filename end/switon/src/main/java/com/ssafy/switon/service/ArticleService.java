@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleReturnDTO;
+import com.ssafy.switon.dto.ArticleWithLikesDTO;
 import com.ssafy.switon.dto.ArticleWithStudyDTO;
+import com.ssafy.switon.dto.BestArticles;
 
 public interface ArticleService {
 	
@@ -37,4 +39,6 @@ public interface ArticleService {
 	List<ArticleReturnDTO> searchArticlesByBoardIdLimit5(int studyId, int boardId, int type, int userId);
 	// 인덱스로 아티클 반환
 	List<ArticleReturnDTO> searchArticlesWithIndex(int boardId, int userId, int index);
+	// qna랑 repo 각각 게시글 인기순 3개 반환
+	BestArticles searchTopArticles(int studyId);
 }

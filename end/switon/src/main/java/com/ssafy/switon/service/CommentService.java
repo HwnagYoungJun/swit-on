@@ -13,6 +13,8 @@ public interface CommentService {
 	Comment search(int id);
 	// 댓글 등록
 	boolean create(Comment comment);
+	// 댓글 등록 (상세히)
+	boolean create(Comment comment, int studyId, int type, String type_name);
 	// 댓글 삭제
 	boolean delete(int id);
 	// 댓글 수정

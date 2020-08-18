@@ -5,15 +5,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.ssafy.switon.service.NotificationService;
 import com.ssafy.switon.service.ScheduleService;
 import com.ssafy.switon.service.StudyService;
 import com.ssafy.switon.service.UserScheduleService;
 
 @Component
 public class Scheduler {
+	
+	@Autowired
+	NotificationService notificationService;
 	
 	@Autowired
 	ScheduleService scheduleService;
@@ -34,6 +39,21 @@ public class Scheduler {
 		if(resultMsg != null) {
 			System.out.println(resultMsg);
 		}
+		
+		// 오차가 있을 수 있으니 앞뒤로 10초씩 여유를 두고 그 사이에 스타트 시간이 포함된 스케줄에 가입한 유저들에게 알림 쏘기
+		// 입실 시간 알림
+		Timestamp tenSecBefore = new Timestamp(System.currentTimeMillis() - 1000 * 10);
+		Timestamp tenSecAfter = new Timestamp(System.currentTimeMillis() + 1000 * 10);
+		String resultMsg2 = notificationService.noticeSchedule(tenSecBefore, tenSecAfter);
+		if(resultMsg2 != null) {
+			System.out.println(resultMsg2);
+		}
+		// 퇴실 시간 알림
+		String resultMsg3 = notificationService.noticeSchedule2(tenSecBefore, tenSecAfter);
+		if(resultMsg2 != null) {
+			System.out.println(resultMsg2);
+		}
+		
 	}
 	// 매일(00:00) 반복
 	@Scheduled(cron = "0 0 0 * * ?")
