@@ -295,6 +295,7 @@ export default {
 		}
 		.study-members {
 			flex: 1;
+			margin-left: 3rem;
 			.diff-user {
 				margin-bottom: 8px;
 			}

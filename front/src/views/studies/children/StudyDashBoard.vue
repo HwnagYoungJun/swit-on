@@ -16,7 +16,7 @@
 						name: 'BoardArticleDetail',
 						params: {
 							id,
-							board_name: 'repository',
+							board_name: 'qna',
 							article_id: article.id,
 						},
 					}"
@@ -332,6 +332,10 @@ export default {
 				});
 				this.schedules = [...scheduleList];
 				this.participantSchedules = [...participateList];
+				this.participantSchedules = this.participantSchedules
+					.reverse()
+					.slice(0, 3);
+				this.schedules = this.schedules.reverse();
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}

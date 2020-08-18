@@ -3,7 +3,7 @@
 		<div class="card-info">
 			<div class="card-content">
 				<h3 class="card-info-title">
-					{{ article.title }}
+					{{ trunk(article.title) }}
 					<span class="bread-span"></span>
 				</h3>
 				<p class="card-info-board">
@@ -30,6 +30,14 @@
 export default {
 	props: {
 		article: Object,
+	},
+	methods: {
+		trunk(str) {
+			if (str.length > 25) {
+				return str.substr(0, 25) + ' ...';
+			}
+			return str;
+		},
 	},
 	computed: {
 		baseURL() {
@@ -89,7 +97,8 @@ export default {
 				display: inline-block;
 				margin-top: 0;
 				margin-bottom: 8px;
-				font-size: $font-bold;
+				font-size: $font-normal * 1.2;
+				font-weight: normal;
 				position: relative;
 				padding-bottom: 8px;
 				left: 50px;

@@ -65,7 +65,7 @@
 							`/study/${studyId}/${bestArticle[0].board_name}/${bestArticle[0].id}`
 						"
 					>
-						{{ bestArticle[0].title }}
+						{{ trunk(bestArticle[0].title) }}
 						<i class="icon ion-md-heart  heart-icon"></i
 						>{{ bestArticle[0].likes }}
 					</router-link>
@@ -82,7 +82,7 @@
 							`/study/${studyId}/${bestArticle[1].board_name}/${bestArticle[1].id}`
 						"
 					>
-						{{ bestArticle[1].title }}
+						{{ trunk(bestArticle[1].title) }}
 						<i class="icon ion-md-heart heart-icon"></i
 						>{{ bestArticle[1].likes }}
 					</router-link>
@@ -99,7 +99,7 @@
 							`/study/${studyId}/${bestArticle[2].board_name}/${bestArticle[2].id}`
 						"
 					>
-						{{ bestArticle[2].title }}
+						{{ trunk(bestArticle[2].title) }}
 						<i class="icon ion-md-heart heart-icon"></i>
 						{{ bestArticle[2].likes }}
 					</router-link>
@@ -115,6 +115,14 @@ export default {
 		studyId: Number,
 		bestMember: Array,
 		bestArticle: Array,
+	},
+	methods: {
+		trunk(str) {
+			if (str.length > 11) {
+				return str.substr(0, 11) + '...';
+			}
+			return str;
+		},
 	},
 };
 </script>

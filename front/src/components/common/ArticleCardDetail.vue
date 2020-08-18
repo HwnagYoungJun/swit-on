@@ -84,6 +84,28 @@
 							>
 						</div>
 					</div>
+					<div class="comment-form">
+						<input
+							@keypress.enter="
+								AddComment();
+								resetContent();
+							"
+							v-model="commentContent"
+							type="text"
+							class="comment"
+							autofocus
+							placeholder="댓글달기"
+						/>
+						<button
+							@click.prevent="
+								AddComment();
+								resetContent();
+							"
+							class="comment-btn"
+						>
+							게시
+						</button>
+					</div>
 					<div class="comment-body">
 						<ul>
 							<li
@@ -136,28 +158,6 @@
 								</div>
 							</li>
 						</ul>
-					</div>
-					<div class="comment-form">
-						<input
-							@keypress.enter="
-								AddComment();
-								resetContent();
-							"
-							v-model="commentContent"
-							type="text"
-							class="comment"
-							autofocus
-							placeholder="댓글달기"
-						/>
-						<button
-							@click.prevent="
-								AddComment();
-								resetContent();
-							"
-							class="comment-btn"
-						>
-							게시
-						</button>
 					</div>
 				</section>
 			</article>
