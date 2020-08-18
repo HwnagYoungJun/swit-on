@@ -6,5 +6,13 @@ function validatePassword(password) {
 	const re = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
 	return re.test(String(password).toLowerCase());
 }
-
-export { validateEmail, validatePassword };
+function validateName(name) {
+	var special_pattern = /[~!@#$%^&*()_+|<>?:{}]/;
+	var space = /\s/g;
+	if (special_pattern.test(name) === false && space.test(name) === false) {
+		return true;
+	} else {
+		return false;
+	}
+}
+export { validateEmail, validatePassword, validateName };

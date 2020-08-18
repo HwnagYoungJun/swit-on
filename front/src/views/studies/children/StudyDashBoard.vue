@@ -89,11 +89,7 @@
 							v-if="s.isAbled"
 							@click="s.modal = !s.modal"
 						>
-							<div
-								v-if="s.modal"
-								@click="s.modal = false"
-								class="schedule-modal"
-							>
+							<div v-if="s.modal" class="schedule-modal">
 								<p class="scheduleTitle">{{ s.title }}</p>
 								<p>
 									<span :key="member.id" v-for="member in s.joinMembers">
@@ -139,11 +135,7 @@
 							v-if="s.isScheduleJoin"
 							@click="s.modal = !s.modal"
 						>
-							<div
-								v-if="s.modal"
-								@click="s.modal = false"
-								class="schedule-modal"
-							>
+							<div v-if="s.modal" class="schedule-modal">
 								<p class="scheduleTitle">{{ s.title }}</p>
 								<p>
 									<span :key="member.id" v-for="member in s.joinMembers">
@@ -349,6 +341,9 @@ export default {
 		this.fetchData();
 		this.fetchSchedule();
 	},
+	watch: {
+		$route: ['fetchData', 'fetchSchedule'],
+	},
 };
 </script>
 
@@ -400,14 +395,21 @@ aside {
 			position: relative;
 			.schedule-modal {
 				position: absolute;
-				z-index: 1000000;
-				background: white;
-				border-top: 2px solid purple;
-				border-bottom: 2px solid purple;
+				background: rgba(255, 255, 255, 1);
+				color: #868e96;
+				z-index: 1000;
+				box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
+				border-radius: 3px;
+				width: 300px;
 				top: 2rem;
 				left: 0;
-				display: flex;
-				flex-direction: column;
+				padding: 0.5rem;
+				@media screen and (max-width: 768px) {
+					// background: $btn-purple;
+					top: 2.5rem;
+					left: 0;
+					width: 250px;
+				}
 				.scheduleTitle {
 					font-size: $font-normal;
 					font-weight: bold;

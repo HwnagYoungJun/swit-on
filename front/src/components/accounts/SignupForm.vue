@@ -52,7 +52,11 @@
 import bus from '@/utils/bus.js';
 import InputBox from '@/components/common/InputBox.vue';
 import { mapActions } from 'vuex';
-import { validateEmail, validatePassword } from '@/utils/validation';
+import {
+	validateEmail,
+	validatePassword,
+	validateName,
+} from '@/utils/validation';
 export default {
 	components: {
 		InputBox,
@@ -86,7 +90,9 @@ export default {
 			let color =
 				this.signupData.name.length === 0
 					? 'black'
-					: this.signupData.name.length > 1
+					: this.signupData.name.length > 1 &&
+					  this.signupData.name.length < 7 &&
+					  validateName(this.signupData.name)
 					? 'green'
 					: 'red';
 			return color;
@@ -98,7 +104,7 @@ export default {
 					: this.changeNameColor === 'green'
 					? // '올바른 형식의 이름을 입력했습니다.'
 					  false
-					: '<i class="icon ion-md-close-circle"></i> 이름을 2글자 이상 적어주세요! ';
+					: '<i class="icon ion-md-close-circle"></i> 이름은 특수문자 제외 2-6자입니다. ';
 			return name;
 		},
 		changeEmailColor() {

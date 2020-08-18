@@ -9,7 +9,10 @@
 							<i class="icon ion-md-medal"></i>
 						</div>
 					</div>
-					<router-link :to="`/profile/${bestMember[0].user_name}`">
+					<router-link
+						v-if="bestMember[0].user_name !== undefined"
+						:to="`/profile/${bestMember[0].user_name}`"
+					>
 						{{ bestMember[0].user_name }}
 						<i class="icon ion-md-podium podium-icon"></i
 						>{{ bestMember[0].score }}
@@ -21,7 +24,10 @@
 							<i class="icon ion-md-medal"></i>
 						</div>
 					</div>
-					<router-link :to="`/profile/${bestMember[1].user_name}`">
+					<router-link
+						v-if="bestMember[1].user_name !== undefined"
+						:to="`/profile/${bestMember[1].user_name}`"
+					>
 						{{ bestMember[1].user_name }}
 						<i class="icon ion-md-podium podium-icon"></i
 						>{{ bestMember[1].score }}
@@ -33,7 +39,10 @@
 							<i class="icon ion-md-medal"></i>
 						</div>
 					</div>
-					<router-link :to="`/profile/${bestMember[2].user_name}`">
+					<router-link
+						v-if="bestMember[2].user_name !== undefined"
+						:to="`/profile/${bestMember[2].user_name}`"
+					>
 						{{ bestMember[2].user_name }}
 						<i class="icon ion-md-podium podium-icon"></i
 						>{{ bestMember[2].score }}
@@ -51,6 +60,7 @@
 						</div>
 					</div>
 					<router-link
+						v-if="bestArticle[0].title !== undefined"
 						:to="
 							`/study/${studyId}/${bestArticle[0].board_name}/${bestArticle[0].id}`
 						"
@@ -67,6 +77,7 @@
 						</div>
 					</div>
 					<router-link
+						v-if="bestArticle[1].title !== undefined"
 						:to="
 							`/study/${studyId}/${bestArticle[1].board_name}/${bestArticle[1].id}`
 						"
@@ -83,6 +94,7 @@
 						</div>
 					</div>
 					<router-link
+						v-if="bestArticle[2].title !== undefined"
 						:to="
 							`/study/${studyId}/${bestArticle[2].board_name}/${bestArticle[2].id}`
 						"
