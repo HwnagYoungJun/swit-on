@@ -35,6 +35,16 @@ function fetchStudy(studyId) {
 	return study.get(`${studyId}`);
 }
 
+function fetchRooms(studyId) {
+	return study.get(`${studyId}/room`);
+}
+function createRoom(studyId, roomName) {
+	return study.post(`${studyId}/room`, { roomCode: roomName });
+}
+function deleteRoom(studyId, roomId) {
+	return study.delete(`${studyId}/room/${roomId}`);
+}
+
 function searchStudy(query) {
 	return study.get(`?keyword=${query}`);
 }
@@ -90,4 +100,7 @@ export {
 	bestMember,
 	popularStudy,
 	bestArticle,
+	fetchRooms,
+	createRoom,
+	deleteRoom,
 };

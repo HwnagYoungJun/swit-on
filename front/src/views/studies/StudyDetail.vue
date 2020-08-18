@@ -129,7 +129,6 @@ export default {
 				this.leaderName = data.leaderName;
 				this.members = data.members;
 			} catch (error) {
-				console.log(error);
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
