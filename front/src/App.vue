@@ -9,6 +9,7 @@
 			<footer v-if="!isAccountsRoute"><Footer /></footer>
 		</section>
 		<ToastPopup></ToastPopup>
+		<ToastPopupNotification></ToastPopupNotification>
 	</section>
 </template>
 
@@ -18,6 +19,7 @@ import AppHeader from '@/components/common/AppHeader.vue';
 import Footer from '@/components/common/Footer.vue';
 import Main from '@/views/Main.vue';
 import ToastPopup from './components/common/ToastPopup.vue';
+import ToastPopupNotification from './components/common/ToastPopupNotification.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import { mapGetters } from 'vuex';
@@ -28,6 +30,7 @@ export default {
 		Footer,
 		ToastPopup,
 		Main,
+		ToastPopupNotification,
 	},
 	computed: {
 		...mapGetters(['getUserId', 'isLogin']),
@@ -73,7 +76,12 @@ export default {
 		}
 	},
 	watch: {
-		$route: 'fetchData',
+		$route() {
+			if (this.isLogin) {
+				this.connect();
+				this.fetchData();
+			}
+		},
 	},
 };
 </script>

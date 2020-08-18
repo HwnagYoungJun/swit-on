@@ -31,10 +31,10 @@ export default {
 		},
 	},
 	created() {
-		bus.$on('show:toast', this.showToast);
+		bus.$on('show:notifications', this.showToast);
 	},
 	beforeDestroy() {
-		bus.$off('show:toast', this.showToast);
+		bus.$off('show:notifications', this.showToast);
 	},
 };
 </script>
@@ -44,8 +44,8 @@ export default {
 	position: fixed;
 	width: 400px;
 	height: 56px;
-	background-color: #e67700;
-	border-radius: 3px;
+	background-color: #22252e;
+	border-radius: 2px;
 	box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.2);
 	color: white;
 	top: -120px;
