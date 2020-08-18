@@ -53,7 +53,6 @@ export default {
 			let client = Stomp.over(new SockJS(`${ServerUrl}websocket`));
 			client.connect({}, function() {
 				client.subscribe(`/topic/notification/${Id}`, message => {
-					// console.log(JSON.parse(message.body));
 					bus.$emit('show:toast', JSON.parse(message.body).msg);
 				});
 			});
@@ -71,15 +70,15 @@ export default {
 	},
 	mounted() {
 		if (this.isLogin) {
-			this.connect();
-			this.fetchData();
+			// this.connect();
+			// this.fetchData();
 		}
 	},
 	watch: {
 		$route() {
 			if (this.isLogin) {
-				this.connect();
-				this.fetchData();
+				// this.connect();
+				// this.fetchData();
 			}
 		},
 	},

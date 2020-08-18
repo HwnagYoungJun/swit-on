@@ -8,6 +8,9 @@ const routes = [
 		path: '/',
 		name: 'main',
 		component: () => import('@/views/Main.vue'),
+		beforeEnter(to, from, next) {
+			store.getters['isLogin'] ? next('/category/추천') : next();
+		},
 	},
 	{
 		path: '/study/new',

@@ -25,6 +25,7 @@ import MainCard from '@/components/common/MainCard.vue';
 import { upperCategoryId } from '@/utils/category';
 import Loading from '@/components/common/Loading.vue';
 import StudyNotFound from '@/components/common/StudyNotFound.vue';
+import { popularStudy } from '@/api/studies';
 
 export default {
 	components: {
@@ -64,12 +65,32 @@ export default {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
+		async fetchData() {
+			try {
+				this.loading = true;
+				const { data } = await popularStudy();
+				this.studies = data;
+				this.loading = false;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
 	},
 	watch: {
-		$route: 'fetchUpperStudy',
+		$route() {
+			if (this.upperCategoryName === '추천') {
+				this.fetchData();
+			} else {
+				this.fetchUpperStudy();
+			}
+		},
 	},
 	created() {
-		this.fetchUpperStudy();
+		if (this.upperCategoryName === '추천') {
+			this.fetchData();
+		} else {
+			this.fetchUpperStudy();
+		}
 	},
 };
 </script>

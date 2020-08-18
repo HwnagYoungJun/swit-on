@@ -2,11 +2,13 @@
 	<section>
 		<CategoryNavForm :upperCategoryName="upperCategoryName" />
 		<LowerCategoryNavForm
+			v-if="upperCategoryName !== '추천'"
 			@changeLower="changeLower"
 			:upperCategory="upperCategory"
 			:upperCategoryName="upperCategoryName"
 			:lowerCategoryName="lowerCategoryName"
 		/>
+		<h1 v-else class="suggest-title">추천 페이지</h1>
 		<router-view :upperCategoryName="upperCategoryName"></router-view>
 	</section>
 </template>
@@ -48,4 +50,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.suggest-title {
+	font-size: $font-bold;
+	margin: 0.6rem 0 1.5rem;
+}
+</style>

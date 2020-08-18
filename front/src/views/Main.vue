@@ -1,19 +1,8 @@
 <template>
 	<section class="main-page">
-		<AppHeader :messages="messages"></AppHeader>
+		<AppHeader :messages="[]"></AppHeader>
 		<Search />
-		<section v-if="isUserLogin" class="popular-wrap">
-			<h2 class="popular-title">인기 소모임<span></span></h2>
-			<router-link
-				class="popular-item-link"
-				:key="study.id"
-				v-for="study in studies"
-				:to="`/study/${study.id}`"
-			>
-				<MainCard :study="study" colorPick="white" />
-			</router-link>
-		</section>
-		<section v-else class="main-page-description">
+		<section class="main-page-description">
 			<section class="main-description-title">
 				<h1 class="animate__animated animate__zoomOut animate__delay-1s hide">
 					Study with Online
@@ -41,40 +30,15 @@
 <script>
 import AppHeader from '@/components/common/AppHeader.vue';
 import Search from '@/components/common/Search.vue';
-import MainCard from '@/components/common/MainCard.vue';
-import { popularStudy } from '@/api/studies';
 import { mapGetters } from 'vuex';
-// import Loading from '@/components/common/Loading.vue';
 
 export default {
 	components: {
 		Search,
-		MainCard,
 		AppHeader,
-		// Loading,
-	},
-	data() {
-		return {
-			studies: [],
-			isLoading: false,
-		};
 	},
 	computed: {
 		...mapGetters(['isLogin']),
-		isUserLogin() {
-			return this.isLogin && this.studies.length;
-		},
-	},
-	methods: {
-		async fetchData() {
-			this.isLoading = true;
-			const { data } = await popularStudy();
-			this.isLoading = false;
-			this.studies = data;
-		},
-	},
-	created() {
-		this.fetchData();
 	},
 };
 </script>
@@ -88,96 +52,6 @@ export default {
 	min-height: 100vh;
 	max-height: 100%;
 	background: $btn-purple-opacity;
-	.popular-wrap {
-		width: 80%;
-		margin: 0 auto;
-		display: flex;
-		justify-content: space-evenly;
-		flex-wrap: wrap;
-		position: relative;
-		.popular-title {
-			position: absolute;
-			top: -25px;
-			left: 10px;
-			color: white;
-			font-size: $font-normal;
-			font-weight: bold;
-			span {
-				width: 100%;
-				height: 8px;
-				position: absolute;
-				bottom: -4px;
-				left: 0;
-				border-radius: 2px;
-				background: $btn-purple;
-				opacity: 0.5;
-			}
-			@media screen and (max-width: 484px) {
-				top: -15px;
-				left: 50px;
-			}
-			@media screen and (max-width: 350px) {
-				top: -15px;
-				left: 20px;
-			}
-		}
-		.popular-item {
-			display: grid;
-			grid-template-columns: 15rem;
-			grid-template-rows: 7rem 12rem;
-			grid-template-areas:
-				'text-part'
-				'image-part';
-			border: 1px solid transparent;
-			position: relative;
-			margin-top: 1rem;
-			padding: 0.3rem 0.5rem 0.5rem;
-			color: #454545;
-			box-shadow: 3px 2px 6px rgba(37, 37, 37, 0.5);
-			.popular-img {
-				grid-area: image-part;
-				overflow: hidden;
-				cursor: pointer;
-			}
-			.popular-content {
-				grid-area: text-part;
-				color: #fff;
-				.content-category {
-					padding-bottom: 0.3rem;
-					border-bottom: 1px solid #fff;
-				}
-				.content-title {
-					font-size: $font-bold;
-					font-weight: 600;
-					padding-top: 0.3rem;
-					padding-bottom: 0.3rem;
-				}
-				.content-week {
-					.content-day {
-						font-weight: 600;
-					}
-				}
-			}
-			.temp {
-				position: absolute;
-				bottom: 1rem;
-				right: 1rem;
-				color: white;
-			}
-			img {
-				width: 100%;
-				height: 100%;
-				object-fit: fill;
-				transition: all 0.3s ease;
-				&:hover {
-					transform: scale(1.1);
-				}
-			}
-		}
-		@media screen and (max-width: 1024px) and (min-width: 950px) {
-			width: 70%;
-		}
-	}
 	.main-page-description {
 		width: 100%;
 		min-height: 50vh;

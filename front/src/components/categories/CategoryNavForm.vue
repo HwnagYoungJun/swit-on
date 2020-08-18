@@ -26,12 +26,13 @@ export default {
 	data() {
 		return {
 			categoryElements: {
-				el1: '웹',
-				el2: '모바일',
-				el3: 'AI',
-				el4: 'CS',
-				el5: '프로그래밍언어',
-				el6: '언어',
+				el1: '추천',
+				el2: '웹',
+				el3: '모바일',
+				el4: 'AI',
+				el5: 'CS',
+				el6: '프로그래밍언어',
+				el7: '언어',
 			},
 		};
 	},
