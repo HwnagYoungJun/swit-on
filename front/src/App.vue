@@ -48,12 +48,10 @@ export default {
 			const Id = this.getUserId;
 			let ServerUrl = process.env.VUE_APP_API_URL;
 			let client = Stomp.over(new SockJS(`${ServerUrl}websocket`));
-
-			client.connect({}, function(frame) {
-				console.log(frame);
-				client.subscribe(`/topic/notification/${Id}`, function(message) {
-					this.messages.push(JSON.parse(message.body));
-					console.log(this.messages);
+			client.connect({}, function() {
+				client.subscribe(`/topic/notification/${Id}`, message => {
+					// console.log(JSON.parse(message.body));
+					bus.$emit('show:toast', JSON.parse(message.body).msg);
 				});
 			});
 		},
@@ -70,7 +68,7 @@ export default {
 	},
 	mounted() {
 		if (this.isLogin) {
-			// this.connect();
+			this.connect();
 			this.fetchData();
 		}
 	},
