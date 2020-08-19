@@ -77,6 +77,9 @@ export default {
 		Promise.all([fetchMyQNA(this.userName), fetchMyRepository(this.userName)])
 			.then(res => {
 				res.forEach(el => {
+					if (el.data.length === 0) {
+						return;
+					}
 					if (el.config.url === `accounts/${this.userName}/myqna`) {
 						var tempQNA = el.data;
 						tempQNA.map(el => {

@@ -35,7 +35,7 @@ export function lowerCategoryId(lowerCategoryString) {
 			return 4;
 		case 'React':
 			return 5;
-		case 'html/CSS':
+		case 'html과CSS':
 			return 6;
 		case 'JS':
 			return 7;

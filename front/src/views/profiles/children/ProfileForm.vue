@@ -32,10 +32,10 @@
 				</p>
 				<div class="middle-box">
 					<div class="middle-element">
-						<p>진행스터디 {{ studying }}</p>
+						<p>진행스터디 {{ studing }}</p>
 					</div>
 					<div class="middle-element">
-						<p>종료스터디 {{ studyed }}</p>
+						<p>종료스터디 {{ endStudy }}</p>
 					</div>
 				</div>
 			</div>
@@ -45,7 +45,7 @@
 
 <script>
 import bus from '@/utils/bus.js';
-import { fetchProfile } from '@/api/auth';
+import { fetchProfile, fetchMyStudy } from '@/api/auth';
 import { mapMutations } from 'vuex';
 
 export default {
@@ -57,8 +57,8 @@ export default {
 			profile: null,
 			introduce: null,
 			profileImg: null,
-			studying: 5,
-			studyed: 6,
+			studing: null,
+			endStudy: null,
 		};
 	},
 	methods: {
@@ -72,11 +72,22 @@ export default {
 		},
 		async fetchData() {
 			try {
+				this.fetchStudy();
 				const name = this.userName;
 				const { data } = await fetchProfile(name);
 				this.profile = data;
 				this.introduce = data.introduce === 'null' ? '' : data.introduce;
 				this.profileImg = data.profile_image;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
+		async fetchStudy() {
+			try {
+				const name = this.userName;
+				const { data } = await fetchMyStudy(name);
+				this.studing = data.unfinishedStudy.length;
+				this.endStudy = data.finishedStudy.length;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
