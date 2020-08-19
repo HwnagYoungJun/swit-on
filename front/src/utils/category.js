@@ -41,8 +41,6 @@ export function lowerCategoryId(lowerCategoryString) {
 			return 7;
 		case 'DB':
 			return 8;
-		case '기타':
-			return 9;
 		case '안드로이드':
 			return 10;
 		case 'IOS':
@@ -55,8 +53,6 @@ export function lowerCategoryId(lowerCategoryString) {
 			return 15;
 		case 'C':
 			return 16;
-		case 'C#':
-			return 17;
 		case 'C++':
 			return 18;
 		case 'Java':

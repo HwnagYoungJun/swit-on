@@ -136,7 +136,6 @@ export default {
 				const studyId = this.id;
 				await JoinStudy(studyId);
 				this.fetchData();
-				// this.$router.push(`/study/${studyId}`);
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}

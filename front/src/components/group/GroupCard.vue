@@ -85,7 +85,7 @@ export default {
 		}
 		.hoverData {
 			color: white;
-			font-size: $font-bold;
+			font-size: $font-bold * 0.85;
 			z-index: 987654321;
 			display: none;
 			position: absolute;
