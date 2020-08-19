@@ -80,19 +80,19 @@
 </template>
 
 <script>
+import bus from '@/utils/bus';
+import { fetchUserAlarms } from '@/api/auth';
 import { mapMutations, mapState, mapGetters } from 'vuex';
 import { baseAuth } from '@/api/index';
 import Search from '@/components/common/Search.vue';
 import Notification from '@/components/common/Notification.vue';
 
 export default {
-	props: {
-		messages: Array,
-	},
 	data() {
 		return {
 			userName: this.name ? this.name : null,
 			profileImg: null,
+			messages: [],
 		};
 	},
 	components: {
@@ -132,10 +132,28 @@ export default {
 		goToTop() {
 			document.documentElement.scrollTop = 0;
 		},
+		async fetchData() {
+			try {
+				const { data } = await fetchUserAlarms();
+				console.log(data);
+				this.messages = data;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
+	},
+	watch: {
+		$route() {
+			if (this.isLogin) {
+				this.fetchImg();
+				this.fetchData();
+			}
+		},
 	},
 	created() {
 		if (this.isLogin) {
 			this.fetchImg();
+			this.fetchData();
 		}
 	},
 };

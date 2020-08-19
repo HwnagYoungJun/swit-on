@@ -258,7 +258,6 @@ export default {
 				await createScheduleParticipate(studyId, scheduleId);
 				this.fetchSchedule();
 			} catch (error) {
-				this.$router.push('/login');
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},

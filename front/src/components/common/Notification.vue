@@ -10,7 +10,39 @@
 		<section :class="[isOpen ? '' : 'messages-close', 'messages-wrap']">
 			<ul v-if="messages.length">
 				<li :key="message.id" v-for="message in messages">
-					{{ message }}
+					<!-- 스케쥴 -->
+					<router-link
+						v-if="message.type === 1"
+						:to="`/study/${message.study_id}`"
+					>
+						<span @click="readAlarm(message.id)">{{
+							message.msg
+						}}</span></router-link
+					>
+					<!-- 내글에 달린거 -->
+					<router-link
+						v-else-if="message.type === 2"
+						:to="
+							`/study/${message.study_id}/${message.board_name}/${message.article_id}`
+						"
+					>
+						<span @click="readAlarm(message.id)">{{ message.msg }}</span>
+					</router-link>
+					<!-- 내 댓글에 좋아요 -->
+					<router-link
+						v-else-if="message.type === 3"
+						:to="
+							`/study/${message.study_id}/${message.board_name}/${message.article_id}`
+						"
+					>
+						<span @click="readAlarm(message.id)">{{
+							message.msg
+						}}</span></router-link
+					>
+					<!-- 내가 만든 스터디에 누가 가입 -->
+					<router-link v-else :to="`/study/${message.study_id}`">
+						<span @click="readAlarm(message.id)">{{ message.msg }}</span>
+					</router-link>
 				</li>
 			</ul>
 			<div class="messages-not" v-else>
@@ -21,6 +53,7 @@
 </template>
 
 <script>
+import { readingUserAlarm } from '@/api/auth';
 export default {
 	props: {
 		messages: Array,
@@ -29,6 +62,16 @@ export default {
 		return {
 			isOpen: false,
 		};
+	},
+	methods: {
+		async readAlarm(id) {
+			await readingUserAlarm(id);
+		},
+	},
+	watch: {
+		$route() {
+			this.isOpen = false;
+		},
 	},
 };
 </script>
@@ -45,12 +88,11 @@ export default {
 	z-index: 1000;
 	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
 	border-radius: 3px;
-	width: 300px;
+	width: 450px;
 	position: absolute;
 	top: 30px;
 	right: 0;
 	@media screen and (max-width: 768px) {
-		// background: $btn-purple;
 		top: -37px;
 		right: 0;
 		width: 200px;

@@ -1,25 +1,36 @@
 <template>
-	<router-link :to="`/study/${study.id}`">
-		<section class="group-box">
-			<div v-if="isEnd" class="endStudy">
-				<i class="icon ion-md-checkmark-circle-outline"></i>
-				<span class="hoverData">
-					출석 | 참여
-				</span>
-			</div>
-			<div class="img-box">
-				<img :src="imgLink" :alt="`${study.name} 스터디 사진`" />
-			</div>
-			<div class="name-box">
-				<span class="badge" v-if="isEnd">
-					<span class="rounded">
-						<span class="icon ion-md-medal"></span>
+	<div>
+		<div v-if="!isEnd">
+			<router-link :to="`/study/${study.id}`">
+				<section class="group-box">
+					<div class="img-box">
+						<img :src="imgLink" :alt="`${study.name} 스터디 사진`" />
+					</div>
+					<div class="name-box">
+						{{ study.name }}
+					</div>
+				</section>
+			</router-link>
+		</div>
+		<div v-else>
+			<section class="group-box">
+				<div class="endStudy">
+					<i class="icon ion-md-checkmark-circle-outline"></i>
+				</div>
+				<div class="img-box">
+					<img :src="imgLink" :alt="`${study.name} 스터디 사진`" />
+				</div>
+				<div class="name-box">
+					<span class="badge">
+						<span class="rounded">
+							<span class="icon ion-md-medal"></span>
+						</span>
 					</span>
-				</span>
-				{{ study.name }}
-			</div>
-		</section>
-	</router-link>
+					{{ study.name }}
+				</div>
+			</section>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -53,7 +64,7 @@ export default {
 		'image-part'
 		'text-part';
 	text-align: center;
-	font-size: $font-bold;
+	font-size: $font-bold * 0.8;
 	.endStudy {
 		background: rgba(0, 0, 0, 0.2);
 		z-index: 10000000;
@@ -74,7 +85,7 @@ export default {
 		}
 		.hoverData {
 			color: white;
-			font-size: $font-bold;
+			font-size: $font-bold * 0.85;
 			z-index: 987654321;
 			display: none;
 			position: absolute;

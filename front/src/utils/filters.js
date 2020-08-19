@@ -47,32 +47,3 @@ export function formatWeekday(n) {
 export function fileDownload(file) {
 	return file.replace('upload/', '');
 }
-
-// function checkExtension(fileExt) {
-// 	var _fileExt = fileExt;
-// 	var _result;
-
-// 	// 미리보기 가능한 확장자는 배열에 넣기
-// 	var _arrExt = new Array('.bmp', '.gif', '.jpg', '.png', '.jpeg');
-
-// 	// 배열 요소를 검사하여 체크
-// 	for (var i = 0; i < _arrExt.length; i++) {
-// 		if (_arrExt[i] == _fileExt) {
-// 			_result = true;
-// 			break;
-// 		} else _result = false;
-// 	}
-
-// 	return _result;
-// }
-
-// export function FilenameCheck(filename) {
-// 	var _fileLen = filename.length;
-
-// 	var _lastDot = filename.lastIndexOf('.');
-
-// 	// 확장자 명만 추출한 후 소문자로 변경
-// 	var _fileExt = filename.substring(_lastDot, _fileLen).toLowerCase();
-
-// 	return checkExtension(_fileExt);
-// }

@@ -17,7 +17,12 @@
 				</section>
 			</form>
 			<aside class="room-list-wrap">
-				<RoomList :Id="id" :isLeader="isLeader" :Rooms="Rooms" />
+				<RoomList
+					@remove-room="fetchData"
+					:Id="id"
+					:isLeader="isLeader"
+					:Rooms="Rooms"
+				/>
 			</aside>
 		</article>
 	</section>
@@ -52,8 +57,9 @@ export default {
 			try {
 				const Id = this.id;
 				const { data } = await fetchRooms(Id);
-				this.Rooms = data.rooms;
-				this.isLeader = data.isLeader;
+				console.log(data);
+				this.Rooms = data.conferences;
+				this.isLeader = data.leader;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}

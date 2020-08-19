@@ -104,14 +104,12 @@
 							>Javascript</option
 						>
 						<option v-if="uppercategory_id === '1'" value="8">Database</option>
-						<option v-if="uppercategory_id === '1'" value="9">기타</option>
 						<option v-if="uppercategory_id === '2'" value="10">Android</option>
 						<option v-if="uppercategory_id === '2'" value="11">IOS</option>
 						<option v-if="uppercategory_id === '2'" value="12">Flutter</option>
 						<option v-if="uppercategory_id === '2'" value="13"
 							>React Native</option
 						>
-						<option v-if="uppercategory_id === '2'" value="14">기타</option>
 						<option v-if="uppercategory_id === '3'" value="15">Python</option>
 						<option v-if="uppercategory_id === '3'" value="16">C</option>
 						<option v-if="uppercategory_id === '3'" value="17">C#</option>
@@ -120,7 +118,6 @@
 						<option v-if="uppercategory_id === '3'" value="20">Kotlin</option>
 						<option v-if="uppercategory_id === '3'" value="21">Swift</option>
 						<option v-if="uppercategory_id === '3'" value="22">R</option>
-						<option v-if="uppercategory_id === '3'" value="23">기타</option>
 						<option v-if="uppercategory_id === '4'" value="24">머신러닝</option>
 						<option v-if="uppercategory_id === '4'" value="25">딥러닝</option>
 						<option v-if="uppercategory_id === '4'" value="26">OpenCV</option>
@@ -128,7 +125,6 @@
 							>텐서플로우</option
 						>
 						<option v-if="uppercategory_id === '4'" value="28">케라스</option>
-						<option v-if="uppercategory_id === '4'" value="29">기타</option>
 
 						<option v-if="uppercategory_id === '5'" value="30">자료구조</option>
 						<option v-if="uppercategory_id === '5'" value="31">알고리즘</option>
@@ -140,12 +136,10 @@
 							>소프트웨어공학</option
 						>
 						<option v-if="uppercategory_id === '5'" value="35">운영체제</option>
-						<option v-if="uppercategory_id === '5'" value="36">기타</option>
 						<option v-if="uppercategory_id === '6'" value="37">영어</option>
 						<option v-if="uppercategory_id === '6'" value="38">한국어</option>
 						<option v-if="uppercategory_id === '6'" value="39">중국어</option>
 						<option v-if="uppercategory_id === '6'" value="40">일본어</option>
-						<option v-if="uppercategory_id === '6'" value="41">기타</option>
 					</select>
 				</div>
 			</div>
@@ -165,23 +159,6 @@
 					required
 				/>
 				<label>까지</label>
-			</div>
-			<div class="studyform-private">
-				<label class="head-label" for="isPrivate">공개설정</label>
-				<input
-					v-model="studyData.isPrivate"
-					id="isNotPrivate"
-					type="radio"
-					value="0"
-				/>
-				<label for="isNotPrivate">공개</label>
-				<input
-					v-model="studyData.isPrivate"
-					id="isPrivate"
-					type="radio"
-					value="1"
-				/>
-				<label for="isPrivate">비공개</label>
 			</div>
 			<div class="studyform-week">
 				<label class="head-label">요일</label>
