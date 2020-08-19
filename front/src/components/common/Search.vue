@@ -23,6 +23,13 @@
 				placeholder="소모임을 검색하세요"
 				@keyup.enter="moveOnlyStudy"
 			/>
+			<button
+				@keyup.enter="moveOnlyStudy"
+				@click="moveOnlyStudy"
+				class="a11y-hidden"
+			>
+				검색
+			</button>
 		</section>
 		<section
 			v-if="
@@ -117,14 +124,15 @@ export default {
 			this.searchedStudyData = [];
 		},
 		moveOnlyStudy(e) {
-			if (!e.target.value) {
+			const target = e.target.value ? e.target.value : this.searchData;
+			if (!target) {
 				return;
 			}
 			this.searchData = '';
 			if (document.querySelector('.searched-datas')) {
 				document.querySelector('.searched-datas').style.display = 'none';
 			}
-			this.$router.push(`/study/search/${e.target.value}`);
+			this.$router.push(`/study/search/${target}`);
 		},
 		moveStudy(id) {
 			this.clearSearchedData();

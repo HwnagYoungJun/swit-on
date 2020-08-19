@@ -18,7 +18,7 @@
 		</nav>
 		<section class="study-description">
 			<div class="study-content">
-				<h3 class="study-title">
+				<h3 class="study-title" id="studyTitle">
 					{{ study.name }}
 				</h3>
 				<div class="leader-comment">
@@ -161,8 +161,8 @@ export default {
 	created() {
 		this.fetchData();
 	},
-	mounted() {
-		document.title = `스윗온 ${this.study.name}스터디`;
+	updated() {
+		document.title = `스윗온 ${this.study.name} 스터디`;
 	},
 	watch: {
 		$route: 'fetchData',
