@@ -57,7 +57,7 @@ export default {
 	background: $btn-purple-opacity;
 	.main-page-description {
 		width: 100%;
-		min-height: 50vh;
+		min-height: 60vh;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
