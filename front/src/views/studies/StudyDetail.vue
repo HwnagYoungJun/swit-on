@@ -290,6 +290,7 @@ export default {
 			flex: 1.5;
 			p {
 				margin-bottom: 10px;
+				font-size: $font-bold * 0.8;
 			}
 			.strong {
 				margin: 0 5px;

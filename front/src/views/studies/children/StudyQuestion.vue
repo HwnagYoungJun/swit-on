@@ -149,7 +149,7 @@ export default {
 	},
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .card-wrap {
 	height: 100%;
 	display: flex;
