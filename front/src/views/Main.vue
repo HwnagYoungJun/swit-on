@@ -40,6 +40,9 @@ export default {
 	computed: {
 		...mapGetters(['isLogin']),
 	},
+	mounted() {
+		document.title = 'Swit On';
+	},
 };
 </script>
 

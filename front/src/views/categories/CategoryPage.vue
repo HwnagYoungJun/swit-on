@@ -40,7 +40,7 @@ export default {
 		},
 	},
 	updated() {
-		document.title = `스윗온 ${this.upperCategoryName}카테고리`;
+		document.title = `스윗온 ${this.upperCategoryName} 카테고리`;
 	},
 	computed: {
 		initName() {
