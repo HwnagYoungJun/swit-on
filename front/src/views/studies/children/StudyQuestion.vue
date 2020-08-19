@@ -5,8 +5,32 @@
 	<section v-else class="card-wrap">
 		<UpperBtn></UpperBtn>
 		<ArticleAddBtn boardName="qna" />
-		<div v-if="!articles.length">
-			<ArticleNotFound />
+		<div v-if="!articles.length" class="article-wrap">
+			<ArticleNotFound class="article-feed-wrap" />
+			<aside class="member-wrap">
+				<div class="study-members">
+					<p>우리 스터디 :></p>
+					<ul>
+						<li v-for="member in members" :key="member.id">
+							<router-link class="member-box" :to="`/profile/${member.name}`">
+								<img
+									v-if="member.profile_image"
+									:src="`${baseURL}${member.profile_image}`"
+									:alt="`${member.name}의 프로필 사진`"
+									class="member-image"
+								/>
+								<img
+									v-else
+									:src="`${baseURL}upload/noProfile.png`"
+									:alt="`${member.name}의 프로필 대체 사진`"
+									class="member-image"
+								/>
+								{{ member.name }}
+							</router-link>
+						</li>
+					</ul>
+				</div>
+			</aside>
 		</div>
 		<article class="article-wrap" v-else>
 			<div class="article-feed-wrap">
