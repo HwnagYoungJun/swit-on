@@ -9,7 +9,7 @@ const routes = [
 		name: 'main',
 		component: () => import('@/views/Main.vue'),
 		beforeEnter(to, from, next) {
-			store.getters['isLogin'] ? next('/category/추천') : next();
+			store.getters['isLogin'] ? next('/category/인기') : next();
 		},
 	},
 	{
@@ -120,7 +120,7 @@ const routes = [
 		name: 'login',
 		component: () => import('@/views/accounts/LoginPage.vue'),
 		beforeEnter(to, from, next) {
-			store.getters['isLogin'] ? next({ path: '/category/추천' }) : next();
+			store.getters['isLogin'] ? next({ path: '/category/인기' }) : next();
 		},
 	},
 	{

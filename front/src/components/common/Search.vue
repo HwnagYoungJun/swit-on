@@ -126,6 +126,7 @@ export default {
 		moveOnlyStudy(e) {
 			const target = e.target.value ? e.target.value : this.searchData;
 			if (!target) {
+				bus.$emit('show:toast', '검색어를 입력해주세요');
 				return;
 			}
 			this.searchData = '';
