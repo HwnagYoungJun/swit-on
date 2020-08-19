@@ -4,7 +4,7 @@
 			<span class="meeting-title">회의 목록</span>
 			<ul>
 				<li :key="Room.id" v-for="Room in Rooms">
-					<router-link :to="`/study/${Room.studyId}/room/${Room.content}`">
+					<router-link :to="`/study/${Room.studyId}/room/${Room.roomCode}`">
 						{{ Room.roomCode }}
 					</router-link>
 					<i
