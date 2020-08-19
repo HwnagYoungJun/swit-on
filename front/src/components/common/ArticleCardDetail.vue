@@ -49,11 +49,13 @@
 								@click="articleUnLike"
 								v-if="isLiked"
 								class="icon ion-md-heart like"
+								aria-label="좋아요 취소"
 							></i>
 							<i
 								@click="articleLike"
 								v-else
 								class="icon ion-md-heart unlike"
+								aria-label="좋아요"
 							></i>
 							<span>좋아요 {{ likeCount }}개</span>
 						</div>
@@ -63,11 +65,13 @@
 									v-if="isBookmarked"
 									@click="removeBookmark"
 									class="icon ion-md-bookmark bookmark"
+									aria-label="북마크 취소"
 								></i>
 								<i
 									v-else
 									@click="addBookmark"
 									class="icon ion-md-bookmark unlike"
+									aria-label="북마크"
 								></i>
 							</div>
 							<span
@@ -143,17 +147,20 @@
 										v-if="getName === comment.user.name"
 										@click="removeComment(comment.id)"
 										class="icon ion-md-close unlike"
+										aria-label="댓글 취소"
 									>
 									</i>
 									<i
 										v-if="comment.like.liked"
 										@click="commentUnLike(comment.id)"
 										class="icon ion-md-heart like"
+										aria-label="댓글 좋아요 취소"
 									></i>
 									<i
 										v-else
 										@click="commentLike(comment.id)"
 										class="icon ion-md-heart unlike"
+										aria-label="댓글 좋아요"
 									></i>
 								</div>
 							</li>

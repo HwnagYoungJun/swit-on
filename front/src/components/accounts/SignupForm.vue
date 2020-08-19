@@ -117,8 +117,8 @@ export default {
 					? // '올바른 형식의 이름을 입력했습니다.'
 					  false
 					: this.changeNameColor === 'red' && this.isNameValid === 'red'
-					? '<i class="icon ion-md-close-circle"></i> 이름이 중복되었습니다'
-					: '<i class="icon ion-md-close-circle"></i> 이름은 특수문자 제외 2-6자입니다.';
+					? '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 이름이 중복되었습니다'
+					: '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 이름은 특수문자 제외 2-6자입니다.';
 			return name;
 		},
 		changeEmailColor() {
@@ -144,8 +144,8 @@ export default {
 					? // '올바른 형식의 이메일을 입력했습니다.'
 					  false
 					: this.changeEmailColor === 'red' && this.isEmailValid === 'red'
-					? '<i class="icon ion-md-close-circle"></i> 이메일이 중복되었습니다'
-					: '<i class="icon ion-md-close-circle"></i> 이메일을 형식을 유지해주세요! ';
+					? '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 이메일이 중복되었습니다'
+					: '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 이메일을 형식을 유지해주세요! ';
 			return name;
 		},
 		changePasswordColor() {
@@ -164,7 +164,7 @@ export default {
 					: this.isValidPassword
 					? // '올바른 형식의 비밀번호를 입력했습니다.'
 					  false
-					: '<i class="icon ion-md-close-circle"></i> 비밀번호는 특수문자 포함 8-15자입니다.';
+					: '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 비밀번호는 특수문자 포함 8-15자입니다.';
 			return name;
 		},
 		changePasswordConfirmColor() {
@@ -184,7 +184,7 @@ export default {
 					: this.signupData.password === this.signupData.password2
 					? // '비밀번호가 일치합니다.'
 					  false
-					: '<i class="icon ion-md-close-circle"></i> 비밀번호가 일치하지 않습니다.';
+					: '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 비밀번호가 일치하지 않습니다.';
 			return name;
 		},
 	},

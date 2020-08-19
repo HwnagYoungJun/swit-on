@@ -6,7 +6,7 @@
 				<li>
 					<div class="badgegold">
 						<div class="rounded">
-							<i class="icon ion-md-medal"></i>
+							<i class="icon ion-md-medal" aria-hidden="true"></i>
 						</div>
 					</div>
 					<router-link
@@ -14,14 +14,14 @@
 						:to="`/profile/${bestMember[0].user_name}`"
 					>
 						{{ bestMember[0].user_name }}
-						<i class="icon ion-md-podium podium-icon"></i
+						<i class="icon ion-md-podium podium-icon" aria-label="활동량"></i
 						>{{ bestMember[0].score }}
 					</router-link>
 				</li>
 				<li>
 					<div class="badgesilver">
 						<div class="rounded">
-							<i class="icon ion-md-medal"></i>
+							<i class="icon ion-md-medal" aria-hidden="true"></i>
 						</div>
 					</div>
 					<router-link
@@ -29,14 +29,14 @@
 						:to="`/profile/${bestMember[1].user_name}`"
 					>
 						{{ bestMember[1].user_name }}
-						<i class="icon ion-md-podium podium-icon"></i
+						<i class="icon ion-md-podium podium-icon" aria-label="활동량"></i
 						>{{ bestMember[1].score }}
 					</router-link>
 				</li>
 				<li>
 					<div class="badgebronze">
 						<div class="rounded">
-							<i class="icon ion-md-medal"></i>
+							<i class="icon ion-md-medal" aria-hidden="true"></i>
 						</div>
 					</div>
 					<router-link
@@ -44,7 +44,7 @@
 						:to="`/profile/${bestMember[2].user_name}`"
 					>
 						{{ bestMember[2].user_name }}
-						<i class="icon ion-md-podium podium-icon"></i
+						<i class="icon ion-md-podium podium-icon" aria-label="활동량"></i
 						>{{ bestMember[2].score }}
 					</router-link>
 				</li>
@@ -56,7 +56,7 @@
 				<li>
 					<div class="first-article">
 						<div class="rounded">
-							<i class="icon ion-md-heart"></i>
+							<i class="icon ion-md-heart" aria-hidden="true"></i>
 						</div>
 					</div>
 					<router-link
@@ -66,14 +66,17 @@
 						"
 					>
 						{{ trunk(bestArticle[0].title) }}
-						<i class="icon ion-md-heart  heart-icon"></i
+						<i
+							class="icon ion-md-heart  heart-icon"
+							aria-label="좋아요 개수"
+						></i
 						>{{ bestArticle[0].likes }}
 					</router-link>
 				</li>
 				<li>
 					<div class="second-article">
 						<div class="rounded">
-							<i class="icon ion-md-heart"></i>
+							<i class="icon ion-md-heart" aria-hidden="true"></i>
 						</div>
 					</div>
 					<router-link
@@ -83,14 +86,14 @@
 						"
 					>
 						{{ trunk(bestArticle[1].title) }}
-						<i class="icon ion-md-heart heart-icon"></i
+						<i class="icon ion-md-heart heart-icon" aria-label="좋아요 개수"></i
 						>{{ bestArticle[1].likes }}
 					</router-link>
 				</li>
 				<li>
 					<div class="third-article">
 						<div class="rounded">
-							<i class="icon ion-md-heart"></i>
+							<i class="icon ion-md-heart" aria-hidden="true"></i>
 						</div>
 					</div>
 					<router-link
@@ -100,7 +103,10 @@
 						"
 					>
 						{{ trunk(bestArticle[2].title) }}
-						<i class="icon ion-md-heart heart-icon"></i>
+						<i
+							class="icon ion-md-heart heart-icon"
+							aria-label="좋아요 개수"
+						></i>
 						{{ bestArticle[2].likes }}
 					</router-link>
 				</li>

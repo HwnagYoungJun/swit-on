@@ -22,17 +22,26 @@
 			<template v-if="!isUserLogin">
 				<router-link class="nav-router-item" :to="{ name: 'login' }"
 					><span class="nav-router-full">로그인</span>
-					<i class="icon ion-md-log-in nav-router-medium"></i>
+					<i
+						class="icon ion-md-log-in nav-router-medium"
+						aria-labelledby="로그인 버튼"
+					></i>
 				</router-link>
 			</template>
 			<template v-else>
 				<router-link class="nav-router-item" :to="'/category/추천'"
 					><span class="nav-router-full">카테고리</span
-					><i class="icon ion-md-apps nav-router-medium"></i
+					><i
+						class="icon ion-md-apps nav-router-medium"
+						aria-labelledby="카테고리 버튼"
+					></i
 				></router-link>
 				<router-link class="nav-router-item" :to="{ name: 'newsfeed' }"
 					><span class="nav-router-full">뉴스피드</span
-					><i class="icon ion-md-list-box nav-router-medium"></i
+					><i
+						class="icon ion-md-list-box nav-router-medium"
+						aria-labelledby="뉴스피드 버튼"
+					></i
 				></router-link>
 				<router-link
 					class="nav-router-item app-header-mobile-none"
@@ -72,7 +81,7 @@
 						:src="`${baseURL}${profileImg}`"
 						:alt="`${name}의 프로필사진`"
 					/>
-					<i v-else class="icon ion-md-contact"></i>
+					<i v-else class="icon ion-md-contact" aria-label="프로필 버튼"></i>
 				</router-link>
 			</template>
 		</nav>
