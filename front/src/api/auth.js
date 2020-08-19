@@ -21,8 +21,15 @@ function ValidName(name) {
 }
 
 // 유저 API
-function fetchAlarms(userId) {
-	return alarm.get(`user/${userId}`);
+// function fetchAlarms(userId) {
+// 	return alarm.get(`user/${userId}`);
+// }
+
+function fetchUserAlarms() {
+	return alarm.get('alarm');
+}
+function readingUserAlarm(alarmId) {
+	return alarm.put(`alarm/${alarmId}`);
 }
 
 function fetchProfile(userName) {
@@ -60,7 +67,8 @@ export {
 	fetchMyRepository,
 	fetchMyQNA,
 	fetchMySchedule,
-	fetchAlarms,
+	fetchUserAlarms,
+	readingUserAlarm,
 	ValidEmail,
 	ValidName,
 };

@@ -3,21 +3,17 @@
 		<section class="meeting">
 			<span class="meeting-title">회의 목록</span>
 			<ul>
-				<router-link
-					v-for="Room in Rooms"
-					:key="Room.id"
-					:to="`/study/${Id}/room/${Room.content}`"
-				>
-					<li>
-						{{ Room.content }}
-						<i
-							v-if="isLeader"
-							@click="deleteRoom(Id, Room.id)"
-							class="icon ion-md-close unlike"
-						>
-						</i>
-					</li>
-				</router-link>
+				<li :key="Room.id" v-for="Room in Rooms">
+					<router-link :to="`/study/${Room.studyId}/room/${Room.content}`">
+						{{ Room.roomCode }}
+					</router-link>
+					<i
+						v-if="isLeader"
+						@click="removeRoom(Id, Room.id)"
+						class="icon ion-md-close unlike"
+					>
+					</i>
+				</li>
 			</ul>
 		</section>
 	</aside>
@@ -42,6 +38,7 @@ export default {
 		},
 		async removeRoom(id, roomId) {
 			await deleteRoom(id, roomId);
+			this.$emit('remove-room');
 		},
 	},
 };
@@ -63,9 +60,13 @@ export default {
 	}
 	li {
 		display: flex;
+		word-break: break-all;
 		align-items: center;
 		margin: 10px 0;
 		color: rgb(90, 90, 90);
+	}
+	i {
+		cursor: pointer;
 	}
 }
 </style>

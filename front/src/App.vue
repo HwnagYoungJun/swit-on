@@ -2,7 +2,7 @@
 	<section id="app">
 		<Main v-if="isMainRoute" />
 		<section v-else class="main-wrap">
-			<AppHeader :messages="messages" v-if="!isAccountsRoute"></AppHeader>
+			<AppHeader v-if="!isAccountsRoute"></AppHeader>
 			<main :class="[!isAccountsRoute ? 'main-container' : '']">
 				<router-view />
 			</main>
@@ -23,7 +23,6 @@ import ToastPopupNotification from './components/common/ToastPopupNotification.v
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import { mapGetters } from 'vuex';
-import { fetchAlarms } from '@/api/auth';
 export default {
 	components: {
 		AppHeader,
@@ -57,28 +56,16 @@ export default {
 				});
 			});
 		},
-		async fetchData() {
-			try {
-				const Id = this.getUserId;
-				const { data } = await fetchAlarms(Id);
-				this.messages = data;
-				console.log(this.messages);
-			} catch (error) {
-				bus.$emit('show:toast', `${error.response.data.msg}`);
-			}
-		},
 	},
 	mounted() {
 		if (this.isLogin) {
 			// this.connect();
-			// this.fetchData();
 		}
 	},
 	watch: {
 		$route() {
 			if (this.isLogin) {
 				// this.connect();
-				// this.fetchData();
 			}
 		},
 	},

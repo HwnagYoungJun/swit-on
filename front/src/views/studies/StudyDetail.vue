@@ -122,7 +122,6 @@ export default {
 			try {
 				const studyId = this.id;
 				const { data } = await fetchStudy(studyId);
-				console.log(data);
 				this.study = data.study;
 				this.isJoined = data.isJoined;
 				this.isLeader = data.isLeader;
@@ -137,6 +136,7 @@ export default {
 				const studyId = this.id;
 				await JoinStudy(studyId);
 				this.fetchData();
+				// this.$router.push(`/study/${studyId}`);
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}

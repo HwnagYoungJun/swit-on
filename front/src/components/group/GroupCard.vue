@@ -53,7 +53,7 @@ export default {
 		'image-part'
 		'text-part';
 	text-align: center;
-	font-size: $font-bold;
+	font-size: $font-bold * 0.8;
 	.endStudy {
 		background: rgba(0, 0, 0, 0.2);
 		z-index: 10000000;

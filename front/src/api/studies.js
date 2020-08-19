@@ -38,8 +38,8 @@ function fetchStudy(studyId) {
 function fetchRooms(studyId) {
 	return study.get(`${studyId}/room`);
 }
-function createRoom(studyId, roomName) {
-	return study.post(`${studyId}/room`, { roomCode: roomName });
+function createRoom(studyId, roomCode) {
+	return study.post(`${studyId}/room`, roomCode);
 }
 function deleteRoom(studyId, roomId) {
 	return study.delete(`${studyId}/room/${roomId}`);

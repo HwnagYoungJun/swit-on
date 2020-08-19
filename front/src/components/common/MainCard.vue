@@ -94,7 +94,7 @@ export default {
 			border-bottom: 1px solid #fff;
 		}
 		.content-title {
-			font-size: $font-bold;
+			font-size: $font-bold * 0.85;
 			font-weight: 600;
 			padding-top: 0.3rem;
 			padding-bottom: 0.3rem;
