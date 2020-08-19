@@ -31,6 +31,7 @@
 					<time class="strong">{{ study.start_time }}</time> 부터
 					<time class="strong">{{ study.end_time }}</time> 까지 활동합니다<i
 						class="icon ion-md-quote"
+						aria-hidden="true"
 					></i>
 				</div>
 				<p class="study-member-cnt">

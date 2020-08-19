@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<button class="schedule-add-btn" @click="addSchedule">
-			<i class="icon ion-md-add"></i> 일정
+			<i class="icon ion-md-add" aria-hidden="true"></i> 일정
 		</button>
 		<button class="schedule-add-btn-mobile" @click="addSchedule">
 			일정추가

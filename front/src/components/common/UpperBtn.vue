@@ -2,7 +2,7 @@
 	<section class="upperKing" @click="goToTop">
 		<div class="upper-container">
 			<div class="upper-wraper"></div>
-			<i class="icon ion-md-arrow-round-up"></i>
+			<i class="icon ion-md-arrow-round-up" aria-label="위로가기 버튼"></i>
 		</div>
 	</section>
 </template>

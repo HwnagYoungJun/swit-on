@@ -6,7 +6,10 @@
 					<img src="@/assets/black.png" alt="logo" class="switon" />
 				</router-link>
 				<router-link :to="{ name: 'login' }">
-					<i class="icon ion-md-arrow-round-back signup-backbtn"></i>
+					<i
+						class="icon ion-md-arrow-round-back signup-backbtn"
+						aria-label="로그인 페이지 버튼"
+					></i>
 				</router-link>
 			</header>
 			<h2>회원가입</h2>

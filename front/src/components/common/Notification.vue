@@ -6,6 +6,7 @@
 		<i
 			@click="isOpen = !isOpen"
 			class="icon ion-md-notifications nav-router-medium router-cursor"
+			aria-label="알림버튼"
 		></i>
 		<section :class="[isOpen ? '' : 'messages-close', 'messages-wrap']">
 			<ul v-if="messages.length">
