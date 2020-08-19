@@ -97,7 +97,7 @@ export default {
 				display: inline-block;
 				margin-top: 0;
 				margin-bottom: 8px;
-				font-size: $font-normal * 1.2;
+				font-size: $font-normal * 1.1;
 				font-weight: normal;
 				position: relative;
 				padding-bottom: 8px;
@@ -130,8 +130,7 @@ export default {
 				}
 			}
 			.card-info-time {
-				color: rgba(94, 54, 97, 0.5);
-				font-weight: 600;
+				color: rgba(77, 45, 80, 0.7);
 			}
 			.card-info-user {
 				color: rgba(94, 54, 97, 1);
