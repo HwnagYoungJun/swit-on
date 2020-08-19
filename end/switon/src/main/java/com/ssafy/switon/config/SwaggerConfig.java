@@ -50,8 +50,8 @@ public class SwaggerConfig {
 		return new ApiInfoBuilder().title("SwitOn API")
 				.description("SwitOn API Reference for D101 Developer")
 				.termsOfServiceUrl("https://edu.ssafy.com")
-				.license("SSAFY License")
-				.licenseUrl("ssafy@ssafy.com").version("1.0").build();
+				.license("SwitOn License")
+				.licenseUrl("http://i3d101.p.ssafy.io/").version("1.0").build();
 	}
 	
 	private ApiKey apiKey() {

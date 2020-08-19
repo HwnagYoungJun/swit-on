@@ -36,6 +36,8 @@
 		select id, user_id, type, msg, study_id, article_id, board_type, created_at, `read`
 		from alarm
 		where user_id = #{user_id}
+		and `read` = false
+		order by id desc
 	</select>
 	
 	<!-- id로 알림 읽음으로 등록 -->

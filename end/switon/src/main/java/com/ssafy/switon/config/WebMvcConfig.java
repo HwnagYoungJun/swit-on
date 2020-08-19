@@ -48,11 +48,14 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		.addPathPatterns("/study/**");
 		
 		registry.addInterceptor(getInterceptor)
+		.addPathPatterns("/alarm")
+		.addPathPatterns("/alarm/**")
 		.addPathPatterns("/study/**/qna/**")
 		.addPathPatterns("/study/**/repository/**")
 		.addPathPatterns("/feeds")
 		.addPathPatterns("/study/**/dashboard")
-		.addPathPatterns("/study/**/schedule/**");
+		.addPathPatterns("/study/**/schedule/**")
+		.addPathPatterns("/study/**/room/**");
 		
 //		registry.addInterceptor(authInterceptor)
 //		.addPathPatterns("/accounts/info")

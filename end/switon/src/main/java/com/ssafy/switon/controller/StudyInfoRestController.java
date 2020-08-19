@@ -42,18 +42,36 @@ public class StudyInfoRestController {
 			}
 
 			Collections.sort(list, new Comparator<StudyInfo>() {
-				
 				@Override
 				public int compare(StudyInfo o1, StudyInfo o2) {
 					return o2.getValue() - o1.getValue();
 				}
 			});
 			
-			int a[] = new int[4];
+			int size = 12;
+			if(list.size() < 12) {
+				size = list.size();
+			}
+			 
+			if(list.size() < 8) {
+				Random r2 = new Random();
+				int b[] = new int[size];
+				for(int i = 0; i < size; i++) {
+					b[i] = r2.nextInt(size);
+					for(int j = 0; j < i; j++) {
+						if(b[i] == b[j]) {
+							i--;
+						}
+					}
+				}
+			} 
+			
+			
+			int a[] = new int[8];
 			Random r = new Random();
 			
-			for(int i = 0; i < 4; i++) {
-				a[i] = r.nextInt(10)+1;
+			for(int i = 0; i < 8; i++) {
+				a[i] = r.nextInt(size);
 				for(int j = 0;j<i;j++) {
 					if(a[i] == a[j]) {
 						i--;
@@ -63,7 +81,7 @@ public class StudyInfoRestController {
 			
 			lastList = new ArrayList<Study>();
 			
-			for(int i = 0; i< 4; i++) {
+			for(int i = 0; i< 8; i++) {
 				lastList.add(studyDAO.selectStudyById(list.get(a[i]).getId()));
 			}
 			

@@ -25,7 +25,7 @@ public interface ArticleService {
 	// 유저 아이디에 맞는 최신 게시글의 id 반환
 	int searchUserRecentArticleId(int userId);
 	// 게시글 생성
-	boolean create(Article article);
+	int create(Article article, int studyId);
 	// 게시글 수정
 	boolean modify(Article article);
 	// 게시글 삭제

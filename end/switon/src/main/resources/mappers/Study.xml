@@ -42,6 +42,7 @@
 			(select count(*) from `join` where study_id = study.id) as users_current
 		from study
 		where name like #{keyword}
+		and isFinish = 0
 	</select>
 
 	<!-- 내가 만든 최신 스터디의 아이디 한개 가져오기 -->
@@ -74,6 +75,7 @@
 			(select count(*) from `join` where study_id = study.id) as users_current
 		from study
 		where lowercategory_id = #{lowercategory_id}
+		and isFinish = 0
 	</select>
 
 	<!-- 스터디 리스트 반환 -->
@@ -96,6 +98,7 @@
 			users_limit,
 			(select count(*) from `join` where study_id = study.id) as users_current
 		from study
+		where isFinish = 0
 	</select>
 	
 	<!-- 스터디 상세 정보 반환 -->
@@ -212,6 +215,7 @@
 			   (select count(*) from `schedule` where study_id = study.id) as schedule,
 			   (select count(id) from article where board_id in (select id from board where study_id = study.id)) as articles
 		from study
+		where isFinish = 0
 	</select>
 	
 	<!-- 스터디 검색어 엔터 쳤을 때 스터디 정보들 카드DTO로 반환 -->
@@ -235,6 +239,7 @@
 			(select count(*) from `join` where study_id = study.id) as users_current
 		from study
 		where name like #{keyword}
+		and isFinish = 0
 	</select>
 	
 	<!-- 유저의 종료된 스터디 반환 -->
@@ -256,7 +261,7 @@
 			logo,
 			users_limit
 		from study
-		where user_id = #{user_Id} 
+		where id in (select study_id from `join` where user_id = #{user_id})
 		and isFinish = 1
 	</select>
 
@@ -279,7 +284,7 @@
 			logo,
 			users_limit
 		from study
-		where user_id = #{user_Id} 
+		where id in (select study_id from `join` where user_id = #{user_id})
 		and isFinish = 0
 	</select>
 </mapper>

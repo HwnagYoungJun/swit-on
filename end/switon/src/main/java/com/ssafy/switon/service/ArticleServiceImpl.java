@@ -75,8 +75,11 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public boolean create(Article article) {
-		return articleDao.insertArticle(article) == 1;
+	public int create(Article article, int studyId) {
+		if(articleDao.insertArticle(article) == 1) {
+			return articleDao.selectRecentUserArticleId(article.getUser_id(), studyId);
+		}
+		return 0;
 	}
 
 	@Override

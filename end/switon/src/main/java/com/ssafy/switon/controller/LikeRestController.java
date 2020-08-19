@@ -163,7 +163,7 @@ public class LikeRestController {
 					//객체를 생성하고 필요한 값을 다넣고 그객체를 보내준다
 					String studyName = studyService.search(studyId).getName();
 					Article article = articleService.search(articleId);
-					Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 스터디의 qna 게시판 글에 좋아요가 달렸습니다.", studyId, articleId, 2);
+					Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 글에 좋아요", studyId, articleId, 2);
 					//template.convertAndSend("/topic/notification/" + articleDAO.selectArticleById(articleId).getUser_id(), alarm);
 					alarmService.createAlarm(alarm);
 					
@@ -232,7 +232,7 @@ public class LikeRestController {
 					//객체를 생성하고 필요한 값을 다넣고 그객체를 보내준다
 					String studyName = studyService.search(studyId).getName();
 					Article article = articleService.search(articleId);
-					Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 스터디의 자료실 게시판 글에 좋아요가 달렸습니다.", studyId, articleId, 3);
+					Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 글에 좋아요", studyId, articleId, 3);
 					//template.convertAndSend("/topic/notification/" + articleDAO.selectArticleById(articleId).getUser_id(), alarm);
 					alarmService.createAlarm(alarm);
 					// 글쓴이에게 2점 부여
@@ -309,7 +309,7 @@ public class LikeRestController {
 				System.out.println(comment.getUser_id() + " " + studyId + " " + 2);
 				
 				String studyName = studyService.search(studyId).getName();
-				Alarm alarm = new Alarm(comment.getUser_id(), 3, studyName +" 스터디의 qna 답글에 좋아요가 달렸습니다.", studyId, articleId, 2);
+				Alarm alarm = new Alarm(comment.getUser_id(), 3, studyName +" 댓글에 좋아요", studyId, articleId, 2);
 				alarmService.createAlarm(alarm);
 				return new ResponseEntity<>("success", HttpStatus.OK);
 			}			
@@ -380,7 +380,7 @@ public class LikeRestController {
 			commentlike.setUser_id(userId);
 			if(commentlikeService.create(commentlike)) {
 				String studyName = studyService.search(studyId).getName();
-				Alarm alarm = new Alarm(comment.getUser_id(), 3, studyName +" 스터디의 자료실 게시글의 댓글에 좋아요가 달렸습니다.", studyId, articleId, 3);
+				Alarm alarm = new Alarm(comment.getUser_id(), 3, studyName +" 댓글에 좋아요", studyId, articleId, 3);
 				alarmService.createAlarm(alarm);
 				return new ResponseEntity<>("success", HttpStatus.OK);
 			}			

@@ -20,7 +20,7 @@ public class StudyInfo {
 		return value;
 	}
 	public void setValue(int user, int like, int schedule, int articles) {
-		this.value = user + like + schedule + articles;
+		this.value = user + (like * 2) + (schedule * 20) + (articles * 30);
 	}
 	public int getId() {
 		return id;

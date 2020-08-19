@@ -210,7 +210,7 @@ public class StudyRestController {
 				joinService.join(studyId, userId);
 				System.out.println("모임장의 스터디 가입 성공!");
 				
-				return new ResponseEntity<>(new ReturnMsg("스터디가 정상적으로 생성되었습니다."), HttpStatus.OK);
+				return new ResponseEntity<>(studyId, HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			System.out.println("** 스터디 생성 실패 - 서버 에러");
@@ -449,9 +449,10 @@ public class StudyRestController {
 		article.setBoard_id(noticeBoardId);
 		article.setUser_id(userId);
 		try {
-			if(articleService.create(article)) {
+			int articleId = articleService.create(article, studyId);
+			if(articleId > 0) {
 				System.out.println("공지글 작성 성공!");
-				return new ResponseEntity<>(new ReturnMsg("공지글을 성공적으로 작성하였습니다."), HttpStatus.OK);
+				return new ResponseEntity<>(articleId, HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			System.out.println("** 공지글 작성 실패 - 서버 오류...");			
@@ -486,11 +487,11 @@ public class StudyRestController {
 		if(joinService.isMember(studyId, userId)) {
 			article.setBoard_id(boardService.findQnABoardId(studyId));
 			article.setUser_id(userId);
-			articleService.create(article);
+			int articleId = articleService.create(article, studyId);
 			System.out.print(studyId + "번 스터디의 qna 게시판에 글 작성 성공!");
 			joinService.givePoint(userId, studyId, 1);
 			System.out.println(" - 포인트 1점 부여");
-			return new ResponseEntity<>(new ReturnMsg("글을 성공적으로 작성하였습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(articleId, HttpStatus.OK);
 		}
 		System.out.println("** " + studyId + "번 스터디의 qna 게시판에 글 작성 실패...");
 		return new ResponseEntity<>(new ReturnMsg("글 작성을 실패하였습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -523,11 +524,11 @@ public class StudyRestController {
 		if(joinService.isMember(studyId, userId)) {
 			article.setBoard_id(boardService.findRepoBoardId(studyId));
 			article.setUser_id(userId);
-			articleService.create(article);
+			int articleId = articleService.create(article, studyId);
 			System.out.print(studyId + "번 스터디의 자료실 게시판에 글 작성 성공!");
 			joinService.givePoint(userId, studyId, 5);
 			System.out.println(" - 포인트 5점 부여");
-			return new ResponseEntity<>(new ReturnMsg("글을 성공적으로 작성하였습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(articleId, HttpStatus.OK);
 		}
 		System.out.println("** " + studyId + "번 스터디의 자료실 게시판에 글 작성 실패...");
 		return new ResponseEntity<>(new ReturnMsg("글 작성을 실패하였습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -881,7 +882,7 @@ public class StudyRestController {
 			
 			String studyName = studyService.search(studyId).getName();
 			Article article = articleService.search(articleId);
-			Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 스터디의 공지글에 댓글이 달렸습니다.", studyId, articleId, 1);
+			Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 글에 새 댓글", studyId, articleId, 1);
 			alarmService.createAlarm(alarm);
 			return new ResponseEntity<>(new ReturnMsg("댓글을 성공적으로 작성했습니다."), HttpStatus.OK);			
 		}
@@ -907,7 +908,7 @@ public class StudyRestController {
 			//객체를 생성하고 필요한 값을 다넣고 그객체를 보내준다
 			String studyName = studyService.search(studyId).getName();
 			Article article = articleService.search(articleId);
-			Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 스터디의 qna 글에 댓글이 달렸습니다.", studyId, articleId, 2);
+			Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 글에 새 댓글", studyId, articleId, 2);
 			//template.convertAndSend("/topic/notification/" + articleDAO.selectArticleById(articleId).getUser_id(), alarm);
 			alarmService.createAlarm(alarm);
 			
@@ -937,7 +938,7 @@ public class StudyRestController {
 			//객체를 생성하고 필요한 값을 다넣고 그객체를 보내준다
 			String studyName = studyService.search(studyId).getName();
 			Article article = articleService.search(articleId);
-			Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 스터디의 자료실 글에 댓글이 달렸습니다.", studyId, articleId, 3);
+			Alarm alarm = new Alarm(article.getUser_id(), 2, studyName +" 글에 새 댓글", studyId, articleId, 3);
 			//template.convertAndSend("/topic/notification/" + articleDAO.selectArticleById(articleId).getUser_id(), alarm);
 			alarmService.createAlarm(alarm);
 			
@@ -1133,11 +1134,15 @@ public class StudyRestController {
 			if(joinService.join(studyId, userId)) {
 				System.out.println("소모임 가입 성공!");
 				Study study = studyService.search(studyId);
-				Alarm alarm = new Alarm(study.getUser_id(), 4, study.getName() +" 스터디에 새로운 멤버가 가입했습니다!", studyId, 0, 1);
+				System.out.println(study);
+				
+				Alarm alarm = new Alarm(study.getUser_id(), 4, study.getName() +" 새 멤버 가입", studyId, 0, 1);
+				System.out.println("알람 만들기 시작");
 				alarmService.createAlarm(alarm);
 				return new ResponseEntity<>(new ReturnMsg("소모임에 성공적으로 가입했습니다."), HttpStatus.OK);
 			}
 		} catch(Exception e) {
+			e.printStackTrace();
 			System.out.println("** 스터디 가입 실패 - 서버 에러");
 		}
 		return new ResponseEntity<>(new ReturnMsg("소모임 가입에 실패했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);			
@@ -1226,23 +1231,6 @@ public class StudyRestController {
 		int pos = fileName.lastIndexOf(".");
 		String ext = fileName.substring(pos);
 		return "upload/" + userId + "_" + System.currentTimeMillis() + ext;
-	}
-	
-	@ApiOperation(value = "유저아이디로 종료된 스터디를 조회한다", response = List.class)
-	@GetMapping("/accounts/{user_id}/endstudy")
-	public Object searchEndStudyByUserId(@PathVariable("user_id") int user_id, HttpServletRequest request){
-		System.out.println("유저아이디로 종료된 스터디 조회");
-		try {
-			List<Study> list1 = studyService.searchEndStudyByUserId(user_id);
-			List<Study> list2 = studyService.searchNotEndStudyByUserId(user_id);
-			
-			StudyProfileDTO list = new StudyProfileDTO(list1, list2);
-			return new ResponseEntity<>(list, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new ResponseEntity<>(new ReturnMsg("유저의 스터디를 불러오는데 실패했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
-		
 	}
 	
 	// Token(Authentication)에서 유저 id 정보를 뽑아내는 메소드

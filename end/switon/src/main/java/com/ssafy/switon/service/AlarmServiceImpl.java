@@ -1,5 +1,6 @@
 package com.ssafy.switon.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.AlarmDAO;
 import com.ssafy.switon.dto.Alarm;
+import com.ssafy.switon.dto.AlarmReturnDTO;
 
 @Service
 public class AlarmServiceImpl implements AlarmService {
@@ -47,6 +49,28 @@ public class AlarmServiceImpl implements AlarmService {
 	@Override
 	public int searchCountNotReadByUserId(int user_id) {
 		return alarmDAO.countAlarmByUserIdNotRead(user_id);
+	}
+
+	@Override
+	public List<AlarmReturnDTO> searchAlarmByUserId(int userId, String string) {
+		List<Alarm> originalAlarms = alarmDAO.selectAlarmByUserId(userId);
+		List<AlarmReturnDTO> alarms = new ArrayList<AlarmReturnDTO>();
+		String board_name;
+		if(originalAlarms.size() != 0) {
+			for(Alarm originalAlarm : originalAlarms) {
+				switch(originalAlarm.getBoard_type()) {
+				case 1: board_name = "notice";
+						break;
+				case 2: board_name = "qna";
+						break;
+				default: board_name = "repository";
+						break;
+				}
+				AlarmReturnDTO alarm = new AlarmReturnDTO(originalAlarm, board_name);
+				alarms.add(alarm);
+			}
+		}
+		return alarms;
 	}
 
 }

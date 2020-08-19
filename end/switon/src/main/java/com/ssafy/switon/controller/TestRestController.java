@@ -77,20 +77,20 @@ public class TestRestController {
 		return articleService.search(id);
 	}
 	
-	@ApiOperation(value = "게시글 작성, 후에 토큰으로 구현할 것")
-	@PostMapping("/article/create")
-	public Object createArticle(Article article){
-		if(articleService.create(article)) {
-			System.out.println("게시글 작성 성공!");
-			int recentArticleId = articleService.searchUserRecentArticleId(article.getUser_id());
-			System.out.println(recentArticleId);
-			return new ResponseEntity<>(new ResultStrObject(recentArticleId), HttpStatus.OK);
-		} else {
-			System.out.println("** 게시글 작성 실패...");
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
+//	@ApiOperation(value = "게시글 작성, 후에 토큰으로 구현할 것")
+//	@PostMapping("/article/create")
+//	public Object createArticle(Article article){
+//		if(articleService.create(article)) {
+//			System.out.println("게시글 작성 성공!");
+//			int recentArticleId = articleService.searchUserRecentArticleId(article.getUser_id());
+//			System.out.println(recentArticleId);
+//			return new ResponseEntity<>(new ResultStrObject(recentArticleId), HttpStatus.OK);
+//		} else {
+//			System.out.println("** 게시글 작성 실패...");
+//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
+//	
 	@ApiOperation(value = "게시글 수정, 후에 토큰으로 구현할 것")
 	@PostMapping("/article/update")
 	public Object editArticle(Article article) {

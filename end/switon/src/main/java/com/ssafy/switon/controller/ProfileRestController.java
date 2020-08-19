@@ -24,6 +24,8 @@ import com.ssafy.switon.dto.ArticleFavReturnDTO;
 import com.ssafy.switon.dto.ArticleWithStudyDTO;
 import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.Schedule;
+import com.ssafy.switon.dto.Study;
+import com.ssafy.switon.dto.StudyProfileDTO;
 import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserInfoWithMedals;
@@ -332,6 +334,26 @@ public class ProfileRestController {
 			e.printStackTrace();
 			return new ResponseEntity<>(new ReturnMsg("즐겨찾기 정보를 불러올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@ApiOperation(value = "유저아이디로 종료된 스터디를 조회한다", response = List.class)
+	@GetMapping("/{name}/endstudy")
+	public Object searchEndStudyByUserId(@PathVariable("name") String name, HttpServletRequest request){
+		int userId = userService.searchUserIdByName(name);
+		if(userId == 0) {
+			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+		}
+		System.out.println("유저아이디로 종료된 스터디 조회");
+		try {
+			List<Study> list1 = studyService.searchEndStudyByUserId(userId);
+			List<Study> list2 = studyService.searchNotEndStudyByUserId(userId);
+			
+			StudyProfileDTO list = new StudyProfileDTO(list1, list2);
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(new ReturnMsg("유저의 스터디를 불러오는데 실패했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img) {

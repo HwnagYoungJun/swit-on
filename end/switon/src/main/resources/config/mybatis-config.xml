@@ -22,5 +22,6 @@
       <mapper resource="mappers/Schedule.xml" />
       <mapper resource="mappers/Userschedule.xml" />
       <mapper resource="mappers/Alarm.xml" />
+      <mapper resource="mappers/Conference.xml" />
    </mappers>
 </configuration>

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.switon.dto.Alarm;
+import com.ssafy.switon.dto.AlarmReturnDTO;
 import com.ssafy.switon.dto.ArticleReturnDTO;
 import com.ssafy.switon.dto.FeedsIndexDTO;
 import com.ssafy.switon.dto.LowerCategory;
@@ -120,6 +121,7 @@ public class SwitonRestController {
 	@ApiOperation(value = "유저id로 알람 목록을 상세 반환한다", response = List.class)
 	@GetMapping("/alarm")
 	public Object searchAlarmByUserId(HttpServletRequest request) {
+		System.out.println("/알람 시작");
 		int userId = 0;
 		String token = request.getHeader("Authentication");
 		if(token != null) {
@@ -127,14 +129,16 @@ public class SwitonRestController {
 		}
 		if(userId != 0) {
 			try {
-				List<Alarm> alarms = alarmService.searchAlarmByUserId(userId);			
+				List<AlarmReturnDTO> alarms = alarmService.searchAlarmByUserId(userId, "board_name도");			
 				System.out.println("알람 목록을 상세 조회");
 				return new ResponseEntity<>(alarms, HttpStatus.OK);
 			} catch (Exception e) {
+				e.printStackTrace();
 				return new ResponseEntity<>(new ReturnMsg("알림을 받아올 수 없습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		return new ResponseEntity<>(null, HttpStatus.OK);
+		System.out.println("토큰을 못 읽어옴");
+		return new ResponseEntity<>(new ReturnMsg("토큰에서 유저 정보를 읽어올 수 없습니다."), HttpStatus.UNAUTHORIZED);
 	}
 	
 	// id로 알림 읽음으로 등록 

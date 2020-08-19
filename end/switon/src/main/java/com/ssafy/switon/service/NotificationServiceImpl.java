@@ -53,7 +53,7 @@ public class NotificationServiceImpl implements NotificationService {
 				Schedule schedule = scheduleDAO.selectScheduleById(schedule_id);
 				Study study = studyDAO.selectStudyById(schedule.getStudy_id());
 				returnMsg = returnMsg + user_id + "번 유저에게 스케쥴 알람 발송 ";
-				AlarmSchedule alarmSchedule = new AlarmSchedule(schedule_title + " 스케줄 입실 시간입니다! 출석하러 이동해볼까요?",
+				AlarmSchedule alarmSchedule = new AlarmSchedule(schedule_title + " 스케줄 입실 시간",
 						1, new ScheduleInfo(schedule_id, schedule_title, study.getId(), study.getName()));
 				// Msg = "ㅇㅇㅇ 스케줄 출석 시간입니다! 출석하러 이동해볼까요?"
 				// type = 1: 스케줄 출석 알림, 2: 댓글, 3: 좋아요
@@ -61,7 +61,7 @@ public class NotificationServiceImpl implements NotificationService {
 //				template.convertAndSend("/topic/notification/" + user_id, alarmSchedule);
 				Alarm alarm = new Alarm();
 				alarm.setUser_id(user_id);
-				alarm.setMsg(study.getName() + " 스터디의 " + schedule_title + " 스케줄 입실 시간입니다! 출석하러 이동해볼까요?");
+				alarm.setMsg(study.getName() + " 스케줄 입실 시간");
 				alarm.setStudy_id(study.getId());
 				alarm.setArticle_id(0);
 				alarm.setType(1);
@@ -97,7 +97,7 @@ public class NotificationServiceImpl implements NotificationService {
 //				template.convertAndSend("/topic/notification/" + user_id, alarmSchedule);
 				Alarm alarm = new Alarm();
 				alarm.setUser_id(user_id);
-				alarm.setMsg(study.getName() + " 스터디의 " + schedule_title + " 스케줄 퇴실 시간입니다! 마무리하러 이동해볼까요?");
+				alarm.setMsg(study.getName() + " 스케줄 퇴실 시간");
 				alarm.setStudy_id(study.getId());
 				alarm.setArticle_id(0);
 				alarm.setType(1);
