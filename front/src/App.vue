@@ -9,6 +9,7 @@
 			<footer v-if="!isAccountsRoute"><Footer /></footer>
 		</section>
 		<ToastPopup></ToastPopup>
+		<ToastPopupNotification></ToastPopupNotification>
 	</section>
 </template>
 
@@ -18,6 +19,7 @@ import AppHeader from '@/components/common/AppHeader.vue';
 import Footer from '@/components/common/Footer.vue';
 import Main from '@/views/Main.vue';
 import ToastPopup from './components/common/ToastPopup.vue';
+import ToastPopupNotification from './components/common/ToastPopupNotification.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import { mapGetters } from 'vuex';
@@ -28,6 +30,7 @@ export default {
 		Footer,
 		ToastPopup,
 		Main,
+		ToastPopupNotification,
 	},
 	computed: {
 		...mapGetters(['getUserId', 'isLogin']),
@@ -48,12 +51,9 @@ export default {
 			const Id = this.getUserId;
 			let ServerUrl = process.env.VUE_APP_API_URL;
 			let client = Stomp.over(new SockJS(`${ServerUrl}websocket`));
-
-			client.connect({}, function(frame) {
-				console.log(frame);
-				client.subscribe(`/topic/notification/${Id}`, function(message) {
-					this.messages.push(JSON.parse(message.body));
-					console.log(this.messages);
+			client.connect({}, function() {
+				client.subscribe(`/topic/notification/${Id}`, message => {
+					bus.$emit('show:toast', JSON.parse(message.body).msg);
 				});
 			});
 		},
@@ -71,11 +71,16 @@ export default {
 	mounted() {
 		if (this.isLogin) {
 			// this.connect();
-			this.fetchData();
+			// this.fetchData();
 		}
 	},
 	watch: {
-		$route: 'fetchData',
+		$route() {
+			if (this.isLogin) {
+				// this.connect();
+				// this.fetchData();
+			}
+		},
 	},
 };
 </script>

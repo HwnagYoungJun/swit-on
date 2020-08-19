@@ -8,6 +8,7 @@
 			:color="changeNameColor"
 			text="이름을 입력하세요"
 			:inputChange="onChangeName"
+			@keypress.enter="checkName"
 		></InputBox>
 		<InputBox
 			type="email"
@@ -17,6 +18,7 @@
 			:color="changeEmailColor"
 			text="이메일을 입력하세요"
 			:inputChange="onChangeEmail"
+			@keypress.enter="checkEmail"
 		></InputBox>
 		<InputBox
 			type="password"
@@ -51,6 +53,7 @@
 <script>
 import bus from '@/utils/bus.js';
 import InputBox from '@/components/common/InputBox.vue';
+import { ValidEmail, ValidName } from '@/api/auth';
 import { mapActions } from 'vuex';
 import {
 	validateEmail,
@@ -69,6 +72,10 @@ export default {
 				password: '',
 				password2: '',
 			},
+			isEmailValid: '',
+			nameErrorMessage: '',
+			emailErrorMessage: '',
+			isNameValid: '',
 		};
 	},
 	computed: {
@@ -95,6 +102,11 @@ export default {
 					  validateName(this.signupData.name)
 					? 'green'
 					: 'red';
+			if (this.isNameValid === 'red') {
+				color = 'red';
+			} else if (this.isNameValid === 'green') {
+				color = 'green';
+			}
 			return color;
 		},
 		changeNameMessage() {
@@ -104,7 +116,9 @@ export default {
 					: this.changeNameColor === 'green'
 					? // '올바른 형식의 이름을 입력했습니다.'
 					  false
-					: '<i class="icon ion-md-close-circle"></i> 이름은 특수문자 제외 2-6자입니다. ';
+					: this.changeNameColor === 'red' && this.isNameValid === 'red'
+					? '<i class="icon ion-md-close-circle"></i> 이름이 중복되었습니다'
+					: '<i class="icon ion-md-close-circle"></i> 이름은 특수문자 제외 2-6자입니다.';
 			return name;
 		},
 		changeEmailColor() {
@@ -114,6 +128,12 @@ export default {
 					: this.isValidEmail
 					? 'green'
 					: 'red';
+			if (this.isEmailValid === 'red') {
+				color = 'red';
+			} else if (this.isEmailValid === 'green') {
+				color = 'green';
+			}
+
 			return color;
 		},
 		changeEmailMessage() {
@@ -123,7 +143,9 @@ export default {
 					: this.changeEmailColor === 'green'
 					? // '올바른 형식의 이메일을 입력했습니다.'
 					  false
-					: '<i class="icon ion-md-close-circle"></i> 이메일이 올바르지 않습니다.';
+					: this.changeEmailColor === 'red' && this.isEmailValid === 'red'
+					? '<i class="icon ion-md-close-circle"></i> 이메일이 중복되었습니다'
+					: '<i class="icon ion-md-close-circle"></i> 이메일을 형식을 유지해주세요! ';
 			return name;
 		},
 		changePasswordColor() {
@@ -170,12 +192,27 @@ export default {
 		...mapActions(['SIGNUP']),
 		async submitForm() {
 			try {
-				console.log(this.signupData);
 				// LOGIN 액션함수에 await를 걸지 않으면 로그인 처리되기 전에 라우터 이동이 진행됌
 				await this.SIGNUP(this.signupData);
 				this.$router.push({ name: 'main' });
 			} catch (error) {
 				bus.$emit('show:toast', error.response.data.msg);
+			}
+		},
+		async checkName() {
+			try {
+				await ValidName(this.signupData.name);
+				this.isNameValid = 'green';
+			} catch (error) {
+				this.isNameValid = 'red';
+			}
+		},
+		async checkEmail() {
+			try {
+				await ValidEmail(this.signupData.email);
+				this.isNameValid = 'green';
+			} catch (error) {
+				this.isNameValid = 'red';
 			}
 		},
 		onChangePassword(val) {
@@ -186,9 +223,13 @@ export default {
 		},
 		onChangeName(val) {
 			this.signupData.name = val;
+			if (this.signupData.name.length > 1) {
+				// this.checkName();
+			}
 		},
 		onChangeEmail(val) {
 			this.signupData.email = val;
+			// this.checkEmail();
 		},
 	},
 };

@@ -360,6 +360,22 @@ export default {
 		height: 10rem;
 	}
 }
+.studyform-week {
+	input[type='checkbox'] {
+		margin-right: 2px;
+	}
+	label {
+		margin-right: 5px;
+	}
+}
+.studyform-private {
+	input[type='radio'] {
+		margin-right: 2px;
+	}
+	label {
+		margin-right: 5px;
+	}
+}
 .head-label {
 	display: block;
 	font-weight: 600;

@@ -8,6 +8,9 @@ const routes = [
 		path: '/',
 		name: 'main',
 		component: () => import('@/views/Main.vue'),
+		beforeEnter(to, from, next) {
+			store.getters['isLogin'] ? next('/category/추천') : next();
+		},
 	},
 	{
 		path: '/study/new',
@@ -118,7 +121,7 @@ const routes = [
 		name: 'login',
 		component: () => import('@/views/accounts/LoginPage.vue'),
 		beforeEnter(to, from, next) {
-			store.getters['isLogin'] ? next({ path: '/' }) : next();
+			store.getters['isLogin'] ? next({ path: '/category/추천' }) : next();
 		},
 	},
 	{
@@ -233,7 +236,6 @@ function beforeEnter(to, from, next) {
 	if (store.getters['isLogin']) {
 		next();
 	} else {
-		// alert('sign in please');
 		next('/login');
 	}
 }

@@ -284,6 +284,9 @@ export default {
 	grid-template-columns: 80% 20%;
 	grid-template-rows: 1fr;
 	grid-template-areas: 'video-list chat-list';
+	@media screen and (max-width: 640px) {
+		grid-template-columns: 100% 0%;
+	}
 	// overflow: hidden;
 	/* position: relative; */
 }
