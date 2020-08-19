@@ -66,7 +66,6 @@ export default {
 	font-weight: bold;
 	font-size: $font-light * 1.2;
 	.suggest-title-comment {
-		padding-left: 5px;
 		font-weight: normal;
 	}
 }
