@@ -23,12 +23,36 @@
 					}"
 				>
 					<ArticleFeed :article="article">
-						<div slot="logo">
+						<!-- <div slot="logo">
 							<img src="@/assets/dd.png" :alt="`${article.name}의 대체 사진`" />
-						</div>
+						</div> -->
 					</ArticleFeed>
 				</router-link>
 			</div>
+			<aside class="member-wrap">
+				<div class="study-members">
+					<p>우리 스터디 :></p>
+					<ul>
+						<li v-for="member in members" :key="member.id">
+							<router-link class="member-box" :to="`/profile/${member.name}`">
+								<img
+									v-if="member.profile_image"
+									:src="`${baseURL}${member.profile_image}`"
+									:alt="`${member.name}의 프로필 사진`"
+									class="member-image"
+								/>
+								<img
+									v-else
+									:src="`${baseURL}upload/noProfile.png`"
+									:alt="`${member.name}의 프로필 대체 사진`"
+									class="member-image"
+								/>
+								{{ member.name }}
+							</router-link>
+						</li>
+					</ul>
+				</div>
+			</aside>
 		</article>
 	</section>
 </template>
@@ -39,6 +63,7 @@ import ArticleFeed from '@/components/common/ArticleFeed.vue';
 import ArticleAddBtn from '@/components/common/ArticleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import { fetchArticles } from '@/api/articles';
+import { fetchStudy } from '@/api/studies';
 import Loading from '@/components/common/Loading.vue';
 import UpperBtn from '@/components/common/UpperBtn.vue';
 export default {
@@ -52,6 +77,7 @@ export default {
 			limit: 0,
 			articles: [],
 			windowTop: 0,
+			members: null,
 		};
 	},
 	components: {
@@ -64,6 +90,7 @@ export default {
 
 	methods: {
 		async fetchNotice() {
+			this.fetchData();
 			try {
 				const studyId = this.id;
 				this.loading = true;
@@ -71,6 +98,15 @@ export default {
 				this.articles = data;
 				this.loading = false;
 				this.limit += 5;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
+		async fetchData() {
+			try {
+				const studyId = this.id;
+				const { data } = await fetchStudy(studyId);
+				this.members = data.members;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
@@ -89,6 +125,9 @@ export default {
 		},
 	},
 	computed: {
+		baseURL() {
+			return process.env.VUE_APP_API_URL;
+		},
 		isInfinite() {
 			return (
 				document.querySelector('body').scrollHeight >
@@ -138,6 +177,36 @@ export default {
 		margin-right: 100px;
 		@media screen and (max-width: 992px) {
 			margin-right: 0;
+		}
+	}
+	.member-wrap {
+		flex: 1;
+		height: 100vh;
+		@media screen and (max-width: 992px) {
+			display: none;
+		}
+		.study-members {
+			flex: 1;
+			margin-left: 3rem;
+			.diff-user {
+				margin-bottom: 8px;
+			}
+			li {
+				.member-box {
+					display: flex;
+					align-items: center;
+					margin-bottom: 8px;
+				}
+				.member-image {
+					width: 30px;
+					height: 30px;
+					margin-right: 8px;
+					border-radius: 50%;
+				}
+			}
+			@media screen and (max-width: 768px) {
+				display: none;
+			}
 		}
 	}
 }

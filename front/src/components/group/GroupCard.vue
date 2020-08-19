@@ -15,7 +15,10 @@
 		<div v-else>
 			<section class="group-box">
 				<div class="endStudy">
-					<i class="icon ion-md-checkmark-circle-outline"></i>
+					<i
+						class="icon ion-md-checkmark-circle-outline"
+						aria-hidden="true"
+					></i>
 				</div>
 				<div class="img-box">
 					<img :src="imgLink" :alt="`${study.name} 스터디 사진`" />
@@ -23,7 +26,7 @@
 				<div class="name-box">
 					<span class="badge">
 						<span class="rounded">
-							<span class="icon ion-md-medal"></span>
+							<span class="icon ion-md-medal" aria-hidden="true"></span>
 						</span>
 					</span>
 					{{ study.name }}

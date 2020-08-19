@@ -1,5 +1,8 @@
 <template>
 	<section class="container">
+		<section v-if="studing.length === 0" class="study-not-found">
+			<p>스터디가 없어요 :(</p>
+		</section>
 		<section class="temp">
 			<article class="group-container">
 				<div :key="study.id" v-for="study in studing">
@@ -10,6 +13,9 @@
 		<div class="space">
 			<span>종료 스터디<span></span></span>
 		</div>
+		<section v-if="endStudy.length === 0" class="study-not-found">
+			<p>스터디가 없어요 :(</p>
+		</section>
 		<section class="temp">
 			<article class="group-container">
 				<div :key="study.id" v-for="study in endStudy">
@@ -41,7 +47,8 @@ export default {
 	methods: {
 		async fetchMyStudy() {
 			try {
-				const { data } = await fetchMyStudy(this.userName);
+				const name = this.userName;
+				const { data } = await fetchMyStudy(name);
 				this.studing = data.unfinishedStudy;
 				this.endStudy = data.finishedStudy;
 			} catch (error) {
@@ -56,7 +63,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.study-not-found {
+	width: 100%;
+	height: 3rem;
+	display: grid;
+	place-items: center;
+	position: relative;
+	p {
+		color: rgb(100, 100, 100);
+		font-weight: bold;
+	}
+}
 .space {
+	margin: 2rem;
 	height: 4rem;
 	span {
 		font-size: $font-bold;

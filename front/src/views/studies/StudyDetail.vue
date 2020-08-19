@@ -18,7 +18,7 @@
 		</nav>
 		<section class="study-description">
 			<div class="study-content">
-				<h3 class="study-title">
+				<h3 class="study-title" id="studyTitle">
 					{{ study.name }}
 				</h3>
 				<div class="leader-comment">
@@ -31,6 +31,7 @@
 					<time class="strong">{{ study.start_time }}</time> 부터
 					<time class="strong">{{ study.end_time }}</time> 까지 활동합니다<i
 						class="icon ion-md-quote"
+						aria-hidden="true"
 					></i>
 				</div>
 				<p class="study-member-cnt">
@@ -79,19 +80,21 @@
 					<p class="diff-user">{{ diffUser }}자리가 비어있어요 :(</p>
 					<ul>
 						<li v-for="member in members" :key="member.id">
-							<img
-								v-if="member.profile_image"
-								:src="`${baseURL}${member.profile_image}`"
-								:alt="`${member.name}의 프로필 사진`"
-								class="member-image"
-							/>
-							<img
-								v-else
-								:src="`${baseURL}upload/noProfile.png`"
-								:alt="`${member.name}의 프로필 대체 사진`"
-								class="member-image"
-							/>
-							{{ member.name }}
+							<router-link class="member-box" :to="`/profile/${member.name}`">
+								<img
+									v-if="member.profile_image"
+									:src="`${baseURL}${member.profile_image}`"
+									:alt="`${member.name}의 프로필 사진`"
+									class="member-image"
+								/>
+								<img
+									v-else
+									:src="`${baseURL}upload/noProfile.png`"
+									:alt="`${member.name}의 프로필 대체 사진`"
+									class="member-image"
+								/>
+								{{ member.name }}
+							</router-link>
 						</li>
 					</ul>
 				</div>
@@ -159,8 +162,8 @@ export default {
 	created() {
 		this.fetchData();
 	},
-	mounted() {
-		document.title = `스윗온 ${this.study.name}스터디`;
+	updated() {
+		document.title = `스윗온 ${this.study.name} 스터디`;
 	},
 	watch: {
 		$route: 'fetchData',
@@ -301,9 +304,11 @@ export default {
 				margin-bottom: 8px;
 			}
 			li {
-				display: flex;
-				align-items: center;
-				margin-bottom: 8px;
+				.member-box {
+					display: flex;
+					align-items: center;
+					margin-bottom: 8px;
+				}
 				.member-image {
 					width: 30px;
 					height: 30px;

@@ -14,13 +14,22 @@
 			</section>
 			<p>
 				출석 버튼으로, 나도
-				<span>switch on</span><i class="icon ion-md-bulb high-light"></i>
+				<span>switch on</span
+				><i class="icon ion-md-bulb high-light" aria-hidden="true"></i>
 			</p>
 			<p>
-				정보 공유<i class="icon ion-md-information exclamation"></i> 일정 관리<i
+				정보 공유<i
 					class="icon ion-md-information exclamation"
+					aria-hidden="true"
 				></i>
-				이력 관리<i class="icon ion-md-information exclamation"></i>
+				일정 관리<i
+					class="icon ion-md-information exclamation"
+					aria-hidden="true"
+				></i>
+				이력 관리<i
+					class="icon ion-md-information exclamation"
+					aria-hidden="true"
+				></i>
 			</p>
 			<p>스윗온과 함께 해요 :)</p>
 		</section>
@@ -40,6 +49,9 @@ export default {
 	computed: {
 		...mapGetters(['isLogin']),
 	},
+	mounted() {
+		document.title = 'Swit On';
+	},
 };
 </script>
 
@@ -54,7 +66,7 @@ export default {
 	background: $btn-purple-opacity;
 	.main-page-description {
 		width: 100%;
-		min-height: 50vh;
+		min-height: 60vh;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;

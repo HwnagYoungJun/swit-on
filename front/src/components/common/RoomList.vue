@@ -11,6 +11,7 @@
 						v-if="isLeader"
 						@click="removeRoom(Id, Room.id)"
 						class="icon ion-md-close unlike"
+						aria-label="회의 끝내기 버튼"
 					>
 					</i>
 				</li>

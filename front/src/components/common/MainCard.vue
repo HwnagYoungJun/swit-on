@@ -6,10 +6,7 @@
 				<span>{{ study.users_current }} / {{ study.users_limit }}</span>
 			</p>
 		</div>
-		<section
-			class="popular-content"
-			:style="{ color: colorPick === 'white' ? 'white' : 'black' }"
-		>
+		<section class="popular-content">
 			<h3 class="content-title">{{ study.name }}</h3>
 			<p class="content-week">
 				<time class="content-day">{{ study.week | formatWeekday }}</time>
@@ -61,7 +58,7 @@ export default {
 	margin-top: 1rem;
 	padding: 0.3rem 0.5rem 0.5rem;
 	color: #454545;
-	box-shadow: 3px 2px 6px rgba(37, 37, 37, 0.5);
+	box-shadow: 2px 2px 5px rgba(139, 139, 139, 0.5);
 	.popular-img {
 		grid-area: image-part;
 		overflow: hidden;
@@ -80,33 +77,29 @@ export default {
 			background: linear-gradient(
 				to bottom,
 				transparent,
-				rgb(0, 0, 0, 0.2),
-				rgb(0, 0, 0, 0.5),
-				rgb(0, 0, 0, 0.8)
+				55%,
+				rgba(0, 0, 0, 0.5)
 			);
 		}
 	}
 	.popular-content {
 		grid-area: text-part;
-		color: #fff;
+		color: #495057;
 		.content-category {
 			padding-bottom: 0.3rem;
 			border-bottom: 1px solid #fff;
 		}
 		.content-title {
 			font-size: $font-bold * 0.85;
-			font-weight: 600;
 			padding-top: 0.3rem;
 			padding-bottom: 0.3rem;
 		}
 		.content-week {
 			.content-day {
-				font-weight: 600;
+				font-size: $font-light;
+				color: rgba(77, 77, 77, 0.8);
 			}
 		}
-	}
-	.black {
-		color: black;
 	}
 	.temp {
 		position: absolute;
