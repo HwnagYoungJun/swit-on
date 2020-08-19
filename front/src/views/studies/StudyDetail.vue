@@ -160,6 +160,9 @@ export default {
 	created() {
 		this.fetchData();
 	},
+	mounted() {
+		document.title = `스윗온 ${this.study.name}스터디`;
+	},
 	watch: {
 		$route: 'fetchData',
 	},

@@ -39,6 +39,9 @@ export default {
 			this.lowerCategory = '전체';
 		},
 	},
+	updated() {
+		document.title = `스윗온 ${this.upperCategoryName}카테고리`;
+	},
 	computed: {
 		initName() {
 			return this.upperCategoryName;
