@@ -37,7 +37,6 @@ const routes = [
 		children: [
 			{
 				path: '',
-				name: 'dashboard',
 				component: () => import('@/views/studies/children/StudyDashBoard.vue'),
 			},
 			{

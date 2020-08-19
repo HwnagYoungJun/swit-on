@@ -5,7 +5,6 @@ function fetchFeeds(index) {
 }
 
 function fetchArticles(studyId, boardName, index) {
-	console.log(studyId, boardName, index);
 	return boardArticles.get(`/${studyId}/${boardName}?index=${index}`);
 }
 

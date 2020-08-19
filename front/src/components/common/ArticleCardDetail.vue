@@ -263,7 +263,6 @@ export default {
 				const boardName = this.board_name;
 				const articleId = this.article_id;
 				const { data } = await fetchArticle(studyId, boardName, articleId);
-				console.log(data);
 				this.article = data;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);

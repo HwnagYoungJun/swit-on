@@ -57,7 +57,6 @@ export default {
 			try {
 				const Id = this.id;
 				const { data } = await fetchRooms(Id);
-				console.log(data);
 				this.Rooms = data.conferences;
 				this.isLeader = data.leader;
 			} catch (error) {
