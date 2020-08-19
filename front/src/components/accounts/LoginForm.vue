@@ -96,15 +96,6 @@ export default {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
-		onSuccess(data) {
-			console.log(data);
-			console.log('success');
-		},
-		onFailure(data) {
-			console.log(data);
-			console.log('failure');
-		},
-
 		setCookie(name, vaule, days) {
 			var exDate = new Date();
 			exDate.setDate(exDate.getDate() + days);

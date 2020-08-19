@@ -37,25 +37,20 @@ function fetchProfile(userName) {
 }
 
 function fetchMyStudy(userName) {
-	console.log(`accounts/${userName}/endstudy`);
 	return baseAuth.get(`accounts/${userName}/endstudy`);
 }
 
 function fetchMyRepository(userName) {
-	console.log(`accounts/${userName}/myrepository`);
 	return baseAuth.get(`accounts/${userName}/myrepository`);
 }
 function fetchMyQNA(userName) {
-	console.log(`accounts/${userName}/myqna`);
 	return baseAuth.get(`accounts/${userName}/myqna`);
 }
 
 function fetchMySchedule(userName) {
-	console.log(`accounts/${userName}/myschedule`);
 	return baseAuth.get(`accounts/${userName}/myschedule`);
 }
 function fetchMyFav(userName) {
-	console.log(`accounts/${userName}/fav`);
 	return baseAuth.get(`accounts/${userName}/fav`);
 }
 export {

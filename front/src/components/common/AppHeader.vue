@@ -135,7 +135,6 @@ export default {
 		async fetchData() {
 			try {
 				const { data } = await fetchUserAlarms();
-				console.log(data);
 				this.messages = data;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
