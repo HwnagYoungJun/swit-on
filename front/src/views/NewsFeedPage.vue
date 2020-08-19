@@ -103,7 +103,7 @@ export default {
 				},
 			],
 			disableDblClick: true,
-			isReadOnly: false,
+			isReadOnly: true,
 			template: {
 				milestone: function(schedule) {
 					return `<span style="color:red;">${schedule.title}</span>`;
@@ -113,7 +113,7 @@ export default {
 				},
 			},
 			useCreationPopup: false,
-			useDetailPopup: false,
+			useDetailPopup: true,
 		};
 	},
 	methods: {
