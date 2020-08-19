@@ -78,7 +78,7 @@ export default {
 	},
 	watch: {
 		$route() {
-			if (this.upperCategoryName === '추천') {
+			if (this.upperCategoryName === '인기') {
 				this.fetchData();
 			} else {
 				this.fetchUpperStudy();
@@ -86,7 +86,7 @@ export default {
 		},
 	},
 	created() {
-		if (this.upperCategoryName === '추천') {
+		if (this.upperCategoryName === '인기') {
 			this.fetchData();
 		} else {
 			this.fetchUpperStudy();

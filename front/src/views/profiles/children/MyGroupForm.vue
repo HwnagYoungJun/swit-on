@@ -3,6 +3,9 @@
 		<section v-if="studing.length === 0" class="study-not-found">
 			<p>스터디가 없어요 :(</p>
 		</section>
+		<div class="space">
+			<span>진행 스터디<span></span></span>
+		</div>
 		<section class="temp">
 			<article class="group-container">
 				<div :key="study.id" v-for="study in studing">
@@ -75,8 +78,8 @@ export default {
 	}
 }
 .space {
-	margin: 2rem;
-	height: 4rem;
+	margin: 1rem;
+	height: 3rem;
 	span {
 		font-size: $font-bold;
 		position: relative;

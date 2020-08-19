@@ -2,7 +2,7 @@
 	<section>
 		<CategoryNavForm :upperCategoryName="upperCategoryName" />
 		<LowerCategoryNavForm
-			v-if="upperCategoryName !== '추천'"
+			v-if="upperCategoryName !== '인기'"
 			@changeLower="changeLower"
 			:upperCategory="upperCategory"
 			:upperCategoryName="upperCategoryName"

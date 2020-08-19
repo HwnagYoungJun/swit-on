@@ -26,7 +26,7 @@ export default {
 	data() {
 		return {
 			categoryElements: {
-				el1: '추천',
+				el1: '인기',
 				el2: '웹',
 				el3: '모바일',
 				el4: 'AI',

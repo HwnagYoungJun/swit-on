@@ -23,13 +23,37 @@
 					>
 						<div class="modify-profile" v-if="isMe">프로필 수정</div>
 					</router-link>
+
 					<a class="mobile-log-out" href="javascript:;" @click="logoutUser"
 						><span>로그아웃</span></a
 					>
 				</div>
-				<p class="introduce">
-					{{ introduce }}
-				</p>
+				<div class="intro-box">
+					<p class="introduce">
+						{{ introduce }}
+					</p>
+					<div class="medal-box">
+						<div class="badgegold">
+							<div class="rounded">
+								<i class="icon ion-md-medal" aria-hidden="true"></i>
+							</div>
+						</div>
+						<span>{{ medals.gold }}</span>
+						<div class="badgesilver">
+							<div class="rounded">
+								<i class="icon ion-md-medal" aria-hidden="true"> </i>
+							</div>
+						</div>
+						<span>{{ medals.silver }}</span>
+						<div class="badgebronze">
+							<div class="rounded">
+								<i class="icon ion-md-medal" aria-hidden="true"> </i>
+							</div>
+						</div>
+						<span>{{ medals.bronze }}</span>
+					</div>
+				</div>
+
 				<div class="middle-box">
 					<div class="middle-element">
 						<p>진행스터디 {{ studing }}</p>
@@ -40,6 +64,26 @@
 				</div>
 			</div>
 		</article>
+		<div class="medal-box">
+			<div class="badgegold">
+				<div class="rounded">
+					<i class="icon ion-md-medal" aria-hidden="true"></i>
+				</div>
+			</div>
+			<span>{{ medals.gold }}</span>
+			<div class="badgesilver">
+				<div class="rounded">
+					<i class="icon ion-md-medal" aria-hidden="true"> </i>
+				</div>
+			</div>
+			<span>{{ medals.silver }}</span>
+			<div class="badgebronze">
+				<div class="rounded">
+					<i class="icon ion-md-medal" aria-hidden="true"> </i>
+				</div>
+			</div>
+			<span>{{ medals.bronze }}</span>
+		</div>
 	</section>
 </template>
 
@@ -59,6 +103,7 @@ export default {
 			profileImg: null,
 			studing: null,
 			endStudy: null,
+			medals: null,
 		};
 	},
 	methods: {
@@ -78,6 +123,7 @@ export default {
 				this.profile = data;
 				this.introduce = data.introduce === 'null' ? '' : data.introduce;
 				this.profileImg = data.profile_image;
+				this.medals = data.medals;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
@@ -113,6 +159,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.intro-box {
+	display: flex;
+	justify-content: space-between;
+	align-content: center;
+	margin-top: 1rem;
+	@media screen and (max-width: 1024px) {
+		justify-content: center;
+	}
+	.medal-box {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.badgegold {
+			@include grade-badge('gold', 30px);
+		}
+		.badgesilver {
+			@include grade-badge('silver', 30px);
+		}
+		.badgebronze {
+			@include grade-badge('bronze', 30px);
+		}
+		span {
+			margin-right: 0.5rem;
+		}
+		@media screen and (max-width: 1024px) {
+			display: none;
+		}
+	}
+}
 .profile-box {
 	display: flex;
 	margin-bottom: 1.5rem;
@@ -120,6 +195,7 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		margin-bottom: 0;
 	}
 }
 .info-box {
@@ -131,7 +207,6 @@ export default {
 	width: 100%;
 	.introduce {
 		font-weight: 400;
-		margin-top: 1.5rem;
 		margin-left: 3rem;
 		font-size: $font-normal * 1.1;
 		@media screen and (max-width: 1024px) {
@@ -230,6 +305,26 @@ export default {
 	@include common-btn();
 	@media screen and (max-width: 768px) {
 		display: flex;
+	}
+}
+.medal-box {
+	display: none;
+	@media screen and (max-width: 1024px) {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.badgegold {
+			@include grade-badge('gold', 30px);
+		}
+		.badgesilver {
+			@include grade-badge('silver', 30px);
+		}
+		.badgebronze {
+			@include grade-badge('bronze', 30px);
+		}
+		span {
+			margin-right: 1rem;
+		}
 	}
 }
 .icon-box {

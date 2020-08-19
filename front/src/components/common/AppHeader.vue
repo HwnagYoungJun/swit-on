@@ -29,7 +29,7 @@
 				</router-link>
 			</template>
 			<template v-else>
-				<router-link class="nav-router-item" :to="'/category/추천'"
+				<router-link class="nav-router-item" :to="'/category/인기'"
 					><span class="nav-router-full">카테고리</span
 					><i
 						class="icon ion-md-apps nav-router-medium"
