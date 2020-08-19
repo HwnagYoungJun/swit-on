@@ -146,7 +146,7 @@ export default {
 			if (this.study.logo) {
 				return `${process.env.VUE_APP_API_URL}${this.study.logo}`;
 			} else {
-				return '@/assets/django.png';
+				return `${process.env.VUE_APP_API_URL}upload/noStudy.jpg`;
 			}
 		},
 		diffUser() {
