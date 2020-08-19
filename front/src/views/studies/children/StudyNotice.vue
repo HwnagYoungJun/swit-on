@@ -102,6 +102,12 @@ export default {
 				this.infiniteLoading();
 			}
 		},
+		$route() {
+			this.fetchNotice();
+			window.addEventListener('scroll', () => {
+				this.windowTop = window.scrollY;
+			});
+		},
 	},
 	created() {
 		this.fetchNotice();

@@ -145,6 +145,13 @@ export default {
 		this.pastName = this.name;
 		this.fetchData();
 	},
+	watch: {
+		$route() {
+			this.pastName = this.name;
+			this.fetchData();
+		},
+	},
+
 	computed: {
 		profileImgCom() {
 			return this.swichFile !== false

@@ -398,7 +398,6 @@ export default {
 .comment-list {
 	display: flex;
 	justify-content: space-between;
-	// align-items: flex-start;
 }
 .comment-btnbox {
 	align-self: flex-start;

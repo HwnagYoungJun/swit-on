@@ -84,6 +84,13 @@ export default {
 				this.infiniteLoading();
 			}
 		},
+		$route() {
+			this.fetchQna();
+			this.fetchBest();
+			window.addEventListener('scroll', () => {
+				this.windowTop = window.scrollY;
+			});
+		},
 	},
 	methods: {
 		async fetchBest() {

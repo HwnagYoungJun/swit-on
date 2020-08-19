@@ -13,11 +13,11 @@ function loginUser(userData) {
 
 // 검증 API
 function ValidEmail(email) {
-	return auth.get(`check/?email=${email}`);
+	return auth.get(`accounts/check?email=${email}`);
 }
 
 function ValidName(name) {
-	return auth.get(`check/?name=${name}`);
+	return auth.get(`accounts/check?name=${name}`);
 }
 
 // 유저 API

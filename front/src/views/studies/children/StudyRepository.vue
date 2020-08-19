@@ -130,6 +130,13 @@ export default {
 				this.infiniteLoading();
 			}
 		},
+		$route() {
+			this.fetchRepo();
+			this.fetchBest();
+			window.addEventListener('scroll', () => {
+				this.windowTop = window.scrollY;
+			});
+		},
 	},
 	created() {
 		this.fetchRepo();

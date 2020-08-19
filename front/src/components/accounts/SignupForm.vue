@@ -8,7 +8,6 @@
 			:color="changeNameColor"
 			text="이름을 입력하세요"
 			:inputChange="onChangeName"
-			@keypress.enter="checkName"
 		></InputBox>
 		<InputBox
 			type="email"
@@ -18,7 +17,6 @@
 			:color="changeEmailColor"
 			text="이메일을 입력하세요"
 			:inputChange="onChangeEmail"
-			@keypress.enter="checkEmail"
 		></InputBox>
 		<InputBox
 			type="password"
@@ -200,20 +198,20 @@ export default {
 			}
 		},
 		async checkName() {
-			try {
-				await ValidName(this.signupData.name);
+			const { data } = await ValidName(this.signupData.name);
+			if (data) {
 				this.isNameValid = 'green';
-			} catch (error) {
-				this.isNameValid = 'red';
+				return;
 			}
+			this.isNameValid = 'red';
 		},
 		async checkEmail() {
-			try {
-				await ValidEmail(this.signupData.email);
-				this.isNameValid = 'green';
-			} catch (error) {
-				this.isNameValid = 'red';
+			const { data } = await ValidEmail(this.signupData.email);
+			if (data) {
+				this.isEmailValid = 'green';
+				return;
 			}
+			this.isEmailValid = 'red';
 		},
 		onChangePassword(val) {
 			this.signupData.password = val;
@@ -224,12 +222,12 @@ export default {
 		onChangeName(val) {
 			this.signupData.name = val;
 			if (this.signupData.name.length > 1) {
-				// this.checkName();
+				this.checkName();
 			}
 		},
 		onChangeEmail(val) {
 			this.signupData.email = val;
-			// this.checkEmail();
+			this.checkEmail();
 		},
 	},
 };

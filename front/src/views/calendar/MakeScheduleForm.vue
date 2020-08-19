@@ -61,7 +61,6 @@ export default {
 			userId: null,
 		};
 	},
-	watch: {},
 	methods: {
 		async submitSchedule() {
 			await this.makeSchedule();

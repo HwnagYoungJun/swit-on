@@ -44,6 +44,11 @@ export default {
 		isLeader: Boolean,
 		id: Number,
 	},
+	watch: {
+		$route() {
+			this.fetchData();
+		},
+	},
 	created() {
 		this.fetchData();
 	},
