@@ -18,6 +18,9 @@ export default {
 		ProfileForm,
 		ProfileNavForm,
 	},
+	mounted() {
+		document.title = `스윗온 ${this.userName} 프로필`;
+	},
 };
 </script>
 

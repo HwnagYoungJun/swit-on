@@ -197,6 +197,9 @@ export default {
 			this.newsFeedData.windowTop = window.scrollY;
 		});
 	},
+	mounted() {
+		document.title = '스윗온 뉴스피드';
+	},
 };
 </script>
 
