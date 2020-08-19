@@ -24,8 +24,7 @@ export default {
 	right: 0;
 	top: -56px;
 	@media screen and (max-width: 768px) {
-		position: static;
-		width: 94%;
+		display: none;
 	}
 }
 </style>
