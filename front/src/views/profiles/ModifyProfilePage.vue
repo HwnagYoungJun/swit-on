@@ -156,7 +156,7 @@ export default {
 				: this.profileImg !== null
 				? this.profileImg === undefined
 					? `${this.baseURL}upload/noProfile.png`
-					: this.swichFile
+					: `${this.baseURL}${this.profileImg}`
 				: `${this.baseURL}upload/noProfile.png`;
 		},
 		baseURL() {

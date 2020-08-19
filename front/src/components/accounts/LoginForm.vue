@@ -44,7 +44,6 @@
 
 <script>
 import bus from '@/utils/bus.js';
-// import KakaoLogin from 'vue-kakao-login';
 import InputBox from '@/components/common/InputBox.vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { validateEmail } from '@/utils/validation';
@@ -53,7 +52,6 @@ import cookies from 'vue-cookies';
 export default {
 	components: {
 		InputBox,
-		// KakaoLogin,
 	},
 	data() {
 		return {

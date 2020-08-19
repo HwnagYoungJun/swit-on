@@ -10,7 +10,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+	mounted() {
+		document.title = 'page not found';
+	},
+};
 </script>
 
 <style lang="scss">

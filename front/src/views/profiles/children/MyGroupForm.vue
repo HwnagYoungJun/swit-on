@@ -2,14 +2,17 @@
 	<section class="container">
 		<section class="temp">
 			<article class="group-container">
-				<div :key="study.id" v-for="study in studies">
+				<div :key="study.id" v-for="study in studing">
 					<GroupCard :study="study" :isEnd="false" />
 				</div>
 			</article>
 		</section>
+		<div class="space">
+			<span>종료 스터디<span></span></span>
+		</div>
 		<section class="temp">
 			<article class="group-container">
-				<div :key="study.id" v-for="study in studies">
+				<div :key="study.id" v-for="study in endStudy">
 					<GroupCard :study="study" :isEnd="true" />
 				</div>
 			</article>
@@ -25,7 +28,8 @@ export default {
 	components: { GroupCard },
 	data() {
 		return {
-			studies: [],
+			studing: [],
+			endStudy: [],
 		};
 	},
 	props: {
@@ -38,7 +42,8 @@ export default {
 		async fetchMyStudy() {
 			try {
 				const { data } = await fetchMyStudy(this.userName);
-				data.forEach(el => this.studies.push(el.study));
+				this.studing = data.unfinishedStudy;
+				this.endStudy = data.finishedStudy;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
@@ -51,6 +56,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.space {
+	height: 4rem;
+	span {
+		font-size: $font-bold;
+		position: relative;
+		span {
+			width: 100%;
+			height: 8px;
+			position: absolute;
+			bottom: -4px;
+			left: 0;
+			border-radius: 2px;
+			background: $btn-purple;
+			opacity: 0.5;
+		}
+	}
+}
 .temp {
 	display: flex;
 	justify-content: center;

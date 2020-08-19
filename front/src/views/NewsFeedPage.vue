@@ -103,7 +103,7 @@ export default {
 				},
 			],
 			disableDblClick: true,
-			isReadOnly: false,
+			isReadOnly: true,
 			template: {
 				milestone: function(schedule) {
 					return `<span style="color:red;">${schedule.title}</span>`;
@@ -113,7 +113,7 @@ export default {
 				},
 			},
 			useCreationPopup: false,
-			useDetailPopup: false,
+			useDetailPopup: true,
 		};
 	},
 	methods: {
@@ -196,6 +196,9 @@ export default {
 		window.addEventListener('scroll', () => {
 			this.newsFeedData.windowTop = window.scrollY;
 		});
+	},
+	mounted() {
+		document.title = '스윗온 뉴스피드';
 	},
 };
 </script>

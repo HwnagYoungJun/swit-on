@@ -87,7 +87,7 @@
 							/>
 							<img
 								v-else
-								src="@/assets/dd.png"
+								:src="`${baseURL}upload/noProfile.png`"
 								:alt="`${member.name}의 프로필 대체 사진`"
 								class="member-image"
 							/>
@@ -159,6 +159,9 @@ export default {
 	},
 	created() {
 		this.fetchData();
+	},
+	mounted() {
+		document.title = `스윗온 ${this.study.name}스터디`;
 	},
 	watch: {
 		$route: 'fetchData',

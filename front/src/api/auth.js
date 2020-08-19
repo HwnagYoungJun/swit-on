@@ -37,8 +37,8 @@ function fetchProfile(userName) {
 }
 
 function fetchMyStudy(userName) {
-	console.log(`accounts/${userName}/mystudy`);
-	return baseAuth.get(`accounts/${userName}/mystudy`);
+	console.log(`accounts/${userName}/endstudy`);
+	return baseAuth.get(`accounts/${userName}/endstudy`);
 }
 
 function fetchMyRepository(userName) {

@@ -117,7 +117,7 @@
 									<p>
 										<router-link
 											class="comment-userbox"
-											:to="`/profile/${article.user.name}`"
+											:to="`/profile/${comment.user.name}`"
 										>
 											<span class="comment-user"
 												><img
