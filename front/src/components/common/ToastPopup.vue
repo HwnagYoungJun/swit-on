@@ -39,7 +39,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .toast {
 	position: fixed;
 	width: 400px;
@@ -55,6 +55,9 @@ export default {
 	justify-content: center;
 	align-items: center;
 	transition: transform 750ms ease-out;
+	@media screen and (max-width: 640px) {
+		width: 300px;
+	}
 }
 .toast.show {
 	transform: translateY(150px);

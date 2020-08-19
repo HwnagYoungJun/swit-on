@@ -15,6 +15,8 @@ import {
 // Vue.use(WebRTC);
 
 Vue.use(VueCookies);
+Vue.$cookies.config('2h');
+
 Vue.use(InfiniteLoading);
 Vue.filter('formatDate', formatDate);
 Vue.filter('formatWeekday', formatWeekday);

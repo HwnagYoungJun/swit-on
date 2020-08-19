@@ -179,7 +179,6 @@ import {
 	fetchArticle,
 	createComment,
 	deleteComment,
-	deleteArticle,
 	createArticleLike,
 	deleteArticleLike,
 	createArticleCommentLike,
@@ -377,8 +376,7 @@ export default {
 				const studyId = this.id;
 				const boardName = this.board_name;
 				const articleId = this.article_id;
-				await deleteArticle(studyId, boardName, articleId);
-				this.$router.push(`/study/${studyId}/${boardName}`);
+				bus.$emit('show:delete', { studyId, boardName, articleId });
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
