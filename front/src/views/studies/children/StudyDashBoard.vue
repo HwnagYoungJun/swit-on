@@ -281,7 +281,6 @@ export default {
 		async fetchSchedule() {
 			try {
 				const { data } = await fetchStudySchedule(this.id);
-				console.log(data);
 				var days = ['일', '월', '화', '수', '목', '금', '토'];
 				const userName = this.getName;
 				let scheduleList = [];
@@ -499,6 +498,7 @@ aside {
 				.join-percent {
 					display: inline-block;
 					width: 0%;
+					padding-right: 10px;
 					text-align: right;
 					border-radius: 4px;
 					background: $btn-purple;
@@ -506,6 +506,7 @@ aside {
 				.attend-percent {
 					display: inline-block;
 					width: 0%;
+					padding-right: 10px;
 					text-align: right;
 					border-radius: 4px;
 					background: $btn-purple;
