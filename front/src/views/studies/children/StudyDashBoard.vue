@@ -351,6 +351,7 @@ export default {
 				const studyId = this.id;
 				const { data } = await fetchAttendance(studyId);
 				this.attend = data;
+				console.log(this.attend);
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
@@ -358,7 +359,7 @@ export default {
 	},
 	updated() {
 		let joinPercent = document.querySelector('.join-percent');
-		joinPercent.style.width = `${this.attend.parparticipation * 100}%`;
+		joinPercent.style.width = `${this.attend.participation * 100}%`;
 		let attendPercent = document.querySelector('.attend-percent');
 		attendPercent.style.width = `${this.attend.attendance * 100}%`;
 	},
@@ -400,6 +401,9 @@ aside {
 }
 .schedule {
 	margin: 50px 0;
+	@media screen and (max-width: 768px) {
+		margin: 25px 0 25px;
+	}
 	padding: 25px 0 15px;
 	position: relative;
 	color: rgb(138, 138, 138);
