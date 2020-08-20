@@ -22,6 +22,14 @@
 				</div>
 				<div class="img-box">
 					<img :src="imgLink" :alt="`${study.name} 스터디 사진`" />
+					<div class="hoverData">
+						<span class="img-text">
+							참여율 {{ study.rate.participation * 100 }}%
+						</span>
+						<span class="img-text">
+							출석률 {{ study.rate.attendance * 100 }}%
+						</span>
+					</div>
 				</div>
 				<div class="name-box">
 					<span class="badge">
@@ -70,7 +78,7 @@ export default {
 	font-size: $font-bold * 0.8;
 	.endStudy {
 		background: rgba(0, 0, 0, 0.2);
-		z-index: 10000000;
+		z-index: 10000;
 		width: 100%;
 		height: 100%;
 		border-radius: 5px;
@@ -83,24 +91,12 @@ export default {
 			color: #f03e3e;
 			font-size: 40px;
 		}
-		&:hover .hoverData {
-			display: inline;
-		}
-		.hoverData {
-			color: white;
-			font-size: $font-bold * 0.85;
-			z-index: 987654321;
-			display: none;
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-		}
 	}
 	.img-box {
 		border-radius: 5px;
 		grid-area: image-part;
 		overflow: hidden;
+		position: relative;
 		img {
 			width: 100%;
 			height: 100%;
@@ -112,6 +108,21 @@ export default {
 			grid-area: text-part;
 			text-decoration: none;
 			color: rgb(70, 70, 70);
+		}
+		.hoverData {
+			color: white;
+			font-size: $font-bold * 0.85;
+			z-index: 987654321;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			transform: translate(-50%, -50%);
 		}
 	}
 	hr {

@@ -493,18 +493,14 @@ aside {
 				.join-percent {
 					display: inline-block;
 					width: 0%;
-					// width: 35%;
-					// padding-right: 8px;
-					text-align: left;
+					text-align: right;
 					border-radius: 4px;
 					background: $btn-purple;
 				}
 				.attend-percent {
 					display: inline-block;
 					width: 0%;
-					// width: 85%;
-					// padding-right: 8px;
-					text-align: left;
+					text-align: right;
 					border-radius: 4px;
 					background: $btn-purple;
 				}
