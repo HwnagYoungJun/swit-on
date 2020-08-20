@@ -59,6 +59,12 @@ export default {
 <style lang="scss">
 .card {
 	width: 30rem;
+	@media screen and (max-width: 640px) {
+		width: 25rem;
+	}
+	@media screen and (max-width: 300px) {
+		width: 22rem;
+	}
 	height: 7rem;
 	margin: 10px 5px 10px;
 	border-radius: 5px;

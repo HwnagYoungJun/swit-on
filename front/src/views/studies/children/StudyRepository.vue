@@ -189,7 +189,6 @@ export default {
 				box-sizing: border-box;
 				width: 100%;
 				overflow-x: hidden;
-
 				word-break: break-all;
 			}
 			code {

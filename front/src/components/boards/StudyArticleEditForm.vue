@@ -20,7 +20,6 @@
 				placeholder="제목을 입력해주세요"
 				class="articleform-input"
 				v-model="title"
-				required
 			/>
 			<Editor
 				ref="toastuiEditor"
@@ -107,12 +106,12 @@ export default {
 				const boardName = this.board_name;
 				const articleId = this.article_id;
 				let content = this.$refs.toastuiEditor.invoke('getHtml');
-				if (!content.length) {
-					bus.$emit('show:toast', '내용을 입력해주세요');
-					return;
-				}
 				if (!this.title) {
 					bus.$emit('show:toast', '제목을 입력해주세요');
+					return;
+				}
+				if (!content.length) {
+					bus.$emit('show:toast', '내용을 입력해주세요');
 					return;
 				}
 				await updateArticle(studyId, boardName, articleId, {

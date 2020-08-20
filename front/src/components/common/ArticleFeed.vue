@@ -62,6 +62,8 @@ export default {
 	pre {
 		width: 100%;
 		word-break: break-all;
+		box-sizing: border-box;
+		overflow-x: hidden;
 		code {
 			width: 100%;
 			height: 100%;

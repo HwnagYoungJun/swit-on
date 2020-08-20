@@ -194,9 +194,8 @@ export default {
 	pre {
 		box-sizing: border-box;
 		width: 100%;
-		overflow-x: hidden;
-
 		word-break: break-all;
+		overflow-x: hidden;
 	}
 	code {
 		width: 100%;
