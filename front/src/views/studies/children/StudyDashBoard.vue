@@ -281,7 +281,6 @@ export default {
 		async fetchSchedule() {
 			try {
 				const { data } = await fetchStudySchedule(this.id);
-				console.log(data);
 				var days = ['일', '월', '화', '수', '목', '금', '토'];
 				const userName = this.getName;
 				let scheduleList = [];

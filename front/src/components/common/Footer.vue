@@ -11,6 +11,9 @@ export default {};
 
 <style lang="scss">
 .footer {
+	@media screen and (max-width: 768px) {
+		margin-bottom: 37px;
+	}
 	display: grid;
 	place-items: center;
 	padding: 7px 0;
