@@ -39,6 +39,7 @@ export default {
 				data.forEach(el => this.names.push(el.name));
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
+				this.$router.push('/404');
 			}
 		},
 		changeLower(categoryName) {

@@ -3,7 +3,7 @@
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
 				<li>
-					<router-link :to="{ name: 'dashboard' }" tabindex="-1">{{
+					<router-link :to="`/study/${article.study.id}`" tabindex="-1">{{
 						article.study.name
 					}}</router-link
 					><span aria-hidden="true">></span>
@@ -265,6 +265,9 @@ export default {
 				this.article = data;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
+				if (error.response.status === 404) {
+					this.$router.push('/404');
+				}
 			}
 		},
 		isCommentLiked(flag) {
@@ -279,6 +282,9 @@ export default {
 				this.fetchData();
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
+				if (error.response.status === 404) {
+					this.$router.push('/404');
+				}
 			}
 		},
 		async removeBookmark() {

@@ -57,7 +57,7 @@ export default {
 	@media screen and (max-width: 640px) {
 		width: 300px;
 	}
-	height: 7rem;
+	height: 8rem;
 	background-color: #22252e;
 	border-radius: 4px;
 	box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.2);
@@ -82,7 +82,7 @@ export default {
 	background: white;
 	color: black;
 	height: 2rem;
-	margin-top: 0.5rem;
+	margin-top: 1.5rem;
 	margin-right: 0.5rem;
 }
 .toast-btn-purple {
@@ -94,7 +94,7 @@ export default {
 	background: $btn-purple;
 	color: white;
 	height: 2rem;
-	margin-top: 0.5rem;
+	margin-top: 1.5rem;
 	margin-left: 0.5rem;
 }
 </style>

@@ -6,9 +6,13 @@
 					<img
 						v-if="isMainRoute"
 						src="@/assets/white.png"
-						alt="switon-logo"
+						alt="스윗온 로고 이미지"
 						:class="['switon', isMainRoute ? 'switon-pos' : '']"/>
-					<img v-else src="@/assets/color.png" alt="switon-logo" class="switon"
+					<img
+						v-else
+						src="@/assets/color.png"
+						alt="스윗온 로고 이미지"
+						class="switon"
 				/></router-link>
 			</div>
 			<Search />
@@ -51,14 +55,14 @@
 				<img
 					v-if="isMainRoute"
 					src="@/assets/white.png"
-					alt="switon-logo"
+					alt="스윗온 로고 이미지"
 					class="go-to-top-logo"
 					@click="goToTop"
 				/>
 				<img
 					v-else
 					src="@/assets/black.png"
-					alt="switon-logo"
+					alt="스윗온 로고 이미지"
 					class="go-to-top-logo"
 					@click="goToTop"
 				/>
@@ -124,8 +128,12 @@ export default {
 	methods: {
 		...mapMutations(['clearUserEmail', 'clearToken']),
 		async fetchImg() {
-			const { data } = await baseAuth.get('accounts/');
-			this.profileImg = data.profile_image;
+			try {
+				const { data } = await baseAuth.get('accounts/');
+				this.profileImg = data.profile_image;
+			} catch {
+				this.logoutUser();
+			}
 		},
 		logoutUser() {
 			this.clearUserEmail();
@@ -147,6 +155,7 @@ export default {
 				this.messages = data;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
+				this.logoutUser();
 			}
 		},
 	},

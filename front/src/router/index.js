@@ -25,7 +25,7 @@ const routes = [
 			name: String(route.params.studyname),
 		}),
 		component: () => import('@/views/studies/StudyPage.vue'),
-		beforeEnter,
+		// beforeEnter,
 	},
 	{
 		path: '/study/:id',

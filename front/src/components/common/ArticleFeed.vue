@@ -59,6 +59,15 @@ export default {
 			object-fit: cover;
 		}
 	}
+	pre {
+		width: 100%;
+		word-break: break-all;
+		code {
+			width: 100%;
+			height: 100%;
+			word-break: break-all;
+		}
+	}
 }
 .feed-wrap {
 	margin-bottom: 30px;

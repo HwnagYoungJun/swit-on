@@ -125,6 +125,7 @@ export default {
 			try {
 				const studyId = this.id;
 				const { data } = await fetchStudy(studyId);
+				console.log(data);
 				this.study = data.study;
 				this.isJoined = data.isJoined;
 				this.isLeader = data.isLeader;
@@ -132,6 +133,9 @@ export default {
 				this.members = data.members;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
+				if (error.response.status === 404) {
+					this.$router.push('/404');
+				}
 			}
 		},
 		async studyJoin() {
@@ -141,6 +145,9 @@ export default {
 				this.fetchData();
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
+				if (error.response.status === 401) {
+					this.$router.push('/login');
+				}
 			}
 		},
 	},
@@ -290,6 +297,7 @@ export default {
 			flex: 1.5;
 			p {
 				margin-bottom: 10px;
+				font-size: $font-bold * 0.8;
 			}
 			.strong {
 				margin: 0 5px;

@@ -48,15 +48,16 @@ export default {
 	border-radius: 3px;
 	box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.2);
 	color: white;
-	top: -120px;
 	margin-left: -200px;
+	top: -120px;
 	left: 50%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	transition: transform 750ms ease-out;
 	@media screen and (max-width: 640px) {
-		width: 300px;
+		width: 250px;
+		margin-left: -125px;
 	}
 }
 .toast.show {

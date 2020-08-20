@@ -35,6 +35,9 @@ function fetchStudy(studyId) {
 	return study.get(`${studyId}`);
 }
 
+function fetchAttendance(studyId) {
+	return study.get(`${studyId}/attend`);
+}
 function fetchRooms(studyId) {
 	return study.get(`${studyId}/room`);
 }
@@ -103,4 +106,5 @@ export {
 	fetchRooms,
 	createRoom,
 	deleteRoom,
+	fetchAttendance,
 };
