@@ -20,7 +20,6 @@
 				placeholder="제목을 입력해주세요"
 				class="articleform-input"
 				v-model="title"
-				required
 			/>
 			<Editor
 				ref="toastuiEditor"
@@ -92,6 +91,14 @@ export default {
 				const studyId = this.id;
 				const boardName = this.board_name;
 				let content = this.$refs.toastuiEditor.invoke('getHtml');
+				if (!this.title) {
+					bus.$emit('show:toast', '제목을 입력해주세요');
+					return;
+				}
+				if (!content.length) {
+					bus.$emit('show:toast', '내용을 입력해주세요');
+					return;
+				}
 				await createArticle(studyId, boardName, {
 					title: this.title,
 					content,
@@ -99,7 +106,7 @@ export default {
 				});
 				this.$router.push(`/study/${studyId}/${boardName}`);
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		onChangeTitle(val) {
