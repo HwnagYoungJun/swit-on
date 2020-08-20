@@ -229,23 +229,24 @@ export default {
 	grid-template-areas: 'article aside';
 	overflow: hidden;
 	@media screen and (max-width: 768px) {
-		grid-template-columns: 1fr;
+		grid-template-columns: 100%;
 		grid-template-areas: 'article';
 	}
 	.article-box {
 		grid-area: article;
 		display: flex;
-		width: 100%;
+		// width: 100%;
+		box-sizing: border-box;
 		flex-direction: column;
 		align-items: flex-start;
-		overflow: hidden;
+		// overflow: hidden;
 		.feed-link {
 			width: 100%;
 		}
 	}
 	.side-box {
 		grid-area: aside;
-		width: 100%;
+		// width: 100%;
 		.schedule-box {
 			padding-left: 5%;
 			width: 90%;

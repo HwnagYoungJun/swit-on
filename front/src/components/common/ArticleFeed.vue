@@ -77,6 +77,7 @@ export default {
 }
 .feed-wrap {
 	width: 100%;
+	overflow-x: hidden;
 	box-sizing: border-box;
 	word-break: break-all;
 
