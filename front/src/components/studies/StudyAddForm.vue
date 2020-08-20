@@ -33,7 +33,6 @@
 					v-model="studyData.name"
 					id="name"
 					type="text"
-					required
 				/>
 			</div>
 			<div class="studyform-content">
@@ -44,7 +43,6 @@
 					class="studyform-input"
 					type="text"
 					row="8"
-					required
 				/>
 			</div>
 			<div class="studyform-userlimit">

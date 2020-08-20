@@ -99,12 +99,13 @@ export default {
 					bus.$emit('show:toast', '내용을 입력해주세요');
 					return;
 				}
-				await createArticle(studyId, boardName, {
+				const { data } = await createArticle(studyId, boardName, {
 					title: this.title,
 					content,
 					file: this.inputFile,
 				});
-				this.$router.push(`/study/${studyId}/${boardName}`);
+				const articleId = data;
+				this.$router.push(`/study/${studyId}/${boardName}/${articleId}`);
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}

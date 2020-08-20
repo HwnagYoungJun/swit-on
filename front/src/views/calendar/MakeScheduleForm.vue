@@ -63,9 +63,9 @@ export default {
 	},
 	methods: {
 		async submitSchedule() {
-			await this.makeSchedule();
-			const el = this.scheduleObject;
 			try {
+				await this.makeSchedule();
+				const el = this.scheduleObject;
 				await baseAuth.post(`study/${this.study_id}/schedule/`, el);
 				this.$router.push(`/study/${this.study_id}`);
 			} catch (error) {
@@ -75,6 +75,22 @@ export default {
 
 		async makeSchedule() {
 			try {
+				if (!this.title) {
+					bus.$emit('show:toast', '제목을 입력해주세요');
+					return;
+				}
+				if (!this.date) {
+					bus.$emit('show:toast', '일정을 입력해주세요');
+					return;
+				}
+				if (!this.startTime) {
+					bus.$emit('show:toast', '시작 시간을 입력해주세요');
+					return;
+				}
+				if (!this.endTime) {
+					bus.$emit('show:toast', '종료 시간을 입력해주세요');
+					return;
+				}
 				const { data } = await baseAuth(`accounts/${cookies.get('name')}`);
 				this.userId = data.id;
 				this.pushSchedule();
