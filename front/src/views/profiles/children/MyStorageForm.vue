@@ -1,7 +1,12 @@
 <template>
 	<section>
 		<ul class="myStorage-box">
-			<li :key="article.id" v-for="article in ariticles">
+			<li v-if="ariticles.length === 0">
+				<section class="study-not-found">
+					<p>저장소가 없어요 :(</p>
+				</section>
+			</li>
+			<li v-else :key="article.id" v-for="article in ariticles">
 				<router-link
 					:to="`/study/${article.study.id}/repository/${article.id}`"
 				>
@@ -58,6 +63,14 @@ export default {
 		display: flex;
 		justify-content: center;
 		flex-wrap: wrap;
+	}
+}
+.study-not-found {
+	width: 100%;
+	height: 3rem;
+	p {
+		color: rgb(100, 100, 100);
+		font-weight: bold;
 	}
 }
 </style>

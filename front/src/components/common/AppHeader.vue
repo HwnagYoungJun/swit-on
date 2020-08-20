@@ -93,6 +93,7 @@
 </template>
 
 <script>
+import cookies from 'vue-cookies';
 import bus from '@/utils/bus';
 import { fetchUserAlarms } from '@/api/auth';
 import { mapMutations, mapState, mapGetters } from 'vuex';
@@ -161,16 +162,20 @@ export default {
 	},
 	watch: {
 		$route() {
-			if (this.isLogin) {
+			if (cookies.isKey('auth-token')) {
 				this.fetchImg();
 				this.fetchData();
+			} else {
+				this.logoutUser();
 			}
 		},
 	},
 	created() {
-		if (this.isLogin) {
+		if (cookies.isKey('auth-token')) {
 			this.fetchImg();
 			this.fetchData();
+		} else {
+			this.logoutUser();
 		}
 	},
 };
