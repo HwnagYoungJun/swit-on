@@ -498,6 +498,7 @@ aside {
 				.join-percent {
 					display: inline-block;
 					width: 0%;
+					padding-right: 10px;
 					text-align: right;
 					border-radius: 4px;
 					background: $btn-purple;
@@ -505,6 +506,7 @@ aside {
 				.attend-percent {
 					display: inline-block;
 					width: 0%;
+					padding-right: 10px;
 					text-align: right;
 					border-radius: 4px;
 					background: $btn-purple;
