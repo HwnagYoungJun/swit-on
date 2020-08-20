@@ -128,8 +128,12 @@ export default {
 	methods: {
 		...mapMutations(['clearUserEmail', 'clearToken']),
 		async fetchImg() {
-			const { data } = await baseAuth.get('accounts/');
-			this.profileImg = data.profile_image;
+			try {
+				const { data } = await baseAuth.get('accounts/');
+				this.profileImg = data.profile_image;
+			} catch {
+				this.logoutUser();
+			}
 		},
 		logoutUser() {
 			this.clearUserEmail();
@@ -151,6 +155,7 @@ export default {
 				this.messages = data;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
+				this.logoutUser();
 			}
 		},
 	},

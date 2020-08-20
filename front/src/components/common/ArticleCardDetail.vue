@@ -265,7 +265,9 @@ export default {
 				this.article = data;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
-				this.$router.push('/404');
+				if (error.response.status === 404) {
+					this.$router.push('/404');
+				}
 			}
 		},
 		isCommentLiked(flag) {
@@ -280,6 +282,9 @@ export default {
 				this.fetchData();
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
+				if (error.response.status === 404) {
+					this.$router.push('/404');
+				}
 			}
 		},
 		async removeBookmark() {

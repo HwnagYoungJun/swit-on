@@ -132,7 +132,9 @@ export default {
 				this.members = data.members;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
-				this.$router.push('/404');
+				if (error.response.status === 404) {
+					this.$router.push('/404');
+				}
 			}
 		},
 		async studyJoin() {
@@ -142,6 +144,9 @@ export default {
 				this.fetchData();
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
+				if (error.response.status === 401) {
+					this.$router.push('/login');
+				}
 			}
 		},
 	},
