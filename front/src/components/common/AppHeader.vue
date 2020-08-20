@@ -132,7 +132,8 @@ export default {
 			try {
 				const { data } = await baseAuth.get('accounts/');
 				this.profileImg = data.profile_image;
-			} catch {
+			} catch (error) {
+				bus.$emit('show:toast', '로그인이 필요합니다');
 				this.logoutUser();
 			}
 		},
@@ -155,7 +156,6 @@ export default {
 				const { data } = await fetchUserAlarms();
 				this.messages = data;
 			} catch (error) {
-				bus.$emit('show:toast', `${error.response.data.msg}`);
 				this.logoutUser();
 			}
 		},
