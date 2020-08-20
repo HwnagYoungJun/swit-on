@@ -60,18 +60,20 @@ export default {
 		}
 	}
 	pre {
-		width: 100%;
-		word-break: break-all;
 		box-sizing: border-box;
+		width: 100%;
 		overflow-x: hidden;
-		code {
-			width: 100%;
-			height: 100%;
-			word-break: break-all;
-		}
+		word-break: break-all;
+	}
+	code {
+		width: 100%;
+		height: 100%;
+		word-break: break-all;
 	}
 }
 .feed-wrap {
+	width: 100%;
+	box-sizing: border-box;
 	margin-bottom: 30px;
 	padding: 15px 20px;
 	border: 1px solid #e0e0e0;
