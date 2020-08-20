@@ -125,7 +125,6 @@ export default {
 			try {
 				const studyId = this.id;
 				const { data } = await fetchStudy(studyId);
-				console.log(data);
 				this.study = data.study;
 				this.isJoined = data.isJoined;
 				this.isLeader = data.isLeader;

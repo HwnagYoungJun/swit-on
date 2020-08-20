@@ -351,7 +351,6 @@ export default {
 				const studyId = this.id;
 				const { data } = await fetchAttendance(studyId);
 				this.attend = data;
-				console.log(this.attend);
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
