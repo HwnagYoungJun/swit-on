@@ -3,7 +3,7 @@
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
 				<li>
-					<router-link :to="{ name: 'dashboard' }" tabindex="-1">{{
+					<router-link :to="`/study/${article.study.id}`" tabindex="-1">{{
 						article.study.name
 					}}</router-link
 					><span aria-hidden="true">></span>

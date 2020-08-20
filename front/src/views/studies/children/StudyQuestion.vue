@@ -196,6 +196,33 @@ export default {
 			margin-right: 0;
 		}
 	}
+	.tui-editor-contents {
+		p {
+			width: 100%;
+			height: 100%;
+			word-break: break-all;
+			.colour {
+				word-break: break-all;
+			}
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+		pre {
+			box-sizing: border-box;
+			width: 100%;
+			overflow-x: hidden;
+
+			word-break: break-all;
+		}
+		code {
+			width: 100%;
+			height: 100%;
+			word-break: break-all;
+		}
+	}
 	.rank-wrap {
 		flex: 1;
 		height: 100vh;
