@@ -69,13 +69,17 @@
 					<div class="attend">
 						<p>참여율</p>
 						<div class="progress-bar">
-							<span class="join-percent">35%</span>
+							<span class="join-percent">
+								{{ attend.participation * 100 }}%</span
+							>
 						</div>
 					</div>
 					<div class="attend">
 						<p>출석률</p>
 						<div class="progress-bar">
-							<span class="attend-percent">85%</span>
+							<span class="attend-percent">
+								{{ attend.attendance * 100 }}%</span
+							>
 						</div>
 					</div>
 				</div>
@@ -186,6 +190,7 @@ import {
 	deleteScheduleParticipate,
 	checkInSchedule,
 	checkOutSchedule,
+	fetchAttendance,
 } from '@/api/studies';
 import ScheduleAddBtn from '@/components/common/ScheduleAddBtn.vue';
 import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
@@ -204,6 +209,7 @@ export default {
 			noticeArticles: null,
 			qnaArticles: null,
 			loading: false,
+			attend: {},
 		};
 	},
 	computed: {
@@ -340,13 +346,29 @@ export default {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
+		async fetchAttendanceRate() {
+			try {
+				const studyId = this.id;
+				const { data } = await fetchAttendance(studyId);
+				this.attend = data;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
+	},
+	updated() {
+		let joinPercent = document.querySelector('.join-percent');
+		joinPercent.style.width = `${this.attend.parparticipation * 100}%`;
+		let attendPercent = document.querySelector('.attend-percent');
+		attendPercent.style.width = `${this.attend.attendance * 100}%`;
 	},
 	created() {
 		this.fetchData();
 		this.fetchSchedule();
+		this.fetchAttendanceRate();
 	},
 	watch: {
-		$route: ['fetchData', 'fetchSchedule'],
+		$route: ['fetchData', 'fetchSchedule', 'fetchAttendanceRate'],
 	},
 };
 </script>
@@ -409,7 +431,6 @@ aside {
 				left: 0;
 				padding: 0.5rem;
 				@media screen and (max-width: 768px) {
-					// background: $btn-purple;
 					top: 2.5rem;
 					left: 0;
 					width: 250px;
@@ -464,22 +485,24 @@ aside {
 			.progress-bar {
 				width: 100%;
 				color: white;
-				border-radius: 8px;
+				border-radius: 4px;
 				background: rgb(238, 238, 238);
 				.join-percent {
 					display: inline-block;
-					width: 35%;
-					padding-right: 8px;
-					text-align: right;
-					border-radius: 5px 0 0 5px;
+					width: 0%;
+					// width: 35%;
+					// padding-right: 8px;
+					text-align: left;
+					border-radius: 4px;
 					background: $btn-purple;
 				}
 				.attend-percent {
 					display: inline-block;
-					width: 85%;
-					padding-right: 8px;
-					text-align: right;
-					border-radius: 5px 0 0 5px;
+					width: 0%;
+					// width: 85%;
+					// padding-right: 8px;
+					text-align: left;
+					border-radius: 4px;
 					background: $btn-purple;
 				}
 			}
