@@ -103,7 +103,11 @@ export default {
 			profileImg: null,
 			studing: null,
 			endStudy: null,
-			medals: null,
+			medals: {
+				gold: null,
+				silver: null,
+				bronze: null,
+			},
 		};
 	},
 	methods: {
@@ -162,7 +166,8 @@ export default {
 <style lang="scss" scoped>
 .intro-box {
 	display: flex;
-	justify-content: space-between;
+	flex-direction: column;
+	// justify-content: flex-start;
 	align-content: center;
 	margin-top: 1rem;
 	@media screen and (max-width: 1024px) {
@@ -171,7 +176,8 @@ export default {
 	.medal-box {
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		margin-left: 3rem;
+		margin-top: 1rem;
 		.badgegold {
 			@include grade-badge('gold', 30px);
 		}
@@ -191,7 +197,7 @@ export default {
 }
 .profile-box {
 	display: flex;
-	margin-bottom: 1.5rem;
+	margin-bottom: 1rem;
 	@media screen and (max-width: 1024px) {
 		flex-direction: column;
 		justify-content: center;
