@@ -158,18 +158,20 @@
 							</span>
 							<div class="schedule-btnbox">
 								<button
-									:disabled="!s.startTime"
+									:disabled="!s.startTime || !s.checkIn"
 									@click="checkIn(s.scheduleId)"
 									class="active"
 								>
-									입실
+									<span v-if="s.checkIn">입실</span>
+									<span v-else>완료</span>
 								</button>
 								<button
-									:disabled="!s.endTime"
+									:disabled="!s.endTime || s.checkOut"
 									@click="checkOut(s.scheduleId)"
 									class="active"
 								>
-									퇴실
+									<span v-if="s.checkOut">완료</span>
+									<span v-else>퇴실</span>
 								</button>
 							</div>
 						</div>
@@ -279,6 +281,7 @@ export default {
 		async fetchSchedule() {
 			try {
 				const { data } = await fetchStudySchedule(this.id);
+				console.log(data);
 				var days = ['일', '월', '화', '수', '목', '금', '토'];
 				const userName = this.getName;
 				let scheduleList = [];
@@ -471,6 +474,9 @@ aside {
 			.active {
 				color: #fff;
 				background: $btn-purple;
+				span {
+					margin: auto;
+				}
 			}
 			.unactive {
 				background: #fff;

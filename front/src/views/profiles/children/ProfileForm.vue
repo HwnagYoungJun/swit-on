@@ -24,7 +24,11 @@
 						<div class="modify-profile" v-if="isMe">프로필 수정</div>
 					</router-link>
 
-					<a class="mobile-log-out" href="javascript:;" @click="logoutUser"
+					<a
+						class="mobile-log-out"
+						href="javascript:;"
+						@click="logoutUser"
+						v-if="isMe"
 						><span>로그아웃</span></a
 					>
 				</div>
