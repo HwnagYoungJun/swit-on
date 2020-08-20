@@ -158,12 +158,12 @@
 							</span>
 							<div class="schedule-btnbox">
 								<button
-									:disabled="!s.startTime || !s.checkIn"
+									:disabled="!s.startTime || s.checkIn"
 									@click="checkIn(s.scheduleId)"
 									class="active"
 								>
-									<span v-if="s.checkIn">입실</span>
-									<span v-else>완료</span>
+									<span v-if="s.checkIn">완료</span>
+									<span v-else>입실</span>
 								</button>
 								<button
 									:disabled="!s.endTime || s.checkOut"
@@ -298,6 +298,8 @@ export default {
 					const endHours = ('00' + end.getHours()).slice(-2);
 					const endMinutes = ('00' + end.getMinutes()).slice(-2);
 					const scheduleId = el.id;
+					const checkIn = el.checkIn;
+					const checkOut = el.checkOut;
 					const isScheduleJoin = el.members.filter(
 						member => member.name === userName,
 					).length;
@@ -320,6 +322,8 @@ export default {
 						title,
 						joinMembers,
 						modal,
+						checkIn,
+						checkOut,
 					};
 					scheduleList.push(ScheduleData);
 					ScheduleData.isScheduleJoin
