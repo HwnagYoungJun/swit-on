@@ -25,9 +25,9 @@
 			<router-link :to="{ name: 'signUp' }" class="signup">
 				회원가입
 			</router-link>
-			<router-link :to="{ name: 'findpassword' }" class="findPassword">
+			<!-- <router-link :to="{ name: 'findpassword' }" class="findPassword">
 				비밀번호를 잊으셨나요?
-			</router-link>
+			</router-link> -->
 		</div>
 		<div class="login-btn">
 			<button
