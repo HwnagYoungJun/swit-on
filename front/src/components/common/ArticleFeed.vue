@@ -46,6 +46,10 @@ export default {
 
 <style lang="scss">
 .tui-editor-contents {
+	box-sizing: border-box;
+	width: 100%;
+	overflow-x: hidden;
+	word-break: break-all;
 	p {
 		width: 100%;
 		height: 100%;
@@ -74,6 +78,8 @@ export default {
 .feed-wrap {
 	width: 100%;
 	box-sizing: border-box;
+	word-break: break-all;
+
 	margin-bottom: 30px;
 	padding: 15px 20px;
 	border: 1px solid #e0e0e0;
@@ -98,6 +104,9 @@ export default {
 	}
 }
 .feed-content {
+	width: 100%;
+	box-sizing: border-box;
+	overflow-x: hidden;
 	min-height: 100px;
 	.feed-content-title {
 		font-weight: bold;
