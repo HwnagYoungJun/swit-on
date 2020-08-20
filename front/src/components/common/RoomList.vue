@@ -3,9 +3,9 @@
 		<section class="meeting">
 			<span class="meeting-title">회의 목록</span>
 			<ul>
-				<li :key="Room.id" v-for="Room in Rooms">
+				<li class="meeting-list" :key="Room.id" v-for="(Room, index) in Rooms">
 					<router-link :to="`/study/${Room.studyId}/room/${Room.roomCode}`">
-						{{ Room.roomCode }}
+						회의 {{ index + 1 }}
 					</router-link>
 					<i
 						v-if="isLeader"
@@ -65,6 +65,9 @@ export default {
 		align-items: center;
 		margin: 10px 0;
 		color: rgb(90, 90, 90);
+		a {
+			margin-bottom: 10px;
+		}
 	}
 	i {
 		cursor: pointer;

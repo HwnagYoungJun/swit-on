@@ -3,7 +3,7 @@
 		<article class="room-wrap">
 			<form class="room-form-wrap" @submit.prevent="addRoom">
 				<section class="meeting-header">
-					<h2>Meeting</h2>
+					<h2>회의</h2>
 					<div class="meeting-btnbox">
 						<button @click.prevent="$router.go(-1)" class="meeting-btn-cancle">
 							취소
