@@ -10,6 +10,7 @@
 		</section>
 		<ToastPopup></ToastPopup>
 		<ToastPopupDelete></ToastPopupDelete>
+		<ToastPopupTerm></ToastPopupTerm>
 	</section>
 </template>
 
@@ -20,6 +21,7 @@ import Footer from '@/components/common/Footer.vue';
 import Main from '@/views/Main.vue';
 import ToastPopup from './components/common/ToastPopup.vue';
 import ToastPopupDelete from './components/common/ToastPopupDelete.vue';
+import ToastPopupTerm from './components/common/ToastPopupTerm.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import { mapGetters } from 'vuex';
@@ -30,6 +32,7 @@ export default {
 		ToastPopup,
 		Main,
 		ToastPopupDelete,
+		ToastPopupTerm,
 	},
 	computed: {
 		...mapGetters(['getUserId', 'isLogin']),

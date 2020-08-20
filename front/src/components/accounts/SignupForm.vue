@@ -36,6 +36,10 @@
 			text="다시 비밀번호를 입력하세요"
 			:inputChange="onChangePasswordConfirm"
 		></InputBox>
+		<div class="term-box">
+			<span class="lookterm" @click="lookTerm">약관보기</span>
+			<div><input type="checkbox" v-model="isCheck" />약관 동의</div>
+		</div>
 		<div class="signup-btn">
 			<button
 				:disabled="isButtonDisabled"
@@ -64,6 +68,7 @@ export default {
 	},
 	data() {
 		return {
+			isCheck: false,
 			signupData: {
 				email: '',
 				name: '',
@@ -74,6 +79,7 @@ export default {
 			nameErrorMessage: '',
 			emailErrorMessage: '',
 			isNameValid: '',
+			// termData: '제1조 (목적)이 약관은 SwitOn(이하 당사)가 제공하는 수업 연결 서비스를 이용함에 있어 당사와 이용자의 권리, 의무 및 책임사항을 규정합니다. 이를 통하여 당사와 이용자는 알아야 할 사항을 숙지, 상호 신뢰의 증진을 목적으로 합니다.',
 		};
 	},
 	computed: {
@@ -88,7 +94,8 @@ export default {
 				!this.isValidEmail ||
 				!this.isValidPassword ||
 				!(this.signupData.password === this.signupData.password2) ||
-				!this.signupData.name
+				!this.signupData.name ||
+				!this.isCheck
 			);
 		},
 		changeNameColor() {
@@ -229,6 +236,9 @@ export default {
 			this.signupData.email = val;
 			this.checkEmail();
 		},
+		lookTerm() {
+			bus.$emit('show:term');
+		},
 	},
 };
 </script>
@@ -251,9 +261,47 @@ export default {
 		}
 	}
 }
+.term-box {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	input {
+		margin-right: 0.33rem;
+	}
+}
 .signup-form {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	position: relative;
+	.term-modal {
+		background: pink;
+		z-index: 1;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		padding: 0;
+		transform: translate(-50%, -50%);
+		width: 50%;
+		height: 50%;
+		.term-modal-box {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			i {
+				font-size: $font-bold;
+				position: absolute;
+				right: 0;
+				top: 0;
+				z-index: 2;
+			}
+		}
+	}
+}
+.lookterm {
+	&:hover {
+		cursor: pointer;
+	}
 }
 </style>
