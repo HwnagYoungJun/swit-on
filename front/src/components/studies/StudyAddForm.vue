@@ -240,8 +240,9 @@ export default {
 				this.studyData.lowercategory_id = parseInt(
 					this.studyData.lowercategory_id,
 				);
-				await createStudy(this.studyData);
-				this.$router.push({ name: 'main' });
+				const { data } = await createStudy(this.studyData);
+				const studyId = data;
+				this.$router.push(`/study/${studyId}`);
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}

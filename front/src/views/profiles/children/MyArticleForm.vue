@@ -9,6 +9,11 @@
 			<label for="rep">저장소</label>
 		</div>
 		<ul class="myArticle-box">
+			<li v-if="!WhatCheck.length">
+				<section class="study-not-found">
+					<p>글이 없어요 :(</p>
+				</section>
+			</li>
 			<li :key="article.id" v-for="article in WhatCheck">
 				<router-link
 					:to="`/study/${article.study.id}/${article.boardName}/${article.id}/`"
@@ -135,6 +140,14 @@ export default {
 	}
 	label {
 		margin-right: 1rem;
+	}
+}
+.study-not-found {
+	width: 100%;
+	height: 3rem;
+	p {
+		color: rgb(100, 100, 100);
+		font-weight: bold;
 	}
 }
 </style>
