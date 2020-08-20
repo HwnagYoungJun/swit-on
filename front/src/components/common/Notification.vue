@@ -8,7 +8,10 @@
 			class="icon ion-md-notifications nav-router-medium router-cursor"
 			aria-label="알림버튼"
 		></i>
-		<section :class="[isOpen ? '' : 'messages-close', 'messages-wrap']">
+		<section
+			id="messagesBox"
+			:class="[isOpen ? '' : 'messages-close', 'messages-wrap']"
+		>
 			<ul v-if="messages.length">
 				<li :key="message.id" v-for="message in messages">
 					<!-- 스케쥴 -->
@@ -74,6 +77,12 @@ export default {
 			this.isOpen = false;
 		},
 	},
+	updated() {
+		const messagesBox = document.querySelector('#messagesBox');
+		if (window.innerWidth < '769') {
+			messagesBox.style.top = `-${messagesBox.offsetHeight + 15}px`;
+		}
+	},
 };
 </script>
 
@@ -83,20 +92,26 @@ export default {
 	position: relative;
 }
 .messages-wrap {
-	padding: 0.5rem;
+	padding: 0.5rem 1.5rem;
 	background: rgba(255, 255, 255, 1);
-	color: #868e96;
 	z-index: 1000;
 	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
 	border-radius: 3px;
-	width: 450px;
+	width: 300px;
 	position: absolute;
 	top: 30px;
 	right: 0;
 	@media screen and (max-width: 768px) {
-		top: -37px;
 		right: 0;
 		width: 200px;
+	}
+	li {
+		margin-bottom: 5px;
+	}
+	span {
+		color: rgba(68, 67, 68, 1);
+		font-size: $font-light;
+		font-weight: normal;
 	}
 	.messages-not {
 		display: flex;
