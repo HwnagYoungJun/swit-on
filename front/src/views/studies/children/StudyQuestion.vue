@@ -81,6 +81,9 @@ export default {
 	watch: {
 		isInfinite: function() {
 			if (!this.isInfinite) {
+				if (!this.windowTop == 0) {
+					return;
+				}
 				this.infiniteLoading();
 			}
 		},
