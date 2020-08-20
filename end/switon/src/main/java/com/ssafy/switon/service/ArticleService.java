@@ -41,4 +41,6 @@ public interface ArticleService {
 	List<ArticleReturnDTO> searchArticlesWithIndex(int boardId, int userId, int index);
 	// qna랑 repo 각각 게시글 인기순 3개 반환
 	BestArticles searchTopArticles(int studyId);
+	// 해당 스터디의 게시글인 경우에만 반환 기능 추가
+	Article search(int articleId, int studyId, int type);
 }

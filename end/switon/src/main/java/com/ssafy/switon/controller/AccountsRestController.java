@@ -44,7 +44,7 @@ public class AccountsRestController {
 		System.out.println(loginDTO);
 		try {
 			if(!userService.emailAlreadyExists(loginDTO.getEmail())){
-				return new ResponseEntity<>(new ReturnMsg("등록되지 않은 유저입니다. 회원가입을 해주세요."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new ReturnMsg("등록되지 않은 유저입니다. 회원가입을 해주세요."), HttpStatus.I_AM_A_TEAPOT);
 			}
 			UserInfoDTO uservo = userService.login(loginDTO);
 			if(uservo != null) {
@@ -59,12 +59,12 @@ public class AccountsRestController {
 				
 				return new ResponseEntity<>(returnDTO, HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>(new ReturnMsg("비밀번호가 일치하지 않습니다. 다시 한번 확인해주세요."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new ReturnMsg("비밀번호가 일치하지 않습니다. 다시 한번 확인해주세요."), HttpStatus.I_AM_A_TEAPOT);
 			}
 		} catch (Exception e) {
 			System.out.println("** 로그인 실패!!");
 		}
-		return new ResponseEntity<>(new ReturnMsg("입력하신 정보를 다시 한번                                          확확인해주세요."), HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(new ReturnMsg("입력하신 정보를 다시 한번  확인해주세요."), HttpStatus.BAD_REQUEST);
 	}
 	
 	@ApiOperation(value = "(테스트용) 헤더의 토큰을 읽어서 해당하는 유저 정보를 반환한다.", response = UserInfoDTO.class)
@@ -109,11 +109,24 @@ public class AccountsRestController {
 		UserLoginDTO loginDTO = new UserLoginDTO(registerDTO.getEmail(), registerDTO.getPassword());
 		System.out.println(registerDTO);
 		try {
-			if(userService.nameAlreadyExists(registerDTO.getName())) {
-				return new ResponseEntity<>(new ReturnMsg("중복된 이름입니다. 다른 이름을 입력해주세요."), HttpStatus.UNAUTHORIZED);
+			String userName = (registerDTO.getName());
+			if(userName.contains(" ") || userName.contains("#") || userName.contains("&") || userName.contains("/")
+					|| userName.contains("\"") || userName.contains("\\") || userName.contains("^")
+					|| userName.contains("*") || userName.contains("!") || userName.contains("'")
+					|| userName.contains("(") || userName.contains(")") || userName.contains("=")
+					|| userName.contains("-") || userName.contains("+") || userName.contains("@")
+					|| userName.contains("$") || userName.contains("%") || userName.contains("`")
+					|| userName.contains("~") || userName.contains("|") || userName.contains("?")) {
+				return new ResponseEntity<>(new ReturnMsg("이름에는 공백이나 특수문자를 입력하실 수 없습니다."), HttpStatus.BAD_REQUEST);
+			}
+			if(userName.length() > "닉네임입니다".length()) {
+				return new ResponseEntity<>(new ReturnMsg("이름이 너무 깁니다. 다른 이름을 입력해주세요."), HttpStatus.BAD_REQUEST);
+			}
+			if(userService.nameAlreadyExists(userName)) {
+				return new ResponseEntity<>(new ReturnMsg("중복된 이름입니다. 다른 이름을 입력해주세요."), HttpStatus.BAD_REQUEST);
 			}
 			if(userService.emailAlreadyExists(registerDTO.getEmail())) {
-				return new ResponseEntity<>(new ReturnMsg("중복된 이메일입니다. 다른 이메일을 입력해주세요."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new ReturnMsg("중복된 이메일입니다. 다른 이메일을 입력해주세요."), HttpStatus.BAD_REQUEST);
 			}
 			if(userService.register(registerDTO)) {
 				System.out.println("회원가입 성공!!");
@@ -131,7 +144,7 @@ public class AccountsRestController {
 				}
 			} else {
 				System.out.println("** 회원가입 실패");
-				return new ResponseEntity<>(new ReturnMsg("회원가입에 실패했습니다. 입력한 정보를 확인해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>(new ReturnMsg("회원가입에 실패했습니다. 입력한 정보를 확인해주세요."), HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
 			System.out.println("** 서버 에러!!");
@@ -146,7 +159,7 @@ public class AccountsRestController {
 		if(email != null) {
 			// 존재하지 않는 메일인 경우 오류
 			if(!userService.emailAlreadyExists(email)) {
-				return new ResponseEntity<>(new ReturnMsg("입력하신 이메일로 가입한 계정이 존재하지 않습니다."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new ReturnMsg("입력하신 이메일로 가입한 계정이 존재하지 않습니다."), HttpStatus.I_AM_A_TEAPOT);
 			}
 			String newToken = jwtUtil.createEmailToken(email);
 			return newToken;

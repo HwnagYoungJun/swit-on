@@ -26,6 +26,7 @@ import com.ssafy.switon.dto.ReturnMsg;
 import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyProfileDTO;
+import com.ssafy.switon.dto.StudyWithRate;
 import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserInfoWithMedals;
@@ -79,7 +80,7 @@ public class ProfileRestController {
 		System.out.println("유저 정보 반환");
 		int userId = userService.searchUserIdByName(name);
 		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.NOT_FOUND);
 		}
 		try {
 			UserInfoDTO originalUser = userService.search(userId);
@@ -97,7 +98,7 @@ public class ProfileRestController {
 							@PathVariable("username") String name, UserInfoDTO userInfoDTO, HttpServletRequest request) {
 		int userId = userService.searchUserIdByName(name);
 		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.NOT_FOUND);
 		}
 		int userIdFromToken;
 		try {
@@ -108,7 +109,7 @@ public class ProfileRestController {
 		}
 		if(userIdFromToken != userId) {
 			System.out.println("** 유저 정보 수정 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("유저 정보 수정에 실패했습니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);			
+			return new ResponseEntity<>(new ReturnMsg("유저 정보 수정에 실패했습니다."), HttpStatus.NOT_FOUND);			
 		}
 		
 		if(img != null) {
@@ -123,15 +124,32 @@ public class ProfileRestController {
 			}
 		}
 		
+		
 		UserInfoDTO originalUserDTO = userService.search(userIdFromToken);
 		if(originalUserDTO == null) {
 			return new ResponseEntity<>(new ReturnMsg("유저 정보 수정에 실패했습니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
+		if(img == null && userInfoDTO.getProfile_image() != null) {
+			userInfoDTO.setProfile_image(originalUserDTO.getProfile_image());
+		}
 		userInfoDTO.setId(userIdFromToken);
 		userInfoDTO.setEmail(originalUserDTO.getEmail());
 		if(userInfoDTO.getName() != null) {
-			if(userService.nameAlreadyExist(userInfoDTO.getId(), userInfoDTO.getName())){
-				return new ResponseEntity<>(new ReturnMsg("다른 사용자가 사용하고 있는 이름입니다. 다른 이름을 입력해주세요."), HttpStatus.UNAUTHORIZED);
+			String userName = userInfoDTO.getName();
+			if(userName.contains(" ") || userName.contains("#") || userName.contains("&") || userName.contains("/")
+					|| userName.contains("\"") || userName.contains("\\") || userName.contains("^")
+					|| userName.contains("*") || userName.contains("!") || userName.contains("'")
+					|| userName.contains("(") || userName.contains(")") || userName.contains("=")
+					|| userName.contains("-") || userName.contains("+") || userName.contains("@")
+					|| userName.contains("$") || userName.contains("%") || userName.contains("`")
+					|| userName.contains("~") || userName.contains("|") || userName.contains("?")) {
+				return new ResponseEntity<>(new ReturnMsg("이름에는 공백이나 특수문자를 입력하실 수 없습니다."), HttpStatus.BAD_REQUEST);
+			}
+			if(userName.length() > "닉네임입니다".length()) {
+				return new ResponseEntity<>(new ReturnMsg("이름이 너무 깁니다. 다른 이름을 입력해주세요."), HttpStatus.BAD_REQUEST);
+			}
+			if(userService.nameAlreadyExist(userInfoDTO.getId(), userName)){
+				return new ResponseEntity<>(new ReturnMsg("다른 사용자가 사용하고 있는 이름입니다. 다른 이름을 입력해주세요."), HttpStatus.BAD_REQUEST);
 			};
 		}
 		if(userInfoDTO.getName() == null) {
@@ -165,11 +183,11 @@ public class ProfileRestController {
 	public Object myStudyList(@PathVariable("name") String name) {
 		if(name == null) {
 			System.out.println("스터디 목록 반환 실패 - 유저 닉네임에 널값");
-			return new ResponseEntity<>(new ReturnMsg("유저 닉네임을 받아올 수 없었습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("유저 닉네임을 받아올 수 없었습니다."), HttpStatus.BAD_REQUEST);
 		}
 		Integer userId = userService.searchUserIdByName(name);
 		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.NOT_FOUND);
 		}
 		try {
 			List<UserStudyInfoDTO> dtos = studyService.searchUserStudies(userId);
@@ -178,15 +196,15 @@ public class ProfileRestController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(new ReturnMsg("유저 정보를 가져올 수 없었습니다."), HttpStatus.OK);
+		return new ResponseEntity<>(new ReturnMsg("유저 정보를 가져올 수 없었습니다."), HttpStatus.NOT_FOUND);
 	}
 	
-	@ApiOperation(value = "유저가 작성한 QnA 글 목록을 반환한다. (로그인 필요)")
+	@ApiOperation(value = "유저가 작성한 QnA 글 목록을 반환한다. ")
 	@GetMapping("{name}/myqna")
 	public Object myQnaList(@PathVariable("name") String name, HttpServletRequest request) {
 		int userId = userService.searchUserIdByName(name);
 		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.NOT_FOUND);
 		}
 //		int userIdFromToken;
 //		try {
@@ -208,12 +226,12 @@ public class ProfileRestController {
 		}
 	}
 	
-	@ApiOperation(value = "유저가 작성한 자료실 글 목록을 반환한다. (로그인 필요)")
+	@ApiOperation(value = "유저가 작성한 자료실 글 목록을 반환한다. ")
 	@GetMapping("/{name}/myrepository")
 	public Object myRepositoryList(@PathVariable("name") String name, HttpServletRequest request) {
 		int userId = userService.searchUserIdByName(name);
 		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.NOT_FOUND);
 		}
 //		int userIdFromToken;
 //		try {
@@ -241,7 +259,7 @@ public class ProfileRestController {
 	public Object userDelete(@PathVariable("name") String name, HttpServletRequest request) {
 		int userId = userService.searchUserIdByName(name);
 		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.NOT_FOUND);
 		}
 		int userIdFromToken;
 		try {
@@ -252,7 +270,7 @@ public class ProfileRestController {
 		}
 		if(userIdFromToken != userId) {
 			System.out.println("** 회원 탈퇴 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		try {
 			if(userService.signOut(userIdFromToken)) {
@@ -263,7 +281,7 @@ public class ProfileRestController {
 			System.out.println("** 회원 탈퇴 실패 - 서버 문제");
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(new ReturnMsg("탈퇴 중 문제가 발생했습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.OK);
+		return new ResponseEntity<>(new ReturnMsg("탈퇴 중 문제가 발생했습니다. 시스템 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ApiOperation(value = "유저가 참여한 스케쥴들만 모아서 반환", response = List.class)
@@ -271,7 +289,7 @@ public class ProfileRestController {
 	public Object userSchedule(@PathVariable("name") String name, HttpServletRequest request) {
 		int userId = userService.searchUserIdByName(name);
 		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.NOT_FOUND);
 		}
 //		int userIdFromToken;
 //		try {
@@ -314,7 +332,7 @@ public class ProfileRestController {
 	public Object userFavorite(@PathVariable("name") String name, HttpServletRequest request) {
 		int userId = userService.searchUserIdByName(name);
 		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.NOT_FOUND);
 		}
 //		int userIdFromToken;
 //		try {
@@ -341,12 +359,12 @@ public class ProfileRestController {
 	public Object searchEndStudyByUserId(@PathVariable("name") String name, HttpServletRequest request){
 		int userId = userService.searchUserIdByName(name);
 		if(userId == 0) {
-			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.OK);
+			return new ResponseEntity<>(new ReturnMsg("유저가 존재하지 않습니다."), HttpStatus.NOT_FOUND);
 		}
 		System.out.println("유저아이디로 종료된 스터디 조회");
 		try {
-			List<Study> list1 = studyService.searchEndStudyByUserId(userId);
-			List<Study> list2 = studyService.searchNotEndStudyByUserId(userId);
+			List<StudyWithRate> list1 = studyService.searchEndStudyByUserId(userId);
+			List<StudyWithRate> list2 = studyService.searchNotEndStudyByUserId(userId);
 			
 			StudyProfileDTO list = new StudyProfileDTO(list1, list2);
 			return new ResponseEntity<>(list, HttpStatus.OK);

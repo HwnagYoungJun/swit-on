@@ -8,6 +8,7 @@ import com.ssafy.switon.dto.SearchReturnDTO;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyCardDTO;
 import com.ssafy.switon.dto.StudyReturnDTO;
+import com.ssafy.switon.dto.StudyWithRate;
 import com.ssafy.switon.dto.UserStudyInfoDTO;
 
 public interface StudyService {
@@ -43,11 +44,11 @@ public interface StudyService {
 	// 베스트 유저 3명 (글쓴 수, 좋아요 수) 찾기
 	BestUsersReturnDTO findBestUsers(int studyId);
 	// 검색어 입력 후 엔터를 쳤을 때는 스터디 결과를 완전히 반환
-	List<StudyCardDTO> searchStudiesByKeywordEnter(String keyword);
+	List<Study> searchStudiesByKeywordEnter(String keyword);
 
 	// 유저 아이디로 종료된 스터디 전체 조회
-	List<Study> searchEndStudyByUserId(int user_id);
+	List<StudyWithRate> searchEndStudyByUserId(int user_id);
 	// 유저 아이디로 종료되지않은 스터디 전체 조회
-	List<Study> searchNotEndStudyByUserId(int user_id);
+	List<StudyWithRate> searchNotEndStudyByUserId(int user_id);
 
 }

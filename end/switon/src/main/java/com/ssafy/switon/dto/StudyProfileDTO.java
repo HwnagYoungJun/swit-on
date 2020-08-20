@@ -3,34 +3,29 @@ package com.ssafy.switon.dto;
 import java.util.List;
 
 public class StudyProfileDTO {
-	List<Study> finishedStudy;
-	List<Study> unfinishedStudy;
-	
-	public StudyProfileDTO(List<Study> finishedStudy, List<Study> unfinishedStudy) {
+	List<StudyWithRate> finishedStudy;
+	List<StudyWithRate> unfinishedStudy;
+	public List<StudyWithRate> getFinishedStudy() {
+		return finishedStudy;
+	}
+	public void setFinishedStudy(List<StudyWithRate> finishedStudy) {
 		this.finishedStudy = finishedStudy;
+	}
+	public List<StudyWithRate> getUnfinishedStudy() {
+		return unfinishedStudy;
+	}
+	public void setUnfinishedStudy(List<StudyWithRate> unfinishedStudy) {
 		this.unfinishedStudy = unfinishedStudy;
 	}
-
 	@Override
 	public String toString() {
 		return "StudyProfileDTO [finishedStudy=" + finishedStudy + ", unfinishedStudy=" + unfinishedStudy + "]";
 	}
-
-	public List<Study> getFinishedStudy() {
-		return finishedStudy;
-	}
-
-	public void setFinishedStudy(List<Study> finishedStudy) {
+	public StudyProfileDTO(List<StudyWithRate> finishedStudy, List<StudyWithRate> unfinishedStudy) {
 		this.finishedStudy = finishedStudy;
-	}
-
-	public List<Study> getUnfinishedStudy() {
-		return unfinishedStudy;
-	}
-
-	public void setUnfinishedStudy(List<Study> unfinishedStudy) {
 		this.unfinishedStudy = unfinishedStudy;
 	}
+	
 	
 	
 }

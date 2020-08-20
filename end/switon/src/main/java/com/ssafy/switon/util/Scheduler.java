@@ -42,17 +42,18 @@ public class Scheduler {
 		
 		// 오차가 있을 수 있으니 앞뒤로 10초씩 여유를 두고 그 사이에 스타트 시간이 포함된 스케줄에 가입한 유저들에게 알림 쏘기
 		// 입실 시간 알림
-		Timestamp tenMinutesBeforeStart = new Timestamp(System.currentTimeMillis() - (1000 * 10) - (1000 * 60 * 10));
-		Timestamp tenMinutesBeforeEnd = new Timestamp(System.currentTimeMillis() + (1000 * 10) - (1000 * 60 * 10));
-		Timestamp tenMinutesAfterStart = new Timestamp(System.currentTimeMillis() - (1000 * 10) + (1000 * 60 * 10));
-		Timestamp tenMinutesAfterEnd = new Timestamp(System.currentTimeMillis() + (1000 * 10) + (1000 * 60 * 10));
-		String resultMsg2 = notificationService.noticeSchedule(tenMinutesBeforeStart, tenMinutesBeforeEnd);
+		Timestamp tenMinutesStart = new Timestamp(System.currentTimeMillis() + (- (1000 * 10) + (1000 * 60 * 10)));
+		Timestamp tenMinutesEnd = new Timestamp(System.currentTimeMillis() + (1000 * 10 + (1000 * 60 * 10))) ;
+		System.out.println(tenMinutesStart + " " + tenMinutesEnd + " ******");
+		String resultMsg2 = notificationService.noticeSchedule(tenMinutesStart, tenMinutesEnd);
 		if(resultMsg2 != null) {
+			System.out.println("입실");
 			System.out.println(resultMsg2);
 		}
 		// 퇴실 시간 알림
-		String resultMsg3 = notificationService.noticeSchedule2(tenMinutesAfterStart, tenMinutesAfterEnd);
+		String resultMsg3 = notificationService.noticeSchedule2(tenMinutesStart, tenMinutesEnd);
 		if(resultMsg3 != null) {
+			System.out.println("퇴실");
 			System.out.println(resultMsg2);
 		}
 		

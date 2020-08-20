@@ -18,4 +18,7 @@ public interface CategoryService {
 	List<UpperCategory> searchUpByKeyword(String keyword);
 	// 키워드로 소분류 조회
 	List<LowerCategorySimpleDTO> searchLowByKeyword(String keyword);
+	// 카테고리가 존재하는지 여부 반환
+	boolean lowerCategoryIdExists(int id);
+	boolean upperCategoryIdExists(int id);
 }

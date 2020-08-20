@@ -21,7 +21,7 @@ public class UserRate {
 		return "UserRate [participation=" + participation + ", attendance=" + attendance + "]";
 	}
 	public UserRate(double participation, double attendance) {
-		this.participation = participation;
-		this.attendance = attendance;
+		this.participation = (participation * 100) / 100.0;
+		this.attendance = (attendance * 100) / 100.0;
 	}	
 }

@@ -28,14 +28,14 @@ public class StudyInfoRestController {
 	@Autowired
 	StudyDAO studyDAO;
 	
-	@ApiOperation(value="추천 스터디목록 반환", response = List.class)
+	@ApiOperation(value="인기 스터디목록 반환", response = List.class)
 	@GetMapping("/popularstudy")
 	public Object searchStudyInfo() {
 		List<Study> lastList = new ArrayList<>();
 		
 		try {
 			List<StudyInfo> list = studyinfoDAO.selectStudyInfo();
-			System.out.println("추천 스터디목록 반환");
+			System.out.println("인기 스터디목록 반환");
 			
 			for(int i = 0; i < list.size(); i++) {
 				list.get(i).setValue(list.get(i).getUser(), list.get(i).getLike(), list.get(i).getSchedule(), list.get(i).getArticles());
@@ -88,7 +88,7 @@ public class StudyInfoRestController {
 			return new ResponseEntity<>(lastList, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>("추천 스터디 목록을 불러올 수 없었습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("인기 스터디 목록을 불러올 수 없었습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

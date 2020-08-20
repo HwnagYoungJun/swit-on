@@ -64,7 +64,7 @@ public class ScheduleRestController {
 		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 스터디 스케줄 조회 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		try {
 			List<ScheduleReturnDTO> schedules = scheduleService.selectSchedulesByStudyId(studyId, userId);
@@ -87,7 +87,7 @@ public class ScheduleRestController {
 		Study study = studyService.search(studyId);
 		if(userId != study.getUser_id()) {
 			System.out.println("** 스케줄 생성 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		schedule.setStudy_id(studyId);
 		schedule.setUser_id(userId);
@@ -101,7 +101,7 @@ public class ScheduleRestController {
 			return new ResponseEntity<>(new ReturnMsg("스케줄을 생성할 수 없었습니다. 서버 관리자에게 문의해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);			
 		}
 		System.out.println("스케줄 생성 실패 - " + result);
-		return new ResponseEntity<>(new ReturnMsg(result), HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(new ReturnMsg(result), HttpStatus.BAD_REQUEST);
 	}
 	
 	@ApiOperation(value = "스케줄 조회", response = Schedule.class)
@@ -115,20 +115,20 @@ public class ScheduleRestController {
 		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 스케줄 조회 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		Schedule schedule = scheduleService.selectScheduleById(scheduleId);
 		if(schedule == null) {
-			return new ResponseEntity<>(new ReturnMsg("스케줄을 찾을 수 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("스케줄을 찾을 수 없습니다."), HttpStatus.NOT_FOUND);
 		}
 		ScheduleReturnDTO dto = new ScheduleReturnDTO(schedule);
 		if(studyId != schedule.getStudy_id()) {
 			System.out.println("** 스케줄 조회 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		Study study = studyService.search(studyId);
 		if(study == null) {
-			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 스터디입니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("존재하지 않는 스터디입니다."), HttpStatus.NOT_FOUND);
 		}
 		dto.setStudy_name(study.getName());
 		try {
@@ -147,7 +147,7 @@ public class ScheduleRestController {
 	private Object modifySchedule(@RequestBody Schedule schedule, @PathVariable("studyId") int studyId, @PathVariable("scheduleId") int scheduleId, HttpServletRequest request) {
 		Schedule originalSchedule = scheduleService.selectScheduleById(scheduleId);
 		if(originalSchedule == null) {
-			return new ResponseEntity<>(new ReturnMsg("스케줄이 존재하지 않습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("스케줄이 존재하지 않습니다."), HttpStatus.NOT_FOUND);
 		}
 		int userId = 0;
 		try {
@@ -157,7 +157,7 @@ public class ScheduleRestController {
 		}
 		if(userId != originalSchedule.getUser_id()) {
 			System.out.println("** 스케줄 수정 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		// 수정되지 않은 부분은 예전 스케줄에서 가져오기
 		if(schedule.getBg_color() == null) {schedule.setBg_color(originalSchedule.getBg_color());}
@@ -184,7 +184,7 @@ public class ScheduleRestController {
 	private Object deleteSchedule( @PathVariable("studyId") int studyId, @PathVariable("scheduleId") int scheduleId, HttpServletRequest request) {
 		Schedule schedule = scheduleService.selectScheduleById(scheduleId);
 		if(schedule == null) {
-			return new ResponseEntity<>(new ReturnMsg("스케줄이 존재하지 않습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("스케줄이 존재하지 않습니다."), HttpStatus.NOT_FOUND);
 		}
 		int userId = 0;
 		try {
@@ -194,7 +194,7 @@ public class ScheduleRestController {
 		}
 		if(userId != schedule.getUser_id()) {
 			System.out.println("** 스케줄 삭제 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		try {
 			if(scheduleService.deleteSchedule(scheduleId)){
@@ -218,7 +218,7 @@ public class ScheduleRestController {
 		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 스케줄 참가여부 조회 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		ParticipateInfo info = userscheduleService.getParticipateInfo(userId, scheduleId);
 		if(info == null) {
@@ -239,7 +239,7 @@ public class ScheduleRestController {
 		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 스케줄 참가 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		try {
 			String result = userscheduleService.createUserSchedule(new UserSchedule(userId, scheduleId));
@@ -251,7 +251,7 @@ public class ScheduleRestController {
 				System.out.println("** 스케줄 참가 실패 - 서버 오류 발생");
 				return new ResponseEntity<>(new ReturnMsg("스케줄에 참여할 수 없었습니다. 서버 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			return new ResponseEntity<>(new ReturnMsg(result), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg(result), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			return new ResponseEntity<>(new ReturnMsg("스케줄에 참여할 수 없었습니다. 서버 관리자에게 문의 바랍니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -268,7 +268,7 @@ public class ScheduleRestController {
 		};
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 스케줄 참가 취소 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		if(userscheduleService.cancelParticipate(userId, scheduleId)) {
 			System.out.println(scheduleId + "번 스케줄 참가 취소 성공!!");
@@ -289,12 +289,12 @@ public class ScheduleRestController {
 		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 입실 출석체크 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		UserSchedule userSchedule = userscheduleService.getParticipate(userId, scheduleId);
 		if(userSchedule == null) {
 			System.out.println("** 입실 출석체크 실패 - 참여하지 않은 스케줄");
-			return new ResponseEntity<>(new ReturnMsg("참여하지 않은 스케줄입니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("참여하지 않은 스케줄입니다."), HttpStatus.BAD_REQUEST);
 		}
 		if(userscheduleService.changeStatus(userId, scheduleId, 1)) {
 			System.out.println(userId + "번 유저 " + scheduleId + "번 스케줄 입실 성공!");
@@ -315,12 +315,12 @@ public class ScheduleRestController {
 		}
 		if(!joinService.isMember(studyId, userId)) {
 			System.out.println("** 입실 퇴실체크 실패 - 권한 없음");
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		UserSchedule userSchedule = userscheduleService.getParticipate(userId, scheduleId);
 		if(userSchedule == null) {
 			System.out.println("** 입실 퇴실체크 실패 - 참여하지 않은 스케줄");
-			return new ResponseEntity<>(new ReturnMsg("참여하지 않은 스케줄입니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("참여하지 않은 스케줄입니다."), HttpStatus.BAD_REQUEST);
 		}
 		if(userscheduleService.changeStatus(userId, scheduleId, 2)) {
 			System.out.println(userId + "번 유저 " + scheduleId + "번 스케줄 퇴실 성공!");

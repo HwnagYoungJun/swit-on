@@ -84,13 +84,13 @@ public class LikeRestController {
 				return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 			}
 			if(!joinService.isMember(studyId, userId)) {
-				return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 			}
 			StudyLike studylike = studylikeService.searchByUser_Study(userId, studyId);
 			
 			if(studylike != null) {
 				System.out.println(studyId + "에 내가 이미 좋아요 누름!!");
-				return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 눌렀습니다."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 눌렀습니다."), HttpStatus.BAD_REQUEST);
 			}
 			try {
 				studylike = new StudyLike();
@@ -117,13 +117,13 @@ public class LikeRestController {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
 		if(!joinService.isMember(studyId, userId)) {
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		StudyLike studylike = studylikeService.searchByUser_Study(userId, studyId);
 		
 		if(studylike == null) {
 			System.out.println(studyId + "에 좋아요를 누르지 않았음!!");
-			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 취소했습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 취소했습니다."), HttpStatus.BAD_REQUEST);
 		}
 		try {
 			if(studylikeService.deleteStudyLikeByUser(userId, studyId)) {
@@ -146,13 +146,13 @@ public class LikeRestController {
 				return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 			}
 			if(!joinService.isMember(studyId, userId)) {
-				return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 			}
 			ArticleLike articlelike = articlelikeService.searchByUser_Article(userId, articleId);
 			
 			if(articlelike != null) {
 				System.out.println(articleId + "번 글에 내가 이미 좋아요 누름!!");
-				return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 눌렀습니다."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 눌렀습니다."), HttpStatus.BAD_REQUEST);
 			}
 			try {
 				articlelike = new ArticleLike();
@@ -186,13 +186,13 @@ public class LikeRestController {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
 		if(!joinService.isMember(studyId, userId)) {
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		ArticleLike articlelike = articlelikeService.searchByUser_Article(userId, articleId);
 		
 		if(articlelike == null) {
 			System.out.println(articleId + "번 글에 좋아요를 누르지 않았음!!");
-			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 취소했습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 취소했습니다."), HttpStatus.BAD_REQUEST);
 		}
 		
 		try {
@@ -216,12 +216,12 @@ public class LikeRestController {
 				return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 			}
 			if(!joinService.isMember(studyId, userId)) {
-				return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 			}
 			ArticleLike articlelike = articlelikeService.searchByUser_Article(userId, articleId);
 			if(articlelike != null) {
 				System.out.println(articleId + "번 글에 내가 이미 좋아요 누름!!");
-				return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 눌렀습니다."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 눌렀습니다."), HttpStatus.BAD_REQUEST);
 			}
 			try {
 				articlelike = new ArticleLike();
@@ -256,13 +256,13 @@ public class LikeRestController {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
 		if(!joinService.isMember(studyId, userId)) {
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		ArticleLike articlelike = articlelikeService.searchByUser_Article(userId, articleId);
 		
 		if(articlelike == null) {
 			System.out.println(articleId + "번 글에 좋아요를 누르지 않았음!!");
-			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 취소했습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 취소했습니다."), HttpStatus.BAD_REQUEST);
 		}
 		
 		try {
@@ -286,17 +286,17 @@ public class LikeRestController {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
 		if(!joinService.isMember(studyId, userId)) {
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		Comment comment = commentService.search(commentId);
 		if(comment == null) {
-			return new ResponseEntity<>(new ReturnMsg("댓글이 존재하지 않습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("댓글이 존재하지 않습니다."), HttpStatus.BAD_REQUEST);
 		}
 		CommentLike commentlike = commentlikeService.searchByUser_Comment(userId, commentId);
 		
 		if(commentlike != null) {
 			System.out.println(commentId + "번 댓글에 내가 이미 좋아요 누름!!");
-			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 눌렀습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 눌렀습니다."), HttpStatus.BAD_REQUEST);
 		}
 		
 		try {
@@ -330,17 +330,17 @@ public class LikeRestController {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
 		if(!joinService.isMember(studyId, userId)) {
-			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		Comment comment = commentService.search(commentId);
 		if(comment == null) {
-			return new ResponseEntity<>(new ReturnMsg("댓글이 존재하지 않습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("댓글이 존재하지 않습니다."), HttpStatus.BAD_REQUEST);
 		}
 		CommentLike commentlike = commentlikeService.searchByUser_Comment(userId, commentId);
 		
 		if(commentlike == null) {
 			System.out.println(commentId + "번 댓글에 좋아요를 누르지 않았음!!");
-			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 취소했습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 취소했습니다."), HttpStatus.BAD_REQUEST);
 		}
 		
 		try {
@@ -365,13 +365,13 @@ public class LikeRestController {
 		}
 		Comment comment = commentService.search(commentId);
 		if(comment == null) {
-			return new ResponseEntity<>(new ReturnMsg("댓글이 존재하지 않습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("댓글이 존재하지 않습니다."), HttpStatus.BAD_REQUEST);
 		}
 		CommentLike commentlike = commentlikeService.searchByUser_Comment(userId, commentId);
 		
 		if(commentlike != null) {
 			System.out.println(commentId + "번 댓글에 내가 이미 좋아요 누름!!");
-			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 눌렀습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 눌렀습니다."), HttpStatus.BAD_REQUEST);
 		}
 		
 		try {
@@ -402,13 +402,13 @@ public class LikeRestController {
 		}
 		Comment comment = commentService.search(commentId);
 		if(comment == null) {
-			return new ResponseEntity<>(new ReturnMsg("댓글이 존재하지 않습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("댓글이 존재하지 않습니다."), HttpStatus.BAD_REQUEST);
 		}
 		CommentLike commentlike = commentlikeService.searchByUser_Comment(userId, commentId);
 		
 		if(commentlike == null) {
 			System.out.println(commentId + "번 댓글에 좋아요를 누르지 않았음!!");
-			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 취소했습니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("이미 좋아요를 취소했습니다."), HttpStatus.BAD_REQUEST);
 		}
 		
 		try {
@@ -431,11 +431,15 @@ public class LikeRestController {
 			} catch(Exception e) {
 				return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 			}
+			Article article = articleService.search(articleId);
+			if(article == null) {
+				return new ResponseEntity<>(new ReturnMsg("글이 존재하지 않습니다."), HttpStatus.NOT_FOUND);
+			}
 			ArticleFav articlefav = articlefavService.searchByUser_Article(userId, articleId);
 			
 			if(articlefav != null) {
 				System.out.println(articleId + "번 글에 내가 이미 즐겨찾기 누름!!");
-				return new ResponseEntity<>(new ReturnMsg("이미 즐겨찾기한 글입니다."), HttpStatus.OK);
+				return new ResponseEntity<>(new ReturnMsg("이미 즐겨찾기한 글입니다."), HttpStatus.BAD_REQUEST);
 			}
 			
 			try {
@@ -462,10 +466,13 @@ public class LikeRestController {
 				return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 			}
 			ArticleFav articlefav = articlefavService.searchByUser_Article(userId, articleId);
-			
+			Article article = articleService.search(articleId);
+			if(article == null) {
+				return new ResponseEntity<>(new ReturnMsg("글이 존재하지 않습니다."), HttpStatus.NOT_FOUND);
+			}
 			if(articlefav != null) {
 				System.out.println(articleId + "번 글에 내가 이미 즐겨찾기 누름!!");
-				return new ResponseEntity<>(new ReturnMsg("이미 즐겨찾기한 글입니다."), HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(new ReturnMsg("이미 즐겨찾기한 글입니다."), HttpStatus.BAD_REQUEST);
 			}
 			try {
 				articlefav = new ArticleFav();
@@ -491,10 +498,13 @@ public class LikeRestController {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
 		ArticleFav articlefav = articlefavService.searchByUser_Article(userId, articleId);
-		
+		Article article = articleService.search(articleId);
+		if(article == null) {
+			return new ResponseEntity<>(new ReturnMsg("글이 존재하지 않습니다."), HttpStatus.NOT_FOUND);
+		}
 		if(articlefav == null) {
 			System.out.println(articleId + "번 글에 즐겨찾기를 누르지 않았음!!");
-			return new ResponseEntity<>(new ReturnMsg("이미 즐겨찾기를 해제한 글입니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("이미 즐겨찾기를 해제한 글입니다."), HttpStatus.BAD_REQUEST);
 		}
 		
 		try {
@@ -518,10 +528,13 @@ public class LikeRestController {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
 		ArticleFav articlefav = articlefavService.searchByUser_Article(userId, articleId);
-		
+		Article article = articleService.search(articleId);
+		if(article == null) {
+			return new ResponseEntity<>(new ReturnMsg("글이 존재하지 않습니다."), HttpStatus.NOT_FOUND);
+		}
 		if(articlefav == null) {
 			System.out.println(articleId + "번 글에 즐겨찾기를 누르지 않았음!!");
-			return new ResponseEntity<>(new ReturnMsg("이미 즐겨찾기를 해제한 글입니다."), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(new ReturnMsg("이미 즐겨찾기를 해제한 글입니다."), HttpStatus.BAD_REQUEST);
 		}
 		
 		try {

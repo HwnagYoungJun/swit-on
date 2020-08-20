@@ -138,7 +138,7 @@ public class SwitonRestController {
 			}
 		}
 		System.out.println("토큰을 못 읽어옴");
-		return new ResponseEntity<>(new ReturnMsg("토큰에서 유저 정보를 읽어올 수 없습니다."), HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(new ReturnMsg("비로그인 유저입니다."), HttpStatus.OK);
 	}
 	
 	// id로 알림 읽음으로 등록 

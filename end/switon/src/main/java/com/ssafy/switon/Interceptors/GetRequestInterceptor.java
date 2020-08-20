@@ -46,7 +46,7 @@ public class GetRequestInterceptor extends HandlerInterceptorAdapter {
 				System.out.println("토큰: " + jwsString);
 //				System.out.println(jwtUtil.getUserPK(jwsString));
 				if (jwsString == null) {
-					setResponseMsg(response, "로그인이 필요한 서비스입니다. 로그인을 해주세요.");
+					setResponseMsg(response, "로그인이 필요합니다.");
 					System.out.println("토큰이 없습니다.");
 					return false;
 				}
@@ -69,21 +69,21 @@ public class GetRequestInterceptor extends HandlerInterceptorAdapter {
 					System.out.println("----------------------------------");
 				} else {
 					System.out.println("** 미등록 유저 토큰");
-					setResponseMsg(response, "탈퇴했거나 등록되지 않은 사용자입니다. 다시 로그인해주세요.");
+					setResponseMsg(response, "로그인이 필요합니다.");
 					return false;
 				}
 			} catch (NullPointerException ne) {
 				System.out.println("** 토큰이 없음");
-				setResponseMsg(response, "로그인이 필요한 서비스입니다. 로그인을 해주세요.");
+				setResponseMsg(response, "로그인이 필요합니다.");
 				return false;
 			} catch (JwtException je) {
 				System.out.println("** 유효하지 않은 토큰");
 				System.out.println(je.getMessage());
-				setResponseMsg(response, "로그인이 시간이 만료되었습니다. 로그인을 해주세요.");
+				setResponseMsg(response, "로그인이 필요합니다.");
 				return false;
 			} catch (Exception e) {
 				System.out.println("** 토큰을 받아올 수 없었습니다.");
-				setResponseMsg(response, "로그인 정보를 받아올 수 없습니다. 다시 로그인해주세요.");
+				setResponseMsg(response, "로그인이 필요합니다.");
 				System.out.println(e.getMessage());
 				return false;
 			}

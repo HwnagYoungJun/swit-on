@@ -101,7 +101,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 					// OR B종료시간이 A시작시간보다 뒤인 경우 + B시작시간이 A의 종료시간보다 앞인 경우 <- 오류
 					|| newEnd.after(oldStart) && newStart.before(oldEnd)){
 				// 오류인 경우 어떤 스터디의 어떤 스케줄과 겹치는지 이름을 반환
-				String msg = "'" + schedule.getTitle() + "' 스케줄과 시간이 겹칩니다.";
+				String msg = "'" + orderSchedule.getTitle() + "' 스케줄과 시간이 겹칩니다.";
 				return msg;
 			}
 		}

@@ -73,6 +73,16 @@ public class ArticleServiceImpl implements ArticleService {
 	public Article search(int id) {
 		return articleDao.selectArticleById(id);
 	}
+	
+	@Override
+	public Article search(int articleId, int studyId, int type) {
+		Article article = articleDao.selectArticleById(articleId);
+		int boardId = boardDao.findBoardId(studyId, type);
+		if(article.getBoard_id() != boardId) {
+			return null;
+		}
+		return article;
+	}
 
 	@Override
 	public int create(Article article, int studyId) {
@@ -307,6 +317,8 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		return "repository";
 	}
+
+	
 
 	
 }

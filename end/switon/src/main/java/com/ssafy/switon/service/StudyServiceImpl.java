@@ -31,8 +31,10 @@ import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudyCardDTO;
 import com.ssafy.switon.dto.StudyReturnDTO;
 import com.ssafy.switon.dto.StudySimple;
+import com.ssafy.switon.dto.StudyWithRate;
 import com.ssafy.switon.dto.UpperCategory;
 import com.ssafy.switon.dto.UserInfoDTO;
+import com.ssafy.switon.dto.UserRate;
 import com.ssafy.switon.dto.UserSimpleDTO;
 import com.ssafy.switon.dto.UserStudyInfoDTO;
 
@@ -62,6 +64,9 @@ public class StudyServiceImpl implements StudyService {
 	
 	@Autowired
 	JoinService joinService;
+	
+	@Autowired
+	UserScheduleService userScheduleService;
 	
 	@Override
 	public List<Study> searchAll() {
@@ -302,24 +307,44 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
-	public List<StudyCardDTO> searchStudiesByKeywordEnter(String keyword) {
+	public List<Study> searchStudiesByKeywordEnter(String keyword) {
 		keyword = "%" + keyword + "%";
 		List<Study> studies = studyDao.selectStudyByKeywordEnter(keyword);
-		List<StudyCardDTO> studyCards = new ArrayList<StudyCardDTO>();
-		for(Study study : studies) {
-			studyCards.add(new StudyCardDTO(study.getId(), study.getName(), 
-					study.getStart_time(), study.getEnd_time(), study.getWeek(), 
-					study.getEnd_term(), study.getUsers_current(), study.getUsers_limit()));
-		}
-		return studyCards;
+//		List<StudyCardDTO> studyCards = new ArrayList<StudyCardDTO>();
+//		for(Study study : studies) {
+//			studyCards.add(new StudyCardDTO(study.getId(), study.getName(), 
+//					study.getStart_time(), study.getEnd_time(), study.getWeek(), 
+//					study.getEnd_term(), study.getUsers_current(), study.getUsers_limit()));
+//		}
+		return studies;
 	}
 	
 	@Override
-	public List<Study> searchEndStudyByUserId(int user_id) {
-		return studyDao.selectEndStudyByUserId(user_id);
+	public List<StudyWithRate> searchEndStudyByUserId(int user_id) {
+		List<Study> endStudiesOriginals = studyDao.selectEndStudyByUserId(user_id);
+		List<StudyWithRate> list1 = new ArrayList<StudyWithRate>();
+		if(endStudiesOriginals.size() != 0) {
+			for(Study endStudy : endStudiesOriginals) {
+				int studyId = endStudy.getId();
+				UserRate rate = userScheduleService.getUserParticipateRate(user_id, studyId);
+				StudyWithRate studyWithRate = new StudyWithRate(endStudy, rate);
+				list1.add(studyWithRate);
+			}
+		}
+		return list1;
 	}
 	@Override
-	public List<Study> searchNotEndStudyByUserId(int user_id) {
-		return studyDao.selectNotEndStudyByUserId(user_id);
+	public List<StudyWithRate> searchNotEndStudyByUserId(int user_id) {
+		List<Study> notEndStudiesOriginals = studyDao.selectNotEndStudyByUserId(user_id);
+		List<StudyWithRate> list2 = new ArrayList<StudyWithRate>();
+		if(notEndStudiesOriginals.size() != 0) {
+			for(Study notEndStudy : notEndStudiesOriginals) {
+				int studyId = notEndStudy.getId();
+				UserRate rate = userScheduleService.getUserParticipateRate(user_id, studyId);
+				StudyWithRate studyWithRate = new StudyWithRate(notEndStudy, rate);
+				list2.add(studyWithRate);
+			}
+		}
+		return list2;
 	}
 }
