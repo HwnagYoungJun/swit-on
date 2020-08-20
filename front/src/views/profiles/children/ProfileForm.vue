@@ -171,7 +171,7 @@ export default {
 .intro-box {
 	display: flex;
 	flex-direction: column;
-	// justify-content: flex-start;
+	justify-content: flex-start;
 	align-content: center;
 	margin-top: 1rem;
 	@media screen and (max-width: 1024px) {
@@ -179,6 +179,7 @@ export default {
 	}
 	.medal-box {
 		display: flex;
+
 		align-items: center;
 		margin-left: 3rem;
 		margin-top: 1rem;
