@@ -32,7 +32,8 @@
 				</div>
 				<section class="card-detail-content">
 					<Viewer :initialValue="article.content" />
-					<div v-if="article.file">
+					<div class="card-detail-filebox" v-if="article.file">
+						<span class="card-detail-file">첨부파일</span>
 						<a
 							v-if="FileCheck"
 							:href="`${BaseUrl}${article.file}`"
@@ -478,6 +479,14 @@ export default {
 		font-size: $font-bold;
 	}
 }
+.card-detail-filebox {
+	margin-top: 2rem;
+	font-size: font-normal;
+	.card-detail-file {
+		font-weight: bold;
+		margin-right: 5px;
+	}
+}
 .img {
 	width: 50px;
 	height: 50px;
@@ -508,7 +517,7 @@ export default {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin: 50px 0 10px;
+		margin: 10px 0 10px;
 		color: crimson;
 		font-size: $font-bold;
 		.logo-likebox {
