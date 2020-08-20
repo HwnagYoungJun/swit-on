@@ -264,8 +264,8 @@ export default {
 				const { data } = await fetchArticle(studyId, boardName, articleId);
 				this.article = data;
 			} catch (error) {
-				this.$router.push('/404');
 				bus.$emit('show:toast', `${error.response.data.msg}`);
+				this.$router.push('/404');
 			}
 		},
 		isCommentLiked(flag) {

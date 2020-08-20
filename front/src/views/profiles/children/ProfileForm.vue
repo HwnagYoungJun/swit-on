@@ -126,6 +126,7 @@ export default {
 				this.medals = data.medals;
 			} catch (error) {
 				bus.$emit('show:toast', `${error.response.data.msg}`);
+				this.$router.push('/404');
 			}
 		},
 		async fetchStudy() {
