@@ -22,6 +22,25 @@
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+    <BODY onbeforeunload="closePage(event)" oncontextmenu="return false">
+    <script language="javascript">
+      function closePage( event ){
+        if( event.clientY < 0 ){
+        }
+      }
+      document.onkeydown = function() {
+          if ( event.ctrlKey == true && ( event.keyCode == 78 || event.keyCode == 82 ) || event.keyCode == 116) {
+              event.keyCode = 0;
+              event.cancelBubble = true;
+              event.returnValue = false;
+          }
+          if ( event.keyCode == 115) {
+          }
+          if (event.keyCode == 505) { 
+              alert(document.body.onBeforeUnload);
+        }
+    }
+    </script>
     <div id="app"></div>
     <!-- built files will be auto injected -->
     <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
