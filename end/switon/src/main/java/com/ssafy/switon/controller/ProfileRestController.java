@@ -104,8 +104,9 @@ public class ProfileRestController {
 		}
 		
 		if(img != null) {
-			String RealPath = getUploadRealPath(request, userIdFromToken, img);
-			String path = getUploadPath(userIdFromToken, img);
+			long time = System.currentTimeMillis();
+			String RealPath = getUploadRealPath(request, userIdFromToken, img, time);
+			String path = getUploadPath(userIdFromToken, img, time);
 			try {
 				img.transferTo(new File(RealPath));
 				userInfoDTO.setProfile_image(path);
@@ -295,19 +296,19 @@ public class ProfileRestController {
 		return new ResponseEntity<>(new ReturnMsg("유저의 스터디를 불러오는데 실패했습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img) {
+	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img, long time) {
 		String fileName = img.getOriginalFilename();
 		int pos = fileName.lastIndexOf(".");
 		String ext = fileName.substring(pos);
-		return request.getServletContext().getRealPath("static"+ File.separator + "upload")
-				+ File.separator + userId + "_" + System.currentTimeMillis() + ext;
+		String result = request.getServletContext().getRealPath("static"+ File.separator + "upload")
+				+ File.separator + userId + "_" + time + ext;
+		return result;
 	}
-	
-	private String getUploadPath(int userId, MultipartFile img) {
+	private String getUploadPath(int userId, MultipartFile img, long time) {
 		String fileName = img.getOriginalFilename();
 		int pos = fileName.lastIndexOf(".");
 		String ext = fileName.substring(pos);
-		return "upload/" + userId + "_" + System.currentTimeMillis() + ext;
+		return "upload/" + userId + "_" + time + ext;
 	}
 	
 	private int getUserPK(HttpServletRequest request) {
