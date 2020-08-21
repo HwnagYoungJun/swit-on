@@ -3,6 +3,7 @@ package com.ssafy.switon.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -191,8 +192,9 @@ public class StudyRestController {
 			return new ResponseEntity<>(new ReturnMsg("유저수 제한은 0명이 될 수 없습니다."), HttpStatus.BAD_REQUEST);
 		}
 		if(img != null) {
-			String RealPath = getUploadRealPath(request, userId, img);
-			String path = getUploadPath(userId, img);
+			long time = System.currentTimeMillis();
+			String RealPath = getUploadRealPath(request, userId, img, time);
+			String path = getUploadPath(userId, img, time);
 			try {
 				img.transferTo(new File(RealPath));
 				study.setLogo(path);
@@ -240,8 +242,9 @@ public class StudyRestController {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
 		if(img != null) {
-			String RealPath = getUploadRealPath(request, userId, img);
-			String path = getUploadPath(userId, img);
+			long time = System.currentTimeMillis();
+			String RealPath = getUploadRealPath(request, userId, img, time);
+			String path = getUploadPath(userId, img, time);
 			try {
 				img.transferTo(new File(RealPath));
 				study.setLogo(path);
@@ -462,8 +465,9 @@ public class StudyRestController {
 			return new ResponseEntity<>(new ReturnMsg("작성 권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		if(img != null) {
-			String RealPath = getUploadRealPath(request, userId, img);
-			String path = getUploadPath(userId, img);
+			long time = System.currentTimeMillis();
+			String RealPath = getUploadRealPath(request, userId, img, time);
+			String path = getUploadPath(userId, img, time);
 			try {
 				img.transferTo(new File(RealPath));
 				article.setFile(path);
@@ -495,8 +499,9 @@ public class StudyRestController {
 			return new ResponseEntity<>(new ReturnMsg("작성 권한이 없습니다."), HttpStatus.FORBIDDEN);
 		}
 		if(img != null) {
-			String RealPath = getUploadRealPath(request, userId, img);
-			String path = getUploadPath(userId, img);
+			long time = System.currentTimeMillis();
+			String RealPath = getUploadRealPath(request, userId, img, time);
+			String path = getUploadPath(userId, img, time);
 			try {
 				img.transferTo(new File(RealPath));
 				article.setFile(path);
@@ -673,8 +678,9 @@ public class StudyRestController {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
 		if(img != null) {
-			String RealPath = getUploadRealPath(request, userId, img);
-			String path = getUploadPath(userId, img);
+			long time = System.currentTimeMillis();
+			String RealPath = getUploadRealPath(request, userId, img, time);
+			String path = getUploadPath(userId, img, time);
 			try {
 				img.transferTo(new File(RealPath));
 				article.setFile(path);
@@ -713,8 +719,9 @@ public class StudyRestController {
 			return new ResponseEntity<>(new ReturnMsg("잘못된 접근입니다. 다시 로그인해주세요."), HttpStatus.UNAUTHORIZED);
 		}
 		if(img != null) {
-			String RealPath = getUploadRealPath(request, userId, img);
-			String path = getUploadPath(userId, img);
+			long time = System.currentTimeMillis();
+			String RealPath = getUploadRealPath(request, userId, img, time);
+			String path = getUploadPath(userId, img, time);
 			try {
 				img.transferTo(new File(RealPath));
 				article.setFile(path);
@@ -1135,19 +1142,19 @@ public class StudyRestController {
 	}
 	
 	
-	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img) {
+	private String getUploadRealPath(HttpServletRequest request, int userId, MultipartFile img, long time) {
 		String fileName = img.getOriginalFilename();
 		int pos = fileName.lastIndexOf(".");
 		String ext = fileName.substring(pos);
 		String result = request.getServletContext().getRealPath("static"+ File.separator + "upload")
-				+ File.separator + userId + "_" + System.currentTimeMillis() + ext;
+				+ File.separator + userId + "_" + time + ext;
 		return result;
 	}
-	private String getUploadPath(int userId, MultipartFile img) {
+	private String getUploadPath(int userId, MultipartFile img, long time) {
 		String fileName = img.getOriginalFilename();
 		int pos = fileName.lastIndexOf(".");
 		String ext = fileName.substring(pos);
-		return "upload/" + userId + "_" + System.currentTimeMillis() + ext;
+		return "upload/" + userId + "_" + time + ext;
 	}
 	
 	private int getUserPK(HttpServletRequest request) {
