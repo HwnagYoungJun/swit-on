@@ -2,7 +2,7 @@
 	<section class="container">
 		<UpperBtn></UpperBtn>
 		<main class="newsFeed-container">
-			<section v-if="newsFeedData.articles" class="article-box">
+			<section v-if="newsFeedData.articles.length" class="article-box">
 				<router-link
 					class="feed-link"
 					v-for="article in newsFeedData.articles"
@@ -18,6 +18,9 @@
 				>
 					<ArticleFeed :article="article" />
 				</router-link>
+			</section>
+			<section v-else>
+				<ArticleNotFound />
 			</section>
 			<aside class="side-box">
 				<div class="schedule-box">
@@ -55,7 +58,7 @@ import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
 import 'tui-calendar/dist/tui-calendar.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
-
+import ArticleNotFound from '@/components/common/ArticleNotFound.vue';
 import cookies from 'vue-cookies';
 import bus from '@/utils/bus';
 import UpperBtn from '@/components/common/UpperBtn.vue';
@@ -64,6 +67,7 @@ export default {
 		ArticleFeed,
 		Calendar,
 		UpperBtn,
+		ArticleNotFound,
 	},
 
 	data() {
