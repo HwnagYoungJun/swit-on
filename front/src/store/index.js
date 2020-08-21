@@ -8,7 +8,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
 		email: cookies.isKey('email') ? cookies.get('email') : null,
+		name: cookies.isKey('name') ? cookies.get('name') : null,
 		token: cookies.isKey('auth-token') ? cookies.get('auth-token') : null,
+		id: cookies.isKey('userid') ? cookies.get('userid') : null,
 	},
 	getters: {
 		isLogin(state) {
@@ -17,10 +19,16 @@ export default new Vuex.Store({
 		getToken(state) {
 			return state.token;
 		},
+		getName(state) {
+			return state.name;
+		},
+		getUserId(state) {
+			return state.id;
+		},
 	},
 	mutations: {
-		setUserEmail(state, email) {
-			state.email = email;
+		setUserName(state, name) {
+			state.name = name;
 		},
 		clearUserEmail(state) {
 			state.email = '';
@@ -28,16 +36,21 @@ export default new Vuex.Store({
 		setToken(state, token) {
 			state.token = token;
 		},
+		setUserId(state, id) {
+			state.id = id;
+		},
 		clearToken(state) {
 			state.token = '';
 		},
 	},
 	actions: {
 		SETUP_USER({ commit }, responseData) {
-			commit('setUserEmail', responseData.user.email);
+			commit('setUserName', responseData.user.name);
+			commit('setUserId', responseData.user.id);
 			commit('setToken', responseData.token);
 			cookies.set('auth-token', responseData.token);
-			cookies.set('email', responseData.user.email);
+			cookies.set('name', responseData.user.name);
+			cookies.set('userid', responseData.user.id);
 		},
 		async SIGNUP({ dispatch }, userData) {
 			const { data } = await registerUser(userData);
@@ -46,7 +59,6 @@ export default new Vuex.Store({
 		},
 		async LOGIN({ dispatch }, userData) {
 			const { data } = await loginUser(userData);
-			console.log(data);
 			dispatch('SETUP_USER', data);
 			return data;
 		},

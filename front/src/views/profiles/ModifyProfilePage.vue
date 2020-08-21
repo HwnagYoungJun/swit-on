@@ -4,76 +4,171 @@
 		autocomplete="off"
 		@submit.prevent="modifyData"
 	>
-		<img
-			class="img-box"
-			src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.0-9/51195329_2188965328018448_6283346633593716736_n.jpg?_nc_cat=110&_nc_sid=85a577&_nc_ohc=oEFV7dFTDEwAX9IiKKx&_nc_ht=scontent-ssn1-1.xx&oh=91b2c49439a416691eccd803c50bd221&oe=5F4024D8"
-			alt="profile_img"
-		/>
-		<div class="img-change">
-			<input type="file" />
-		</div>
-		<h2>{{ email }}</h2>
-		<div class="input-container">
-			<div class="input-box">
-				<span>이름</span>
-				<input type="text" v-model="name" />
+		<section class="modify-header">
+			<h2>프로필 변경</h2>
+			<div class="study-btnbox">
+				<button @click.prevent="$router.go(-1)" class="studyform-btn-cancle">
+					취소
+				</button>
+				<button :disabled="!isVaildIntro" class="hide-btn">작성</button>
+				<button
+					:disabled="!isVaildIntro"
+					class="studyform-btn-submit"
+					type="submit"
+				>
+					작성
+				</button>
 			</div>
-			<div class="input-box">
-				<span>소개</span>
-				<textarea
-					name=""
-					id=""
-					cols="10"
-					rows="2"
-					v-model="introduce"
-				></textarea>
+		</section>
+		<article class="modify-main">
+			<div class="imgimgimg">
+				<div class="img-container">
+					<img
+						class="img-box"
+						id="img-box"
+						:src="profileImgCom"
+						:alt="`${pastName}의 프로필 사진`"
+					/>
+				</div>
 			</div>
-		</div>
-		<div class="hiddenMsg" v-if="!isVaildIntro">
-			소개는 20자 이하입니다!
-		</div>
-		<div class="hiddenMsg" v-else></div>
-		<button class="submit-btn" :disabled="!isVaildIntro">
-			제출
-		</button>
+
+			<div class="upload-btn_wrap">
+				<input
+					ref="inputFile"
+					class="upload_text"
+					readonly="readonly"
+					@change="onChangeFile"
+				/>
+				<div class="btn-wrap">
+					<button
+						type="button"
+						@click="emetyImg"
+						class="profile-update-deleteBtn"
+					>
+						<span>기본 이미지</span>
+					</button>
+					<button type="button" class="profile-update-addBtn">
+						<span>첨부</span>
+					</button>
+					<input
+						ref="inputFile"
+						type="file"
+						class="input_file"
+						@change="onChangeFile"
+					/>
+				</div>
+			</div>
+
+			<div class="input-container">
+				<div class="modify-input">
+					<label class="head-label" for="name">이름</label>
+					<input id="name" type="text" v-model="name" />
+				</div>
+				<div class="modify-input">
+					<label for="intro" class="head-label">소개</label>
+					<textarea
+						name="intro"
+						id="intro"
+						rows="2"
+						v-model="introduce"
+					></textarea>
+				</div>
+			</div>
+			<div class="hiddenMsg" v-if="!isVaildIntro">
+				(※ 소개는 20자 이하입니다.)
+			</div>
+			<div class="hiddenMsg" v-else></div>
+		</article>
 	</form>
 </template>
 
 <script>
-import axios from 'axios';
-
+import bus from '@/utils/bus.js';
+import { baseAuth } from '@/api/index';
+import { mapMutations } from 'vuex';
 export default {
+	props: {
+		userName: String,
+	},
 	data() {
 		return {
+			swichFile: false,
 			email: null,
-			name: null,
 			introduce: null,
+			profileImg: null,
+			name: this.$store.state.name ? this.$store.state.name : this.userName,
+			pastName: null,
 		};
 	},
-	method: {
-		// 태인이형님이 만들어 두신걸 알지만 제가 만듭니다 ㅎㅎ
+	methods: {
+		...mapMutations(['setUserName']),
+		emetyImg() {
+			this.profileImg = null;
+		},
+		onChangeFile() {
+			this.profileImg = this.$refs.inputFile.files[0];
+			var tempImg = this.$refs.inputFile.files[0];
+			var reader = new FileReader();
+			reader.readAsDataURL(tempImg);
+			reader.onload = function() {
+				document.querySelector('#img-box').src = reader.result;
+				this.swichFile = reader.result;
+			};
+		},
 		async fetchData() {
 			try {
-				const res = await axios.get('http://200.20.20.20/accounts/');
-				this.email = res.email;
-				this.name = res.name;
-				this.introduce = res.introduce;
-			} catch (err) {
-				console.log(err.msg);
+				const { data } = await baseAuth.get(`accounts/${this.name}`);
+				this.email = data.email;
+				this.introduce = data.introduce;
+				this.name = data.name;
+				this.profileImg = data.profile_image;
+			} catch (error) {
+				bus.$emit('show:toast', `${error}`);
 			}
 		},
 		async modifyData() {
 			try {
-				await axios.put('유알엘을 씁시다', {
-					name: this.name,
-					introduce: this.introduce,
-				});
-			} catch (err) {
-				console.log(err);
+				const formdata = new FormData();
+				formdata.append('name', this.name);
+				formdata.append('introduce', this.introduce);
+				formdata.append('img', this.profileImg);
+				await baseAuth.put(`accounts/${this.pastName}`, formdata);
+				this.setUserName(this.name);
+				this.$cookies.set('name', this.name);
+				this.$router.push(`profile/${this.name}`);
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 	},
+	created() {
+		this.pastName = this.name;
+		this.fetchData();
+	},
+	watch: {
+		$route() {
+			this.pastName = this.name;
+			this.fetchData();
+		},
+	},
+
 	computed: {
+		profileImgCom() {
+			return this.swichFile !== false
+				? this.profileImg === null
+					? `${this.baseURL}upload/noProfile.png`
+					: this.profileImg === undefined
+					? `${this.baseURL}upload/noProfile.png`
+					: this.swichFile
+				: this.profileImg !== null
+				? this.profileImg === undefined
+					? `${this.baseURL}upload/noProfile.png`
+					: `${this.baseURL}${this.profileImg}`
+				: `${this.baseURL}upload/noProfile.png`;
+		},
+		baseURL() {
+			return process.env.VUE_APP_API_URL;
+		},
 		isVaildIntro() {
 			var lenIntro = 0;
 			if (this.introduce !== null) {
@@ -83,23 +178,85 @@ export default {
 			return isVaild;
 		},
 	},
-	created() {
-		this.fetchData();
-	},
 };
 </script>
 
 <style lang="scss" scoped>
+.modify-text {
+	text-align: center;
+	font-size: $font-bold;
+}
 .modify-container {
-	border: 1px solid #ffe375;
-	background: #fff6d2;
-	padding: 1rem;
-	border-radius: 2rem;
-	width: 350px;
-	margin: 0 auto;
+	width: 70%;
+	margin: 0 auto 3rem;
+	height: 100%;
+	@media screen and (max-width: 768px) {
+		width: 95%;
+	}
+}
+.modify-header {
 	display: flex;
-	flex-direction: column;
+	position: relative;
+	justify-content: space-between;
 	align-items: center;
+	margin-bottom: 1rem;
+	.studyform-btn-cancle {
+		@include form-btn('white');
+		margin-right: 5px;
+	}
+	.studyform-btn-submit {
+		@include form-btn('purple');
+		position: relative;
+		right: 0;
+		:disabled {
+			display: none;
+		}
+	}
+	.hide-btn {
+		border: none;
+		border-radius: 3px;
+		height: 40px;
+		padding: 0 1.125rem;
+		font-size: 1rem;
+		font-weight: 700;
+		text-decoration: none solid #000;
+		background: #000;
+		color: #fff;
+		position: absolute;
+		right: 0;
+		:disabled {
+			background-color: gray;
+		}
+	}
+}
+.modify-main {
+	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
+	padding: 1rem;
+	border-radius: 4px;
+	// .modify-input {
+	// 	width: 100%;
+	// 	padding: 10px;
+	// 	border: none;
+	// 	border-radius: 0;
+	// 	border-bottom: 1px solid black;
+	// 	&:focus {
+	// 		outline: none;
+	// 		border-bottom: 1px solid black;
+	// 	}
+	// }
+	// textarea {
+	// 	height: 5rem;
+	// }
+}
+.imgimgimg {
+	display: flex;
+	justify-content: center;
+}
+.img-container {
+	width: 15rem;
+	height: 15rem;
+	border-radius: 50%;
+	border: 1px solid black;
 }
 .img-box {
 	width: 15rem;
@@ -108,9 +265,7 @@ export default {
 	object-fit: cover;
 }
 .input-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	width: 100%;
 	.input-box {
 		display: flex;
 		flex-direction: column;
@@ -122,27 +277,94 @@ export default {
 			margin-right: 1rem;
 			margin-bottom: 0.5rem;
 		}
-		input {
-			border: 1px solid black;
-			width: 100%;
-			height: 2rem;
-		}
+	}
+	.modify-input {
+		margin-top: 0.5rem;
+		input,
 		textarea {
 			width: 100%;
-			height: 4rem;
-			border: 1px solid black;
-			resize: vertical;
+			padding: 10px;
+			border: none;
+			border-radius: 0;
+			border-bottom: 1px solid black;
+			&:focus {
+				outline: none;
+				border-bottom: 1px solid black;
+			}
 		}
 	}
 }
-.submit-btn {
-	width: 10rem;
-	height: 3rem;
-	margin-top: 2rem;
-	background: $btn-purple;
-	color: white;
+.head-label {
+	display: block;
+	font-weight: 600;
 }
 .hiddenMsg {
+	height: 1rem;
+	padding-left: 0.5rem;
+	color: red;
+}
+input.upload_text {
+	flex: 1;
 	height: 2rem;
+	margin-top: 1rem;
+}
+div.upload-btn_wrap {
+	@media screen and (max-width: 1024px) {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		margin-top: 0;
+	}
+}
+
+div.upload-btn_wrap {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 2rem;
+	padding-left: 3px;
+	margin-top: 1rem;
+	padding-left: 1rem;
+}
+div.upload-btn_wrap button {
+	@include scale(width, 70px);
+	height: 2rem;
+	font-weight: bold;
+	background: rgb(225, 225, 225);
+	border: none;
+	border-radius: 3px;
+	color: rgb(150, 149, 149);
+	margin-top: 1rem;
+}
+.btn-wrap {
+	width: 100%;
+	min-height: 30px;
+	position: relative;
+	.profile-update-deleteBtn {
+		position: absolute;
+		top: -10px;
+		@include scale(right, 90px);
+		@include scale(width, 90px);
+	}
+	.profile-update-addBtn {
+		position: absolute;
+		top: -10px;
+		right: 10px;
+	}
+	.input_file {
+		position: absolute;
+		top: 0;
+		right: 10px;
+		@include scale(width, 75px);
+		opacity: 0;
+		filter: alpha(opacity=0);
+		-ms-filter: 'alpha(opacity=0)';
+		-moz-opacity: 0;
+		margin-top: 0.6rem;
+		&:hover {
+			cursor: pointer;
+		}
+	}
 }
 </style>

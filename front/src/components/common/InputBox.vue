@@ -1,5 +1,5 @@
 <template>
-	<div class="InputBox">
+	<section class="InputBox">
 		<div v-if="title" class="input-box">
 			<label :for="`input-box-${this.userInfo}`" :class="[name_class, color]">
 				{{ title }}
@@ -15,7 +15,7 @@
 			@input="inputChange(inputData)"
 		/>
 		<p v-if="message" v-html="message" :class="[message_class, color]"></p>
-	</div>
+	</section>
 </template>
 
 <script>

@@ -1,20 +1,23 @@
 <template>
-	<div class="login-container">
-		<div class="login-box">
-			<div class="login-header">
+	<section class="login-container">
+		<section class="login-box">
+			<header class="login-header">
 				<router-link :to="{ name: 'main' }">
-					<img src="@/assets/black.png" alt="logo" class="switon" />
+					<img src="@/assets/black.png" alt="switon-logo" class="switon" />
 				</router-link>
-			</div>
+			</header>
 			<h2>로그인</h2>
 			<LoginForm></LoginForm>
+		</section>
+		<div class="rel">
+			<img
+				class="login-img"
+				src="@/assets/login.png"
+				alt="회원가입 디자인 사진"
+			/>
+			<div class="opacity"></div>
 		</div>
-		<img
-			class="login-img"
-			src="https://dimg.donga.com/wps/NEWS/IMAGE/2019/11/02/98183409.2.jpg"
-			alt="loginImage"
-		/>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -27,6 +30,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.rel {
+	position: relative;
+}
+.opacity {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border: 1.5rem solid rgba(50, 49, 48, 0.3);
+}
 .login-header {
 	margin-bottom: 2rem;
 }

@@ -1,74 +1,101 @@
 <template>
-	<calendar
-		:calendars="calendarList"
-		:schedules="scheduleList"
-		:view="view"
-		:taskView="taskView"
-		:scheduleView="scheduleView"
-		:theme="theme"
-		:week="week"
-		:month="month"
-		:timezones="timezones"
-		:disableDblClick="disableDblClick"
-		:isReadOnly="isReadOnly"
-		:template="template"
-		:useCreationPopup="useCreationPopup"
-		:useDetailPopup="useDetailPopup"
-	/>
+	<section v-if="loading">
+		<Loading />
+	</section>
+	<section v-else class="calendar-wrap">
+		<ScheduleAddBtn v-if="isLeader" />
+		<calendar
+			:calendars="calendarList"
+			:schedules="scheduleList"
+			:view="view"
+			:taskView="taskView"
+			:scheduleView="scheduleView"
+			:theme="theme"
+			:week="week"
+			:month="month"
+			:timezones="timezones"
+			:disableDblClick="disableDblClick"
+			:isReadOnly="isReadOnly"
+			:template="template"
+			:useCreationPopup="useCreationPopup"
+			:useDetailPopup="useDetailPopup"
+		/>
+	</section>
 </template>
 
 <script>
-import 'tui-calendar/dist/tui-calendar.css';
-import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
+import bus from '@/utils/bus.js';
+import ScheduleAddBtn from '@/components/common/ScheduleAddBtn.vue';
+import { baseAuth } from '@/api/index';
+import Loading from '@/components/common/Loading.vue';
 
-// If you use the default popups, use this.
+import Calendar from '@toast-ui/vue-calendar/src/Calendar.vue';
+import 'tui-calendar/dist/tui-calendar.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 
 export default {
 	components: {
 		Calendar,
+		ScheduleAddBtn,
+		Loading,
+	},
+	props: {
+		isLeader: Boolean,
+		id: Number,
+	},
+	watch: {
+		$route() {
+			this.fetchData();
+		},
+	},
+	created() {
+		this.fetchData();
+	},
+	methods: {
+		async fetchData() {
+			try {
+				this.loading = true;
+				const { data } = await baseAuth.get(`study/${this.id}/schedule`);
+				this.loading = false;
+				if (data.length) {
+					this.calendarList = data.reduce((acc, el) => {
+						if (acc.findIndex(i => i.name === el.study_name) === -1) {
+							acc.push({
+								id: el.study_id,
+								name: el.study_name,
+							});
+						}
+						return acc;
+					}, []);
+
+					this.scheduleList = data.reduce((acc, el, idx) => {
+						acc.push({
+							id: idx,
+							calendarId: el.study_id,
+							title: el.title,
+							category: 'time',
+							dueDateClass: '',
+							start: el.start,
+							end: el.end,
+							color: el.bg_color === '#dde6e8' ? '#000000' : '#ffffff',
+							bgColor: el.bg_color,
+							dragBgColor: el.bg_color,
+							borderColor: el.bg_color,
+						});
+						return acc;
+					}, []);
+				}
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+			}
+		},
 	},
 	data() {
 		return {
-			calendarList: [
-				{
-					id: '0',
-					name: 'home',
-				},
-				{
-					id: '1',
-					name: 'office',
-				},
-			],
-			scheduleList: [
-				{
-					id: '1',
-					calendarId: '1',
-					title: 'my schedule',
-					category: 'time',
-					dueDateClass: '',
-					start: '2020-07-27T12:30:00+09:00',
-					end: '2020-07-31T17:31:00+09:00',
-					color: '#ffffff',
-					bgColor: '#ff5583',
-					dragBgColor: '#ff5583',
-					borderColor: '#ff5583',
-				},
-				{
-					id: '2',
-					calendarId: '1',
-					title: 'second schedule',
-					category: 'time',
-					dueDateClass: '',
-					start: '2020-08-01T12:30:00+09:00',
-					end: '2020-08-05T17:31:00+09:00',
-					color: '#ffffff',
-					bgColor: '#ff5583',
-					dragBgColor: '#ff5583',
-					borderColor: '#ff5583',
-				},
-			],
+			loading: false,
+			calendarList: [],
+			scheduleList: [],
 			view: 'month',
 			taskView: false,
 			scheduleView: ['time'],
@@ -95,7 +122,7 @@ export default {
 				},
 			],
 			disableDblClick: true,
-			isReadOnly: false,
+			isReadOnly: true,
 			template: {
 				milestone: function(schedule) {
 					return `<span style="color:red;">${schedule.title}</span>`;
@@ -112,6 +139,9 @@ export default {
 </script>
 
 <style>
+.calendar-wrap {
+	position: relative;
+}
 .tui-full-calendar-timegrid-container {
 	height: 300px !important;
 }

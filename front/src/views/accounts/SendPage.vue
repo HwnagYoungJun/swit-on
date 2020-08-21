@@ -1,7 +1,7 @@
 <template>
-	<div class="container">
+	<section class="container">
 		<SendEmailForm> </SendEmailForm>
-	</div>
+	</section>
 </template>
 
 <script>

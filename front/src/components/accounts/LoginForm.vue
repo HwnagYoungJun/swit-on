@@ -25,9 +25,9 @@
 			<router-link :to="{ name: 'signUp' }" class="signup">
 				회원가입
 			</router-link>
-			<router-link :to="{ name: 'findpassword' }" class="findPassword">
+			<!-- <router-link :to="{ name: 'findpassword' }" class="findPassword">
 				비밀번호를 잊으셨나요?
-			</router-link>
+			</router-link> -->
 		</div>
 		<div class="login-btn">
 			<button
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import InputBox from '@/components/common/InputBox.vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { validateEmail } from '@/utils/validation';
@@ -79,6 +80,9 @@ export default {
 		isCookie() {
 			return cookies.isKey('id') ? true : false;
 		},
+		apiKey() {
+			return process.env.VUE_APP_KAKAO_KEY;
+		},
 	},
 	methods: {
 		...mapActions(['LOGIN']),
@@ -89,11 +93,9 @@ export default {
 				this.testCookie();
 				this.$router.push({ name: 'main' });
 			} catch (error) {
-				// console.log(error.response.data);
-				console.log(error);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
-
 		setCookie(name, vaule, days) {
 			var exDate = new Date();
 			exDate.setDate(exDate.getDate() + days);

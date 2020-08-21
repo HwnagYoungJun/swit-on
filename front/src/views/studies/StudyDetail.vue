@@ -1,37 +1,50 @@
 <template>
-	<div>
+	<section>
 		<nav aria-label="Breadcrumb" class="breadcrumb">
 			<ol>
 				<li>
-					<router-link :to="`/category/${study.uppercategory_name}`">{{
-						study.uppercategory_name
-					}}</router-link
+					<router-link
+						:to="`/category/${study.uppercategory_name}`"
+						tabindex="-1"
+						>{{ study.uppercategory_name }}</router-link
 					><span aria-hidden="true">></span>
 				</li>
 				<li>
-					<router-link :to="`/study/${id}`" aria-current="page"
-						>python 소모임</router-link
-					>
+					<router-link :to="`/study/${id}`" aria-current="page" tabindex="-1">{{
+						study.name
+					}}</router-link>
 				</li>
 			</ol>
 		</nav>
-		<div class="study-description">
+		<section class="study-description">
 			<div class="study-content">
-				<p class="study-title">{{ study.name }}</p>
-				<p>모집: {{ study.start_term }} - {{ study.end_term }}</p>
-				<p>
-					매주:
-					{{ study.week | formatWeekday }}
-					{{ study.start_time }}시-{{ study.end_time }}시
+				<h3 class="study-title" id="studyTitle">
+					{{ study.name }}
+				</h3>
+				<div class="leader-comment">
+					<span>{{ leaderName }}</span>
+					<p>우리 {{ study.name }}은</p>
+					<p>
+						매주
+						<span class="strong">{{ study.week | formatWeekday }}요일</span>
+					</p>
+					<time class="strong">{{ study.start_time }}</time> 부터
+					<time class="strong">{{ study.end_time }}</time> 까지 활동합니다<i
+						class="icon ion-md-quote"
+						aria-hidden="true"
+					></i>
+				</div>
+				<p class="study-member-cnt">
+					현재 {{ study.users_limit }}명 중
+					<span class="strong">{{ study.users_current }}명</span>이 함께 하고
+					있어요
 				</p>
-				<small>{{ study.users_current }}/{{ study.users_limit }}명</small>
 			</div>
 			<div class="study-logo">
-				<img v-if="study.logo" :src="study.logo" alt="" />
-				<!-- <img src="@/assets/django.png" alt="" /> -->
+				<img :src="studyImg" :alt="`${study.name} 스터디 사진`" />
 			</div>
-		</div>
-		<div v-if="isJoined" class="study-category">
+		</section>
+		<section v-if="isJoined" class="study-category">
 			<router-link :to="`/study/${study.id}`"
 				>대시보드<span></span
 			></router-link>
@@ -39,24 +52,60 @@
 			<router-link :to="{ name: 'repository' }"
 				>저장소<span></span
 			></router-link>
-			<router-link :to="{ name: 'notice' }">공지<span></span></router-link>
 			<router-link :to="{ name: 'qna' }">Q&A<span></span></router-link>
-			<hr />
+			<router-link :to="{ name: 'notice' }">공지<span></span></router-link>
+			<router-link :to="{ name: 'meeting' }">회의<span></span></router-link>
 			<div class="study-sub-content">
-				<router-view :id="id"></router-view>
+				<router-view :id="id" :isLeader="isLeader"></router-view>
 			</div>
-		</div>
-		<div v-else class="study-sub-content">
-			<p class="title">{{ study.name }} 소개</p>
-			<p>
-				{{ study.description }}
-			</p>
+		</section>
+		<section v-else class="study-sub-content">
+			<h3 class="title">모임 소개</h3>
+			<article class="study-des-wrap">
+				<div class="study-des">
+					<p>
+						{{ study.description }}
+					</p>
+					<p>
+						<span class="strong">{{ study.start_term | formatDate }}</span
+						>부터 <span class="strong">{{ study.end_term | formatDate }}</span
+						>까지 스터디원을 모집합니다!
+					</p>
+					<p>
+						<span class="strong">{{ study.name }}</span
+						>과 함께 해요 :)
+					</p>
+				</div>
+				<div class="study-members">
+					<p class="diff-user">{{ diffUser }}자리가 비어있어요 :(</p>
+					<ul>
+						<li v-for="member in members" :key="member.id">
+							<router-link class="member-box" :to="`/profile/${member.name}`">
+								<img
+									v-if="member.profile_image"
+									:src="`${baseURL}${member.profile_image}`"
+									:alt="`${member.name}의 프로필 사진`"
+									class="member-image"
+								/>
+								<img
+									v-else
+									:src="`${baseURL}upload/noProfile.png`"
+									:alt="`${member.name}의 프로필 대체 사진`"
+									class="member-image"
+								/>
+								{{ member.name }}
+							</router-link>
+						</li>
+					</ul>
+				</div>
+			</article>
 			<button @click="studyJoin" class="join-btn">가입하기</button>
-		</div>
-	</div>
+		</section>
+	</section>
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import { JoinStudy, fetchStudy } from '@/api/studies';
 export default {
 	props: {
@@ -65,35 +114,73 @@ export default {
 	data() {
 		return {
 			isJoined: false,
+			isLeader: null,
+			leaderName: '',
+			members: null,
 			study: {},
 		};
 	},
 	methods: {
 		async fetchData() {
-			const studyId = this.id;
-			const { data } = await fetchStudy(studyId);
-			console.log(data);
-			this.study = data.study;
-			this.isJoined = data.isJoined;
+			try {
+				const studyId = this.id;
+				const { data } = await fetchStudy(studyId);
+				this.study = data.study;
+				this.isJoined = data.isJoined;
+				this.isLeader = data.isLeader;
+				this.leaderName = data.leaderName;
+				this.members = data.members;
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+				if (error.response.status === 404) {
+					this.$router.push('/404');
+				}
+			}
 		},
 		async studyJoin() {
-			const studyId = this.id;
-			await JoinStudy(studyId);
-			this.fetchData();
+			try {
+				const studyId = this.id;
+				await JoinStudy(studyId);
+				this.fetchData();
+			} catch (error) {
+				bus.$emit('show:toast', `${error.response.data.msg}`);
+				if (error.response.status === 401) {
+					this.$router.push('/login');
+				}
+			}
+		},
+	},
+	computed: {
+		studyImg() {
+			if (this.study.logo) {
+				return `${process.env.VUE_APP_API_URL}${this.study.logo}`;
+			} else {
+				return `${process.env.VUE_APP_API_URL}upload/noStudy.jpg`;
+			}
+		},
+		diffUser() {
+			return this.study.users_limit - this.study.users_current;
+		},
+		baseURL() {
+			return process.env.VUE_APP_API_URL;
 		},
 	},
 	created() {
 		this.fetchData();
 	},
-	// watch: {
-	// 	id() {
-	// 		this.fetchData();
-	// 	},
-	// },
+	updated() {
+		document.title = `스윗온 ${this.study.name} 스터디`;
+	},
+	watch: {
+		$route: 'fetchData',
+	},
 };
 </script>
 
 <style lang="scss">
+.study-main {
+	margin-bottom: 2rem;
+}
 .breadcrumb {
 	ol {
 		padding: 0;
@@ -111,27 +198,61 @@ export default {
 	}
 }
 .study-description {
-	display: flex;
+	width: 100%;
+	height: 18rem;
+	display: grid;
+	grid-template-areas: 'content logo';
+	grid-template-rows: 100%;
+	grid-template-columns: 60% 40%;
 	margin-bottom: 30px;
 	padding: 2%;
 	color: rgb(107, 107, 107);
 	box-shadow: 0 3px 6px rgb(214, 214, 214);
 	border-radius: 4px;
+	@include scale(font-size, '16');
+	@media screen and (max-width: 768px) {
+		grid-template-columns: repeat(1, 1fr);
+	}
 	.study-logo {
-		flex: 1.5;
+		grid-area: logo;
+		width: 100%;
+		height: 100%;
 		img {
 			width: 100%;
+			height: 100%;
+			object-fit: fill;
+		}
+		@media screen and (max-width: 768px) {
+			display: none;
 		}
 	}
 	.study-content {
-		flex: 2;
+		grid-area: content;
 		margin: 0 30px;
+		position: relative;
 		p {
 			margin: 5px 0;
 		}
 		.study-title {
 			margin-bottom: 10px;
 			font-size: $font-bold;
+			font-weight: normal;
+		}
+		i {
+			margin-left: 5px;
+		}
+		.study-member-cnt {
+			position: absolute;
+			right: 10px;
+			bottom: 0;
+		}
+	}
+	.strong {
+		margin-right: 3px;
+		color: $main-color;
+		font-size: 18px;
+		@media screen and (max-width: 768px) {
+			font-size: 15.5px;
 		}
 	}
 }
@@ -161,12 +282,53 @@ export default {
 	}
 }
 .study-sub-content {
+	margin-bottom: 30px;
 	padding: 15px;
 	position: relative;
 	.title {
 		margin: 10px 0 30px;
 		font-size: $font-bold;
+		font-weight: normal;
 	}
+	.study-des-wrap {
+		display: flex;
+		.study-des {
+			flex: 1.5;
+			p {
+				margin-bottom: 10px;
+				font-size: $font-bold * 0.8;
+			}
+			.strong {
+				margin: 0 5px;
+				color: $main-color;
+				font-size: 20px;
+			}
+		}
+		.study-members {
+			flex: 1;
+			margin-left: 3rem;
+			.diff-user {
+				margin-bottom: 8px;
+			}
+			li {
+				.member-box {
+					display: flex;
+					align-items: center;
+					margin-bottom: 8px;
+				}
+				.member-image {
+					width: 30px;
+					height: 30px;
+					margin-right: 8px;
+					border-radius: 50%;
+				}
+			}
+			@media screen and (max-width: 768px) {
+				display: none;
+			}
+		}
+	}
+
 	.join-btn {
 		display: inline-block;
 		width: 150px;
@@ -194,11 +356,6 @@ export default {
 		display: grid;
 		place-items: center;
 		flex: 0.5;
-		img {
-			width: 50px;
-			height: 50px;
-			border-radius: 50%;
-		}
 	}
 }
 </style>
