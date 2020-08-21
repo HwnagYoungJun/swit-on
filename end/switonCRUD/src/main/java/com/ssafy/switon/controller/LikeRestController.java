@@ -3,6 +3,7 @@ package com.ssafy.switon.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,9 @@ public class LikeRestController {
 	@Autowired
 	StudyLikeService studylikeService;
 	
+	@Autowired
+	SimpMessagingTemplate template;
+	
 	///////////////////////ArticleFavRetController///////////////////////
 	@ApiOperation(value = "글 즐겨찾기 목록을 전체 반환한다", response = List.class)
 	@GetMapping("/articlefav/list")
@@ -59,6 +63,8 @@ public class LikeRestController {
 	@ApiOperation(value = "글 즐겨찾기 등록한다", response = String.class)
 	@PostMapping("/articlefav/write")
 	public String writeArticleFav(ArticleFav articlefav) {
+		
+		
 		System.out.println("글 즐겨찾기 등록");
 		if(articlefavService.create(articlefav)) {
 			System.out.println("글 즐겨찾기 등록 성공!!!");
@@ -114,6 +120,8 @@ public class LikeRestController {
 		System.out.println("글좋아요를 등록");
 		if(articlelikeService.createArticleLike(articlelike)) {
 			System.out.println("글좋아요 등록 성공!!!");
+			//객체를 생성하고 필요한 값을 다넣고 그객체를 보내준다
+			template.convertAndSend("/topic/notification/" + 1, articlelike);
 			return "success";
 		} else {
 			System.out.println("글좋아요 등록 실패...");

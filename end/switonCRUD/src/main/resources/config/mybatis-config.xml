@@ -14,5 +14,10 @@
       <mapper resource="mappers/category.xml" />
       <mapper resource="mappers/comment.xml" />
       <mapper resource="mappers/User.xml" /> 
+      <mapper resource="mappers/Schedule.xml" />
+	  <mapper resource="mappers/Userschedule.xml" />
+	  <mapper resource="mappers/Study.xml" />
+	  <mapper resource="mappers/Alarm.xml" />
+	  <mapper resource="mappers/Conference.xml" />
    </mappers>
 </configuration>

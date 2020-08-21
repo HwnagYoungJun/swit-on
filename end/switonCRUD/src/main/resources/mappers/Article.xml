@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mappers/Article.xml -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="article">
+
+	<!-- 유저 피드 반환 (최신순으로 startIdx부터 amount 만큼) -->
+	<select id="selectFeeds" parameterType="FeedsIndexDTO" resultType="Article">
+		select id,
+			title,
+			content,
+			user_id,
+			file,
+			board_id,
+			created_at,
+			updated_at
+		from article
+		where board_id in (select id
+							from board
+							where study_id in (select study_id
+												from `join`
+												where user_id = #{user_id}))
+		order by created_at desc
+		limit #{start_idx}, #{amount}
+	</select>
+	
+	<!-- 스터디 인기글 3개 반환 -->
+	<select id="selectTopThreeArticles" resultType="ArticleWithLikesDTO">
+		select id,
+			title,
+			content,
+			user_id,
+			file,
+			(select type from board where id = board_id) as board_type,
+			created_at,
+			updated_at,
+			(select count(*) from articlelike where article_id = article.id) as likes
+			from article
+			where board_id = #{board_id}
+			order by likes desc, created_at desc
+			limit 3;
+	</select>
+
+	<!-- 게시판 리스트 반환 -->
+	<select id="selectArticles" resultType="Article">
+		select id,
+			title,
+			content,
+			user_id,
+			file,
+			board_id,
+			created_at,
+			updated_at
+		from article
+	</select>
+	
+	<!-- 게시판 아이디의 게시판 리스트 반환 -->
+	<select id="selectArticlesByBoardId" resultType="Article">
+		select id,
+			title,
+			content,
+			user_id,
+			file,
+			board_id,
+			created_at,
+			updated_at
+		from article
+		where board_id = #{board_id}
+	</select>
+	
+	<!-- 게시판 아이디의 게시글 리스트 반환(5개 제한) -->
+	<select id="selectArticlesByBoardIdLimit5" parameterType="BoardIndexDTO" resultType="Article">
+		select id,
+			title,
+			content,
+			user_id,
+			file,
+			board_id,
+			created_at,
+			updated_at
+		from article
+		where board_id = #{board_id}
+		order by created_at desc
+		limit #{start_idx}, #{amount}
+	</select>
+	
+	<!-- 게시글 상세 정보 반환 -->
+	<select id="selectArticle" resultType="Article">
+		select id,
+			title,
+			content,
+			user_id,
+			file,
+			board_id,
+			created_at,
+			updated_at
+		from article
+		where id = #{id}
+	</select>
+	
+	<select id="selectQnAsByUserId" resultType="Article">
+		select id,
+			title,
+			content,
+			user_id,
+			file,
+			board_id,
+			created_at,
+			updated_at
+		from article
+		where user_id = #{user_id}
+		AND board_id in (select id from board where type = 2)
+	</select>
+	
+		<select id="selectReposByUserId" resultType="Article">
+		select id,
+			title,
+			content,
+			user_id,
+			file,
+			board_id,
+			created_at,
+			updated_at
+		from article
+		where user_id = #{user_id}
+		AND board_id in (select id from board where type = 3)
+	</select>
+	
+	
+	<!-- 내가 작성한 최신글 아이디 한개 가져오기 -->
+	<select id="getRecentArticleIdByUserId" resultType="Integer">
+		select id
+		from article
+		where user_id = #{user_id}
+		order by created_at desc
+		limit 1
+	</select>
+	
+	<!-- 게시글 생성 -->
+	<insert id="insertArticle">
+		insert into article(
+				title,
+				content,
+				user_id,
+				file,
+				board_id
+			)
+		values (
+				#{title},
+				#{content},
+				#{user_id},
+				#{file},
+				#{board_id}
+			)
+	</insert>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateArticle">
+		update article
+		set title = #{title},
+			content = #{content},
+			file = #{file},
+			updated_at = now()
+		where id = #{id}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="deleteArticle">
+		delete from article
+		where id = #{id}
+	</delete>
+	
+	<!-- 한 스터디에서 한 유저가 쓴 글 수를 반환한다. -->
+	<select id="cntUserArticlesByStudyId" parameterType="UserStudyDTO" resultType="Integer">
+		select count(*)
+		from article
+		where user_id = #{user_id}
+		and id in (select id from article
+		                    where board_id in (select id from board 
+												where study_id = #{study_id}));
+	</select>
+	
+	<!-- 한 스터디에서 한 유저의 최신글 아이디를 하나 반환한다. -->
+	<select id="selectRecentUserArticleId" parameterType="UserStudyDTO" resultType="Integer">
+		select id
+		from article
+		where user_id = #{user_id}
+		and id in (select id from article
+		                    where board_id in (select id from board 
+												where study_id = #{study_id}))
+		order by id desc
+		limit 1
+	</select>
+	
+
+</mapper>

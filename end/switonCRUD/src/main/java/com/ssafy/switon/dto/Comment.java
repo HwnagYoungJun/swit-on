@@ -1,14 +1,24 @@
 package com.ssafy.switon.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+
+import io.swagger.annotations.ApiParam;
 
 public class Comment {
+	
+	@ApiParam(value = "댓글 id (PK)", required = false, hidden = true)
 	int id;
+	@ApiParam(value = "댓글 내용", required = true)
 	String content;
+	@ApiParam(value = "작성자 id", required = false, hidden = true)
 	int user_id;
+	@ApiParam(value = "게시글 id", required = false, hidden = true)
 	int article_id;
-	Date created_at;
-	Date updated_at;
+	@ApiParam(value = "작성일", required = false, hidden = true)
+	Timestamp created_at;
+	@ApiParam(value = "수정일", required = false, hidden = true)
+	Timestamp updated_at;
 	public int getId() {
 		return id;
 	}
@@ -33,16 +43,16 @@ public class Comment {
 	public void setArticle_id(int article_id) {
 		this.article_id = article_id;
 	}
-	public Date getCreated_at() {
+	public Timestamp getCreated_at() {
 		return created_at;
 	}
-	public void setCreated_at(Date created_at) {
+	public void setCreated_at(Timestamp created_at) {
 		this.created_at = created_at;
 	}
-	public Date getUpdated_at() {
+	public Timestamp getUpdated_at() {
 		return updated_at;
 	}
-	public void setUpdated_at(Date updated_at) {
+	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
 	@Override

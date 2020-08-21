@@ -14,7 +14,7 @@ public class ArticleLikeDAOImpl implements ArticleLikeDAO {
 
 	@Autowired
 	SqlSession sqlSession;
-	
+
 	@Override
 	public List<ArticleLike> selectArticleLikes() {
 		return sqlSession.selectList("articlelike.selectArticleLikes");
