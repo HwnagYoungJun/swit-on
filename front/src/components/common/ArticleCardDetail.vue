@@ -29,6 +29,7 @@
 							article.user.name
 						}}</router-link
 					>
+					<span>{{ article.created_at | formatDate }}</span>
 				</div>
 				<section class="card-detail-content">
 					<Viewer :initialValue="article.content" />
@@ -419,6 +420,9 @@ export default {
 	}
 }
 .content-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	margin: 10px 0 15px;
 	padding-left: 10px;
 
@@ -437,16 +441,7 @@ export default {
 		color: #4b4b4b;
 	}
 	span {
-		display: inline-block;
-		width: 80px;
-		margin: 0 3px;
-		padding: 10px 0;
-		border: 1px solid #6c23c0;
-		border-radius: 20px;
-		color: #6c23c0;
-		font-size: $font-light;
-		background: none;
-		text-align: center;
+		font-size: $font-normal * 0.9;
 	}
 }
 .breadcrumb {
