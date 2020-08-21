@@ -606,9 +606,11 @@ export default {
 }
 .like {
 	color: crimson;
+	cursor: pointer;
 }
 .unlike {
 	color: grey;
+	cursor: pointer;
 }
 .span-btn {
 	cursor: pointer;
