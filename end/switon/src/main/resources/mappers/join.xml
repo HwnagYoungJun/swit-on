@@ -6,6 +6,13 @@
 
 <mapper namespace="join">
 
+	<!-- 스터디 아이디로 가입 정보들 반환 -->
+	<select id="selectJoinsByStudyId" resultType="Join">
+		select id, user_id, study_id, isComplete, reg_date, isLeader, score, medal
+		from `join`
+		where study_id = #{study_id}
+	</select>
+
 	<!-- 스터디의 현재 가입자수 반환 -->
 	<select id="userCount" resultType="Integer">
 		select count(*) as cnt
@@ -13,9 +20,16 @@
 		where study_id = #{study_id}
 	</select>
 	
+	<!-- 스터디의 현재 멤버들 id 반환 -->
+	<select id="selectMemberIds" resultType="Integer">
+		select user_id
+		from `join`
+		where study_id = #{study_id}
+	</select>
+	
 	<!-- 소모임 가입 모든 리스트 반환 -->
 	<select id="selectJoins" resultType="Join">
-		select id, user_id, study_id, isComplete, reg_date, isLeader
+		select id, user_id, study_id, isComplete, reg_date, isLeader, score, medal
 		from `join`
 	</select>
 	
@@ -28,7 +42,7 @@
 	
 	<!-- 소모임 가입 상세 정보 반환 -->
 	<select id="selectJoin" resultType="Join">
-		select id, user_id, study_id, isComplete, reg_date, isLeader
+		select id, user_id, study_id, isComplete, reg_date, isLeader, score, medal
 		from `join`
 		where id = #{id}
 	</select>
@@ -43,7 +57,7 @@
 	
 	<!-- 내가 가입한 소모임 리스트 반환 -->
 	<select id="selectJoinsByUserId" resultType="Join">
-		select id, user_id, study_id, isComplete, reg_date, isLeader
+		select id, user_id, study_id, isComplete, reg_date, isLeader, score, medal
 		from `join`
 		where user_id = #{user_id}
 	</select>
@@ -65,6 +79,55 @@
 		update `join`
 		set isComplete = 1
 		where study_id = #{study_id}
+	</update>
+	
+	<!-- 소모임 가입 매우 상세 정보 반환 -->
+	<!-- 
+	<select id="selectJoinByUserIdAndStudyId">
+		select id, user_id, study_id, isComplete, reg_date, isLeader, score, medal
+		from `join`
+		where user_id = #{user_id}
+		and study_id = #{study_id}
+	</select> -->
+	<!-- 내가 얻은 메달 색깔별 수 반환 -->
+	<select id="selectMedalsByUserId" resultType="Medals">
+		select (select count(*) from `join` where user_id = #{user_id} and medal = 1) as gold,
+				(select count(*) from `join` where user_id = #{user_id} and medal = 2) as silver,
+			    (select count(*) from `join` where user_id = #{user_id} and medal = 3) as bronze
+	</select>
+	
+	<!-- 스터디 랭킹 1,2,3위 반환 -->
+	<select id="selectRankers" resultType="Ranker">
+		select `join`.user_id, `user`.name as user_name, `join`.score
+		from `join`
+		join `user` on `join`.user_id = `user`.id
+		where study_id = #{study_id}
+		order by score desc
+		limit 3
+	</select>
+	
+	<!-- 메달 등록 -->
+	<update id="giveMedal" parameterType="JoinGiveDTO">
+		update `join`
+		set medal = #{medal}
+		where user_id = #{user_id}
+		and study_id = #{study_id}
+	</update>
+	
+	<!-- 점수 등록 -->
+	<update id="addScore" parameterType="JoinGiveDTO">
+		update `join`
+		set score = score + #{point}
+		where user_id = #{user_id}
+		and study_id = #{study_id}
+	</update>
+	
+	<!-- 점수 회수 -->
+	<update id="subScore" parameterType="JoinGiveDTO">
+		update `join`
+		set score = score - #{point}
+		where user_id = #{user_id}
+		and study_id = #{study_id}
 	</update>
 	
 	<!-- 소모임  가입 정보 삭제-->

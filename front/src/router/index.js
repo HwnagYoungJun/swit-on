@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import store from '../store';
-
 Vue.use(VueRouter);
 
 const routes = [
@@ -9,11 +8,9 @@ const routes = [
 		path: '/',
 		name: 'main',
 		component: () => import('@/views/Main.vue'),
-	},
-	{
-		path: '/study',
-		name: 'studies',
-		component: () => import('@/views/studies/StudyPage.vue'),
+		beforeEnter(to, from, next) {
+			store.getters['isLogin'] ? next('/category/인기') : next();
+		},
 	},
 	{
 		path: '/study/new',
@@ -22,14 +19,13 @@ const routes = [
 		beforeEnter,
 	},
 	{
-		path: '/study/:id/:board_name/new',
-		name: 'newArticle',
-		component: () => import('@/views/boards/StudyArticleAddPage.vue'),
+		path: '/study/search/:studyname',
+		name: 'searchedstudy',
 		props: route => ({
-			id: Number(route.params.id),
-			board_name: String(route.params.board_name),
+			name: String(route.params.studyname),
 		}),
-		beforeEnter,
+		component: () => import('@/views/studies/StudyPage.vue'),
+		// beforeEnter,
 	},
 	{
 		path: '/study/:id',
@@ -41,7 +37,6 @@ const routes = [
 		children: [
 			{
 				path: '',
-				name: 'dashboard',
 				component: () => import('@/views/studies/children/StudyDashBoard.vue'),
 			},
 			{
@@ -64,7 +59,51 @@ const routes = [
 				name: 'qna',
 				component: () => import('@/views/studies/children/StudyQuestion.vue'),
 			},
+			{
+				path: 'meeting',
+				name: 'meeting',
+				component: () => import('@/views/studies/children/StudyMeeting.vue'),
+			},
 		],
+	},
+	{
+		path: '/study/:id/:board_name/new',
+		name: 'newArticle',
+		component: () => import('@/views/boards/StudyArticleAddPage.vue'),
+		props: route => ({
+			id: Number(route.params.id),
+			board_name: String(route.params.board_name),
+		}),
+		beforeEnter,
+	},
+	{
+		path: '/study/:id/room/:room',
+		name: 'room',
+		props: route => ({
+			id: Number(route.params.id),
+			room: String(route.params.room),
+		}),
+		component: () => import('@/views/studies/StudyRoomPage.vue'),
+		beforeEnter,
+	},
+	{
+		path: '/study/:study_id/schedule',
+		name: 'makeschedule',
+		props: route => ({
+			study_id: Number(route.params.study_id),
+		}),
+		component: () => import('@/views/calendar/MakeScheduleForm.vue'),
+	},
+	{
+		path: '/study/:id/:board_name/:article_id/edit',
+		name: 'editArticle',
+		component: () => import('@/views/boards/StudyArticleEditPage.vue'),
+		props: route => ({
+			id: Number(route.params.id),
+			board_name: String(route.params.board_name),
+			article_id: Number(route.params.article_id),
+		}),
+		beforeEnter,
 	},
 	{
 		path: '/study/:id/:board_name/:article_id',
@@ -81,7 +120,7 @@ const routes = [
 		name: 'login',
 		component: () => import('@/views/accounts/LoginPage.vue'),
 		beforeEnter(to, from, next) {
-			store.getters['isLogin'] ? next({ path: '/' }) : next();
+			store.getters['isLogin'] ? next({ path: '/category/인기' }) : next();
 		},
 	},
 	{
@@ -109,12 +148,16 @@ const routes = [
 		},
 	},
 	{
-		path: '/mypage/',
-		name: 'mypage',
+		path: '/profile/:userName',
+		name: 'profile',
+		props: route => ({
+			userName: String(route.params.userName),
+		}),
 		component: () => import('@/views/profiles/ProfilePage.vue'),
+
 		children: [
 			{
-				path: 'myschedule',
+				path: '',
 				name: 'myschedule',
 				component: () => import('@/views/profiles/children/MyScheduleForm.vue'),
 			},
@@ -141,9 +184,31 @@ const routes = [
 		component: () => import('@/views/profiles/ModifyProfilePage.vue'),
 	},
 	{
-		path: '/category/:UpperCategoryName',
+		path: '/category/:upperCategoryName',
 		name: 'categorydetail',
-		component: () => import('@/views/categorys/CategoryPage.vue'),
+		props: route => ({
+			upperCategoryName: String(route.params.upperCategoryName),
+			lowerCategoryName: String(route.params.lowerCategoryName),
+		}),
+		component: () => import('@/views/categories/CategoryPage.vue'),
+		children: [
+			{
+				path: '',
+				name: 'upperCategoryList',
+				component: () =>
+					import('@/views/categories/children/UpperCategoryList.vue'),
+			},
+			{
+				path: ':lowerCategoryName',
+				name: 'lowerCategoryList',
+				props: route => ({
+					upperCategoryName: String(route.params.upperCategoryName),
+					lowerCategoryName: String(route.params.lowerCategoryName),
+				}),
+				component: () =>
+					import('@/views/categories/children/LowerCategoryList.vue'),
+			},
+		],
 	},
 	{
 		path: '/newsfeed',
@@ -170,7 +235,6 @@ function beforeEnter(to, from, next) {
 	if (store.getters['isLogin']) {
 		next();
 	} else {
-		// alert('sign in please');
 		next('/login');
 	}
 }

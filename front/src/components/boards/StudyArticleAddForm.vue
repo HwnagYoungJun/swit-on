@@ -4,7 +4,7 @@
 		@submit.prevent="createArticle"
 		enctype="multipart/form-data"
 	>
-		<div class="articleform-header">
+		<header class="articleform-header">
 			<h2>{{ routeBoardName }}</h2>
 			<div class="articleform-btnbox">
 				<button @click.prevent="$router.go(-1)" class="articleform-btn-cancle">
@@ -13,7 +13,7 @@
 				<button class="hide-btn">작성</button>
 				<button class="articleform-btn-submit" type="submit">작성</button>
 			</div>
-		</div>
+		</header>
 		<section class="articleform-main">
 			<input
 				type="text"
@@ -51,6 +51,7 @@
 	</form>
 </template>
 <script>
+import bus from '@/utils/bus.js';
 import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/i18n/ko-kr.js';
@@ -89,15 +90,24 @@ export default {
 			try {
 				const studyId = this.id;
 				const boardName = this.board_name;
-				let content = this.$refs.toastuiEditor.invoke('getMarkdown');
-				await createArticle(studyId, boardName, {
+				let content = this.$refs.toastuiEditor.invoke('getHtml');
+				if (!this.title) {
+					bus.$emit('show:toast', '제목을 입력해주세요');
+					return;
+				}
+				if (!content.length) {
+					bus.$emit('show:toast', '내용을 입력해주세요');
+					return;
+				}
+				const { data } = await createArticle(studyId, boardName, {
 					title: this.title,
 					content,
 					file: this.inputFile,
 				});
-				this.$router.push(`/study/${studyId}/${boardName}`);
+				const articleId = data;
+				this.$router.push(`/study/${studyId}/${boardName}/${articleId}`);
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		onChangeTitle(val) {
@@ -118,7 +128,6 @@ export default {
 .articleform-main {
 	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
 	padding: 1rem;
-	// padding: 1rem 1rem 0;
 	border-radius: 4px;
 	.articleform-input {
 		width: 100%;
@@ -131,15 +140,12 @@ export default {
 			border-bottom: 1px solid black;
 		}
 	}
-
 	.tui-editor-defaultUI {
 		border: none;
 	}
-
 	.tui-editor-defaultUI-toolbar {
 		padding: 0 10px;
 	}
-
 	.te-ww-container .tui-editor-contents:first-child {
 		padding: 1rem 10px 0 10px;
 	}
@@ -178,14 +184,10 @@ export default {
 		right: 0;
 	}
 }
-
 input.upload_text {
 	flex: 1;
 	height: 2rem;
-	// padding: 0 0.5rem 1rem;
-	// border-top: 1px solid #bbb;
 	margin-top: 1rem;
-	// margin-bottom: 1rem;
 }
 div.upload-btn_wrap input.input_file {
 	/*파일찾기 폼 투명하게*/
@@ -217,7 +219,6 @@ div.upload-btn_wrap button {
 	height: 2rem;
 	font-weight: bold;
 	background: rgb(225, 225, 225);
-	// border: 1px solid #333;
 	border: none;
 	border-radius: 3px;
 	color: rgb(150, 149, 149);

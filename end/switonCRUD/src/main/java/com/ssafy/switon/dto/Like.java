@@ -2,11 +2,11 @@ package com.ssafy.switon.dto;
 
 public class Like {
 	int like_cnt;
-	boolean isLiked;
+	boolean liked;
 	
-	public Like(int like_cnt, boolean isLiked) {
+	public Like(int like_cnt, boolean liked) {
 		this.like_cnt = like_cnt;
-		this.isLiked = isLiked;
+		this.liked = liked;
 	}
 	public int getLike_cnt() {
 		return like_cnt;
@@ -15,17 +15,13 @@ public class Like {
 		this.like_cnt = like_cnt;
 	}
 	public boolean isLiked() {
-		return isLiked;
+		return liked;
 	}
-	public void setLiked(boolean isLiked) {
-		this.isLiked = isLiked;
+	public void setLiked(boolean liked) {
+		this.liked = liked;
 	}
-	
 	@Override
 	public String toString() {
-		return "Like [like_cnt=" + like_cnt + ", isLiked=" + isLiked + "]";
+		return "Like [like_cnt=" + like_cnt + ", liked=" + liked + "]";
 	}
-	
-	
-	
 }

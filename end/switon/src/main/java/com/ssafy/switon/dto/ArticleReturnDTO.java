@@ -12,7 +12,7 @@ public class ArticleReturnDTO {
 	String title;
 	@ApiParam(value = "게시글 내용", required = true)
 	String content;
-	@ApiParam(value = "작성자 (토큰에서 긁어옴)", required = false, hidden = true)
+	@ApiParam(value = "작성자", required = false, hidden = true)
 	int user_id;
 	@ApiParam(value = "첨부파일")
 	String file;
@@ -22,14 +22,31 @@ public class ArticleReturnDTO {
 	Timestamp created_at;
 	@ApiParam(value = "게시글 수정시간", required = false, hidden = true)
 	Timestamp updated_at;
-	@ApiParam(value = "게시판 타입(영어로)", required = false, hidden = true)
-	String board_name;
 	
+	String board_name;
 	StudySimple study;
 	UserSimpleDTO user;
 	Like like;
 	
+	public ArticleReturnDTO() {
+		
+	}
 	
+	public ArticleReturnDTO(Article article, String board_name, StudySimple study, UserSimpleDTO user,
+			Like like) {
+		this.id = article.getId();
+		this.title = article.getTitle();
+		this.content = article.getContent();
+		this.user_id = article.getUser_id();
+		this.file = article.getFile();
+		this.board_id = article.getBoard_id();
+		this.created_at = article.getCreated_at();
+		this.updated_at = article.getUpdated_at();
+		this.board_name = board_name;
+		this.study = study;
+		this.user = user;
+		this.like = like;
+	}
 	public Like getLike() {
 		return like;
 	}

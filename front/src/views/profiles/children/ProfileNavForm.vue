@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<section>
 		<div class="el-box">
 			<router-link :to="{ name: 'myschedule' }" class="element"
 				>{{ el.el1 }}<span></span
@@ -7,19 +7,22 @@
 			<router-link :to="{ name: 'mygroup' }" class="element"
 				>{{ el.el2 }}<span></span
 			></router-link>
-			<router-link :to="{ name: 'mystorage' }" class="element"
+			<router-link v-if="isMe" :to="{ name: 'mystorage' }" class="element"
 				>{{ el.el3 }}<span></span
 			></router-link>
-			<router-link :to="{ name: 'myarticle' }" class="element"
+			<router-link v-if="isMe" :to="{ name: 'myarticle' }" class="element"
 				>{{ el.el4 }}<span></span
 			></router-link>
 		</div>
 		<hr />
-	</div>
+	</section>
 </template>
 
 <script>
 export default {
+	props: {
+		userName: String,
+	},
 	data() {
 		return {
 			el: {
@@ -28,7 +31,13 @@ export default {
 				el3: '저장소',
 				el4: '글',
 			},
+			name: this.$cookies.get('name'),
 		};
+	},
+	computed: {
+		isMe() {
+			return this.$cookies.get('name') === this.userName;
+		},
 	},
 };
 </script>
@@ -42,6 +51,8 @@ hr {
 .el-box {
 	display: flex;
 	margin-top: 2rem;
+	justify-content: center;
+	align-items: center;
 	@media screen and (max-width: 1024px) {
 		margin-top: 1rem;
 	}

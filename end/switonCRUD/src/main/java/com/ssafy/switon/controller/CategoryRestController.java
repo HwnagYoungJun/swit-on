@@ -41,5 +41,19 @@ public class CategoryRestController {
 		System.out.println("대분류에 해당하는 소분류 정보 조회");
 		return categoryService.searchUp_Low(uppercategory_id);
 	}
+		
+	@ApiOperation(value = "키워드로 대분류 검색한다", response = List.class)
+	@GetMapping("/up/{keyword}")
+	public List<UpperCategory> searchUpByKeyword(@PathVariable("keyword") String keyword) {
+		System.out.println("키워드로 대분류 정보 조회");
+		return categoryService.searchUpByKeyword(keyword);
+	}
 	
+	
+	@ApiOperation(value = "키워드로 소분류 검색한다", response = List.class)
+	@GetMapping("/low/{keyword}")
+	public List<LowerCategory> searchLowByKeyword(@PathVariable("keyword") String keyword) {
+		System.out.println("키워드로 소분류 정보 조회");
+		return categoryService.searchLowByKeyword(keyword);
+	}
 }

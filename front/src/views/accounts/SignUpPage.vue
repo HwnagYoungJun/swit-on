@@ -1,23 +1,29 @@
 <template>
-	<div class="signup-container">
-		<div class="signup-box">
-			<div class="signup-header">
+	<section class="signup-container">
+		<section class="signup-box">
+			<header class="signup-header">
 				<router-link :to="{ name: 'main' }">
 					<img src="@/assets/black.png" alt="logo" class="switon" />
 				</router-link>
 				<router-link :to="{ name: 'login' }">
-					<i class="icon ion-md-arrow-round-back signup-backbtn"></i>
+					<i
+						class="icon ion-md-arrow-round-back signup-backbtn"
+						aria-label="로그인 페이지 버튼"
+					></i>
 				</router-link>
-			</div>
+			</header>
 			<h2>회원가입</h2>
 			<SignupForm></SignupForm>
+		</section>
+		<div class="rel">
+			<img
+				class="signup-img"
+				src="@/assets/login.png"
+				alt="회원가입 디자인 사진"
+			/>
+			<div class="opacity"></div>
 		</div>
-		<img
-			class="signup-img"
-			src="https://dimg.donga.com/wps/NEWS/IMAGE/2019/11/02/98183409.2.jpg"
-			alt="signupImage"
-		/>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -30,16 +36,28 @@ export default {
 </script>
 
 <style lang="scss">
+.rel {
+	position: relative;
+}
+.opacity {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border: 1rem solid rgba(50, 49, 48, 0.2);
+}
 .signup-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 2rem;
+	margin-bottom: 1rem;
 }
 .signup-container {
 	display: grid;
 	width: 100%;
-	// height: 100vh;
+	height: 100%;
 	grid-template-rows: 100%;
 	grid-template-columns: repeat(2, 50vw);
 	grid-template-areas: 'box img';
@@ -65,6 +83,7 @@ export default {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+	box-sizing: content-box;
 }
 h2 {
 	font-size: $font-bold;

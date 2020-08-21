@@ -1,6 +1,5 @@
 package com.ssafy.switon.dto;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import io.swagger.annotations.ApiParam;

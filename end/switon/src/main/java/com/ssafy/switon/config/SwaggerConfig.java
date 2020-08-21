@@ -26,22 +26,13 @@ public class SwaggerConfig {
 	@Bean
 	public Docket postsApi() {
 
-//		List<Parameter> global = new ArrayList<>();
-//		global.add(new ParameterBuilder().
-//			name("Authorization").
-//			description("Access Token").
-//			parameterType("header").
-//			required(false).
-//			modelRef(new ModelRef("string")).build());
-		
 		return new Docket(DocumentationType.SWAGGER_2)
 				.groupName("SwitOn")
 				.apiInfo(apiInfo())
-//				.globalOperationParameters(global)
 				.securityContexts(Lists.newArrayList(securityContext()))
 				.securitySchemes(Lists.newArrayList(apiKey()))
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.ssafy.switon.controller"))
+				.apis(RequestHandlerSelectors.basePackage("com.ssafy.switon.hide"))
 				.paths(PathSelectors.ant("/**"))
 				.build();
 	}
@@ -50,8 +41,8 @@ public class SwaggerConfig {
 		return new ApiInfoBuilder().title("SwitOn API")
 				.description("SwitOn API Reference for D101 Developer")
 				.termsOfServiceUrl("https://edu.ssafy.com")
-				.license("SSAFY License")
-				.licenseUrl("ssafy@ssafy.com").version("1.0").build();
+				.license("SwitOn License")
+				.licenseUrl("http://i3d101.p.ssafy.io/").version("1.0").build();
 	}
 	
 	private ApiKey apiKey() {
@@ -71,5 +62,4 @@ public class SwaggerConfig {
 		authorizationScopes[0] = authorizationScope;
 		return Lists.newArrayList(new SecurityReference("JWT", authorizationScopes));
 	}
-
 }

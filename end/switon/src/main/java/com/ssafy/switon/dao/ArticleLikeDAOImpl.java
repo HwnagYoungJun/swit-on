@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.switon.dto.ArticleLike;
-import com.ssafy.switon.dto.StudyLike;
+import com.ssafy.switon.dto.UserStudyDTO;
 
 @Repository
 public class ArticleLikeDAOImpl implements ArticleLikeDAO {
@@ -54,6 +54,20 @@ public class ArticleLikeDAOImpl implements ArticleLikeDAO {
 		articlelike.setUser_id(user_id);
 		articlelike.setArticle_id(article_id);
 		return sqlSession.delete("articlelike.deleteArticleLikeByUser", articlelike);
+	}
+
+	@Override
+	public int cntLikesUserGot(int user_id, int study_id) {
+		UserStudyDTO dto = new UserStudyDTO(user_id, study_id);
+		Integer cnt = sqlSession.selectOne("articlelike.cntLikesUserGot", dto);
+		return cnt = cnt == null ? 0 : cnt;
+	}
+
+	@Override
+	public int selectRecentLikeId(int user_id, int study_id) {
+		UserStudyDTO dto = new UserStudyDTO(user_id, study_id);
+		Integer id = sqlSession.selectOne("articlelike.selectRecentLikeId", dto);
+		return id = id == null ? 0 : id;
 	}
 
 }

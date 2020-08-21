@@ -1,10 +1,13 @@
 package com.ssafy.switon.dto;
 
-import io.swagger.annotations.ApiParam;
-
 public class Board {
 	
 	public Board(int study_id, int type) {
+		this.study_id = study_id;
+		this.type = type;
+	}
+	public Board(int id, int study_id, int type) {
+		this.id = id;
 		this.study_id = study_id;
 		this.type = type;
 	}

@@ -1,5 +1,6 @@
 package com.ssafy.switon.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -55,5 +56,36 @@ public class StudyDAOImpl implements StudyDAO {
 		List<Study> list = sqlSession.selectList("study.selectStudiesByLowercategoryId", lowercategory_id);
 		return list;
 	}
+	
+	@Override
+	public List<Study> selectStudyByKeyword(String keyword) {
+		System.out.println("검색어: " + keyword);
+		keyword = "%" + keyword + "%";
+		return sqlSession.selectList("study.selectStudyByKeyword", keyword);
+	}
 
+	@Override
+	public List<Integer> selectNotFinishedStudyIds(Timestamp time) {
+		return sqlSession.selectList("study.selectNotFinishedStudyIds", time);
+	}
+
+	@Override
+	public int updateStudyFinish(int id) {
+		return sqlSession.update("study.updateStudyFinish", id);
+	}
+
+	@Override
+	public List<Study> selectStudyByKeywordEnter(String keyword) {
+		return sqlSession.selectList("study.selectStudyByKeywordEnter", keyword);
+	}
+
+	@Override
+	public List<Study> selectEndStudyByUserId(int user_id) {
+		return sqlSession.selectList("study.selectEndStudiesByUserId",user_id);
+	}
+
+	@Override
+	public List<Study> selectNotEndStudyByUserId(int user_id) {
+		return sqlSession.selectList("study.selectNotEndStudiesByUserId",user_id);
+	}
 }

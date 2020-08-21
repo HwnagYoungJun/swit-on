@@ -1,63 +1,41 @@
 <template>
-	<div id="app">
-		<section v-if="isMainRoute" class="main-page">
-			<AppHeader v-if="!isAccountsRoute"></AppHeader>
-			<input
-				type="search"
-				class="main-input"
-				placeholder="소모임을 검색하세요"
-			/>
-			<div v-if="studies" class="popular-wrap">
-				<p class="popular-title">인기 소모임</p>
-				<router-link
-					:key="study.id"
-					v-for="study in studies"
-					:to="`/study/${study.id}`"
-				>
-					<div class="popular-item">
-						<div class="popular-img">
-							<img src="@/assets/react.png" alt="study-logo" />
-							<p class="temp">
-								{{ study.users_current }} / {{ study.users_limit }}
-							</p>
-						</div>
-						<div class="popular-content">
-							<p class="content-title">{{ study.name }}</p>
-							<p class="content-week">
-								<span class="content-day"> 월</span
-								><span class="content-day"> 수</span>
-							</p>
-							<p class="content-time">
-								{{ study.start_time }}-{{ study.end_time }}
-							</p>
-						</div>
-					</div>
-				</router-link>
-			</div>
-		</section>
-		<section v-else>
+	<section id="app">
+		<Main v-if="isMainRoute" />
+		<section v-else class="main-wrap">
 			<AppHeader v-if="!isAccountsRoute"></AppHeader>
 			<main :class="[!isAccountsRoute ? 'main-container' : '']">
 				<router-view />
 			</main>
+			<footer v-if="!isAccountsRoute"><Footer /></footer>
 		</section>
-	</div>
+		<ToastPopup></ToastPopup>
+		<ToastPopupDelete></ToastPopupDelete>
+		<ToastPopupTerm></ToastPopupTerm>
+	</section>
 </template>
 
 <script>
+import bus from '@/utils/bus';
 import AppHeader from '@/components/common/AppHeader.vue';
-import { fetchStudies } from '@/api/studies';
+import Footer from '@/components/common/Footer.vue';
+import Main from '@/views/Main.vue';
+import ToastPopup from './components/common/ToastPopup.vue';
+import ToastPopupDelete from './components/common/ToastPopupDelete.vue';
+import ToastPopupTerm from './components/common/ToastPopupTerm.vue';
+import SockJS from 'sockjs-client';
+import Stomp from 'webstomp-client';
+import { mapGetters } from 'vuex';
 export default {
 	components: {
 		AppHeader,
-	},
-	data() {
-		return {
-			studies: null,
-			isLoading: false,
-		};
+		Footer,
+		ToastPopup,
+		Main,
+		ToastPopupDelete,
+		ToastPopupTerm,
 	},
 	computed: {
+		...mapGetters(['getUserId', 'isLogin']),
 		isAccountsRoute() {
 			return this.$route.name === 'signUp' || this.$route.name === 'login';
 		},
@@ -65,23 +43,32 @@ export default {
 			return this.$route.name === 'main';
 		},
 	},
+	data() {
+		return {
+			messages: [],
+		};
+	},
 	methods: {
-		async fetchData() {
-			this.isLoading = true;
-			const { data } = await fetchStudies();
-			this.isLoading = false;
-			this.studies = data;
+		connect() {
+			const Id = this.getUserId;
+			let ServerUrl = process.env.VUE_APP_API_URL;
+			let client = Stomp.over(new SockJS(`${ServerUrl}websocket`));
+			client.connect({}, function() {
+				client.subscribe(`/topic/notification/${Id}`, message => {
+					bus.$emit('show:toast', JSON.parse(message.body).msg);
+				});
+			});
 		},
 	},
-	// created() {
-	// 	if (this.isMainRoute) {
-	// 		this.fetchData();
-	// 	}
-	// },
+	mounted() {
+		if (this.isLogin) {
+			// this.connect();
+		}
+	},
 	watch: {
-		isMainRoute() {
-			if (this.isMainRoute) {
-				this.fetchData();
+		$route() {
+			if (this.isLogin) {
+				// this.connect();
 			}
 		},
 	},
@@ -92,109 +79,28 @@ export default {
 @import './assets/css/reset.css';
 @import './assets/css/common.css';
 
+.main-wrap {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
 .main-container {
+	flex: 1;
 	width: 70%;
 	margin: 0 auto;
-}
-
-.main-page {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
-	align-items: center;
-	min-height: 100vh;
-	max-height: 100%;
-	background: $btn-purple-opacity;
-	.main-input {
-		width: 30%;
-		padding: 13px 25px;
-		line-height: 2;
-		border: none;
-		border-radius: 4px;
-		background: rgba(255, 255, 255, 0.5);
-		box-shadow: 3px 3px 5px rgba(83, 83, 83, 0.35);
-		&:focus {
-			outline: none;
-			background: rgba(255, 255, 255, 1);
-		}
-	}
-	.popular-wrap {
-		width: 80%;
-		margin: 0 auto;
-		display: flex;
-		justify-content: space-evenly;
-		flex-wrap: wrap;
-		position: relative;
-		.popular-title {
-			color: white;
-			font-size: $font-normal;
-			position: absolute;
-			top: -20px;
-			left: 40px;
-		}
-		.popular-item {
-			display: grid;
-			grid-template-columns: 15rem;
-			grid-template-rows: 7rem 12rem;
-			grid-template-areas:
-				'text-part'
-				'image-part';
-			border: 1px solid transparent;
-			position: relative;
-			margin-top: 1rem;
-			padding: 0.3rem 0.5rem 0.5rem;
-			color: #454545;
-			// background: rgba(255, 255, 255, 0.05);
-			box-shadow: 3px 2px 6px rgba(37, 37, 37, 0.5);
-			.popular-img {
-				grid-area: image-part;
-				overflow: hidden;
-				cursor: pointer;
-			}
-			.popular-content {
-				grid-area: text-part;
-				color: #fff;
-				.content-category {
-					padding-bottom: 0.3rem;
-					border-bottom: 1px solid #fff;
-				}
-				.content-title {
-					font-size: $font-bold;
-					font-weight: 600;
-					padding-top: 0.3rem;
-					padding-bottom: 0.3rem;
-				}
-				.content-week {
-					// padding-top: 0.3rem;
-					.content-day {
-						font-weight: 600;
-					}
-				}
-			}
-			.temp {
-				position: absolute;
-				bottom: 1rem;
-				right: 1rem;
-				color: white;
-			}
-			img {
-				width: 100%;
-				height: 100%;
-				object-fit: fill;
-				transition: all 0.3s ease;
-				&:hover {
-					transform: scale(1.1);
-				}
-			}
-			p {
-				// margin-top: -3px;
-			}
-		}
-	}
 }
 @media screen and (max-width: 768px) {
 	.main-container {
 		width: 95%;
+	}
+	.nav-router {
+		width: 100%;
+		height: 37px;
+		justify-content: space-around;
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		z-index: 888;
 	}
 }
 </style>

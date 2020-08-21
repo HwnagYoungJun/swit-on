@@ -36,6 +36,10 @@
 			text="다시 비밀번호를 입력하세요"
 			:inputChange="onChangePasswordConfirm"
 		></InputBox>
+		<div class="term-box">
+			<span class="lookterm" @click="lookTerm">약관보기</span>
+			<div><input type="checkbox" v-model="isCheck" />약관 동의</div>
+		</div>
 		<div class="signup-btn">
 			<button
 				:disabled="isButtonDisabled"
@@ -49,21 +53,33 @@
 </template>
 
 <script>
+import bus from '@/utils/bus.js';
 import InputBox from '@/components/common/InputBox.vue';
+import { ValidEmail, ValidName } from '@/api/auth';
 import { mapActions } from 'vuex';
-import { validateEmail, validatePassword } from '@/utils/validation';
+import {
+	validateEmail,
+	validatePassword,
+	validateName,
+} from '@/utils/validation';
 export default {
 	components: {
 		InputBox,
 	},
 	data() {
 		return {
+			isCheck: false,
 			signupData: {
 				email: '',
 				name: '',
 				password: '',
 				password2: '',
 			},
+			isEmailValid: '',
+			nameErrorMessage: '',
+			emailErrorMessage: '',
+			isNameValid: '',
+			// termData: '제1조 (목적)이 약관은 SwitOn(이하 당사)가 제공하는 수업 연결 서비스를 이용함에 있어 당사와 이용자의 권리, 의무 및 책임사항을 규정합니다. 이를 통하여 당사와 이용자는 알아야 할 사항을 숙지, 상호 신뢰의 증진을 목적으로 합니다.',
 		};
 	},
 	computed: {
@@ -78,16 +94,24 @@ export default {
 				!this.isValidEmail ||
 				!this.isValidPassword ||
 				!(this.signupData.password === this.signupData.password2) ||
-				!this.signupData.name
+				!this.signupData.name ||
+				!this.isCheck
 			);
 		},
 		changeNameColor() {
 			let color =
 				this.signupData.name.length === 0
 					? 'black'
-					: this.signupData.name.length > 1
+					: this.signupData.name.length > 1 &&
+					  this.signupData.name.length < 7 &&
+					  validateName(this.signupData.name)
 					? 'green'
 					: 'red';
+			if (this.isNameValid === 'red') {
+				color = 'red';
+			} else if (this.isNameValid === 'green') {
+				color = 'green';
+			}
 			return color;
 		},
 		changeNameMessage() {
@@ -97,7 +121,9 @@ export default {
 					: this.changeNameColor === 'green'
 					? // '올바른 형식의 이름을 입력했습니다.'
 					  false
-					: '<i class="icon ion-md-close-circle"></i> 이름을 2글자 이상 적어주세요! ';
+					: this.changeNameColor === 'red' && this.isNameValid === 'red'
+					? '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 이름이 중복되었습니다'
+					: '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 이름은 특수문자 제외 2-6자입니다.';
 			return name;
 		},
 		changeEmailColor() {
@@ -107,6 +133,12 @@ export default {
 					: this.isValidEmail
 					? 'green'
 					: 'red';
+			if (this.isEmailValid === 'red') {
+				color = 'red';
+			} else if (this.isEmailValid === 'green') {
+				color = 'green';
+			}
+
 			return color;
 		},
 		changeEmailMessage() {
@@ -116,7 +148,9 @@ export default {
 					: this.changeEmailColor === 'green'
 					? // '올바른 형식의 이메일을 입력했습니다.'
 					  false
-					: '<i class="icon ion-md-close-circle"></i> 이메일이 올바르지 않습니다.';
+					: this.changeEmailColor === 'red' && this.isEmailValid === 'red'
+					? '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 이메일이 중복되었습니다'
+					: '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 이메일을 형식을 유지해주세요! ';
 			return name;
 		},
 		changePasswordColor() {
@@ -135,7 +169,7 @@ export default {
 					: this.isValidPassword
 					? // '올바른 형식의 비밀번호를 입력했습니다.'
 					  false
-					: '<i class="icon ion-md-close-circle"></i> 비밀번호는 특수문자 포함 8-15자입니다.';
+					: '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 비밀번호는 특수문자 포함 8-15자입니다.';
 			return name;
 		},
 		changePasswordConfirmColor() {
@@ -155,7 +189,7 @@ export default {
 					: this.signupData.password === this.signupData.password2
 					? // '비밀번호가 일치합니다.'
 					  false
-					: '<i class="icon ion-md-close-circle"></i> 비밀번호가 일치하지 않습니다.';
+					: '<i class="icon ion-md-close-circle" aria-hidden="true"></i> 비밀번호가 일치하지 않습니다.';
 			return name;
 		},
 	},
@@ -163,13 +197,28 @@ export default {
 		...mapActions(['SIGNUP']),
 		async submitForm() {
 			try {
-				console.log(this.signupData);
 				// LOGIN 액션함수에 await를 걸지 않으면 로그인 처리되기 전에 라우터 이동이 진행됌
 				await this.SIGNUP(this.signupData);
 				this.$router.push({ name: 'main' });
 			} catch (error) {
-				console.log(error);
+				bus.$emit('show:toast', error.response.data.msg);
 			}
+		},
+		async checkName() {
+			const { data } = await ValidName(this.signupData.name);
+			if (data) {
+				this.isNameValid = 'green';
+				return;
+			}
+			this.isNameValid = 'red';
+		},
+		async checkEmail() {
+			const { data } = await ValidEmail(this.signupData.email);
+			if (data) {
+				this.isEmailValid = 'green';
+				return;
+			}
+			this.isEmailValid = 'red';
 		},
 		onChangePassword(val) {
 			this.signupData.password = val;
@@ -179,9 +228,16 @@ export default {
 		},
 		onChangeName(val) {
 			this.signupData.name = val;
+			if (this.signupData.name.length > 1) {
+				this.checkName();
+			}
 		},
 		onChangeEmail(val) {
 			this.signupData.email = val;
+			this.checkEmail();
+		},
+		lookTerm() {
+			bus.$emit('show:term');
 		},
 	},
 };
@@ -205,9 +261,47 @@ export default {
 		}
 	}
 }
+.term-box {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	input {
+		margin-right: 0.33rem;
+	}
+}
 .signup-form {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	position: relative;
+	.term-modal {
+		background: pink;
+		z-index: 1;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		padding: 0;
+		transform: translate(-50%, -50%);
+		width: 50%;
+		height: 50%;
+		.term-modal-box {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			i {
+				font-size: $font-bold;
+				position: absolute;
+				right: 0;
+				top: 0;
+				z-index: 2;
+			}
+		}
+	}
+}
+.lookterm {
+	&:hover {
+		cursor: pointer;
+	}
 }
 </style>

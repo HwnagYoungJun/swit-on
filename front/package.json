@@ -12,16 +12,25 @@
     "@lkmadushan/vue-tuicalendar": "^0.1.6",
     "@toast-ui/vue-calendar": "^1.1.1",
     "@toast-ui/vue-editor": "^2.3.0",
+    "adapterjs": "^0.15.5",
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "emailjs-com": "^2.6.3",
+    "rtcmulticonnection": "^3.7.0",
+    "sockjs-client": "^1.5.0",
     "tui-calendar": "^1.12.13",
+    "uuid": "^8.3.0",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.2",
     "vue-flickity": "^1.2.1",
+    "vue-infinite-loading": "^2.4.5",
+    "vue-kakao-login": "^1.0.5",
     "vue-router": "^3.2.0",
+    "vue-swatches": "^2.1.0",
     "vue-template-compiler": "^2.6.11",
-    "vuex": "^3.4.0"
+    "vue-webrtc": "^1.2.2",
+    "vuex": "^3.4.0",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",
@@ -33,12 +42,15 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.1.0",
+    "deepmerge": "^4.2.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-vue": "^6.2.2",
+    "fibers": "^5.0.0",
     "node-sass": "^4.12.0",
     "prettier": "^1.19.1",
+    "sass": "^1.26.10",
     "sass-loader": "^8.0.2"
   }
 }
