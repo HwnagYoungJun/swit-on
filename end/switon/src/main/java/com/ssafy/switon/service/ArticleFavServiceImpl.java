@@ -13,11 +13,9 @@ import com.ssafy.switon.dao.StudyDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Article;
 import com.ssafy.switon.dto.ArticleFav;
-import com.ssafy.switon.dto.ArticleFavReturnDTO;
 import com.ssafy.switon.dto.ArticleWithStudyDTO;
 import com.ssafy.switon.dto.Board;
 import com.ssafy.switon.dto.StudySimple;
-import com.ssafy.switon.dto.UserSimpleDTO;
 
 @Service
 public class ArticleFavServiceImpl implements ArticleFavService {

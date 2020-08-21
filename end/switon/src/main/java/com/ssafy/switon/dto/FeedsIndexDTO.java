@@ -2,34 +2,36 @@ package com.ssafy.switon.dto;
 
 public class FeedsIndexDTO {
 	
-	int userId;
-	int startIdx;
-	int endIdx;
+	int user_id;
+	int start_idx;
+	int amount;
+	
+	
 	public int getUserId() {
-		return userId;
+		return user_id;
 	}
 	public void setUserId(int userId) {
-		this.userId = userId;
+		this.user_id = userId;
 	}
 	public int getStartIdx() {
-		return startIdx;
+		return start_idx;
 	}
 	public void setStartIdx(int startIdx) {
-		this.startIdx = startIdx;
+		this.start_idx = startIdx;
 	}
-	public int getEndIdx() {
-		return endIdx;
+	public int getamount() {
+		return amount;
 	}
-	public void setEndIdx(int endIdx) {
-		this.endIdx = endIdx;
+	public void setamount(int amount) {
+		this.amount = amount;
 	}
-	public FeedsIndexDTO(int userId, int startIdx, int endIdx) {
-		this.userId = userId;
-		this.startIdx = startIdx;
-		this.endIdx = endIdx;
+	public FeedsIndexDTO(int userId, int startIdx, int amount) {
+		this.user_id = userId;
+		this.start_idx = startIdx;
+		this.amount = amount;
 	}
 	@Override
 	public String toString() {
-		return "FeedsIndexDTO [userId=" + userId + ", startIdx=" + startIdx + ", endIdx=" + endIdx + "]";
+		return "FeedsIndexDTO [userId=" + user_id + ", startIdx=" + start_idx + ", amount=" + amount + "]";
 	}
 }

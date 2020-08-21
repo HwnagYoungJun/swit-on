@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.switon.dao.ScheduleDAO;
 import com.ssafy.switon.dao.StudyDAO;
+import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dao.UserScheduleDAO;
 import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.ScheduleReturnDTO;
@@ -32,6 +33,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 	
 	@Autowired
 	StudyDAO studyDAO;
+	
+	@Autowired
+	JoinService joinService;
+	
+	@Autowired
+	UserDAO userDAO;
 
 	
 	@Override
@@ -40,18 +47,40 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public List<ScheduleReturnDTO> selectSchedulesByStudyId(int studyId) {
+	public List<ScheduleReturnDTO> selectSchedulesByStudyId(int studyId, int userId) {
 		List<Schedule> schedules = scheduleDAO.selectSchedulesByStudyId(studyId);
 		List<ScheduleReturnDTO> dtos = new ArrayList<ScheduleReturnDTO>();
+		boolean checkIn;
+		boolean checkOut;
+		boolean complete;
 		for(Schedule schedule : schedules) {
 			ScheduleReturnDTO dto = new ScheduleReturnDTO(schedule);
+			int scheduleId = schedule.getId();
 			Study study = studyService.search(schedule.getStudy_id());
 			dto.setStudy_name(study.getName());
+			dto.setMembers(userScheduleService.searchParticipants(scheduleId));
+			UserSchedule userSchedule = userScheduleDAO.selectParticipate(new UserSchedule(userId, scheduleId));
+			if(userSchedule != null) {
+				checkIn = checkOut = complete = false;
+				int status = userSchedule.getStatus();
+				if ((status & (1)) > 0) {
+					checkIn = true;
+				}
+				if ((status & (1 << 1)) > 0) {
+					checkOut = true;
+				}
+				if (status == 7) {
+					complete = true;
+				}
+				dto.setCheckIn(checkIn);
+				dto.setCheckOut(checkOut);
+				dto.setComplete(complete);
+			}
 			dtos.add(dto);
 		}
 		return dtos;
 	}
-
+	
 	@Override
 	public Schedule selectScheduleById(int id) {
 		return scheduleDAO.selectScheduleById(id);
@@ -70,7 +99,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 					// OR B종료시간이 A시작시간보다 뒤인 경우 + B시작시간이 A의 종료시간보다 앞인 경우 <- 오류
 					|| newEnd.after(oldStart) && newStart.before(oldEnd)){
 				// 오류인 경우 어떤 스터디의 어떤 스케줄과 겹치는지 이름을 반환
-				String msg = "'" + schedule.getTitle() + "' 스케줄과 시간이 겹칩니다.";
+				String msg = "'" + orderSchedule.getTitle() + "' 스케줄과 시간이 겹칩니다.";
 				return msg;
 			}
 		}
@@ -123,6 +152,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 					userSchedule.setStatus(status);
 					if(status == 7) {
 						userSchedule.setSuccess(true);
+						Schedule schedule = scheduleDAO.selectScheduleById(id);
+						// 출석체크 완벽하게 완료시 30점 부여
+						joinService.givePoint(userSchedule.getUser_id(), schedule.getStudy_id(), 30);
 					}
 					userScheduleDAO.updateSchedule(userSchedule);
 					result += userSchedule.getUser_id() + "번 유저 작업완료 |";

@@ -12,7 +12,7 @@ public class UserInfoDTO {
 	String email;
 	@ApiParam(value = "유저 소갯말")
 	String introduce;
-	@ApiParam(value = "유저 프로필 이미지", required = false, hidden = true)
+	@ApiParam(value = "유저 프로필 이미지", required = false)
 	String profile_image;
 	@ApiParam(value = "유저 관심 카테고리(소카테고리) id (FK)")
 	String interests;

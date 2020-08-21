@@ -7,6 +7,35 @@
 	
 <mapper namespace="userschedule">
 
+	<!-- 참여율 (스터디의 모든 스케쥴 중에서 내가 참가한 스케쥴의 퍼센티지) -->
+	<select id="selectParticipationRate" parameterType="RateDTO" resultType="RateDTO">
+		select count(*) as mine,
+		(select count(*)
+			from schedule
+			where study_id = #{study_id}) as total
+		from userschedule
+		where user_id = #{user_id}
+		and schedule_id in (select id
+								from schedule
+								where study_id = #{study_id});
+	</select>
+
+	<!-- 출석률 (스터디의 완료된 스케쥴 중에서 내가 참가한 동시에 success한 스케쥴의 퍼센티지) -->
+	<select id="selectAttendanceRate" parameterType="RateDTO" resultType="RateDTO">
+		select count(*) as mine,
+		(select count(*)
+			from schedule
+			where study_id = #{study_id}
+			and isFinish = true) as total
+		from userschedule
+		where user_id = #{user_id}
+		and success = true
+		and schedule_id in (select id
+								from schedule
+								where study_id = #{study_id});
+	</select>
+
+
 	<!-- 모든 유저스케줄 조회 -->
 	<select id="selectAll" resultType="UserSchedule">
 		select id, user_id, schedule_id, status, success
@@ -81,6 +110,22 @@
 		delete from userschedule
 		where id = #{id}
 	</delete>
+	
+	<!-- 알림을 쏴줘야할 유저 정보 검색 -->
+	<select id="selectUsersToAlarm" parameterType="TimeBetweenDTO" resultType="ScheduleAlarmReturnDTO">
+		select `userschedule`.user_id as user_id, `schedule`.id as schedule_id, `schedule`.title as schedule_title
+		from `userschedule`
+		join `schedule` on `userschedule`.schedule_id = `schedule`.id
+		where start <![CDATA[ > ]]> #{start}  and  start <![CDATA[ < ]]> #{end}
+	</select>
+	
+	<!-- 퇴실 알림을 쏴줘야할 유저 정보 검색 -->
+	<select id="selectUsersToAlarm2" parameterType="TimeBetweenDTO" resultType="ScheduleAlarmReturnDTO">
+		select `userschedule`.user_id as user_id, `schedule`.id as schedule_id, `schedule`.title as schedule_title
+		from `userschedule`
+		join `schedule` on `userschedule`.schedule_id = `schedule`.id
+		where end <![CDATA[ > ]]> #{start}  and  end <![CDATA[ < ]]> #{end}
+	</select>
 	
 	<!-- 더이상의 수정, 삭제는 없음! -->
 

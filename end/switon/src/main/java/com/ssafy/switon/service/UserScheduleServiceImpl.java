@@ -12,14 +12,14 @@ import com.ssafy.switon.dao.StudyDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dao.UserScheduleDAO;
 import com.ssafy.switon.dto.ParticipateInfo;
+import com.ssafy.switon.dto.RateDTO;
 import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.ScheduleReturnDTO;
 import com.ssafy.switon.dto.Study;
-import com.ssafy.switon.dto.UserDTO;
 import com.ssafy.switon.dto.UserInfoDTO;
+import com.ssafy.switon.dto.UserRate;
 import com.ssafy.switon.dto.UserSchedule;
 import com.ssafy.switon.dto.UserScheduleReturnDTO;
-import com.ssafy.switon.dto.UserScheduleSimpleDTO;
 import com.ssafy.switon.dto.UserSimpleDTO;
 
 @Service
@@ -53,17 +53,13 @@ public class UserScheduleServiceImpl implements UserScheduleService {
 		Timestamp newStart = newSchedule.getStart();
 		Timestamp newEnd = newSchedule.getEnd();
 		int userId = userschedule.getUser_id();
-//		List<UserScheduleReturnDTO> scheduleList = getUserSchedules(userId);
 		List<UserSchedule> scheduleList = userscheduleDAO.selectUserSchedules(userId);
 		for(UserSchedule userSchedule : scheduleList) {
 			Schedule schedule = scheduleDAO.selectScheduleById(userSchedule.getSchedule_id());
 			Timestamp oldStart = schedule.getStart();
 			Timestamp oldEnd = schedule.getEnd();
-			// B시작시간이 A종료시간보다 앞인 경우 + B종료시간이 A시작시간보다 뒤인 경우
 			if(newStart.before(oldEnd) && newEnd.after(oldStart)
-					// OR B종료시간이 A시작시간보다 뒤인 경우 + B시작시간이 A의 종료시간보다 앞인 경우 <- 오류
 					|| newEnd.after(oldStart) && newStart.before(oldEnd)){
-				// 오류인 경우 어떤 스터디의 어떤 스케줄과 겹치는지 이름을 반환
 				Study conflictStudy = studyDAO.selectStudyById(schedule.getStudy_id());
 				String msg = "현재 참가중인 '" + conflictStudy.getName() + "' 스터디의 '" + schedule.getTitle() + "' 스케줄과 시간이 겹칩니다.";
 				return msg;
@@ -151,6 +147,22 @@ public class UserScheduleServiceImpl implements UserScheduleService {
 			members.add(member);
 		}
 		return members;
+	}
+
+	@Override
+	public UserRate getUserParticipateRate(int userId, int studyId) {
+		RateDTO dto = new RateDTO(userId, studyId);
+		RateDTO part = userscheduleDAO.selectParticipationRate(dto);
+		RateDTO attend = userscheduleDAO.selectAttendanceRate(dto);
+		double participation = 1.0;
+		double attendance = 1.0;
+		if(part.getTotal() != 0) {
+			participation = part.getMine() / part.getTotal();			
+		}
+		if(attend.getTotal() != 0) {
+			attendance = attend.getMine() / attend.getTotal();
+		}
+		return new UserRate(participation, attendance);
 	}
 
 }

@@ -41,4 +41,14 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryDAO.selectLowByKeyword(keyword);
 	}
 
+	@Override
+	public boolean lowerCategoryIdExists(int id) {
+		return categoryDAO.selectLowOne(id) != null;
+	}
+
+	@Override
+	public boolean upperCategoryIdExists(int id) {
+		return categoryDAO.selectUpOne(id) != null;
+	}
+
 }

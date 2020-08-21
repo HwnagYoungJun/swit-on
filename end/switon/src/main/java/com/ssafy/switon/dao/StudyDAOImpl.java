@@ -74,4 +74,18 @@ public class StudyDAOImpl implements StudyDAO {
 		return sqlSession.update("study.updateStudyFinish", id);
 	}
 
+	@Override
+	public List<Study> selectStudyByKeywordEnter(String keyword) {
+		return sqlSession.selectList("study.selectStudyByKeywordEnter", keyword);
+	}
+
+	@Override
+	public List<Study> selectEndStudyByUserId(int user_id) {
+		return sqlSession.selectList("study.selectEndStudiesByUserId",user_id);
+	}
+
+	@Override
+	public List<Study> selectNotEndStudyByUserId(int user_id) {
+		return sqlSession.selectList("study.selectNotEndStudiesByUserId",user_id);
+	}
 }

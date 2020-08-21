@@ -42,6 +42,7 @@
 			(select count(*) from `join` where study_id = study.id) as users_current
 		from study
 		where name like #{keyword}
+		and isFinish = 0
 	</select>
 
 	<!-- 내가 만든 최신 스터디의 아이디 한개 가져오기 -->
@@ -74,6 +75,7 @@
 			(select count(*) from `join` where study_id = study.id) as users_current
 		from study
 		where lowercategory_id = #{lowercategory_id}
+		and isFinish = 0
 	</select>
 
 	<!-- 스터디 리스트 반환 -->
@@ -96,6 +98,7 @@
 			users_limit,
 			(select count(*) from `join` where study_id = study.id) as users_current
 		from study
+		where isFinish = 0
 	</select>
 	
 	<!-- 스터디 상세 정보 반환 -->
@@ -205,13 +208,83 @@
 	</delete>
 	
 	<!-- 스터디인포를 모두 조회 -->
-	<!-- <select id="selectStudyInfo" resultType="StudyInfo">
+	<select id="selectStudyInfo" resultType="StudyInfo">
 		select id,
 			   (select count(*) from `join` where study_id = study.id) as user,
 			   (select count(*) from `studylike` where study_id = study.id) as likes,
 			   (select count(*) from `schedule` where study_id = study.id) as schedule,
 			   (select count(id) from article where board_id in (select id from board where study_id = study.id)) as articles
 		from study
-	</select> -->
+		where isFinish = 0
+	</select>
+	
+	<!-- 스터디 검색어 엔터 쳤을 때 스터디 정보들 카드DTO로 반환 -->
+	<select id="selectStudyByKeywordEnter" resultType="Study">
+		select id,
+			name,
+			user_id,
+			description,
+			code,
+			isPrivate,
+			isRecruit,
+			start_term,
+			end_term,
+			created_at,
+			week,
+			start_time,
+			end_time,
+			lowercategory_id,
+			logo,
+			users_limit,
+			(select count(*) from `join` where study_id = study.id) as users_current
+		from study
+		where name like #{keyword}
+		and isFinish = 0
+	</select>
+	
+	<!-- 유저의 종료된 스터디 반환 -->
+	<select id="selectEndStudiesByUserId" resultType="Study">
+		select id,
+			name,
+			user_id,
+			description,
+			code,
+			isPrivate,
+			isRecruit,
+			start_term,
+			end_term,
+			created_at,
+			week,
+			start_time,
+			end_time,
+			lowercategory_id,
+			logo,
+			users_limit
+		from study
+		where id in (select study_id from `join` where user_id = #{user_id})
+		and isFinish = 1
+	</select>
 
+	<!-- 유저의 종료되지않은 스터디 반환 -->
+	<select id="selectNotEndStudiesByUserId" resultType="Study">
+		select id,
+			name,
+			user_id,
+			description,
+			code,
+			isPrivate,
+			isRecruit,
+			start_term,
+			end_term,
+			created_at,
+			week,
+			start_time,
+			end_time,
+			lowercategory_id,
+			logo,
+			users_limit
+		from study
+		where id in (select study_id from `join` where user_id = #{user_id})
+		and isFinish = 0
+	</select>
 </mapper>

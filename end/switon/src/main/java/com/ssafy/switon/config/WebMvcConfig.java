@@ -13,8 +13,6 @@ import com.ssafy.switon.Interceptors.OtherRequestInterceptor;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer{
 
-//	@Autowired
-//	AuthInterceptor authInterceptor;
 	@Autowired
 	CORSInterceptor corsInterceptor;
 	@Autowired
@@ -22,15 +20,11 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	@Autowired
 	OtherRequestInterceptor otherInterceptor;
 	
-	
-	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/upload/**")
 			.addResourceLocations("static/upload/");
 	}
-
-
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
@@ -41,20 +35,14 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		.addPathPatterns("/study/**");
 		
 		registry.addInterceptor(getInterceptor)
-		.addPathPatterns("/accounts/**/fav")
-		.addPathPatterns("/accounts/**/myqna")
-		.addPathPatterns("/accounts/**/myrepository")
+		.addPathPatterns("/alarm")
+		.addPathPatterns("/alarm/**")
 		.addPathPatterns("/study/**/qna/**")
 		.addPathPatterns("/study/**/repository/**")
 		.addPathPatterns("/feeds")
 		.addPathPatterns("/study/**/dashboard")
-		.addPathPatterns("/study/**/schedule/**");
+		.addPathPatterns("/study/**/schedule/**")
+		.addPathPatterns("/study/**/room/**");
 		
-//		registry.addInterceptor(authInterceptor)
-//		.addPathPatterns("/accounts/info")
-//		.addPathPatterns("/study/create")
-//		.addPathPatterns("/study/**/delete")
-//		.addPathPatterns("/**/myqna")
-//		.addPathPatterns("/**/myrepository");
 	}
 }

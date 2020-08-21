@@ -32,6 +32,8 @@
 		select id, study_id, title, start, end, bg_color, user_id
 		from schedule
 		where study_id = #{study_id}
+		and isFinish = false
+		order by start desc
 	</select>
 	
 	<!-- id로 스케줄 상세 정보 조회 -->

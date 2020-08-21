@@ -6,7 +6,7 @@
 
 <mapper namespace="article">
 
-	<!-- 유저 피드 반환 (최신순으로 startIdx ~ endIdx 까지) -->
+	<!-- 유저 피드 반환 (최신순으로 startIdx부터 amount 만큼) -->
 	<select id="selectFeeds" parameterType="FeedsIndexDTO" resultType="Article">
 		select id,
 			title,
@@ -23,7 +23,24 @@
 												from `join`
 												where user_id = #{user_id}))
 		order by created_at desc
-		limit #{start_idx}, #{end_idx}
+		limit #{start_idx}, #{amount}
+	</select>
+	
+	<!-- 스터디 인기글 3개 반환 -->
+	<select id="selectTopThreeArticles" resultType="ArticleWithLikesDTO">
+		select id,
+			title,
+			content,
+			user_id,
+			file,
+			(select type from board where id = board_id) as board_type,
+			created_at,
+			updated_at,
+			(select count(*) from articlelike where article_id = article.id) as likes
+			from article
+			where board_id = #{board_id}
+			order by likes desc, created_at desc
+			limit 3;
 	</select>
 
 	<!-- 게시판 리스트 반환 -->
@@ -54,7 +71,7 @@
 	</select>
 	
 	<!-- 게시판 아이디의 게시글 리스트 반환(5개 제한) -->
-	<select id="selectArticlesByBoardIdLimit5" resultType="Article">
+	<select id="selectArticlesByBoardIdLimit5" parameterType="BoardIndexDTO" resultType="Article">
 		select id,
 			title,
 			content,
@@ -66,7 +83,7 @@
 		from article
 		where board_id = #{board_id}
 		order by created_at desc
-		limit 5
+		limit #{start_idx}, #{amount}
 	</select>
 	
 	<!-- 게시글 상세 정보 반환 -->
@@ -154,6 +171,28 @@
 		delete from article
 		where id = #{id}
 	</delete>
+	
+	<!-- 한 스터디에서 한 유저가 쓴 글 수를 반환한다. -->
+	<select id="cntUserArticlesByStudyId" parameterType="UserStudyDTO" resultType="Integer">
+		select count(*)
+		from article
+		where user_id = #{user_id}
+		and id in (select id from article
+		                    where board_id in (select id from board 
+												where study_id = #{study_id}));
+	</select>
+	
+	<!-- 한 스터디에서 한 유저의 최신글 아이디를 하나 반환한다. -->
+	<select id="selectRecentUserArticleId" parameterType="UserStudyDTO" resultType="Integer">
+		select id
+		from article
+		where user_id = #{user_id}
+		and id in (select id from article
+		                    where board_id in (select id from board 
+												where study_id = #{study_id}))
+		order by id desc
+		limit 1
+	</select>
 	
 
 </mapper>

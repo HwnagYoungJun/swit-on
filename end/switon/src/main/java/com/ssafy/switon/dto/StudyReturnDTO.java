@@ -10,9 +10,16 @@ public class StudyReturnDTO {
 	Boolean isLeader;
 	Like like;
 	List<UserSimpleDTO> members;
+	List<Ranker> rankers;
 	
 	
 	
+	public List<Ranker> getRankers() {
+		return rankers;
+	}
+	public void setRankers(List<Ranker> rankers) {
+		this.rankers = rankers;
+	}
 	public List<UserSimpleDTO> getMembers() {
 		return members;
 	}
@@ -58,9 +65,10 @@ public class StudyReturnDTO {
 	}
 	@Override
 	public String toString() {
-		return "StudyReturnDTO [study=" + study + ", leaderName=" + leaderName + ", isJoined=" + isJoined + ", isLeader="
-				+ isLeader + ", like=" + like + "]";
+		return "StudyReturnDTO [study=" + study + ", leaderName=" + leaderName + ", isJoined=" + isJoined
+				+ ", isLeader=" + isLeader + ", like=" + like + ", members=" + members + ", rankers=" + rankers + "]";
 	}
+	
 	
 	
 }

@@ -50,5 +50,29 @@
 		delete from articlelike
    		where user_id = #{user_id} and article_id = #{article_id}
 	</delete>
+	
+	<!-- 한 스터디에서 한 유저가 받은 좋아요 수를 반환한다. -->
+	<select id="cntLikesUserGot" parameterType="UserStudyDTO" resultType="Integer">
+		select count(*) as cnt
+		from articlelike
+		where article_id in (select id from article
+							where user_id = #{user_id})
+		and article_id in (select id from article
+		                    where board_id in (select id from board 
+											where study_id = #{study_id}))
+	</select>
+	
+	<!-- 한 스터디에서 한 유저가 최근에 받은 좋아요 아이디를 하나 반환한다. -->
+	<select id="selectRecentLikeId" parameterType="UserStudyDTO" resultType="Integer">
+		select id
+		from articlelike
+		where article_id in (select id from article
+							where user_id = #{user_id})
+		and article_id in (select id from article
+		                    where board_id in (select id from board 
+											where study_id = #{study_id}))
+		order by id desc
+		limit 1
+	</select>
 
 </mapper>

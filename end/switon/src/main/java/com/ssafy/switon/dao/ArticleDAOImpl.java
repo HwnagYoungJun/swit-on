@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.switon.dto.Article;
+import com.ssafy.switon.dto.ArticleWithLikesDTO;
+import com.ssafy.switon.dto.BoardIndexDTO;
 import com.ssafy.switon.dto.FeedsIndexDTO;
+import com.ssafy.switon.dto.UserStudyDTO;
 
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
@@ -67,13 +70,32 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<Article> selectArticlesByBoardIdLimit5(int boardId) {
-		return sqlSession.selectList("article.selectArticlesByBoardIdLimit5", boardId);
+	public List<Article> selectArticlesByBoardIdLimit5(BoardIndexDTO boardIndexDTO) {
+		return sqlSession.selectList("article.selectArticlesByBoardIdLimit5", boardIndexDTO);
 	}
 
 	@Override
 	public List<Article> selectFeeds(FeedsIndexDTO feedsIndexDTO) {
 		return sqlSession.selectList("article.selectFeeds", feedsIndexDTO);
+	}
+
+	@Override
+	public int cntUserArticlesByStudyId(int user_id, int study_id) {
+		UserStudyDTO dto = new UserStudyDTO(user_id, study_id);
+		Integer cnt = sqlSession.selectOne("article.cntUserArticlesByStudyId", dto);
+		return cnt = cnt == null ? 0 : cnt;
+	}
+
+	@Override
+	public int selectRecentUserArticleId(int user_id, int study_id) {
+		UserStudyDTO dto = new UserStudyDTO(user_id, study_id);
+		Integer id = sqlSession.selectOne("article.selectRecentUserArticleId", dto);
+		return id = id == null? 0 : id;
+	}
+
+	@Override
+	public List<ArticleWithLikesDTO> selectTopThreeArticles(int boardId) {
+		return sqlSession.selectList("article.selectTopThreeArticles", boardId);
 	}
 
 }
