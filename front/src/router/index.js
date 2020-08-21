@@ -25,7 +25,6 @@ const routes = [
 			name: String(route.params.studyname),
 		}),
 		component: () => import('@/views/studies/StudyPage.vue'),
-		// beforeEnter,
 	},
 	{
 		path: '/study/:id',
@@ -93,6 +92,7 @@ const routes = [
 			study_id: Number(route.params.study_id),
 		}),
 		component: () => import('@/views/calendar/MakeScheduleForm.vue'),
+		beforeEnter,
 	},
 	{
 		path: '/study/:id/:board_name/:article_id/edit',
@@ -114,6 +114,7 @@ const routes = [
 			article_id: Number(route.params.article_id),
 		}),
 		component: () => import('@/components/common/ArticleCardDetail.vue'),
+		beforeEnter,
 	},
 	{
 		path: '/login',
@@ -154,7 +155,6 @@ const routes = [
 			userName: String(route.params.userName),
 		}),
 		component: () => import('@/views/profiles/ProfilePage.vue'),
-
 		children: [
 			{
 				path: '',

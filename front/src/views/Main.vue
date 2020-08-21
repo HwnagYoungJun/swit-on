@@ -1,7 +1,7 @@
 <template>
 	<section class="main-page">
 		<AppHeader :messages="[]"></AppHeader>
-		<Search />
+		<!-- <Search /> -->
 		<section class="main-page-description">
 			<section class="main-description-title">
 				<h1 class="animate__animated animate__zoomOut animate__delay-1s hide">
@@ -38,12 +38,12 @@
 
 <script>
 import AppHeader from '@/components/common/AppHeader.vue';
-import Search from '@/components/common/Search.vue';
+// import Search from '@/components/common/Search.vue';
 import { mapGetters } from 'vuex';
 
 export default {
 	components: {
-		Search,
+		// Search,
 		AppHeader,
 	},
 	computed: {
