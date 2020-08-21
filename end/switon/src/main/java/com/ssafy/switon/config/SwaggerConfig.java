@@ -26,22 +26,13 @@ public class SwaggerConfig {
 	@Bean
 	public Docket postsApi() {
 
-//		List<Parameter> global = new ArrayList<>();
-//		global.add(new ParameterBuilder().
-//			name("Authorization").
-//			description("Access Token").
-//			parameterType("header").
-//			required(false).
-//			modelRef(new ModelRef("string")).build());
-		
 		return new Docket(DocumentationType.SWAGGER_2)
 				.groupName("SwitOn")
 				.apiInfo(apiInfo())
-//				.globalOperationParameters(global)
 				.securityContexts(Lists.newArrayList(securityContext()))
 				.securitySchemes(Lists.newArrayList(apiKey()))
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.ssafy.switon.controller"))
+				.apis(RequestHandlerSelectors.basePackage("com.ssafy.switon.hide"))
 				.paths(PathSelectors.ant("/**"))
 				.build();
 	}
@@ -71,5 +62,4 @@ public class SwaggerConfig {
 		authorizationScopes[0] = authorizationScope;
 		return Lists.newArrayList(new SecurityReference("JWT", authorizationScopes));
 	}
-
 }

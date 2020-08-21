@@ -23,7 +23,6 @@ import com.ssafy.switon.dto.BestArticles;
 import com.ssafy.switon.dto.Board;
 import com.ssafy.switon.dto.BoardIndexDTO;
 import com.ssafy.switon.dto.FeedsIndexDTO;
-import com.ssafy.switon.dto.Join;
 import com.ssafy.switon.dto.Like;
 import com.ssafy.switon.dto.Study;
 import com.ssafy.switon.dto.StudySimple;
@@ -166,7 +165,6 @@ public class ArticleServiceImpl implements ArticleService {
 			boolean isLiked = articleLikeService.searchByUser_Article(userId, articleId) != null;
 			Like like = new Like(articleLikeService.searchLikeCount(articleId),
 					isLiked);
-			System.out.println(like);
 			ArticleReturnDTO articleReturnDTO = new ArticleReturnDTO();
 			articleReturnDTO.setId(articleId);
 			articleReturnDTO.setTitle(article.getTitle());

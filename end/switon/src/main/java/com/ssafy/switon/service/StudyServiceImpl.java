@@ -104,7 +104,6 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	public int create(Study study, int userId) {
 		if(studyDao.insertStudy(study) == 1) {
-			System.out.println("스터디 생성 성공");
 			int studyId = studyDao.getRecentStudyIdByUserId(userId);
 			return studyId;
 		}
@@ -124,7 +123,6 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	public List<UserStudyInfoDTO> searchUserStudies(int userId) {
 		List<UserStudyInfoDTO> list = new ArrayList<>();
-		System.out.println(userId + "번 유저의 스터디 찾기 시도");
 		List<Join> joins = joinDao.selectJoinsByUserId(userId);
 		for(Join join : joins) {
 			UserStudyInfoDTO dto = new UserStudyInfoDTO();
@@ -217,7 +215,6 @@ public class StudyServiceImpl implements StudyService {
 
 	@Override
 	public String finishStudies(Timestamp timestamp) {
-		// isFinish가 FALSE인 스터디들 중에서 시간이 다 된 스터디 검색
 		List<Integer> ids = studyDao.selectNotFinishedStudyIds(timestamp);
 		String result;
 		if(ids.size() != 0) {
@@ -310,12 +307,6 @@ public class StudyServiceImpl implements StudyService {
 	public List<Study> searchStudiesByKeywordEnter(String keyword) {
 		keyword = "%" + keyword + "%";
 		List<Study> studies = studyDao.selectStudyByKeywordEnter(keyword);
-//		List<StudyCardDTO> studyCards = new ArrayList<StudyCardDTO>();
-//		for(Study study : studies) {
-//			studyCards.add(new StudyCardDTO(study.getId(), study.getName(), 
-//					study.getStart_time(), study.getEnd_time(), study.getWeek(), 
-//					study.getEnd_term(), study.getUsers_current(), study.getUsers_limit()));
-//		}
 		return studies;
 	}
 	

@@ -14,7 +14,6 @@ import com.ssafy.switon.dao.UserScheduleDAO;
 import com.ssafy.switon.dto.Schedule;
 import com.ssafy.switon.dto.ScheduleReturnDTO;
 import com.ssafy.switon.dto.Study;
-import com.ssafy.switon.dto.UserInfoDTO;
 import com.ssafy.switon.dto.UserSchedule;
 
 @Service
@@ -51,7 +50,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public List<ScheduleReturnDTO> selectSchedulesByStudyId(int studyId, int userId) {
 		List<Schedule> schedules = scheduleDAO.selectSchedulesByStudyId(studyId);
 		List<ScheduleReturnDTO> dtos = new ArrayList<ScheduleReturnDTO>();
-		UserInfoDTO user = userDAO.selectUserById(userId);
 		boolean checkIn;
 		boolean checkOut;
 		boolean complete;

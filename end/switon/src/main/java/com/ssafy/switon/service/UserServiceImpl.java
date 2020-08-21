@@ -42,16 +42,12 @@ public class UserServiceImpl implements UserService {
 				&& registerDTO.getPassword().equals(registerDTO.getPassword2())) {
 			
 			if(emailAlreadyExists(registerDTO.getEmail())) {
-				System.out.println("** 이미 가입한 이메일입니다.");
 				return false;
 			}
 			
 			if(nameAlreadyExists(registerDTO.getName())) {
-				System.out.println("** 이미 가입한 닉네임입니다.");
 				return false;
 			}
-			
-			// 패스워드 암호화 해주기
 			String hashedPwd = BCrypt.hashpw(registerDTO.getPassword(), BCrypt.gensalt());
 			registerDTO.setPassword(hashedPwd);
 			registerDTO.setPassword2(hashedPwd);

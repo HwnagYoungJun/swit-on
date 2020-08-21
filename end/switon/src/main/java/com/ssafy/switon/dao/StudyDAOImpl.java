@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.switon.dto.Study;
-import com.ssafy.switon.dto.StudyCardDTO;
 
 @Repository
 public class StudyDAOImpl implements StudyDAO {

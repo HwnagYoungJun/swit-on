@@ -14,7 +14,6 @@ import com.ssafy.switon.dao.StudyDAO;
 import com.ssafy.switon.dao.UserDAO;
 import com.ssafy.switon.dto.Alarm;
 import com.ssafy.switon.dto.Article;
-import com.ssafy.switon.dto.Board;
 import com.ssafy.switon.dto.Comment;
 import com.ssafy.switon.dto.CommentReturnDTO;
 import com.ssafy.switon.dto.Like;

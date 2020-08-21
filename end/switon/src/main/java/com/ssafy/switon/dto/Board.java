@@ -1,7 +1,5 @@
 package com.ssafy.switon.dto;
 
-import io.swagger.annotations.ApiParam;
-
 public class Board {
 	
 	public Board(int study_id, int type) {

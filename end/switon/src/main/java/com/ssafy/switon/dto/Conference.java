@@ -26,7 +26,7 @@ public class Conference {
 		super();
 		this.id = id;
 		this.study_id = study_id;
-		this.room_code = room_code;
+		this.room_code = roomCode;
 	}
 	public Conference() {
 		super();

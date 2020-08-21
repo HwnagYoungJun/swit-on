@@ -1,6 +1,5 @@
 package com.ssafy.switon.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -106,7 +105,6 @@ public class ConferenceRestController {
 		return new ResponseEntity<>(new ReturnMsg("회의를 불러올 수 없었습니다."), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	// Token(Authentication)에서 유저 id 정보를 뽑아내는 메소드
 	private int getUserPK(HttpServletRequest request) {
 		return jwtUtil.getUserPK(request.getHeader("Authentication").substring("Bearer ".length()));
 	}

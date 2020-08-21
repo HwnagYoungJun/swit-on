@@ -35,7 +35,6 @@ public class StudyInfoRestController {
 		
 		try {
 			List<StudyInfo> list = studyinfoDAO.selectStudyInfo();
-			System.out.println("인기 스터디목록 반환");
 			
 			for(int i = 0; i < list.size(); i++) {
 				list.get(i).setValue(list.get(i).getUser(), list.get(i).getLike(), list.get(i).getSchedule(), list.get(i).getArticles());

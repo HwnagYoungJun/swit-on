@@ -21,7 +21,6 @@ import com.ssafy.switon.dto.TimeBetweenDTO;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
-//	template.convertAndSend("/topic/notification/" + {글작성자 아이디}, awake);
 	
 	@Autowired
 	SimpMessagingTemplate template;
@@ -55,10 +54,7 @@ public class NotificationServiceImpl implements NotificationService {
 				returnMsg = returnMsg + user_id + "번 유저에게 스케쥴 알람 발송 ";
 				AlarmSchedule alarmSchedule = new AlarmSchedule(schedule_title + " 스케줄 입실 시간",
 						1, new ScheduleInfo(schedule_id, schedule_title, study.getId(), study.getName()));
-				// Msg = "ㅇㅇㅇ 스케줄 출석 시간입니다! 출석하러 이동해볼까요?"
-				// type = 1: 스케줄 출석 알림, 2: 댓글, 3: 좋아요
-				// ScheduleInfo = 스케줄 정보 스케줄 아이디, 스케줄 이름, 스터디 아이디, 스터디 이름
-//				template.convertAndSend("/topic/notification/" + user_id, alarmSchedule);
+				template.convertAndSend("/topic/notification/" + user_id, alarmSchedule);
 				Alarm alarm = new Alarm();
 				alarm.setUser_id(user_id);
 				alarm.setMsg(study.getName() + " 스케줄 입실 시간");
@@ -78,7 +74,7 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	public String noticeSchedule2(Timestamp tenSecBefore, Timestamp tenSecAfter) {
 		TimeBetweenDTO timeDTO = new TimeBetweenDTO(tenSecBefore, tenSecAfter);
-		List<ScheduleAlarmReturnDTO> list = userScheduleDAO.searchUsersToAlarm(timeDTO);
+		List<ScheduleAlarmReturnDTO> list = userScheduleDAO.searchUsersToAlarm2(timeDTO);
 		String returnMsg;
 		if(list.size() != 0) {
 			returnMsg = "스케줄 퇴실 알람 (";
@@ -91,10 +87,7 @@ public class NotificationServiceImpl implements NotificationService {
 				returnMsg = returnMsg + user_id + "번 유저에게 스케쥴 알람 발송 ";
 				AlarmSchedule alarmSchedule = new AlarmSchedule(schedule_title + " 스케줄 퇴실 시간입니다! 마무리하러 이동해볼까요?",
 						1, new ScheduleInfo(schedule_id, schedule_title, study.getId(), study.getName()));
-				// Msg = "ㅇㅇㅇ 스케줄 출석 시간입니다! 출석하러 이동해볼까요?"
-				// type = 1: 스케줄 출석 알림, 2: 댓글, 3: 좋아요
-				// ScheduleInfo = 스케줄 정보 스케줄 아이디, 스케줄 이름, 스터디 아이디, 스터디 이름
-//				template.convertAndSend("/topic/notification/" + user_id, alarmSchedule);
+				template.convertAndSend("/topic/notification/" + user_id, alarmSchedule);
 				Alarm alarm = new Alarm();
 				alarm.setUser_id(user_id);
 				alarm.setMsg(study.getName() + " 스케줄 퇴실 시간");

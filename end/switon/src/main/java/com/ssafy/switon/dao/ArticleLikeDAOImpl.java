@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.ssafy.switon.dto.ArticleLike;
 import com.ssafy.switon.dto.UserStudyDTO;
-import com.ssafy.switon.dto.StudyLike;
 
 @Repository
 public class ArticleLikeDAOImpl implements ArticleLikeDAO {

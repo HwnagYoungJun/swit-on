@@ -1,11 +1,5 @@
 package com.ssafy.switon.dto;
 
-import java.sql.Date;
-
-// 스터디 ID, 스터디명, 현재인원, 전체인원
-// 기간(start_term, end_term)
-// 모임장 아이디, 모임장 이름
-// 로고
 public class UserStudyInfoDTO {
 	
 	Study study;
