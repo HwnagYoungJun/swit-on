@@ -3,6 +3,7 @@
 		class="modify-container"
 		autocomplete="off"
 		@submit.prevent="modifyData"
+		enctype="multipart/form-data"
 	>
 		<section class="modify-header">
 			<h2>프로필 변경</h2>
@@ -45,7 +46,7 @@
 						@click="emetyImg"
 						class="profile-update-deleteBtn"
 					>
-						<span>기본 이미지</span>
+						<span>기본이미지</span>
 					</button>
 					<button type="button" class="profile-update-addBtn">
 						<span>첨부</span>
@@ -53,6 +54,7 @@
 					<input
 						ref="inputFile"
 						type="file"
+						accept="image/*"
 						class="input_file"
 						@change="onChangeFile"
 					/>
@@ -110,6 +112,7 @@ export default {
 			var tempImg = this.$refs.inputFile.files[0];
 			var reader = new FileReader();
 			reader.readAsDataURL(tempImg);
+
 			reader.onload = function() {
 				document.querySelector('#img-box').src = reader.result;
 				this.swichFile = reader.result;
@@ -123,7 +126,7 @@ export default {
 				this.name = data.name;
 				this.profileImg = data.profile_image;
 			} catch (error) {
-				bus.$emit('show:toast', `${error}`);
+				bus.$emit('show:toast', `${error.response.data.msg}`);
 			}
 		},
 		async modifyData() {
@@ -233,20 +236,6 @@ export default {
 	box-shadow: 0 2px 6px 0 rgba(68, 67, 68, 0.4);
 	padding: 1rem;
 	border-radius: 4px;
-	// .modify-input {
-	// 	width: 100%;
-	// 	padding: 10px;
-	// 	border: none;
-	// 	border-radius: 0;
-	// 	border-bottom: 1px solid black;
-	// 	&:focus {
-	// 		outline: none;
-	// 		border-bottom: 1px solid black;
-	// 	}
-	// }
-	// textarea {
-	// 	height: 5rem;
-	// }
 }
 .imgimgimg {
 	display: flex;
@@ -345,12 +334,21 @@ div.upload-btn_wrap button {
 		position: absolute;
 		top: -10px;
 		@include scale(right, 90px);
-		@include scale(width, 90px);
+		width: 90px;
+		@media screen and (max-width: 640px) {
+			width: 80px;
+			margin-right: 10px;
+		}
 	}
 	.profile-update-addBtn {
 		position: absolute;
 		top: -10px;
 		right: 10px;
+		width: 60px;
+		@media screen and (max-width: 640px) {
+			width: 40px;
+			right: 5px;
+		}
 	}
 	.input_file {
 		position: absolute;
