@@ -140,7 +140,18 @@ export default {
 				this.$cookies.set('name', this.name);
 				this.$router.push(`profile/${this.name}`);
 			} catch (error) {
-				bus.$emit('show:toast', `${error.response.data.msg}`);
+				if (error.response.status === 500) {
+					if (error.response.data.msg === undefined) {
+						bus.$emit(
+							'show:toast',
+							'파일의 용량 제한을 초과했습니다. 최대 5mb까지 가능합니다.',
+						);
+					} else {
+						bus.$emit('show:toast', `${error.response.data.msg}`);
+					}
+				} else {
+					bus.$emit('show:toast', `${error.response.data.msg}`);
+				}
 			}
 		},
 	},
