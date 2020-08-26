@@ -8,8 +8,8 @@
 		<div v-if="!articles.length" class="article-wrap">
 			<ArticleNotFound class="article-feed-wrap" />
 			<aside class="member-wrap">
-				<div class="study-members">
-					<p>우리 스터디 :></p>
+				<div>
+					<p class="study-members">우리 스터디 :></p>
 					<ul>
 						<li v-for="member in members" :key="member.id">
 							<router-link class="member-box" :to="`/profile/${member.name}`">
@@ -51,7 +51,7 @@
 			</div>
 			<aside class="member-wrap">
 				<div class="study-members">
-					<p>우리 스터디 :></p>
+					<p class="study-members-title">우리 스터디 :></p>
 					<ul>
 						<li v-for="member in members" :key="member.id">
 							<router-link class="member-box" :to="`/profile/${member.name}`">
@@ -215,6 +215,9 @@ export default {
 		justify-content: center;
 	}
 }
+.study-members-title {
+	font-weight: bold;
+}
 .article-wrap {
 	display: flex;
 	flex-wrap: wrap;
@@ -235,7 +238,6 @@ export default {
 		}
 		.study-members {
 			flex: 1;
-			margin-left: 3rem;
 			.diff-user {
 				margin-bottom: 8px;
 			}
