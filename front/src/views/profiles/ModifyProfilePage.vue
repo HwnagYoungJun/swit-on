@@ -328,7 +328,7 @@ div.upload-btn_wrap {
 	padding-left: 1rem;
 }
 div.upload-btn_wrap button {
-	@include scale(width, 70px);
+	@include scale(width, 80px);
 	height: 2rem;
 	font-weight: bold;
 	background: rgb(225, 225, 225);
@@ -344,11 +344,11 @@ div.upload-btn_wrap button {
 	.profile-update-deleteBtn {
 		position: absolute;
 		top: -10px;
-		@include scale(right, 90px);
+		right: 90px;
 		width: 90px;
 		@media screen and (max-width: 640px) {
 			width: 80px;
-			margin-right: 10px;
+			right: 70px;
 		}
 	}
 	.profile-update-addBtn {
@@ -357,7 +357,7 @@ div.upload-btn_wrap button {
 		right: 10px;
 		width: 60px;
 		@media screen and (max-width: 640px) {
-			width: 40px;
+			width: 55px;
 			right: 5px;
 		}
 	}
