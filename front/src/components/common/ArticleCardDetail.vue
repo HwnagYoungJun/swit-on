@@ -251,7 +251,7 @@ export default {
 			var _result;
 
 			// 미리보기 가능한 확장자는 배열에 넣기
-			var _arrExt = new Array('.bmp', '.gif', '.jpg', '.png', '.jpeg');
+			var _arrExt = new Array('.pdf', '.bmp', '.gif', '.jpg', '.png', '.jpeg');
 
 			// 배열 요소를 검사하여 체크
 			for (var i = 0; i < _arrExt.length; i++) {

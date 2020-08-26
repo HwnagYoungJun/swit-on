@@ -140,7 +140,18 @@ export default {
 				this.$cookies.set('name', this.name);
 				this.$router.push(`profile/${this.name}`);
 			} catch (error) {
-				bus.$emit('show:toast', `${error.response.data.msg}`);
+				if (error.response.status === 500) {
+					if (error.response.data.msg === undefined) {
+						bus.$emit(
+							'show:toast',
+							'파일의 용량 제한을 초과했습니다. 최대 5mb까지 가능합니다.',
+						);
+					} else {
+						bus.$emit('show:toast', `${error.response.data.msg}`);
+					}
+				} else {
+					bus.$emit('show:toast', `${error.response.data.msg}`);
+				}
 			}
 		},
 	},
@@ -317,7 +328,7 @@ div.upload-btn_wrap {
 	padding-left: 1rem;
 }
 div.upload-btn_wrap button {
-	@include scale(width, 70px);
+	@include scale(width, 80px);
 	height: 2rem;
 	font-weight: bold;
 	background: rgb(225, 225, 225);
@@ -333,11 +344,11 @@ div.upload-btn_wrap button {
 	.profile-update-deleteBtn {
 		position: absolute;
 		top: -10px;
-		@include scale(right, 90px);
+		right: 90px;
 		width: 90px;
 		@media screen and (max-width: 640px) {
 			width: 80px;
-			margin-right: 10px;
+			right: 70px;
 		}
 	}
 	.profile-update-addBtn {
@@ -346,7 +357,7 @@ div.upload-btn_wrap button {
 		right: 10px;
 		width: 60px;
 		@media screen and (max-width: 640px) {
-			width: 40px;
+			width: 55px;
 			right: 5px;
 		}
 	}
