@@ -11,6 +11,7 @@
 				:key="study.id"
 				v-for="study in studies"
 				:to="`/study/${study.id}`"
+				tabindex="-1"
 			>
 				<MainCard :study="study" colorPick="black" />
 			</router-link>

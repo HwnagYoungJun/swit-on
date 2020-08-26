@@ -21,7 +21,7 @@
 		<section class="card-detail-wrap">
 			<article class="card-detail">
 				<header class="card-detail-title">
-					<p>{{ article.title }}</p>
+					<p tabindex="0">{{ article.title }}</p>
 				</header>
 				<div class="content-info">
 					<router-link :to="`/profile/${article.user.name}`">
@@ -32,9 +32,9 @@
 					<span>{{ article.created_at | formatDate }}</span>
 				</div>
 				<section class="card-detail-content">
-					<Viewer :initialValue="article.content" />
+					<Viewer :initialValue="article.content" tabindex="0" />
 					<div class="card-detail-filebox" v-if="article.file">
-						<span class="card-detail-file">첨부파일</span>
+						<span class="card-detail-file" tabindex="0">첨부파일</span>
 						<a
 							v-if="FileCheck"
 							:href="`${BaseUrl}${article.file}`"
@@ -52,14 +52,16 @@
 								v-if="isLiked"
 								class="icon ion-md-heart like"
 								aria-label="좋아요 취소"
+								tabindex="0"
 							></i>
 							<i
 								@click="articleLike"
 								v-else
 								class="icon ion-md-heart unlike"
 								aria-label="좋아요"
+								tabindex="0"
 							></i>
-							<span>좋아요 {{ likeCount }}개</span>
+							<span tabindex="0">좋아요 {{ likeCount }}개</span>
 						</div>
 						<div class="logo-btnbox">
 							<div class="bookmark" v-if="board_name === 'repository'">
@@ -99,7 +101,6 @@
 							v-model="commentContent"
 							type="text"
 							class="comment"
-							autofocus
 							placeholder="댓글달기"
 						/>
 						<button
@@ -122,6 +123,7 @@
 								<div class="comment-contentbox">
 									<p>
 										<router-link
+											tabindex="-1"
 											class="comment-userbox"
 											:to="`/profile/${comment.user.name}`"
 										>
@@ -139,7 +141,7 @@
 												{{ comment.user.name }}</span
 											>
 										</router-link>
-										<span class="comment-content-item">{{
+										<span class="comment-content-item" tabindex="0">{{
 											comment.content
 										}}</span>
 									</p>
@@ -150,6 +152,7 @@
 										@click="removeComment(comment.id)"
 										class="icon ion-md-close unlike"
 										aria-label="댓글 취소"
+										tabindex="0"
 									>
 									</i>
 									<i
@@ -157,12 +160,14 @@
 										@click="commentUnLike(comment.id)"
 										class="icon ion-md-heart like"
 										aria-label="댓글 좋아요 취소"
+										tabindex="0"
 									></i>
 									<i
 										v-else
 										@click="commentLike(comment.id)"
 										class="icon ion-md-heart unlike"
 										aria-label="댓글 좋아요"
+										tabindex="0"
 									></i>
 								</div>
 							</li>
@@ -580,9 +585,6 @@ export default {
 			border: none;
 			color: $main-color;
 			cursor: pointer;
-			&:focus {
-				outline: none;
-			}
 		}
 	}
 	.comment-userbox {

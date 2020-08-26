@@ -8,9 +8,11 @@
 			:upperCategoryName="upperCategoryName"
 			:lowerCategoryName="lowerCategoryName"
 		/>
-		<h1 v-else class="suggest-title">
+		<h1 v-else class="suggest-title" tabindex="0">
 			<p>{{ getName }}님,</p>
-			<p class="suggest-title-comment">최근 인기 소모임 입니다:)</p>
+			<p class="suggest-title-comment">
+				최근 인기 소모임 입니다:)
+			</p>
 		</h1>
 		<router-view :upperCategoryName="upperCategoryName"></router-view>
 	</section>

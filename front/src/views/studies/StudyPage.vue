@@ -7,13 +7,16 @@
 			:upperCategoryName="upperCategoryName"
 			:lowerCategoryName="lowerCategoryName"
 		/>
-		<p class="searched-info">"{{ name }}"에 대한 검색 결과입니다</p>
+		<p class="searched-info" tabindex="0">
+			"{{ name }}"에 대한 검색 결과입니다
+		</p>
 
 		<div v-if="searchedStudyDatas.length" class="search-only-study-wrap">
 			<router-link
 				:key="study.id"
 				v-for="study in searchedStudyDatas"
 				:to="`/study/${study.id}`"
+				tabindex="-1"
 			>
 				<MainCard :study="study" colorPick="black" />
 			</router-link>

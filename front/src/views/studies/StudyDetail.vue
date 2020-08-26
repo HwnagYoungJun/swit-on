@@ -18,23 +18,28 @@
 		</nav>
 		<section class="study-description">
 			<div class="study-content">
-				<h3 class="study-title" id="studyTitle">
+				<h3 class="study-title" id="studyTitle" tabindex="0">
 					{{ study.name }}
 				</h3>
 				<div class="leader-comment">
-					<span>{{ leaderName }}</span>
-					<p>우리 {{ study.name }}은</p>
-					<p>
-						매주
-						<span class="strong">{{ study.week | formatWeekday }}요일</span>
-					</p>
-					<time class="strong">{{ study.start_time }}</time> 부터
-					<time class="strong">{{ study.end_time }}</time> 까지 활동합니다<i
-						class="icon ion-md-quote"
-						aria-hidden="true"
-					></i>
+					<div tabindex="0">
+						<span class="a11y-hidden">팀장</span>
+						<span>{{ leaderName }}</span>
+					</div>
+					<div tabindex="0">
+						<p>우리 {{ study.name }}은</p>
+						<p>
+							매주
+							<span class="strong">{{ study.week | formatWeekday }}요일</span>
+						</p>
+						<time class="strong">{{ study.start_time }}</time> 부터
+						<time class="strong">{{ study.end_time }}</time> 까지 활동합니다<i
+							class="icon ion-md-quote"
+							aria-hidden="true"
+						></i>
+					</div>
 				</div>
-				<p class="study-member-cnt">
+				<p class="study-member-cnt" tabindex="0">
 					현재 {{ study.users_limit }}명 중
 					<span class="strong">{{ study.users_current }}명</span>이 함께 하고
 					있어요
