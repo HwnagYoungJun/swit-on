@@ -66,7 +66,7 @@
 					class="go-to-top-logo"
 					@click="goToTop"
 				/>
-				<div class="nav-router-item">
+				<div class="nav-router-item" tabindex="0">
 					<Notification :messages="messages" />
 				</div>
 				<a

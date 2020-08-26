@@ -7,11 +7,13 @@
 			</p>
 		</div>
 		<section class="popular-content">
-			<h3 class="content-title">{{ study.name }}</h3>
+			<h3 class="content-title" tabindex="0">{{ study.name }}</h3>
 			<p class="content-week">
-				<time class="content-day">{{ study.week | formatWeekday }}</time>
+				<time class="content-day" tabindex="0">{{
+					study.week | formatWeekday
+				}}</time>
 			</p>
-			<time class="content-time"
+			<time class="content-time" tabindex="0"
 				>{{ study.start_time }}-{{ study.end_time }}</time
 			>
 		</section>
