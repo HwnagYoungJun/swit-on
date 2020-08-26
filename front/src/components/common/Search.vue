@@ -23,7 +23,7 @@
 				placeholder="소모임을 검색하세요"
 				@keyup.enter="moveOnlyStudy"
 			/>
-			<button @keyup.enter="moveOnlyStudy" class="a11y-hidden">
+			<button @click="moveOnlyStudy" class="a11y-hidden">
 				검색
 			</button>
 		</section>
