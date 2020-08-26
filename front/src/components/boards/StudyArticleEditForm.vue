@@ -247,7 +247,10 @@ div.upload-btn_wrap {
 	margin-top: 1rem;
 }
 div.upload-btn_wrap button {
-	@include scale(width, 70px);
+	width: 70px;
+	@media screen and (max-width: 768px) {
+		width: 50px;
+	}
 	height: 2rem;
 	font-weight: bold;
 	background: rgb(225, 225, 225);
