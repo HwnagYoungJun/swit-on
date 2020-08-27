@@ -8,8 +8,8 @@
 		<div v-if="!articles.length" class="article-wrap">
 			<ArticleNotFound class="article-feed-wrap" />
 			<aside class="member-wrap">
-				<div>
-					<p class="study-members">우리 스터디 :></p>
+				<div class="study-members">
+					<p class="study-members-title">우리 스터디 :></p>
 					<ul>
 						<li v-for="member in members" :key="member.id">
 							<router-link class="member-box" :to="`/profile/${member.name}`">
@@ -246,12 +246,12 @@ export default {
 					display: flex;
 					align-items: center;
 					margin-bottom: 8px;
-				}
-				.member-image {
-					width: 30px;
-					height: 30px;
-					margin-right: 8px;
-					border-radius: 50%;
+					.member-image {
+						width: 30px;
+						height: 30px;
+						margin-right: 8px;
+						border-radius: 50%;
+					}
 				}
 			}
 			@media screen and (max-width: 768px) {
